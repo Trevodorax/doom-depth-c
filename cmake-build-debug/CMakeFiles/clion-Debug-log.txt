@@ -1,0 +1,4 @@
+/Users/paulgaudeaux/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Users/paulgaudeaux/Applications/CLion.app/Contents/bin/ninja/mac/ninja -DCMAKE_TOOLCHAIN_FILE=/Users/paulgaudeaux/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja -S /Users/paulgaudeaux/Documents/piscine/doom-depth-c -B /Users/paulgaudeaux/Documents/piscine/doom-depth-c/cmake-build-debug
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/paulgaudeaux/Documents/piscine/doom-depth-c/cmake-build-debug
