@@ -3,7 +3,8 @@ project(doom_depth_c C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(doom_depth_c main.c
+add_executable(doom_depth_c
+        main.c
         src/doom_depth.c
         src/doom_depth.h
         src/entities/armor/armor.h
@@ -14,8 +15,8 @@ add_executable(doom_depth_c main.c
         src/entities/stage/stage.h
         src/entities/stats/stats.h
         src/entities/weapon/weapon.h
-        src/entities/json/json.c
-        src/entities/json/json.h)
+        src/storage/json/json.c
+        src/storage/json/json.h)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
@@ -25,6 +26,9 @@ target_link_libraries(doom_depth_c
         $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
         $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
-add_executable(doom_depth_tests src/entities/json/json_test.c
+
+add_executable(doom_depth_tests
         test.c
-        src/minunit/minunit.h)
+        src/minunit/minunit.h
+        src/storage/json/json_test.c
+        src/storage/json/json.h)
