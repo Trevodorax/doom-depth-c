@@ -3,7 +3,11 @@ project(doom_depth_c C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(doom_depth_c main.c)
+add_executable(doom_depth_c main.c
+        src/doom_depth.c
+        src/doom_depth.h
+        src/entities/armor/armor.h
+        src/entities/inventory/inventory.h)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
