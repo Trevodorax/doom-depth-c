@@ -6,7 +6,7 @@ typedef struct {
     short rarity;
     unsigned int amount;
     unsigned int uses;
-    unsigned int maxUses;
+    unsigned int max_uses;
     unsigned int cost;
 } Armor;
 
