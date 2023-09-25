@@ -4,11 +4,11 @@
 #include "weapon.h"
 
 typedef struct {
-    int capacity;
-    int nbManaPotions;
-    int nbHealthPotions;
-    int nbWeapons;
-    int nbArmors;
+    unsigned int capacity;
+    unsigned int nbManaPotions;
+    unsigned int nbHealthPotions;
+    unsigned int nbWeapons;
+    unsigned int nbArmors;
     Weapon *weapons;
 } Inventory;
 

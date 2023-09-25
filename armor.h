@@ -4,10 +4,10 @@
 typedef struct {
     char *name;
     short rarity;
-    int amount;
-    int uses;
-    int maxUses;
-    int cost;
+    unsigned int amount;
+    unsigned int uses;
+    unsigned int maxUses;
+    unsigned int cost;
 } Armor;
 
 #endif

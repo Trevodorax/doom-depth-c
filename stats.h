@@ -2,11 +2,11 @@
 #define STATS
 
 typedef struct {
-    int nbMonstersKilled;
-    int nbDeaths;
-    int damagesDealed;
-    int healthHealed;
-    int maxLevelReached;
+    unsigned int nbMonstersKilled;
+    unsigned int nbDeaths;
+    unsigned int damagesDealed;
+    unsigned int healthHealed;
+    unsigned int maxLevelReached;
 } Stats;
 
 #endif

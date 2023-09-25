@@ -9,14 +9,14 @@
 
 typedef struct {
     char *name;
-    int hp;
-    int mana;
-    int manaMax;
-    int xp;
-    int level;
-    int baseAttack;
-    int baseDefense;
-    int gold;
+    unsigned int hp;
+    unsigned int mana;
+    unsigned int manaMax;
+    unsigned int xp;
+    unsigned int level;
+    unsigned int baseAttack;
+    unsigned int baseDefense;
+    unsigned int gold;
     Spell offensiveSpell;
     Spell defensiveSpell;
     Spell healingSpell;

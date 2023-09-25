@@ -4,10 +4,10 @@
 typedef struct {
     char *name;
     short type;
-    int hp;
-    int hpMax;
-    int attack;
-    int defense;
+    unsigned int hp;
+    unsigned int hpMax;
+    unsigned int attack;
+    unsigned int defense;
 } Monster;
 
 #endif

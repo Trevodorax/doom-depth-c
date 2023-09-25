@@ -4,12 +4,12 @@
 typedef struct {
     char *name;
     short rarity;
-    int minAttack;
-    int maxAttack;
-    int attacksPerTurn;
-    int uses;
-    int maxUses;
-    int cost;
+    unsigned int minAttack;
+    unsigned int maxAttack;
+    unsigned int attacksPerTurn;
+    unsigned int uses;
+    unsigned int maxUses;
+    unsigned int cost;
 } Weapon;
 
 #endif

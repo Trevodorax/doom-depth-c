@@ -2,7 +2,7 @@
 #define STAGE
 
 typedef struct {
-    int nbEnemies;
+    unsigned int nbEnemies;
     float *enemyChancesToAppear;
 } Stage;
 

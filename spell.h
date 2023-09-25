@@ -4,8 +4,8 @@
 typedef struct {
     char *name;
     short type;
-    int amount;
-    int cost;
+    unsigned int amount;
+    unsigned int cost;
 } Spell;
 
 #endif
