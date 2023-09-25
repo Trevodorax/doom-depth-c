@@ -13,7 +13,9 @@ add_executable(doom_depth_c main.c
         src/entities/spell/spell.h
         src/entities/stage/stage.h
         src/entities/stats/stats.h
-        src/entities/weapon/weapon.h)
+        src/entities/weapon/weapon.h
+        src/entities/json/json.c
+        src/entities/json/json.h)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
@@ -23,3 +25,6 @@ target_link_libraries(doom_depth_c
         $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
         $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
+add_executable(doom_depth_tests src/entities/json/json_test.c
+        test.c
+        src/minunit/minunit.h)
