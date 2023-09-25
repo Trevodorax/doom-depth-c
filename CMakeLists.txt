@@ -7,7 +7,13 @@ add_executable(doom_depth_c main.c
         src/doom_depth.c
         src/doom_depth.h
         src/entities/armor/armor.h
-        src/entities/inventory/inventory.h)
+        src/entities/inventory/inventory.h
+        src/entities/monster/monster.h
+        src/entities/player/player.h
+        src/entities/spell/spell.h
+        src/entities/stage/stage.h
+        src/entities/stats/stats.h
+        src/entities/weapon/weapon.h)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
