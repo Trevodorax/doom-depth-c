@@ -37,6 +37,19 @@ struct Json {
  */
 Json *get_json_from_file(const char *file_path);
 
+/**
+ * @brief Parses a string and returns a Json struct
+ *
+ * @return The parsed Json object (gives ownership)
+ * @errors Returns NULL in the following cases:
+ * - bad .json format
+ * - cannot allocate memory
+ * @param json_string
+ * @author Paul Gaudeaux
+ * @date 26/09/23
+ */
+Json *parse_json(char **json_string);
+
 int json_test();
 
 #endif //DOOM_DEPTH_C_JSON_H
