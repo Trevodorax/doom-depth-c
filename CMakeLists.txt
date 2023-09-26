@@ -33,4 +33,8 @@ add_executable(doom_depth_tests
         test.c
         src/minunit/minunit.h
         src/storage/json/json_test.c
-        src/storage/json/json.h)
+        src/storage/json/json.h
+        src/utils/array.c
+        src/utils/array.h
+        src/utils/array_test.c
+        src/utils/array_test.h)

@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "../../minunit/minunit.h"
 
-int tests_run = 0;
-
 int foo = 7;
 int bar = 4;
 
@@ -20,14 +18,14 @@ char * test_perimeter_2() {
     return 0;
 }
 
-char * all_tests() {
+char * all_json_tests() {
     mu_run_test(test_perimeter_1);
     mu_run_test(test_perimeter_2);
     return 0;
 }
 
 int json_test() {
-    char *result = all_tests();
+    char *result = all_json_tests();
     if (result != 0) {
         printf("%s\n", result);
     }

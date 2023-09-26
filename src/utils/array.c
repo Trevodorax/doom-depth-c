@@ -15,6 +15,8 @@
  * @sideeffects Modifies the linked list by adding a new node at the beginning.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
 void push(ArrayNode **head_ref, void *new_data, size_t data_size) {
     ArrayNode *new_node = (ArrayNode *)malloc(sizeof(ArrayNode));
@@ -36,6 +38,8 @@ void push(ArrayNode **head_ref, void *new_data, size_t data_size) {
  * @sideeffects Modifies the linked list by adding a new node at the end.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
 void append(ArrayNode **head_ref, void *new_data, size_t data_size) {
     ArrayNode *new_node = (ArrayNode *)malloc(sizeof(ArrayNode));
@@ -67,8 +71,10 @@ void append(ArrayNode **head_ref, void *new_data, size_t data_size) {
  * @sideeffects Modifies the linked list by removing a node.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
-void deleteNode(ArrayNode **head_ref, int index) {
+void delete_node(ArrayNode **head_ref, int index) {
     if (*head_ref == NULL || index < 0) {
         return;
     }
@@ -109,6 +115,8 @@ void deleteNode(ArrayNode **head_ref, int index) {
  * @sideeffects Modifies the linked list by adding a new node at the specified index.
  * @dependencies No dependencies.
  * @errors Returns -1 if the index is out of bounds.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
 int insertAtIndex(ArrayNode **head_ref, void *new_data, size_t data_size, int index) {
     if (index < 0) {
@@ -153,8 +161,10 @@ int insertAtIndex(ArrayNode **head_ref, void *new_data, size_t data_size, int in
  * @sideeffects No side effects.
  * @dependencies No dependencies.
  * @errors Returns -1 if the element is not found.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
-int findNode(ArrayNode *head, void *data_to_find, size_t data_size) {
+int find_node(ArrayNode *head, void *data_to_find, size_t data_size) {
     ArrayNode *current = head;
     int index = 0;
 
@@ -171,6 +181,36 @@ int findNode(ArrayNode *head, void *data_to_find, size_t data_size) {
 }
 
 /**
+ * @brief Retrieves the node at a given index in the linked list.
+ *
+ * This function traverses the linked list to find the node at the specified index.
+ * The index is 0-based, meaning that passing 0 will return the first node, 1 will return the second, and so on.
+ *
+ * @param head Pointer to the head of the linked list.
+ * @param index The 0-based index of the node to be retrieved.
+ * @return Pointer to the node at the specified index, or NULL if the index is out of bounds.
+ * @sideeffects No side effects.
+ * @dependencies Assumes that the ArrayNode structure is defined with a 'next' field.
+ * @errors Returns NULL if the index is out of bounds.
+ * @author Noam DE MASURE
+ * @date 27/09/2023
+ */
+void * get_value_at_index(ArrayNode *head, int index) {
+    ArrayNode *current = head;
+
+    while (index != 0){
+        if(current->next!=NULL){
+            current = current->next;
+        } else {
+            return NULL;
+        }
+        index--;
+    }
+
+    return current->value;
+}
+
+/**
  * @brief Frees the linked list.
  *
  * This function frees all the nodes in the linked list and sets the head to NULL.
@@ -179,8 +219,10 @@ int findNode(ArrayNode *head, void *data_to_find, size_t data_size) {
  * @sideeffects Frees the memory allocated for the linked list.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
-void freeList(ArrayNode **head_ref) {
+void free_list(ArrayNode **head_ref) {
     ArrayNode *current = *head_ref;
     ArrayNode *next;
 
@@ -205,10 +247,12 @@ void freeList(ArrayNode **head_ref) {
  * @sideeffects Prints the elements of the linked list to stdout.
  * @dependencies Depends on the provided print function.
  * @errors No error handling implemented.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
-void printList(ArrayNode *node, void (*pointer_function)(void *)) {
+void print_list(ArrayNode *node, void (*fptr)(void *)) {
     while (node != NULL) {
-        (*pointer_function)(node->value);
+        (*fptr)(node->value);
         node = node->next;
     }
     printf("\n");
@@ -223,8 +267,10 @@ void printList(ArrayNode *node, void (*pointer_function)(void *)) {
  * @sideeffects Prints the string to the standard output.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
-void printString(void *str) {
+void print_string(void *str) {
     printf(" %s", (char *)str);
 }
 
@@ -237,8 +283,10 @@ void printString(void *str) {
  * @sideeffects Prints the integer to the standard output.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
-void printInt(void *n) {
+void print_int(void *n) {
     printf(" %d", *(int *)n);
 }
 
@@ -251,32 +299,11 @@ void printInt(void *n) {
  * @sideeffects Prints the float to the standard output.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
+ * @author Noam DE MASURE
+ * @date 26/09/2023
  */
-void printFloat(void *f) {
+void print_float(void *f) {
     printf(" %f", *(float *)f);
 }
 
-int example() {
-    ArrayNode *start = NULL;
 
-    // Example with integers
-    unsigned int_size = sizeof(int);
-    int arr[] = {10, 20, 30, 40, 50}, i;
-    for (i = 4; i >= 0; i--) {
-        push(&start, &arr[i], int_size);
-    }
-    printf("Liste d'entiers :");
-    printList(start, printInt);
-
-    // Example with floats
-    unsigned float_size = sizeof(float);
-    start = NULL;
-    float arr_f[] = {10.1f, 20.2f, 30.3f, 40.4f, 50.5f};
-    for (i = 4; i >= 0; i--) {
-        push(&start, &arr_f[i], float_size);
-    }
-    printf("Liste de flottants :");
-    printList(start, printFloat);
-
-    return 0;
-}
