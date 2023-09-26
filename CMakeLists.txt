@@ -17,8 +17,8 @@ add_executable(doom_depth_c
         src/entities/weapon/weapon.h
         src/storage/json/json.c
         src/storage/json/json.h
-        src/utils/Array.c
-        src/utils/Array.h)
+        src/utils/array.c
+        src/utils/array.h)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)

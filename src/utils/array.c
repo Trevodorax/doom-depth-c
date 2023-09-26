@@ -1,4 +1,4 @@
-#include "Array.h"
+#include "array.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,8 +15,6 @@
  * @sideeffects Modifies the linked list by adding a new node at the beginning.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 void push(ArrayNode **head_ref, void *new_data, size_t data_size) {
     ArrayNode *new_node = (ArrayNode *)malloc(sizeof(ArrayNode));
@@ -38,8 +36,6 @@ void push(ArrayNode **head_ref, void *new_data, size_t data_size) {
  * @sideeffects Modifies the linked list by adding a new node at the end.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 void append(ArrayNode **head_ref, void *new_data, size_t data_size) {
     ArrayNode *new_node = (ArrayNode *)malloc(sizeof(ArrayNode));
@@ -71,8 +67,6 @@ void append(ArrayNode **head_ref, void *new_data, size_t data_size) {
  * @sideeffects Modifies the linked list by removing a node.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 void deleteNode(ArrayNode **head_ref, int index) {
     if (*head_ref == NULL || index < 0) {
@@ -115,8 +109,6 @@ void deleteNode(ArrayNode **head_ref, int index) {
  * @sideeffects Modifies the linked list by adding a new node at the specified index.
  * @dependencies No dependencies.
  * @errors Returns -1 if the index is out of bounds.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 int insertAtIndex(ArrayNode **head_ref, void *new_data, size_t data_size, int index) {
     if (index < 0) {
@@ -161,8 +153,6 @@ int insertAtIndex(ArrayNode **head_ref, void *new_data, size_t data_size, int in
  * @sideeffects No side effects.
  * @dependencies No dependencies.
  * @errors Returns -1 if the element is not found.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 int findNode(ArrayNode *head, void *data_to_find, size_t data_size) {
     ArrayNode *current = head;
@@ -189,8 +179,6 @@ int findNode(ArrayNode *head, void *data_to_find, size_t data_size) {
  * @sideeffects Frees the memory allocated for the linked list.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 void freeList(ArrayNode **head_ref) {
     ArrayNode *current = *head_ref;
@@ -217,8 +205,6 @@ void freeList(ArrayNode **head_ref) {
  * @sideeffects Prints the elements of the linked list to stdout.
  * @dependencies Depends on the provided print function.
  * @errors No error handling implemented.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 void printList(ArrayNode *node, void (*pointer_function)(void *)) {
     while (node != NULL) {
@@ -237,8 +223,6 @@ void printList(ArrayNode *node, void (*pointer_function)(void *)) {
  * @sideeffects Prints the string to the standard output.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 void printString(void *str) {
     printf(" %s", (char *)str);
@@ -253,8 +237,6 @@ void printString(void *str) {
  * @sideeffects Prints the integer to the standard output.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 void printInt(void *n) {
     printf(" %d", *(int *)n);
@@ -269,8 +251,6 @@ void printInt(void *n) {
  * @sideeffects Prints the float to the standard output.
  * @dependencies No dependencies.
  * @errors No error handling implemented.
- * @author Noam DE MASURE
- * @date 26/09/2023
  */
 void printFloat(void *f) {
     printf(" %f", *(float *)f);
