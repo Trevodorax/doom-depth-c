@@ -13,11 +13,6 @@ char * test_get_node_int_value_at_index() {
         push(&start, &arr[i], int_size);
     }
     int * assertValue = (int *)get_value_at_index(start,1);
-//    if(assertValue==NULL){
-//        printf("NULL");
-//    } else {
-//        print_int(assertValue);
-//    }
     mu_assert("\nError in test_get_node_at_index : WRONG VALUE - Expecting 20", *assertValue == 20);
     return 0;
 }
