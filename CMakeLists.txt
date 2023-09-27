@@ -32,8 +32,10 @@ target_link_libraries(doom_depth_c
 add_executable(doom_depth_tests
         test.c
         src/minunit/minunit.h
-        src/storage/json/json_test.c
+        src/storage/json/json.c
         src/storage/json/json.h
+        src/storage/json/json_test.c
+        src/storage/json/json_test.h
         src/utils/array.c
         src/utils/array.h
         src/utils/array_test.c

@@ -1,5 +1,8 @@
 #ifndef DOOM_DEPTH_C_ARRAY_H
 #define DOOM_DEPTH_C_ARRAY_H
+
+#include <stdio.h>
+
 typedef struct ArrayNode {
     void *value;
     struct ArrayNode *next;
