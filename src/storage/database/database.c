@@ -16,3 +16,15 @@ sqlite3 *db_connect() {
 
     return db;
 }
+
+int execute_query(sqlite3 *db, char *sql, char **z_err_msg) {
+
+    int rc = sqlite3_exec(db, sql, 0, 0, z_err_msg);
+
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", *z_err_msg);
+        sqlite3_free(*z_err_msg);
+    }
+
+    return rc;
+}
