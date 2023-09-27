@@ -22,7 +22,9 @@ add_executable(doom_depth_c
         src/map/map.c
         src/map/map.h
         src/sdl_utils/sdl_utils.c
-        src/sdl_utils/sdl_utils.h)
+        src/sdl_utils/sdl_utils.h
+        src/storage/database/database.h
+        src/storage/database/database.c)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
