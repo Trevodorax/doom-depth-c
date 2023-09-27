@@ -59,7 +59,7 @@ int array_test() {
         printf("%s\n", result);
     }
     else {
-        printf("ALL TESTS PASSED IN JSON\n");
+        printf("ALL TESTS PASSED IN ARRAY\n");
     }
     printf("Tests run: %d\n", tests_run);
 

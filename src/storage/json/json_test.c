@@ -4,8 +4,6 @@
 #include "json_test.h"
 #include "../../minunit/minunit.h"
 
-int tests_run = 0;
-
 static char * test_parse_simple_json_string() {
     char *json_str = "{\"name\":\"Paul\", \"age\":20, \"city\":\"Paris\"}";
     Json *json_obj = parse_json(&json_str);
@@ -93,7 +91,7 @@ static char * all_tests() {
 
 
 int json_test() {
-    char *result = all_json_tests();
+    char *result = all_tests();
     if (result != 0) {
         printf("%s\n", result);
     }

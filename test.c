@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include "src/minunit/minunit.h"
+#include "src/utils/array_test.h"
 #include "src/storage/json/json_test.h"
 
 int tests_run = 0;
