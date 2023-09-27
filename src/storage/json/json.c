@@ -4,9 +4,48 @@
 #include <ctype.h>
 #include "json.h"
 
+/**
+ * @brief parses a json object
+ *
+ * @sideeffects moves the pointer to string to the end of the parsed object
+ * @param json_string_ptr the string of the json object
+ * @return the parsed json object
+ * @author Paul Gaudeaux
+ * @date 27/09/23
+ */
 Json *parse_json_object(char **json_string_ptr);
+
+/**
+ * @brief parses a json array
+ *
+ * @sideeffects moves the pointer to string to the end of the parsed array
+ * @param json_string_ptr the string of the json array
+ * @return the parsed json object
+ * @author Paul Gaudeaux
+ * @date 27/09/23
+ */
 Json *parse_json_array(char **json_string_ptr);
+
+/**
+ * @brief parses a json string
+ *
+ * @sideeffects moves the pointer to string to the end of the parsed string
+ * @param json_string_ptr the string of the json string
+ * @return the parsed json object
+ * @author Paul Gaudeaux
+ * @date 27/09/23
+ */
 char *parse_json_string(char **json_string_ptr);
+
+/**
+ * @brief parses a json number
+ *
+ * @sideeffects moves the pointer to string to the end of the parsed number
+ * @param json_string_ptr the string of the json number
+ * @return the parsed json number
+ * @author Paul Gaudeaux
+ * @date 27/09/23
+ */
 int parse_json_number(char **json_string_ptr);
 
 Json *get_json_from_file(const char *file_path) {
@@ -81,8 +120,6 @@ Json *parse_json(char **json_string) {
 
     return result;
 }
-
-#include <stdlib.h>
 
 void free_json(Json *json) {
     // no jokes

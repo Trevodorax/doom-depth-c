@@ -44,12 +44,21 @@ Json *get_json_from_file(const char *file_path);
  * @errors Returns NULL in the following cases:
  * - bad .json format
  * - cannot allocate memory
+ * @sideeffects moves the pointer to string to the end of the parsed json
  * @param json_string
  * @author Paul Gaudeaux
  * @date 26/09/23
  */
 Json *parse_json(char **json_string);
 
+/**
+ * @brief recursively frees a Json completely
+ *
+ * @sideeffects frees the memory of the complete json at all levels of nesting
+ * @param json the json to free
+ * @author Paul Gaudeaux
+ * @date 17/09/23
+ */
 void free_json(Json *json);
 
 #endif //DOOM_DEPTH_C_JSON_H
