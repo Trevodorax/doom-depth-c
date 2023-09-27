@@ -1,6 +1,8 @@
 #ifndef DOOM_DEPTH_C_DATABASE_H
 #define DOOM_DEPTH_C_DATABASE_H
 
+#define MAX_TRIES 3
+
 #include <sqlite3.h>
 #include "database_queries.h"
 
@@ -53,5 +55,21 @@ int execute_query(sqlite3 *db, char *sql, char **z_err_msg);
  * @date 28/09/23
  */
 int db_init(sqlite3 *db);
+
+/**
+ * @brief Ensures a connection to the database, initializing it if needed.
+ *
+ * This function tries to establish a connection to the database. If the database does not exist,
+ * it tries to create and initialize it. If it fails to ensure a connection after MAX_TRIES, it returns NULL.
+ *
+ * @return A pointer to the connected SQLite3 database, or NULL if connection attempts exceed MAX_TRIES.
+ *
+ * @sideeffects May create and initialize a new database. Modifies the database by potentially adding new tables or data.
+ * @dependencies Depends on db_connect() and db_init() functions.
+ * @errors Potential errors from SQLite during database connection or initialization.
+ * @author Tom BOURLARD
+ * @date 28/09/23
+ */
+sqlite3 *db_connection();
 
 #endif //DOOM_DEPTH_C_DATABASE_H

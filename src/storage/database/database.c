@@ -45,3 +45,35 @@ int db_init(sqlite3 *db) {
     return SQLITE_OK;
 
 }
+
+sqlite3 *db_connection() {
+
+    int tries = 0;
+    sqlite3 *db;
+
+    while (tries < MAX_TRIES) {
+
+        db = db_connect();
+
+        if (db) {
+
+            int rc = db_init(db);
+
+            if (rc != SQLITE_OK) {
+                sqlite3_close(db);
+                tries++;
+                continue;
+            }
+
+            return db;
+
+        }
+
+        tries++;
+
+    }
+
+    fprintf(stderr, "Unable to connect to the database.\n");
+    return NULL;
+
+}
