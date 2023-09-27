@@ -1,0 +1,31 @@
+{
+  "name": "First map",
+  "stages": [
+    {
+      "nb_monsters": 0,
+      "done": 1,
+      "start": 1,
+      "right": {
+        "nb_monsters": 2,
+        "enemy_chances_to_appear": [50, 50],
+        "done": 0,
+        "right": {
+          "nb_monsters": 4,
+          "enemy_chances_to_appear": [30, 40, 30],
+          "done": 0,
+          "right": {
+            "nb_monsters": 1,
+            "enemy_chances_to_appear": [0, 0, 0, 100],
+            "done": 0,
+            "linked_map": "map_2.json"
+          }
+        },
+        "top": {
+          "nb_monsters": 3,
+          "enemy_chances_to_appear": [50, 50],
+          "done": 0
+        }
+      }
+    }
+  ]
+}

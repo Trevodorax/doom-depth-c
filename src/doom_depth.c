@@ -1,32 +1,27 @@
 #include <SDL2/SDL.h>
 #include <sqlite3.h>
 #include "doom_depth.h"
+#include "sdl_utils/sdl_utils.h"
+#include "map/map.h"
 
 int doom_depth() {
     SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_Window *window;
-    window = SDL_CreateWindow("Doom depth c", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 700, 500, SDL_WINDOW_RESIZABLE);
+    // TODO: extract to an init function
+    game_window_t *main_window = malloc(sizeof(game_window_t));
+    main_window->window = SDL_CreateWindow("Doom depth c", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 700, 500, SDL_WINDOW_RESIZABLE);;
+    main_window->renderer = SDL_CreateRenderer(
+            main_window->window,
+            1,
+            SDL_RENDERER_ACCELERATED
+    );
+    main_window->context = malloc(sizeof(window_context_t));
 
-    SDL_Event e;
-    int quit = 0;
-    while (!quit){
-        while (SDL_PollEvent(&e)){
-            if (e.type == SDL_QUIT){
-                quit = 1;
-            }
-            if (e.type == SDL_KEYDOWN){
-                quit = 1;
-            }
-            if (e.type == SDL_MOUSEBUTTONDOWN){
-                quit = 1;
-            }
-        }
-    }
+    map_screen(main_window, "map_1.json");
 
-    printf("SQLite version: %s\n", sqlite3_libversion());
+    // printf("SQLite version: %s\n", sqlite3_libversion());
 
-    SDL_DestroyWindow(window);
+    // TODO: free the window
     SDL_Quit();
 
     return 0;
