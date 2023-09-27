@@ -1,6 +1,6 @@
 #include "database_queries.h"
 
-const char *create_armor_table_sql =
+const char create_armor_table_sql[] =
         "CREATE TABLE IF NOT EXISTS ARMOR ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "name TEXT NOT NULL,"
@@ -12,7 +12,7 @@ const char *create_armor_table_sql =
         "image TEXT NOT NULL"
         ");";
 
-const char *create_weapon_table_sql =
+const char create_weapon_table_sql[] =
         "CREATE TABLE IF NOT EXISTS WEAPON ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "name TEXT NOT NULL,"
@@ -26,7 +26,7 @@ const char *create_weapon_table_sql =
         "image TEXT NOT NULL"
         ");";
 
-const char *create_monster_table_sql =
+const char create_monster_table_sql[] =
         "CREATE TABLE IF NOT EXISTS MONSTER ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "type INTEGER NOT NULL,"
@@ -38,7 +38,7 @@ const char *create_monster_table_sql =
         "image TEXT NOT NULL"
         ");";
 
-const char *create_inventory_table_sql =
+const char create_inventory_table_sql[] =
         "CREATE TABLE IF NOT EXISTS INVENTORY ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "capacity INTEGER NOT NULL,"
@@ -48,21 +48,21 @@ const char *create_inventory_table_sql =
         "nb_health_potions INTEGER NOT NULL"
         ");";
 
-const char *create_armors_in_inventory_table_sql =
+const char create_armors_in_inventory_table_sql[] =
         "CREATE TABLE IF NOT EXISTS ARMORS_IN_INVENTORY ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "inventory_id INTEGER NOT NULL REFERENCES INVENTORY,"
         "armor_id INTEGER NOT NULL REFERENCES ARMOR"
         ");";
 
-const char *create_weapons_in_inventory_table_sql =
+const char create_weapons_in_inventory_table_sql[] =
         "CREATE TABLE IF NOT EXISTS WEAPONS_IN_INVENTORY ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "inventory_id INTEGER NOT NULL REFERENCES INVENTORY,"
         "weapon_id INTEGER NOT NULL REFERENCES WEAPON"
         ");";
 
-const char *create_spell_table_sql =
+const char create_spell_table_sql[] =
         "CREATE TABLE IF NOT EXISTS SPELL ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "type INTEGER NOT NULL,"
@@ -71,7 +71,7 @@ const char *create_spell_table_sql =
         "cost INTEGER NOT NULL"
         ");";
 
-const char *create_player_table_sql =
+const char create_player_table_sql[] =
         "CREATE TABLE IF NOT EXISTS PLAYER ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "name TEXT NOT NULL,"
@@ -93,7 +93,7 @@ const char *create_player_table_sql =
         "stats_id INTEGER NOT NULL REFERENCES STATS"
         ");";
 
-const char *create_stage_table_sql =
+const char create_stage_table_sql[] =
         "CREATE TABLE IF NOT EXISTS STAGE ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "nb_enemies INTEGER NOT NULL,"
@@ -101,7 +101,7 @@ const char *create_stage_table_sql =
         ");";
 
 
-const char *create_stats_table_sql =
+const char create_stats_table_sql[] =
         "CREATE TABLE IF NOT EXISTS STATS ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "nb_monsters_killed INTEGER NOT NULL,"
@@ -112,7 +112,7 @@ const char *create_stats_table_sql =
         ");";
 
 
-const char *insert_armor_sql =
+const char insert_armor_sql[] =
         "INSERT INTO ARMOR (name, amount, rarity, max_uses, uses, cost, image)"
         "VALUES ('Leather Armor', 1, 1, 10, 10, 10, '../../../assets/leather_armor.png'),"
         "('Chainmail', 1, 1, 20, 20, 20, '../../../assets/chainmail.png'),"
@@ -120,7 +120,7 @@ const char *insert_armor_sql =
         "('Dragon Armor', 1, 2, 40, 40, 40, '../../../assets/dragon_armor.png'),"
         "('God Armor', 1, 3, 50, 50, 50, '../../../assets/god_armor.png');";
 
-const char *insert_weapon_sql =
+const char insert_weapon_sql[] =
         "INSERT INTO WEAPON (name, min_attack, max_attack, attacks_per_turn, rarity, max_uses, uses, cost, image)"
         "VALUES ('Butter Knife', 1, 2, 1, 1, 10, 10, 3, '../../../assets/butter_knife.png'),"
         "('Compass', 2, 4, 1, 1, 10, 10, 5, '../../../assets/compass.png'),"
@@ -129,12 +129,12 @@ const char *insert_weapon_sql =
         "('Flip-Flops', 5, 10, 1, 3, 10, 10, 20, '../../../assets/flip_flops.png'),"
         "('Wand', 6, 12, 1, 3, 10, 10, 25, '../../../assets/wand.png');";
 
-const char *insert_spell_sql =
+const char insert_spell_sql[] =
         "INSERT INTO SPELL (type, name, amount, cost) VALUES (1, 'Heal', 10, 10),"
         "(2, 'Defense', 10, 10),"
         "(3, 'Attack', 10, 10);";
 
-const char *insert_monster_sql =
+const char insert_monster_sql[] =
         "INSERT INTO MONSTER (type, name, hp_max, hp, attack, defense, image)"
         "VALUES (0, 'Bat', 10, 10, 2, 1, '../../../assets/bat.png'),"
         "(0, 'Gobelin', 15, 15, 3, 2, '../../../assets/gobelin.png'),"
@@ -150,3 +150,19 @@ const char *insert_monster_sql =
         "(2, 'M. Demacon', 100, 100, 10, 10, '../../../assets/demacon.png'),"
         "(2, 'M. Machavoine', 100, 100, 10, 10, '../../../assets/machavoine.png');";
 
+const char *ALL_QUERIES[] = {
+        create_armor_table_sql,
+        create_weapon_table_sql,
+        create_monster_table_sql,
+        create_inventory_table_sql,
+        create_armors_in_inventory_table_sql,
+        create_weapons_in_inventory_table_sql,
+        create_spell_table_sql,
+        create_player_table_sql,
+        create_stage_table_sql,
+        create_stats_table_sql,
+        insert_armor_sql,
+        insert_weapon_sql,
+        insert_spell_sql,
+        insert_monster_sql
+};

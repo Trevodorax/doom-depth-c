@@ -2,6 +2,7 @@
 #define DOOM_DEPTH_C_DATABASE_H
 
 #include <sqlite3.h>
+#include "database_queries.h"
 
 /**
  * @brief Connects to the SQLite database or returns NULL if it fails.
@@ -35,5 +36,22 @@ sqlite3 *db_connect();
  * @date 27/09/23
  */
 int execute_query(sqlite3 *db, char *sql, char **z_err_msg);
+
+/**
+ * @brief Initializes the database with required tables and initial data.
+ *
+ * This function executes a series of SQL queries to set up the necessary tables
+ * and insert initial data into them.
+ *
+ * @param db The SQLite3 database pointer where the tables and data will be initialized.
+ * @return SQLITE_OK if the initialization is successful. Otherwise, it returns an error code.
+ *
+ * @sideeffects May modify the database by creating new tables or inserting data.
+ * @dependencies Depends on the global ALL_QUERIES array for SQL commands.
+ * @errors Possible SQLite errors due to malformed SQL commands or other SQLite-specific issues.
+ * @author Tom BOURLARD
+ * @date 28/09/23
+ */
+int db_init(sqlite3 *db);
 
 #endif //DOOM_DEPTH_C_DATABASE_H
