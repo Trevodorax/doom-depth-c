@@ -50,6 +50,6 @@ Json *get_json_from_file(const char *file_path);
  */
 Json *parse_json(char **json_string);
 
-int json_test();
+void free_json(Json *json);
 
 #endif //DOOM_DEPTH_C_JSON_H

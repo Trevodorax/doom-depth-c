@@ -72,7 +72,6 @@ Json *parse_json(char **json_string) {
     }
 
     if(result == NULL) {
-        // TODO: free everything
         return NULL;
     }
 
@@ -83,6 +82,38 @@ Json *parse_json(char **json_string) {
     return result;
 }
 
+#include <stdlib.h>
+
+void free_json(Json *json) {
+    // no jokes
+    if (!json) {
+        return;
+    }
+
+    switch (json->type) {
+        case 's':
+            free(json->string);
+            break;
+        case 'a':
+            for (size_t i = 0; i < json->nb_elements; ++i) {
+                free_json(&json->values[i]);
+            }
+            free(json->values);
+            break;
+        case 'o':
+            for (size_t i = 0; i < json->nb_elements; ++i) {
+                free(json->keys[i]);
+                free_json(&json->values[i]);
+            }
+            free(json->keys);
+            free(json->values);
+            break;
+        case 'n':
+            break;
+        default:
+            break;
+    }
+}
 
 Json *parse_json_object(char **json_string_ptr) {
     (*json_string_ptr)++; // '{'
@@ -121,6 +152,7 @@ Json *parse_json_object(char **json_string_ptr) {
 
         // if no ':' after key, bad format
         if(**json_string_ptr != ':') {
+            free_json(obj);
             free(key);
             return NULL;
         }
@@ -133,6 +165,7 @@ Json *parse_json_object(char **json_string_ptr) {
         // Parse the value
         Json *value = parse_json(json_string_ptr);
         if(!value) {
+            free_json(obj);
             free(key);
             return NULL;
         }
@@ -163,6 +196,7 @@ Json *parse_json_object(char **json_string_ptr) {
             (*json_string_ptr)++;
             break;
         } else {
+            free_json(obj);
             return NULL;
         }
     }
@@ -197,7 +231,7 @@ Json *parse_json_array(char **json_string_ptr) {
         Json *value = parse_json(json_string_ptr);
         if(!value) {
             for (size_t i = 0; i < arr->nb_elements; i++) {
-                // TODO: free each Json in array
+                free_json(&arr->values[i]);
             }
             free(arr->values);
             free(arr);
@@ -225,6 +259,7 @@ Json *parse_json_array(char **json_string_ptr) {
             (*json_string_ptr)++;
             break;
         } else {
+            free_json(arr);
             return NULL;
         }
     }
@@ -233,7 +268,7 @@ Json *parse_json_array(char **json_string_ptr) {
 
 
 char *parse_json_string(char **json_string_ptr) {
-    (*json_string_ptr)++; // skip opening quote
+    (*json_string_ptr)++; // '"'
     char *start = *json_string_ptr;
     while(**json_string_ptr && **json_string_ptr != '"') {
         (*json_string_ptr)++;

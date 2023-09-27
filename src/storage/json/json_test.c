@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "json.h"
+#include "json_test.h"
 #include "../../minunit/minunit.h"
 
 int tests_run = 0;
@@ -18,6 +19,8 @@ static char * test_parse_simple_json_string() {
     mu_assert("error, value[1] != 20", json_obj->values[1].number == 20);
     mu_assert("error, key[2] != city", strcmp(json_obj->keys[2], "city") == 0);
     mu_assert("error, value[2] != Paris", strcmp(json_obj->values[2].string, "Paris") == 0);
+
+    free_json(json_obj);
 
     return 0;
 }
@@ -66,12 +69,14 @@ static char * test_parse_complex_json_string() {
     mu_assert("error, value[4].keys[1] != zipcode", strcmp(json_obj->values[4].keys[1], "zipcode") == 0);
     mu_assert("error, value[4].values[1] != 12345", strcmp(json_obj->values[4].values[1].string, "12345") == 0);
 
+    free_json(json_obj);
+
     return 0;
 }
 
 
 static char * test_parse_invalid_json_string() {
-    char *json_str = "{name:\"Paul\", age:20 city:\"Paris\"}"; // Missing comma and incorrect key format
+    char *json_str = "{\"name\":\"Paul\", \"age\":20, \"city\":\"Paris\", \"friends\": [\"tom\"A]}"; // Missing comma and incorrect key format
     Json *json_obj = parse_json(&json_str);
 
     mu_assert("error, json_obj should be NULL for invalid json", json_obj == NULL);
