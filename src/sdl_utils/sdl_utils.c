@@ -180,11 +180,15 @@ int drawThickRect(
     return EXIT_SUCCESS;
 }
 
-
 SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, const char * font_path, int font_size, SDL_Color color) {
     SDL_Surface * string_surface = NULL;
     SDL_Texture * string_texture = NULL;
+
     TTF_Font *font = TTF_OpenFont(font_path, font_size);
+    if (!font) {
+        fprintf(stderr, "\nError TTF_OpenFont : %s", TTF_GetError());
+        return NULL;
+    }
 
     if(!string)
     {
