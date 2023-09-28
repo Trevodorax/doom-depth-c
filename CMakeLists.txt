@@ -22,7 +22,11 @@ add_executable(doom_depth_c
         src/map/map.c
         src/map/map.h
         src/sdl_utils/sdl_utils.c
-        src/sdl_utils/sdl_utils.h)
+        src/sdl_utils/sdl_utils.h
+        src/storage/database/database.h
+        src/storage/database/database.c
+        src/storage/database/database_queries.h
+        src/storage/database/database_queries.c)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
@@ -43,4 +47,18 @@ add_executable(doom_depth_tests
         src/utils/array.c
         src/utils/array.h
         src/utils/array_test.c
-        src/utils/array_test.h)
+        src/utils/array_test.h
+        src/storage/database/database.h
+        src/storage/database/database.c
+        src/storage/database/database_queries.h
+        src/storage/database/database_queries.c
+        src/storage/database/database_test.c
+        src/storage/database/database_test.h
+)
+
+target_link_libraries(doom_depth_tests PRIVATE unofficial::sqlite3::sqlite3)
+target_link_libraries(doom_depth_tests
+        PRIVATE
+        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+)
