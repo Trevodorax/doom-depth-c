@@ -97,5 +97,19 @@ int draw_fill_rect(SDL_Rect rect, SDL_Color color, SDL_Renderer * renderer);
  */
 int drawThickRect(SDL_Rect rect, unsigned int thickness, SDL_Color color, SDL_Renderer * renderer);
 
+/**
+ * @brief Returns string as a texture with the specified font, font size and color.
+ *
+ * Creates a texture from the given string
+ *
+ * @param renderer Pointer to the renderer
+ * @param string String to render
+ * @param font_path Path of the font for the string
+ * @param font_size Size of the font for the string (in pt)
+ * @param color Color of the string
+ * @return Pointer to the created texture, or NULL on failure
+ */
+SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, const char * font_path, int font_size, SDL_Color color);
+
 
 #endif //DOOM_DEPTH_C_SDL_UTILS_H
