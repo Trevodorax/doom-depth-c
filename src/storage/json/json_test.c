@@ -72,7 +72,6 @@ static char * test_parse_complex_json_string() {
     return 0;
 }
 
-
 static char * test_parse_invalid_json_string() {
     char *json_str = "{\"name\":\"Paul\", \"age\":20, \"city\":\"Paris\", \"friends\": [\"tom\"A]}"; // Missing comma and incorrect key format
     Json *json_obj = parse_json(&json_str);
@@ -82,10 +81,77 @@ static char * test_parse_invalid_json_string() {
     return 0;
 }
 
+static char * test_get_index_of_key() {
+    char *json_str =
+            "{"
+            "\"name\":\"Paul\","
+            "\"age\":20,"
+            "\"city\":\"Paris\","
+            "\"friends\":[\"Anaelle\",\"Noam\", \"Tom\"],"
+            "\"address\":{"
+            "\"street\":\"1 rue du Pain\","
+            "\"zipcode\":\"12345\""
+            "}"
+            "}";
+
+    Json *json_obj = parse_json(&json_str);
+
+    int idx = get_index_of_key(json_obj, "age");
+    mu_assert("error, idx != 1", idx == 1);
+
+    idx = get_index_of_key(json_obj, "nonexistent_key");
+    mu_assert("error, idx != -1 for nonexistent key", idx == -1);
+
+    idx = get_index_of_key(NULL, "age");
+    mu_assert("error, idx != -1 for NULL json_obj", idx == -1);
+
+    idx = get_index_of_key(json_obj, NULL);
+    mu_assert("error, idx != -1 for NULL key", idx == -1);
+
+    free_json(json_obj);
+
+    return 0;
+}
+
+static char * test_get_object_at_key() {
+    char *json_str =
+            "{"
+            "\"name\":\"Paul\","
+            "\"age\":20,"
+            "\"city\":\"Paris\","
+            "\"address\":{"
+            "\"street\":\"1 rue du Pain\","
+            "\"zipcode\":\"12345\""
+            "}"
+            "}";
+
+    Json *json_obj = parse_json(&json_str);
+
+    Json *age_obj = get_object_at_key(json_obj, "age");
+    mu_assert("error, age_obj is NULL", age_obj != NULL);
+    mu_assert("error, age_obj->type != 'n'", age_obj->type == 'n');
+    mu_assert("error, age_obj->number != 20", age_obj->number == 20);
+
+    Json *nonexistent_obj = get_object_at_key(json_obj, "nonexistent_key");
+    mu_assert("error, nonexistent_obj is not NULL", nonexistent_obj == NULL);
+
+    Json *null_obj = get_object_at_key(NULL, "age");
+    mu_assert("error, null_obj is not NULL", null_obj == NULL);
+
+    Json *key_null_obj = get_object_at_key(json_obj, NULL);
+    mu_assert("error, key_null_obj is not NULL", key_null_obj == NULL);
+
+    free_json(json_obj);
+
+    return 0;
+}
+
 static char * all_tests() {
     mu_run_test(test_parse_simple_json_string);
     mu_run_test(test_parse_complex_json_string);
     mu_run_test(test_parse_invalid_json_string);
+    mu_run_test(test_get_index_of_key);
+    mu_run_test(test_get_object_at_key);
     return 0;
 }
 

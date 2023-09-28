@@ -328,3 +328,31 @@ int parse_json_number(char **json_string_ptr) {
     *json_string_ptr = end;
     return num;
 }
+
+int get_index_of_key(Json * json, char * key) {
+    // Check if the json pointer is NULL
+    if(json == NULL || key == NULL || json->type != 'o') {
+        return -1;
+    }
+
+    for(int i = 0; i < json->nb_elements; i++) {
+        if(strcmp(json->keys[i], key) == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+Json * get_object_at_key(Json * json, char * key) {
+    if (json == NULL || key == NULL || json->type != 'o') {
+        return NULL;
+    }
+
+    int index = get_index_of_key(json, key);
+    if (index == -1) {
+        return NULL;
+    }
+
+    return &(json->values[index]);
+}
