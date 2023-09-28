@@ -3,7 +3,7 @@
 
 sqlite3 *db_connect() {
 
-    char *file_name = "doomdepthc.database";
+    char *file_name = "../database/doomdepthc.database";
     sqlite3 *db;
 
     int rc = sqlite3_open(file_name, &db);
