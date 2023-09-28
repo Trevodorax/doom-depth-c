@@ -8,5 +8,5 @@ int main(int argc, char **argv) {
     int json = json_test();
     int array = array_test();
     int database = database_test();
-    return json && array;
+    return json && array && database;
 }
