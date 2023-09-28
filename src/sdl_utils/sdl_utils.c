@@ -50,7 +50,7 @@ game_window_t * init_game_window() {
         return NULL;
     }
 
-    if (!TTF_Init()) {
+    if (TTF_Init()) {
         return NULL;
     }
 
