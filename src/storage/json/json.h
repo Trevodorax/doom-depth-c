@@ -18,7 +18,7 @@ struct Json {
     char *string;
 
     // if array or object
-    size_t nb_elements;
+    int nb_elements;
     char **keys;
     Json *values;
 };

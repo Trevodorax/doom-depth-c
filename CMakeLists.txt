@@ -28,7 +28,8 @@ add_executable(doom_depth_c
         src/storage/database/database_queries.h
         src/storage/database/database_queries.c
         src/map/stage/stage.c
-        src/map/stage/stage.h)
+        src/map/stage/stage.h
+        src/entities/fight/fight.c)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
@@ -56,6 +57,17 @@ add_executable(doom_depth_tests
         src/storage/database/database_queries.c
         src/storage/database/database_test.c
         src/storage/database/database_test.h
+        src/sdl_utils/sdl_utils.c
+        src/sdl_utils/sdl_utils.h
+        src/map/stage/stage.c
+        src/map/stage/stage.h
+        src/entities/fight/fight.c
+        src/entities/fight/fight.h
+        src/map/map.c
+        src/map/map.h
+        src/map/map_test.c
+        src/map/map_test.h
+
 )
 
 target_link_libraries(doom_depth_tests PRIVATE unofficial::sqlite3::sqlite3)
