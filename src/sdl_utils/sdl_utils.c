@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL_ttf.h>
 #include "sdl_utils.h"
 
 void free_game_window(game_window_t * game_window) {
@@ -13,6 +14,8 @@ void free_game_window(game_window_t * game_window) {
     if(game_window->context) {
         free(game_window->context);
     }
+
+    TTF_Quit();
 }
 
 game_window_t * init_game_window() {
@@ -44,6 +47,10 @@ game_window_t * init_game_window() {
 
     game_window->context = malloc(sizeof(window_context_t));
     if(!game_window->context) {
+        return NULL;
+    }
+
+    if (!TTF_Init()) {
         return NULL;
     }
 
@@ -174,3 +181,34 @@ int drawThickRect(
 }
 
 
+SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, const char * font_path, int font_size, SDL_Color color) {
+    SDL_Surface * string_surface = NULL;
+    SDL_Texture * string_texture = NULL;
+    TTF_Font *font = TTF_OpenFont(font_path, font_size);
+
+    if(!string)
+    {
+        return NULL;
+    }
+
+    // get the string surface
+    string_surface = TTF_RenderText_Solid(font, string, color);
+    if(!string_surface)
+    {
+        return NULL;
+    }
+
+    // transform the surface into a texture
+    string_texture = SDL_CreateTextureFromSurface(renderer, string_surface);
+    if(!string_texture)
+    {
+        fprintf(stderr, "\nError SDL_CreateTextureFromSurface : %s", SDL_GetError());
+        return NULL;
+    }
+
+    // free the surface (it was just to create the texture)
+    SDL_FreeSurface(string_surface);
+
+    TTF_CloseFont(font);
+    return string_texture;
+}
