@@ -9,12 +9,14 @@ int doom_depth() {
 
     game_window_t * main_window = init_game_window();
 
-    map_screen(main_window, "map_1.json");
+    if(map_screen(main_window, "../assets/map_1.json") == EXIT_FAILURE) {
+        return EXIT_FAILURE;
+    }
 
     // printf("SQLite version: %s\n", sqlite3_libversion());
 
     free_game_window(main_window);
     SDL_Quit();
 
-    return 0;
+    return EXIT_SUCCESS;
 }

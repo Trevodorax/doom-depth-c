@@ -71,7 +71,6 @@ Json *get_json_from_file(const char *file_path) {
 
     // turn it into a Json struct
     Json *json = parse_json(&file_content);
-    free(file_content);
 
     return json;
 }

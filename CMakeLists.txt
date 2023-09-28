@@ -12,7 +12,7 @@ add_executable(doom_depth_c
         src/entities/monster/monster.h
         src/entities/player/player.h
         src/entities/spell/spell.h
-        src/entities/stage/stage.h
+        src/entities/fight/fight.h
         src/entities/stats/stats.h
         src/entities/weapon/weapon.h
         src/storage/json/json.c
@@ -26,7 +26,9 @@ add_executable(doom_depth_c
         src/storage/database/database.h
         src/storage/database/database.c
         src/storage/database/database_queries.h
-        src/storage/database/database_queries.c)
+        src/storage/database/database_queries.c
+        src/map/stage/stage.c
+        src/map/stage/stage.h)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
