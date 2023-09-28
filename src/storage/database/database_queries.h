@@ -19,6 +19,6 @@ extern const char insert_weapon_sql[];
 extern const char insert_spell_sql[];
 extern const char insert_monster_sql[];
 
-extern char * ALL_QUERIES[];
+extern const char * ALL_QUERIES[];
 
 #endif //DOOM_DEPTH_C_DATABASE_QUERIES_H

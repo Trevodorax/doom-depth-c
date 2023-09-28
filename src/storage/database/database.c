@@ -17,7 +17,7 @@ sqlite3 *db_connect() {
     return db;
 }
 
-int execute_query(sqlite3 *db, char *sql, char **z_err_msg) {
+int execute_query(sqlite3 *db, const char *sql, char **z_err_msg) {
 
     int rc = sqlite3_exec(db, sql, 0, 0, z_err_msg);
 

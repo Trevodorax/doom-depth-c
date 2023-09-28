@@ -37,7 +37,7 @@ sqlite3 *db_connect();
  * @author Tom BOURLARD
  * @date 27/09/23
  */
-int execute_query(sqlite3 *db, char *sql, char **z_err_msg);
+int execute_query(sqlite3 *db, const char *sql, char **z_err_msg);
 
 /**
  * @brief Initializes the database with required tables and initial data.
