@@ -53,27 +53,24 @@ sqlite3 *db_connection() {
 
     while (tries < MAX_TRIES) {
 
-        db = db_connect();
+        db = db_connect(); // return NULL if unable to connect
 
         if (db) {
 
             int rc = db_init(db);
-
-            if (rc != SQLITE_OK) {
-                sqlite3_close(db);
-                tries++;
-                continue;
+            if (rc == SQLITE_OK) {
+                return db;
             }
 
-            return db;
-
+            fprintf(stderr, "Unable to initialize the database.\n");
+            sqlite3_close(db);
+        } else {
+            fprintf(stderr, "Unable to connect to the database.\n");
         }
 
         tries++;
 
     }
 
-    fprintf(stderr, "Unable to connect to the database.\n");
     return NULL;
-
 }
