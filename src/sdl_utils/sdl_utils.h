@@ -71,7 +71,7 @@ int set_background_color(SDL_Renderer * renderer, SDL_Color color);
  * @param image_file_name Name of the image file to load
  * @return Pointer to the created texture, or NULL on failure
  */
-SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_file_name);
+SDL_Texture * get_bmp_texture(SDL_Renderer * renderer, const char * image_file_name);
 
 /**
  * @brief Draws a filled rectangle with the specified color
@@ -110,6 +110,27 @@ int drawThickRect(SDL_Rect rect, unsigned int thickness, SDL_Color color, SDL_Re
  * @return Pointer to the created texture, or NULL on failure
  */
 SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, const char * font_path, int font_size, SDL_Color color);
+
+/**
+ * @brief Returns image as a texture.
+ *
+ * Creates a texture from the given image, supported formats are:
+ * - JPG (.jpg or .jpeg)
+ * - PNG
+ * - GIF
+ * - BMP
+ * - TGA
+ * - XPM
+ * - PNM
+ * - PCX
+ * - TIF (.tif ot .tiff)
+ * - LBM (.lbm or .iff)
+ *
+ * @param renderer Pointer to the renderer
+ * @param image_path String to render
+ * @return Pointer to the created texture, or NULL on failure
+ */
+SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_path);
 
 
 #endif //DOOM_DEPTH_C_SDL_UTILS_H
