@@ -6,8 +6,10 @@
 #include "../spell/spell.h"
 #include "../stats/stats.h"
 #include "../weapon/weapon.h"
+#include <malloc.h>
+#include <string.h>
 
-typedef struct {
+typedef struct player_t {
     char *name;
     unsigned int hp;
     unsigned int mana;
@@ -17,13 +19,23 @@ typedef struct {
     unsigned int base_attack;
     unsigned int base_defense;
     unsigned int gold;
-    Spell offensive_spell;
-    Spell defensive_spell;
-    Spell healing_spell;
-    Armor *chosen_armor;
-    Weapon *chosen_weapon;
-    Inventory *inventory;
-    Stats *stats;
+    unsigned short action_points;
+    spell_t *offensive_spell;
+    spell_t *defensive_spell;
+    spell_t *healing_spell;
+    armor_t *chosen_armor;
+    weapon_t *chosen_weapon;
+    inventory_t *inventory;
+    stats_t *stats;
 } player_t;
+
+player_t *create_player(char *name);
+
+player_t *
+create_player_from_database(char *name, unsigned int hp, unsigned int mana, unsigned int mana_max, unsigned int xp,
+                            unsigned int level, unsigned int base_attack, unsigned int base_defense, unsigned int gold,
+                            unsigned int action_points, spell_t *offensive_spell, spell_t *defensive_spell,
+                            spell_t *healing_spell, armor_t *chosen_armor, weapon_t *chosen_weapon, inventory_t *inventory,
+                            stats_t *stats);
 
 #endif

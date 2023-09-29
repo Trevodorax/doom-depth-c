@@ -28,6 +28,12 @@ add_executable(doom_depth_c
         src/storage/database/database.c
         src/storage/database/database_queries.h
         src/storage/database/database_queries.c
+        src/entities/player/player.c
+        src/entities/spell/spell.c
+        src/entities/stats/stats.c
+        src/entities/inventory/inventory.c
+        src/entities/weapon/weapon.c
+        src/entities/armor/armor.c
         src/map/stage/stage.c
         src/map/stage/stage.h
         src/start_menu/start_menu.c
