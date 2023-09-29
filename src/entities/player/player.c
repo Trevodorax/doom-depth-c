@@ -30,3 +30,27 @@ player_t * create_player(char *name) {
     return player;
 }
 
+unsigned int compute_xp_needed(unsigned int level){
+    int total_xp = 0;
+    for (int i = 1; i <= level; ++i) {
+        total_xp += 100 * i;
+    }
+    return (unsigned int)total_xp;
+}
+
+void level_up(player_t * player) {
+
+}
+
+void check_level_up(player_t * player){
+    if(compute_xp_needed(player->level+1) <= player->xp){
+        level_up(player);
+    }
+}
+
+void give_exp(player_t * player, unsigned int amount){
+    player->xp += amount;
+    check_level_up(player);
+}
+
+

@@ -38,4 +38,7 @@ create_player_from_database(char *name, unsigned int hp, unsigned int mana, unsi
                             spell_t *healing_spell, armor_t *chosen_armor, weapon_t *chosen_weapon, inventory_t *inventory,
                             stats_t *stats);
 
+void give_exp(player_t * player, unsigned int amount);
+
+
 #endif
