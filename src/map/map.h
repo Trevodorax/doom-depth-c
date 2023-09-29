@@ -2,6 +2,12 @@
 #define DOOM_DEPTH_C_MAP_H
 
 #include "../sdl_utils/sdl_utils.h"
+#include "stage/stage.h"
+
+typedef struct {
+    char * name;
+    stage_t * first_stage;
+} map_t;
 
 /**
  * @brief switches the window to map mode

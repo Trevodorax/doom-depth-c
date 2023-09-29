@@ -18,7 +18,7 @@ struct Json {
     char *string;
 
     // if array or object
-    size_t nb_elements;
+    int nb_elements;
     char **keys;
     Json *values;
 };
@@ -35,7 +35,7 @@ struct Json {
  * @author Paul Gaudeaux
  * @date 26/09/23
  */
-Json *get_json_from_file(const char *file_path);
+Json * get_json_from_file(const char *file_path);
 
 /**
  * @brief Parses a string and returns a Json struct
@@ -49,7 +49,26 @@ Json *get_json_from_file(const char *file_path);
  * @author Paul Gaudeaux
  * @date 26/09/23
  */
-Json *parse_json(char **json_string);
+Json * parse_json(char ** json_string);
+
+/**
+ * @brief Returns the index of the element with given key
+ *
+ * @param json Searched json of type 'o'
+ * @param key Key to find index of
+ * @error If there is no object with given key, returns -1
+ * @return The index of the object with the given key (or -1)
+ */
+int get_index_of_key(Json * json, char * key);
+
+/**
+ * @brief Retrieves a Json object for a given key within a parent Json object.
+ *
+ * @param json Pointer to the parent Json object of type 'o'.
+ * @param key  Key to be searched within the parent Json object.
+ * @return Pointer to the Json object corresponding to the key, or NULL if not found.
+ */
+Json * get_object_at_key(Json * json, char * key);
 
 /**
  * @brief recursively frees a Json completely
@@ -59,6 +78,6 @@ Json *parse_json(char **json_string);
  * @author Paul Gaudeaux
  * @date 17/09/23
  */
-void free_json(Json *json);
+void free_json(Json * json);
 
 #endif //DOOM_DEPTH_C_JSON_H

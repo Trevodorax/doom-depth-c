@@ -13,6 +13,7 @@ add_executable(doom_depth_c
         src/entities/player/player.h
         src/entities/spell/spell.h
         src/entities/fight/fight.h
+        src/entities/fight/fight.c
         src/entities/stats/stats.h
         src/entities/weapon/weapon.h
         src/storage/json/json.c
@@ -56,6 +57,17 @@ add_executable(doom_depth_tests
         src/storage/database/database_queries.c
         src/storage/database/database_test.c
         src/storage/database/database_test.h
+        src/sdl_utils/sdl_utils.c
+        src/sdl_utils/sdl_utils.h
+        src/map/stage/stage.c
+        src/map/stage/stage.h
+        src/entities/fight/fight.c
+        src/entities/fight/fight.h
+        src/map/map.c
+        src/map/map.h
+        src/map/map_test.c
+        src/map/map_test.h
+
 )
 
 target_link_libraries(doom_depth_tests PRIVATE unofficial::sqlite3::sqlite3)

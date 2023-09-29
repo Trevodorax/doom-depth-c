@@ -113,7 +113,7 @@ Json *parse_json(char **json_string) {
         return NULL;
     }
 
-    while(isspace(**json_string)) {
+    while(isspace((unsigned char) **json_string)) {
         (*json_string)++;
     }
 
@@ -164,7 +164,7 @@ Json *parse_json_object(char **json_string_ptr) {
     obj->keys = NULL;
     obj->values = NULL;
 
-    while(isspace(**json_string_ptr)) {
+    while(isspace((unsigned char) **json_string_ptr)) {
         (*json_string_ptr)++;
     }
 
@@ -182,7 +182,7 @@ Json *parse_json_object(char **json_string_ptr) {
             return NULL;
         }
 
-        while(isspace(**json_string_ptr)) {
+        while(isspace((unsigned char) **json_string_ptr)) {
             (*json_string_ptr)++;
         }
 
@@ -194,7 +194,7 @@ Json *parse_json_object(char **json_string_ptr) {
         }
         (*json_string_ptr)++; // ':'
 
-        while(isspace(**json_string_ptr)) {
+        while(isspace((unsigned char) **json_string_ptr)) {
             (*json_string_ptr)++;
         }
 
@@ -217,14 +217,14 @@ Json *parse_json_object(char **json_string_ptr) {
         obj->values[obj->nb_elements] = *value;
         obj->nb_elements++;
 
-        while(isspace(**json_string_ptr)) {
+        while(isspace((unsigned char) **json_string_ptr)) {
             (*json_string_ptr)++;
         }
 
         if(**json_string_ptr == ',') {
             // new element
             (*json_string_ptr)++;
-            while(isspace(**json_string_ptr)) {
+            while(isspace((unsigned char) **json_string_ptr)) {
                 (*json_string_ptr)++;
             }
         } else if(**json_string_ptr == '}') {
@@ -252,7 +252,7 @@ Json *parse_json_array(char **json_string_ptr) {
     arr->nb_elements = 0;
     arr->values = NULL;
 
-    while(isspace(**json_string_ptr)) {
+    while(isspace((unsigned char) **json_string_ptr)) {
         (*json_string_ptr)++;
     }
 
@@ -282,13 +282,13 @@ Json *parse_json_array(char **json_string_ptr) {
         arr->values[arr->nb_elements] = *value;
         (arr->nb_elements)++;
 
-        while(isspace(**json_string_ptr)) {
+        while(isspace((unsigned char) **json_string_ptr)) {
             (*json_string_ptr)++;
         }
 
         if(**json_string_ptr == ',') {
             (*json_string_ptr)++;
-            while(isspace(**json_string_ptr)) {
+            while(isspace((unsigned char) **json_string_ptr)) {
                 (*json_string_ptr)++;
             }
         } else if(**json_string_ptr == ']') {
@@ -327,4 +327,32 @@ int parse_json_number(char **json_string_ptr) {
     int num = (int)strtol(*json_string_ptr, &end, 10);
     *json_string_ptr = end;
     return num;
+}
+
+int get_index_of_key(Json * json, char * key) {
+    // Check if the json pointer is NULL
+    if(json == NULL || key == NULL || json->type != 'o') {
+        return -1;
+    }
+
+    for(int i = 0; i < json->nb_elements; i++) {
+        if(strcmp(json->keys[i], key) == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+Json * get_object_at_key(Json * json, char * key) {
+    if (json == NULL || key == NULL || json->type != 'o') {
+        return NULL;
+    }
+
+    int index = get_index_of_key(json, key);
+    if (index == -1) {
+        return NULL;
+    }
+
+    return &(json->values[index]);
 }
