@@ -4,13 +4,13 @@
 
 fight_t * json_to_fight(Json * fight_json) {
     if (!fight_json || fight_json->type != 'o') {
-        fprintf(stderr, "json_to_fight error: invalid input json\n");
+        fprintf(stderr, "\njson_to_fight error: invalid input json\n");
         return NULL;
     }
 
     fight_t *result = malloc(sizeof(fight_t));
     if (!result) {
-        fprintf(stderr, "json_to_fight error: memory allocation failed\n");
+        fprintf(stderr, "\njson_to_fight error: memory allocation failed\n");
         return NULL;
     }
 
@@ -24,7 +24,7 @@ fight_t * json_to_fight(Json * fight_json) {
 
     Json *chances = get_object_at_key(fight_json, "enemy_chances_to_appear");
     if(!chances || chances->type != 'a') {
-        fprintf(stderr, "json_to_fight error: enemy_chances_to_appear not found or invalid\n");
+        fprintf(stderr, "\njson_to_fight error: enemy_chances_to_appear not found or invalid\n");
         free(result);
         return NULL;
     }
@@ -32,7 +32,7 @@ fight_t * json_to_fight(Json * fight_json) {
     result->enemy_chances_to_appear = (float *)malloc(result->nb_enemies * sizeof(float));
     for (unsigned int i = 0; i < result->nb_enemies; i++) {
         if(chances->values[i].type != 'n') {
-            fprintf(stderr, "json_to_fight error: enemy chances to appear is not a number.");
+            fprintf(stderr, "\njson_to_fight error: enemy chances to appear is not a number.");
             return NULL;
         }
         result->enemy_chances_to_appear[i] = ((float)chances->values[i].number) / 100;

@@ -21,6 +21,8 @@ struct stage_t {
     bool has_linked_map; // true if the user goes to a linked map when stepping on this stage
     char * linked_map_file_path;
 
+    bool counted; // for the get_map_dimensions function
+
     fight_t *fight; // only if type == fight
 
     // next stages
@@ -31,5 +33,7 @@ struct stage_t {
 };
 
 stage_t * json_to_stage(Json * json_stage);
+
+void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
 
 #endif //DOOM_DEPTH_C_STAGE_H

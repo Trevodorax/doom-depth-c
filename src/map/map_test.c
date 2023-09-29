@@ -3,6 +3,9 @@
 #include "map_test.h"
 #include "map.h"
 
+map_t * json_to_map(Json * json_map);
+int get_map_dimensions(map_t *map, int *width, int *height);
+
 static char * test_json_to_map() {
     char *json_str =
             "{"
@@ -51,8 +54,90 @@ static char * test_json_to_map() {
     return 0;
 }
 
+static char * test_get_map_dimensions() {
+    char *string_map = "{"
+                      "\"name\": \"Test Map\","
+                      "\"stages\": ["
+                          "{"
+                              "\"nb_monsters\": 0,"
+                              "\"done\": 1,"
+                              "\"start\": 1,"
+                               "\"left\": {"
+                                   "\"nb_monsters\": 3,"
+                                   "\"enemy_chances_to_appear\": [50, 50],"
+                                   "\"done\": 0"
+                               "},"
+                              "\"right\": {"
+                                  "\"nb_monsters\": 2,"
+                                  "\"enemy_chances_to_appear\": [50, 50],"
+                                  "\"done\": 0,"
+                                  "\"right\": {"
+                                      "\"nb_monsters\": 4,"
+                                      "\"enemy_chances_to_appear\": [30, 40, 30],"
+                                      "\"done\": 0,"
+                                      "\"right\": {"
+                                          "\"nb_monsters\": 1,"
+                                          "\"enemy_chances_to_appear\": [0, 0, 0, 100],"
+                                          "\"done\": 0,"
+                                          "\"linked_map\": \"map_2.json\""
+                                      "},"
+                                      "\"top\": {"
+                                          "\"nb_monsters\": 3,"
+                                          "\"enemy_chances_to_appear\": [50, 50],"
+                                          "\"done\": 0,"
+                                           "\"top\": {"
+                                               "\"nb_monsters\": 3,"
+                                               "\"enemy_chances_to_appear\": [50, 50],"
+                                               "\"done\": 0"
+                                           "}"
+                                      "},"
+                                      "\"bottom\": {"
+                                          "\"nb_monsters\": 3,"
+                                          "\"enemy_chances_to_appear\": [50, 50],"
+                                          "\"done\": 0,"
+                                          "\"bottom\": {"
+                                              "\"nb_monsters\": 3,"
+                                              "\"enemy_chances_to_appear\": [50, 50],"
+                                              "\"done\": 0,"
+                                               "\"bottom\": {"
+                                                   "\"nb_monsters\": 3,"
+                                                   "\"enemy_chances_to_appear\": [50, 50],"
+                                                   "\"done\": 0,"
+                                                   "\"bottom\": {"
+                                                       "\"nb_monsters\": 3,"
+                                                       "\"enemy_chances_to_appear\": [50, 50],"
+                                                       "\"done\": 0"
+                                                   "}"
+                                              "}"
+                                          "}"
+                                      "}"
+                                  "}"
+                              "}"
+                          "}"
+                      "]"
+                      "}";
+
+    Json *json_map = parse_json(&string_map);
+
+    map_t *map = json_to_map(json_map);
+    mu_assert("\ntest_get_map_dimensions error, map is NULL", map != NULL);
+    mu_assert("\ntest_get_map_dimensions error, map name is not TestMap", strcmp(map->name, "Test Map") == 0);
+
+    int width;
+    int height;
+
+    get_map_dimensions(map, &width, &height);
+
+    printf("\nwidth: %d", width);
+    printf("\nheight: %d", height);
+
+    mu_assert("\ntest_get_map_dimensions error wrong width", width == 5);
+    mu_assert("\ntest_get_map_dimensions error wrong height", height == 7);
+}
+
 static char * all_tests() {
     mu_run_test(test_json_to_map);
+    mu_run_test(test_get_map_dimensions);
     return 0;
 }
 

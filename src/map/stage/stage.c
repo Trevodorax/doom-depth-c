@@ -22,6 +22,7 @@ stage_t * json_to_stage(Json * json_stage) {
     result->has_linked_map = false;
     result->fight = NULL;
     result->top = result->right = result->bottom = result->left = NULL;
+    result->counted = false;
 
     Json * start = get_object_at_key(json_stage, "start");
     if (start && start->type == 'n') {
@@ -41,6 +42,7 @@ stage_t * json_to_stage(Json * json_stage) {
     Json *linked_map = get_object_at_key(json_stage, "linked_map");
     if (linked_map && linked_map->type == 's') {
         result->has_linked_map = true;
+        result->linked_map_file_path = malloc(strlen(linked_map->string) + 1);
         strcpy(result->linked_map_file_path, linked_map->string);
     }
 
@@ -68,4 +70,31 @@ stage_t * json_to_stage(Json * json_stage) {
     return result;
 }
 
+void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y) {
+    if(!stage || stage->counted) {
+        return;
+    }
 
+    stage->counted = true;
+
+    if (x > *max_x) {
+        *max_x = x;
+    }
+
+    if (y > *max_y) {
+        *max_y = y;
+    }
+
+    if (x < *min_x) {
+        *min_x = x;
+    }
+
+    if (y < *min_y) {
+        *min_y = y;
+    }
+
+    get_stage_dimensions(stage->top, x, y + 1, max_x, max_y, min_x, min_y);
+    get_stage_dimensions(stage->right, x + 1, y, max_x, max_y, min_x, min_y);
+    get_stage_dimensions(stage->bottom, x, y - 1, max_x, max_y, min_x, min_y);
+    get_stage_dimensions(stage->left, x - 1, y, max_x, max_y, min_x, min_y);
+}

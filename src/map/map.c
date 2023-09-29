@@ -1,10 +1,21 @@
 #include "map.h"
 #include "../storage/json/json.h"
 #include "../sdl_utils/sdl_utils.h"
-#include "stage/stage.h"
 
 int display_map(game_window_t * game_window, map_t * map);
 map_t * json_to_map(Json * json_map);
+
+/**
+ * @brief Gets the height and width of a map
+ *
+ * @param map The map for which we get the dimensions
+ * @param width Where the width will be stored
+ * @param height Where the height will be stored
+ * @sideeffects Sets the width and height to the dimensions of the map
+ * @error If the map is not correct, this function will die (the checks must have been done before)
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int get_map_dimensions(map_t *map, int *width, int *height);
 
 int map_screen(game_window_t *game_window, char *map_file) {
     Json * json_map = get_json_from_file(map_file);
@@ -92,6 +103,25 @@ int display_map(game_window_t * game_window, map_t * map) {
     }
 
     SDL_RenderPresent(game_window->renderer);
+
+    return EXIT_SUCCESS;
+}
+
+int get_map_dimensions(map_t *map, int *width, int *height) {
+    if (!map || !width || !height) {
+        fprintf(stderr, "\nget_map_dimensions error: please provide all necessary arguments.");
+        return EXIT_FAILURE;
+    }
+
+    int max_x = 0;
+    int max_y = 0;
+    int min_x = 0;
+    int min_y = 0;
+
+    get_stage_dimensions(map->first_stage, 0, 0, &max_x, &max_y, &min_x, &min_y);
+
+    *width = (max_x - min_x) + 1;
+    *height = (max_y - min_y) + 1;
 
     return EXIT_SUCCESS;
 }
