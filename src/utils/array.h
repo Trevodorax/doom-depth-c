@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-typedef struct ArrayNode {
+typedef struct array_node_t {
     void *value;
     struct array_node_t *next;
 } array_node_t;
