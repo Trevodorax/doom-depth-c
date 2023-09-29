@@ -15,8 +15,6 @@
  * @sideeffects None.
  * @dependencies Depends on the SQLite3 library.
  * @errors Returns NULL if unable to connect to the database.
- * @author Tom BOURLARD
- * @date 27/09/23
  */
 sqlite3 *db_connect();
 
@@ -34,25 +32,23 @@ sqlite3 *db_connect();
  * @sideeffects May modify the SQLite database based on the SQL query provided.
  * @dependencies Depends on the SQLite3 library.
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
- * @author Tom BOURLARD
- * @date 27/09/23
  */
 int execute_query(sqlite3 *db, const char *sql, char **z_err_msg);
 
 /**
- * @brief Initializes the database with required tables and initial data.
+ * @brief Initializes the database by creating necessary tables and inserting default values.
  *
- * This function executes a series of SQL queries to set up the necessary tables
- * and insert initial data into them.
+ * This function iterates over the predefined table information in `all_tables_info`.
+ * For each table:
+ * - It checks if the table exists in the database.
+ * - If the table doesn't exist, it creates the table and, if applicable, inserts default values into the table.
  *
- * @param db The SQLite3 database pointer where the tables and data will be initialized.
- * @return SQLITE_OK if the initialization is successful. Otherwise, it returns an error code.
+ * @param db    A pointer to the SQLite3 database connection.
+ * @return      SQLITE_OK if the initialization is successful; an error code otherwise.
  *
  * @sideeffects May modify the database by creating new tables or inserting data.
  * @dependencies Depends on the global ALL_QUERIES array for SQL commands.
  * @errors Possible SQLite errors due to malformed SQL commands or other SQLite-specific issues.
- * @author Tom BOURLARD
- * @date 28/09/23
  */
 int db_init(sqlite3 *db);
 
@@ -67,8 +63,6 @@ int db_init(sqlite3 *db);
  * @sideeffects May create and initialize a new database. Modifies the database by potentially adding new tables or data.
  * @dependencies Depends on db_connect() and db_init() functions.
  * @errors Potential errors from SQLite during database connection or initialization.
- * @author Tom BOURLARD
- * @date 28/09/23
  */
 sqlite3 *db_connection();
 
