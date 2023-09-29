@@ -113,7 +113,7 @@ Json *parse_json(char **json_string) {
         return NULL;
     }
 
-    while(isspace(**json_string)) {
+    while(isspace((unsigned char) **json_string)) {
         (*json_string)++;
     }
 
@@ -164,7 +164,7 @@ Json *parse_json_object(char **json_string_ptr) {
     obj->keys = NULL;
     obj->values = NULL;
 
-    while(isspace(**json_string_ptr)) {
+    while(isspace((unsigned char) **json_string_ptr)) {
         (*json_string_ptr)++;
     }
 
@@ -182,7 +182,7 @@ Json *parse_json_object(char **json_string_ptr) {
             return NULL;
         }
 
-        while(isspace(**json_string_ptr)) {
+        while(isspace((unsigned char) **json_string_ptr)) {
             (*json_string_ptr)++;
         }
 
@@ -194,7 +194,7 @@ Json *parse_json_object(char **json_string_ptr) {
         }
         (*json_string_ptr)++; // ':'
 
-        while(isspace(**json_string_ptr)) {
+        while(isspace((unsigned char) **json_string_ptr)) {
             (*json_string_ptr)++;
         }
 
@@ -217,14 +217,14 @@ Json *parse_json_object(char **json_string_ptr) {
         obj->values[obj->nb_elements] = *value;
         obj->nb_elements++;
 
-        while(isspace(**json_string_ptr)) {
+        while(isspace((unsigned char) **json_string_ptr)) {
             (*json_string_ptr)++;
         }
 
         if(**json_string_ptr == ',') {
             // new element
             (*json_string_ptr)++;
-            while(isspace(**json_string_ptr)) {
+            while(isspace((unsigned char) **json_string_ptr)) {
                 (*json_string_ptr)++;
             }
         } else if(**json_string_ptr == '}') {
@@ -252,7 +252,7 @@ Json *parse_json_array(char **json_string_ptr) {
     arr->nb_elements = 0;
     arr->values = NULL;
 
-    while(isspace(**json_string_ptr)) {
+    while(isspace((unsigned char) **json_string_ptr)) {
         (*json_string_ptr)++;
     }
 
@@ -282,13 +282,13 @@ Json *parse_json_array(char **json_string_ptr) {
         arr->values[arr->nb_elements] = *value;
         (arr->nb_elements)++;
 
-        while(isspace(**json_string_ptr)) {
+        while(isspace((unsigned char) **json_string_ptr)) {
             (*json_string_ptr)++;
         }
 
         if(**json_string_ptr == ',') {
             (*json_string_ptr)++;
-            while(isspace(**json_string_ptr)) {
+            while(isspace((unsigned char) **json_string_ptr)) {
                 (*json_string_ptr)++;
             }
         } else if(**json_string_ptr == ']') {
