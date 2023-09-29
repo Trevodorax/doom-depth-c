@@ -63,4 +63,13 @@ void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y
  */
 SDL_Color * get_stage_color(stage_t * stage);
 
+
+/**
+ * @brief Sets all stages to not counted so the count can proceed normally
+ *
+ * @sideeffects Sets all stages to not counted recursively
+ * @param stage
+ */
+void uncount_stages(stage_t * stage);
+
 #endif //DOOM_DEPTH_C_STAGE_H

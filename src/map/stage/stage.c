@@ -77,17 +77,17 @@ stage_t * json_to_stage(Json * json_stage) {
     return result;
 }
 
-void prepare_get_stage_dimensions(stage_t * stage) {
+void uncount_stages(stage_t * stage) {
     if(!stage) {
         return;
     }
 
     stage->counted = false;
 
-    prepare_get_stage_dimensions(stage->top);
-    prepare_get_stage_dimensions(stage->right);
-    prepare_get_stage_dimensions(stage->bottom);
-    prepare_get_stage_dimensions(stage->left);
+    uncount_stages(stage->top);
+    uncount_stages(stage->right);
+    uncount_stages(stage->bottom);
+    uncount_stages(stage->left);
 }
 
 void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y) {

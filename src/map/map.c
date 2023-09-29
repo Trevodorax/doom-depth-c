@@ -36,14 +36,6 @@ map_t * json_to_map(Json * json_map);
 int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, int * initial_y);
 
 /**
- * @brief Sets all stages to not counted so the count can proceed normally
- *
- * @sideeffects Sets all stages to not counted recursively
- * @param stage
- */
-void prepare_get_stage_dimensions(stage_t * stage);
-
-/**
  * @brief Displays the given stage and its stages recursively
  *
  * @param game_window The window to print the stages on
@@ -164,6 +156,7 @@ int display_map(game_window_t * game_window, map_t * map) {
         return EXIT_FAILURE;
     }
 
+    uncount_stages(map->first_stage);
     print_stages(game_window, map->first_stage, initial_x, initial_y, stage_size);
 
     SDL_RenderPresent(game_window->renderer);
@@ -182,7 +175,7 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
     int min_x = 0;
     int min_y = 0;
 
-    prepare_get_stage_dimensions(map->first_stage);
+    uncount_stages(map->first_stage);
     get_stage_dimensions(map->first_stage, 0, 0, &max_x, &max_y, &min_x, &min_y);
 
     *width = (max_x - min_x) + 1;
@@ -195,9 +188,11 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
 }
 
 int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size) {
-    if(!stages) {
+    if(!stages || stages->counted) {
         return EXIT_SUCCESS;
     }
+
+    stages->counted = true;
 
     print_stage(game_window, stages, x_coord * stage_size, y_coord * stage_size, stage_size);
 
