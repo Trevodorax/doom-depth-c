@@ -1,7 +1,15 @@
 #ifndef DOOM_DEPTH_C_DATABASE_QUERIES_H
 #define DOOM_DEPTH_C_DATABASE_QUERIES_H
 
-#define ALL_QUERIES_SIZE 14
+#include <stdio.h>
+
+#define ALL_QUERIES_SIZE 10
+
+typedef struct Table_Info {
+    const char* checkQuery;
+    const char* createQuery;
+    const char* insertQuery;
+} Table_Info;
 
 extern const char create_armor_table_sql[];
 extern const char create_weapon_table_sql[];
@@ -19,6 +27,6 @@ extern const char insert_weapon_sql[];
 extern const char insert_spell_sql[];
 extern const char insert_monster_sql[];
 
-extern const char * ALL_QUERIES[];
+extern Table_Info all_tables_info[];
 
 #endif //DOOM_DEPTH_C_DATABASE_QUERIES_H

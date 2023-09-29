@@ -150,19 +150,55 @@ const char insert_monster_sql[] =
         "(2, 'M. Demacon', 100, 100, 10, 10, '../../../assets/demacon.png'),"
         "(2, 'M. Machavoine', 100, 100, 10, 10, '../../../assets/machavoine.png');";
 
-const char *ALL_QUERIES[] = {
-        create_armor_table_sql,
-        create_weapon_table_sql,
-        create_monster_table_sql,
-        create_inventory_table_sql,
-        create_armors_in_inventory_table_sql,
-        create_weapons_in_inventory_table_sql,
-        create_spell_table_sql,
-        create_player_table_sql,
-        create_stage_table_sql,
-        create_stats_table_sql,
-        insert_armor_sql,
-        insert_weapon_sql,
-        insert_spell_sql,
-        insert_monster_sql
+Table_Info all_tables_info[] = {
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='ARMOR';",
+                create_armor_table_sql,
+                insert_armor_sql
+        },
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='WEAPON';",
+                create_weapon_table_sql,
+                insert_weapon_sql
+        },
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='MONSTER';",
+                create_monster_table_sql,
+                insert_monster_sql
+        },
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='INVENTORY';",
+                create_inventory_table_sql,
+                NULL
+        },
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='ARMORS_IN_INVENTORY';",
+                create_armors_in_inventory_table_sql,
+                NULL
+        },
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='WEAPONS_IN_INVENTORY';",
+                create_weapons_in_inventory_table_sql,
+                NULL
+        },
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='SPELL';",
+                create_spell_table_sql,
+                insert_spell_sql
+        },
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='PLAYER';",
+                create_player_table_sql,
+                NULL
+        },
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='STAGE';",
+                create_stage_table_sql,
+                NULL
+        },
+        {
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='STATS';",
+                create_stats_table_sql,
+                NULL
+        }
 };
