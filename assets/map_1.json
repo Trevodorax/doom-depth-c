@@ -2,7 +2,6 @@
   "name": "Map 1",
   "stages": [
     {
-      "nb_monsters": 0,
       "done": 1,
       "start": 1,
       "treasure": {},
@@ -44,12 +43,9 @@
               "enemy_chances_to_appear": [50, 50],
               "done": 0,
               "bottom": {
-                "nb_monsters": 3,
-                "enemy_chances_to_appear": [50, 50],
                 "done": 0,
                 "bottom": {
-                  "nb_monsters": 3,
-                  "enemy_chances_to_appear": [50, 50],
+                  "shop": {},
                   "done": 0
                 }
               }

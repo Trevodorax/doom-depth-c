@@ -4,6 +4,20 @@
 #include <string.h>
 #include <stdbool.h>
 
+/**
+ * @brief Computes and updates the dimensions of the given stage.
+ *
+ * @warning Stages must be uncounted before calling.
+ * @param stage Pointer to the stage whose dimensions are to be computed.
+ * @param x Current x-coord of the stage.
+ * @param y Current y-coord of the stage.
+ * @param max_x Pointer to store the maximum x-coord.
+ * @param max_y Pointer to store the maximum y-coord.
+ * @param min_x Pointer to store the minimum x-coord.
+ * @param min_y Pointer to store the minimum y-coord.
+ */
+void get_stage_dimensions_rec(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
+
 stage_t * json_to_stage(Json * json_stage) {
     if (!json_stage || json_stage->type != 'o') {
         fprintf(stderr, "json_to_stage error: invalid input json\n");
@@ -59,6 +73,12 @@ stage_t * json_to_stage(Json * json_stage) {
         // TODO: set treasure
     }
 
+    Json * shop = get_object_at_key(json_stage, "shop");
+    if(shop && shop->type == 'o') {
+        result->type = SHOP;
+        // TODO: set shop
+    }
+
     // recursive calls for next stages
     Json *top = get_object_at_key(json_stage, "top");
     if (top) {
@@ -96,7 +116,7 @@ void uncount_stages(stage_t * stage) {
     uncount_stages(stage->left);
 }
 
-void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y) {
+void get_stage_dimensions_rec(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y) {
     if(!stage || stage->counted) {
         return;
     }
@@ -119,10 +139,15 @@ void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y
         *min_y = y;
     }
 
-    get_stage_dimensions(stage->top, x, y - 1, max_x, max_y, min_x, min_y);
-    get_stage_dimensions(stage->right, x + 1, y, max_x, max_y, min_x, min_y);
-    get_stage_dimensions(stage->bottom, x, y + 1, max_x, max_y, min_x, min_y);
-    get_stage_dimensions(stage->left, x - 1, y, max_x, max_y, min_x, min_y);
+    get_stage_dimensions_rec(stage->top, x, y - 1, max_x, max_y, min_x, min_y);
+    get_stage_dimensions_rec(stage->right, x + 1, y, max_x, max_y, min_x, min_y);
+    get_stage_dimensions_rec(stage->bottom, x, y + 1, max_x, max_y, min_x, min_y);
+    get_stage_dimensions_rec(stage->left, x - 1, y, max_x, max_y, min_x, min_y);
+}
+
+void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y) {
+    uncount_stages(stage);
+    get_stage_dimensions_rec(stage, x, y, max_x, max_y, min_x, min_y);
 }
 
 SDL_Color * get_stage_color(stage_t * stage) {

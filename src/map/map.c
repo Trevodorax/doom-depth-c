@@ -38,6 +38,19 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
 /**
  * @brief Displays the given stage and its stages recursively
  *
+ * @warning The stages must be uncounted before calling
+ * @param game_window The window to print the stages on
+ * @param stages The stage to be displayed
+ * @param x_coord The x-coord of the stage
+ * @param y_coord The y-coord of the stage
+ * @param stage_size The size of the stage
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size);
+
+/**
+ * @brief Uncounts and displays the given stage and its stages recursively
+ *
  * @param game_window The window to print the stages on
  * @param stages The stage to be displayed
  * @param x_coord The x-coord of the stage
@@ -46,6 +59,7 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size);
+
 
 /**
  * @brief Displays the given stage only
@@ -156,7 +170,6 @@ int display_map(game_window_t * game_window, map_t * map) {
         return EXIT_FAILURE;
     }
 
-    uncount_stages(map->first_stage);
     print_stages(game_window, map->first_stage, initial_x, initial_y, stage_size);
 
     SDL_RenderPresent(game_window->renderer);
@@ -175,7 +188,6 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
     int min_x = 0;
     int min_y = 0;
 
-    uncount_stages(map->first_stage);
     get_stage_dimensions(map->first_stage, 0, 0, &max_x, &max_y, &min_x, &min_y);
 
     *width = (max_x - min_x) + 1;
@@ -188,6 +200,11 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
 }
 
 int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size) {
+    uncount_stages(stages);
+    print_stages_rec(game_window, stages, x_coord, y_coord, stage_size);
+}
+
+int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size) {
     if(!stages || stages->counted) {
         return EXIT_SUCCESS;
     }
@@ -196,10 +213,10 @@ int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int
 
     print_stage(game_window, stages, x_coord * stage_size, y_coord * stage_size, stage_size);
 
-    print_stages(game_window, stages->top, x_coord, y_coord - 1, stage_size);
-    print_stages(game_window, stages->right, x_coord + 1, y_coord, stage_size);
-    print_stages(game_window, stages->bottom, x_coord, y_coord + 1, stage_size);
-    print_stages(game_window, stages->left, x_coord - 1, y_coord, stage_size);
+    print_stages_rec(game_window, stages->top, x_coord, y_coord - 1, stage_size);
+    print_stages_rec(game_window, stages->right, x_coord + 1, y_coord, stage_size);
+    print_stages_rec(game_window, stages->bottom, x_coord, y_coord + 1, stage_size);
+    print_stages_rec(game_window, stages->left, x_coord - 1, y_coord, stage_size);
 
     return EXIT_SUCCESS;
 }

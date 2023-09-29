@@ -63,7 +63,6 @@ void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y
  */
 SDL_Color * get_stage_color(stage_t * stage);
 
-
 /**
  * @brief Sets all stages to not counted so the count can proceed normally
  *
