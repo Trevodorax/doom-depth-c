@@ -36,6 +36,25 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
     // clear renderer
     SDL_RenderClear(game_window->renderer);
 
+    SDL_Texture *background_texture = get_image_texture(game_window->renderer, "../assets/flames_around.png");
+    if (!background_texture) {
+        return EXIT_FAILURE;
+    }
+
+    int background_height = 0;
+    int background_width = 0;
+    SDL_QueryTexture(background_texture, NULL, NULL, &background_width, &background_height);
+
+    SDL_Rect background_rect = {
+            0,
+            0,
+            background_width,
+            background_height
+    };
+
+    SDL_RenderCopy(game_window->renderer, background_texture, NULL, &background_rect);
+    SDL_DestroyTexture(background_texture);
+
     // create texture for title
     SDL_Texture *title_texture = get_string_texture(
             game_window->renderer,
@@ -63,6 +82,7 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
 
     // add title to renderer
     SDL_RenderCopy(game_window->renderer, title_texture, NULL, &title_rect);
+    SDL_DestroyTexture(title_texture);
 
     // create texture for game loading option
     SDL_Texture *load_game_texture = get_string_texture(
@@ -91,6 +111,7 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
 
     // add game loading option to renderer
     SDL_RenderCopy(game_window->renderer, load_game_texture, NULL, &load_game_rect);
+    SDL_DestroyTexture(load_game_texture);
 
     // create texture for new game option
     SDL_Texture *new_game_texture = get_string_texture(
@@ -119,6 +140,7 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
 
     // add new game option to renderer
     SDL_RenderCopy(game_window->renderer, new_game_texture, NULL, &new_game_rect);
+    SDL_DestroyTexture(new_game_texture);
 
     // create texture for cursor
     SDL_Texture *cursor_texture = get_string_texture(
@@ -157,6 +179,7 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
 
     // add cursor to renderer
     SDL_RenderCopy(game_window->renderer, cursor_texture, NULL, &cursor_rect);
+    SDL_DestroyTexture(cursor_texture);
 
     SDL_RenderPresent(game_window->renderer);
 
