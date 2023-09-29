@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL_ttf.h>
+#include <SDL_image.h>
 #include "sdl_utils.h"
 
 void free_game_window(game_window_t * game_window) {
@@ -89,7 +90,7 @@ int set_background_color(SDL_Renderer * renderer, SDL_Color color)
     return EXIT_SUCCESS;
 }
 
-SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_file_name) {
+SDL_Texture * get_bmp_texture(SDL_Renderer * renderer, const char * image_file_name) {
     SDL_Surface * img_surface = NULL;
     SDL_Texture * img_texture = NULL;
 
@@ -211,4 +212,32 @@ SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, c
 
     TTF_CloseFont(font);
     return string_texture;
+}
+
+SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_path) {
+    SDL_Surface * image_surface = NULL;
+    SDL_Texture * image_texture = NULL;
+    if (!image_path) {
+        return NULL;
+    }
+
+    // get the image surface
+    image_surface = IMG_Load(image_path);
+    if(!image_surface)
+    {
+        return NULL;
+    }
+
+    // transform the surface into a texture
+    image_texture = SDL_CreateTextureFromSurface(renderer, image_surface);
+    if(!image_texture)
+    {
+        fprintf(stderr, "\nError SDL_CreateTextureFromSurface : %s", SDL_GetError());
+        return NULL;
+    }
+
+    // free the surface (it was just to create the texture)
+    SDL_FreeSurface(image_surface);
+
+    return image_texture;
 }
