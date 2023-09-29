@@ -46,6 +46,13 @@ stage_t * json_to_stage(Json * json_stage) {
         strcpy(result->linked_map_file_path, linked_map->string);
     }
 
+    // set stage type
+    if(result->fight) {
+        result->type = FIGHT;
+    } else {
+        result->type = EMPTY;
+    }
+
     // recursive calls for next stages
     Json *top = get_object_at_key(json_stage, "top");
     if (top) {
@@ -68,6 +75,19 @@ stage_t * json_to_stage(Json * json_stage) {
     }
 
     return result;
+}
+
+void prepare_get_stage_dimensions(stage_t * stage) {
+    if(!stage) {
+        return;
+    }
+
+    stage->counted = false;
+
+    prepare_get_stage_dimensions(stage->top);
+    prepare_get_stage_dimensions(stage->right);
+    prepare_get_stage_dimensions(stage->bottom);
+    prepare_get_stage_dimensions(stage->left);
 }
 
 void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y) {
@@ -93,8 +113,52 @@ void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y
         *min_y = y;
     }
 
-    get_stage_dimensions(stage->top, x, y + 1, max_x, max_y, min_x, min_y);
+    get_stage_dimensions(stage->top, x, y - 1, max_x, max_y, min_x, min_y);
     get_stage_dimensions(stage->right, x + 1, y, max_x, max_y, min_x, min_y);
-    get_stage_dimensions(stage->bottom, x, y - 1, max_x, max_y, min_x, min_y);
+    get_stage_dimensions(stage->bottom, x, y + 1, max_x, max_y, min_x, min_y);
     get_stage_dimensions(stage->left, x - 1, y, max_x, max_y, min_x, min_y);
+}
+
+SDL_Color * get_stage_color(stage_t * stage) {
+    if(!stage) {
+        fprintf(stderr, "\nget_stage_color error: please provide all the necessary arguments");
+        return NULL;
+    }
+
+    SDL_Color  * stage_color = malloc(sizeof(SDL_Color));
+
+    switch(stage->type) {
+        case EMPTY:
+            stage_color->r = 0;
+            stage_color->g = 150;
+            stage_color->b = 0;
+            stage_color->a = 255;
+            break;
+        case FIGHT:
+            stage_color->r = 150;
+            stage_color->g = 0;
+            stage_color->b = 0;
+            stage_color->a = 255;
+            break;
+        case SHOP:
+            stage_color->r = 0;
+            stage_color->g = 0;
+            stage_color->b = 150;
+            stage_color->a = 255;
+            break;
+        case TREASURE:
+            stage_color->r = 150;
+            stage_color->g = 150;
+            stage_color->b = 0;
+            stage_color->a = 255;
+            break;
+        default:
+            stage_color->r = 0;
+            stage_color->g = 0;
+            stage_color->b = 0;
+            stage_color->a = 255;
+            break;
+    }
+
+    return stage_color;
 }

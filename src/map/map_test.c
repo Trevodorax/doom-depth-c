@@ -4,7 +4,7 @@
 #include "map.h"
 
 map_t * json_to_map(Json * json_map);
-int get_map_dimensions(map_t *map, int *width, int *height);
+int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, int * initial_y);
 
 static char * test_json_to_map() {
     char *json_str =
@@ -125,14 +125,15 @@ static char * test_get_map_dimensions() {
 
     int width;
     int height;
+    int initial_x;
+    int initial_y;
 
-    get_map_dimensions(map, &width, &height);
-
-    printf("\nwidth: %d", width);
-    printf("\nheight: %d", height);
+    get_map_dimensions(map, &width, &height, &initial_x, &initial_y);
 
     mu_assert("\ntest_get_map_dimensions error wrong width", width == 5);
     mu_assert("\ntest_get_map_dimensions error wrong height", height == 7);
+    mu_assert("\ntest_get_map_dimensions error wrong initial_x", initial_x == 1);
+    mu_assert("\ntest_get_map_dimensions error wrong initial_y", initial_y == 2);
 }
 
 static char * all_tests() {

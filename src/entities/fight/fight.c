@@ -29,7 +29,7 @@ fight_t * json_to_fight(Json * fight_json) {
         return NULL;
     }
 
-    result->enemy_chances_to_appear = (float *)malloc(result->nb_enemies * sizeof(float));
+    result->enemy_chances_to_appear = malloc(result->nb_enemies * sizeof(float));
     for (unsigned int i = 0; i < result->nb_enemies; i++) {
         if(chances->values[i].type != 'n') {
             fprintf(stderr, "\njson_to_fight error: enemy chances to appear is not a number.");
