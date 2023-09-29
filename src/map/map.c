@@ -199,7 +199,7 @@ int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int
     print_stages(game_window, stages->top, x_coord, y_coord - 1, stage_size);
     print_stages(game_window, stages->right, x_coord + 1, y_coord, stage_size);
     print_stages(game_window, stages->bottom, x_coord, y_coord + 1, stage_size);
-    print_stages(game_window, stages->top, x_coord - 1, y_coord, stage_size);
+    print_stages(game_window, stages->left, x_coord - 1, y_coord, stage_size);
 
     return EXIT_SUCCESS;
 }

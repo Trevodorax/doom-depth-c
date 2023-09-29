@@ -53,6 +53,12 @@ stage_t * json_to_stage(Json * json_stage) {
         result->type = EMPTY;
     }
 
+    Json * treasure = get_object_at_key(json_stage, "treasure");
+    if(treasure && treasure->type == 'o') {
+        result->type = TREASURE;
+        // TODO: set treasure
+    }
+
     // recursive calls for next stages
     Json *top = get_object_at_key(json_stage, "top");
     if (top) {

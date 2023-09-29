@@ -5,6 +5,7 @@
       "nb_monsters": 0,
       "done": 1,
       "start": 1,
+      "treasure": {},
       "left": {
         "nb_monsters": 3,
         "enemy_chances_to_appear": [50, 50],
