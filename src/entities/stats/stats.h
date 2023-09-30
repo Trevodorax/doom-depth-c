@@ -2,6 +2,7 @@
 #define STATS
 
 typedef struct {
+    int id;
     unsigned int nb_monsters_killed;
     unsigned int nb_deaths;
     unsigned int damages_dealt;
