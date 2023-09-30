@@ -36,24 +36,14 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
     // clear renderer
     SDL_RenderClear(game_window->renderer);
 
-    SDL_Texture *background_texture = get_image_texture(game_window->renderer, "../assets/flames_around.png");
-    if (!background_texture) {
-        return EXIT_FAILURE;
-    }
-
-    int background_height = 0;
-    int background_width = 0;
-    SDL_QueryTexture(background_texture, NULL, NULL, &background_width, &background_height);
-
     SDL_Rect background_rect = {
-            0,
-            0,
-            background_width,
-            background_height
+            -10,
+            -10,
+            window_width + 20,
+            window_height + 20
     };
 
-    SDL_RenderCopy(game_window->renderer, background_texture, NULL, &background_rect);
-    SDL_DestroyTexture(background_texture);
+    draw_image_in_rectangle(game_window->renderer, background_rect, "../assets/flames_around.png",  NORTH);
 
     // create texture for title
     SDL_Texture *title_texture = get_string_texture(

@@ -73,6 +73,19 @@ int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int
  */
 int print_stage(game_window_t * game_window, stage_t * stage, int x_coord, int y_coord, int stage_size);
 
+/**
+ * @brief Prints a player somewhere on the map
+ *
+ * Draws the player image orientated in the player orientation.
+ *
+ * @param game_window The game window
+ * @param player The player to be displayed (ignored by the current implementation)
+ * @param player_orientation The orientation of the player on the map
+ * @param stage_rect The rectangle to print the player in
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int print_player_on_stage(game_window_t * game_window, orientation_t player_orientation, SDL_Rect stage_rect);
+
 int map_screen(game_window_t *game_window, char *map_file) {
     Json * json_map = get_json_from_file(map_file);
     if(!json_map) {
@@ -224,9 +237,20 @@ int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord,
 int print_stage(game_window_t * game_window, stage_t * stage, int x_coord, int y_coord, int stage_size) {
     SDL_Rect stage_rect =  {x_coord, y_coord, stage_size, stage_size};
     SDL_Color * stage_color = get_stage_color(stage);
-
-    if(!draw_fill_rect(stage_rect, *stage_color, game_window->renderer)) {
+    if(draw_fill_rect(stage_rect, *stage_color, game_window->renderer) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
+
+    print_player_on_stage(game_window, SOUTH, stage_rect);
+
+    return EXIT_SUCCESS;
+}
+
+int print_player_on_stage(game_window_t * game_window, orientation_t player_orientation, SDL_Rect stage_rect) {
+    SDL_Rect player_rect = {stage_rect.x + 10, stage_rect.y + 10, stage_rect.w - 20, stage_rect.h - 20};
+    if (!draw_image_in_rectangle(game_window->renderer, player_rect, "../assets/player.png", player_orientation)) {
+        return EXIT_FAILURE;
+    }
+
     return EXIT_SUCCESS;
 }

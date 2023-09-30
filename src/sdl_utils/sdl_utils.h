@@ -2,6 +2,8 @@
 #define DOOM_DEPTH_C_SDL_UTILS_H
 
 #include <SDL2/SDL.h>
+#include "../entities/player/player.h"
+#include "../map/stage/stage.h"
 
 typedef struct {
     /**
@@ -96,6 +98,17 @@ int draw_fill_rect(SDL_Rect rect, SDL_Color color, SDL_Renderer * renderer);
  * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure.
  */
 int drawThickRect(SDL_Rect rect, unsigned int thickness, SDL_Color color, SDL_Renderer * renderer);
+
+/**
+ * @brief Draws an image in a rectangle with specified orientation
+ *
+ * @param renderer   Pointer to the SDL renderer
+ * @param container  Rectangle in which to draw the image
+ * @param file_path  Path to the image file
+ * @param orientation Desired orientation of the image
+ * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure
+ */
+int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation);
 
 /**
  * @brief Returns string as a texture with the specified font, font size and color.
