@@ -29,7 +29,9 @@ add_executable(doom_depth_c
         src/storage/database/database_queries.h
         src/storage/database/database_queries.c
         src/map/stage/stage.c
-        src/map/stage/stage.h)
+        src/map/stage/stage.h
+        src/start_menu/start_menu.c
+        src/start_menu/start_menu.h)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
