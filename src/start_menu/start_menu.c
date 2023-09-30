@@ -61,7 +61,7 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
             "DoomDepthC",
             "../assets/PixelifySans-Bold.ttf",
             48,
-            (SDL_Color) {255, 255, 255}
+            (SDL_Color) {255, 255, 255, 255}
     );
     if (!title_texture) {
         return EXIT_FAILURE;
@@ -85,33 +85,33 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
     SDL_DestroyTexture(title_texture);
 
     // create texture for game loading option
-    SDL_Texture *load_game_texture = get_string_texture(
+    SDL_Texture *loaded_game_texture = get_string_texture(
             game_window->renderer,
             "Load game",
             "../assets/PixelifySans-Bold.ttf",
             24,
-            (SDL_Color) {255, 255, 255}
+            (SDL_Color) {255, 255, 255, 255}
     );
-    if (!load_game_texture) {
+    if (!loaded_game_texture) {
         return EXIT_FAILURE;
     }
 
     // get game loading option dimensions
-    int load_game_width = 0;
-    int load_game_height = 0;
-    SDL_QueryTexture(load_game_texture, NULL, NULL, &load_game_width, &load_game_height);
+    int loaded_game_width = 0;
+    int loaded_game_height = 0;
+    SDL_QueryTexture(loaded_game_texture, NULL, NULL, &loaded_game_width, &loaded_game_height);
 
     // create rectangle for game loading option
-    SDL_Rect load_game_rect = {
-            (window_width - load_game_width) / 2,
+    SDL_Rect loaded_game_rect = {
+            (window_width - loaded_game_width) / 2,
             title_rect.y + 128,
-            load_game_width,
-            load_game_height
+            loaded_game_width,
+            loaded_game_height
     };
 
     // add game loading option to renderer
-    SDL_RenderCopy(game_window->renderer, load_game_texture, NULL, &load_game_rect);
-    SDL_DestroyTexture(load_game_texture);
+    SDL_RenderCopy(game_window->renderer, loaded_game_texture, NULL, &loaded_game_rect);
+    SDL_DestroyTexture(loaded_game_texture);
 
     // create texture for new game option
     SDL_Texture *new_game_texture = get_string_texture(
@@ -119,7 +119,7 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
             "New game",
             "../assets/PixelifySans-Bold.ttf",
             24,
-            (SDL_Color) {255, 255, 255}
+            (SDL_Color) {255, 255, 255, 255}
     );
     if (!new_game_texture) {
         return EXIT_FAILURE;
@@ -133,7 +133,7 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
     // create rectangle for new game option
     SDL_Rect new_game_rect = {
             (window_width - new_game_width) / 2,
-            load_game_rect.y +load_game_height + 24,
+            loaded_game_rect.y +loaded_game_height + 24,
             new_game_width,
             new_game_height
     };
@@ -148,7 +148,7 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
             ">",
             "../assets/PixelifySans-Bold.ttf",
             12,
-            (SDL_Color) {255, 255, 255}
+            (SDL_Color) {255, 255, 255, 255}
     );
     if (!cursor_texture) {
         return EXIT_FAILURE;
@@ -170,8 +170,8 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
         };
     } else {
         cursor_rect = (SDL_Rect) {
-                load_game_rect.x - cursor_width - 8,
-                load_game_rect.y + cursor_height / 2,
+                loaded_game_rect.x - cursor_width - 8,
+                loaded_game_rect.y + cursor_height / 2,
                 cursor_width,
                 cursor_height
         };
