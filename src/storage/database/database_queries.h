@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#define ALL_QUERIES_SIZE 10
+#define ALL_QUERIES_SIZE 9
 
 typedef struct Table_Info {
     const char* checkQuery;

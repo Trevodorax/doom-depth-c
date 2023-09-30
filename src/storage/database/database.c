@@ -1,5 +1,6 @@
 #include "database.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 sqlite3 *db_connect() {
 
@@ -52,7 +53,7 @@ int callback(void *exists, int argc, char **argv, char **azColName) {
 
 int db_init(sqlite3 *db) {
 
-    char *z_err_msg = 0;
+    char *z_err_msg = NULL;
 
     for (int i = 0; i < ALL_QUERIES_SIZE; i++) {
 
