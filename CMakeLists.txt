@@ -78,6 +78,18 @@ target_link_libraries(doom_depth_tests
 )
 
 find_package(SDL2_ttf CONFIG REQUIRED)
+target_link_libraries(doom_depth_tests
+        PRIVATE
+        $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
+)
+
+find_package(SDL2_image CONFIG REQUIRED)
+target_link_libraries(doom_depth_tests
+        PRIVATE
+        $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>
+)
+
+find_package(SDL2_ttf CONFIG REQUIRED)
 target_link_libraries(doom_depth_c
         PRIVATE
         $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
