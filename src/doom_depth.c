@@ -18,8 +18,6 @@ int doom_depth() {
         return EXIT_FAILURE;
     }
 
-    // printf("SQLite version: %s\n", sqlite3_libversion());
-
     free_game_window(main_window);
     SDL_Quit();
 

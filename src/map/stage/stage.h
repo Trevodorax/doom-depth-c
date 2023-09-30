@@ -1,9 +1,11 @@
 #ifndef DOOM_DEPTH_C_STAGE_H
 #define DOOM_DEPTH_C_STAGE_H
-#include <stdbool.h>
+
 #include <SDL2/SDL.h>
+#include <stdbool.h>
 #include "../../entities/fight/fight.h"
 #include "../../storage/json/json.h"
+#include "../../entities/player/player.h"
 
 typedef enum {
     EMPTY,
@@ -11,6 +13,13 @@ typedef enum {
     SHOP,
     TREASURE
 } stage_type_t;
+
+typedef enum {
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST
+} orientation_t;
 
 typedef struct stage_t stage_t;
 struct stage_t {
@@ -25,6 +34,10 @@ struct stage_t {
     bool counted; // for the get_map_dimensions function
 
     fight_t *fight; // only if type == FIGHT
+
+    // player on the stage (if there is one)
+    player_t * player;
+    orientation_t player_orientation;
 
     // next stages
     stage_t *top;

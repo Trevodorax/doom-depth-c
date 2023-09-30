@@ -24,6 +24,6 @@ typedef struct {
     Weapon *chosen_weapon;
     Inventory *inventory;
     Stats *stats;
-} Player;
+} player_t;
 
 #endif

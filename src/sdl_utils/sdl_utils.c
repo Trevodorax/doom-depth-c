@@ -3,6 +3,9 @@
 #include <SDL_image.h>
 #include "sdl_utils.h"
 
+int draw_image_in_rectangle_multiple_sprites(SDL_Renderer *renderer, SDL_Rect container, const char *file_path);
+int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation);
+
 void free_game_window(game_window_t * game_window) {
     if(game_window->window)
     {
@@ -177,6 +180,118 @@ int drawThickRect(
             return EXIT_FAILURE;
         }
     }
+
+    return EXIT_SUCCESS;
+}
+
+int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation) {
+    char * orientated_file_path = malloc(strlen(file_path) + 10);
+    if (!orientated_file_path) {
+        return EXIT_FAILURE;
+    }
+
+    bool has_directions = false;
+
+    // build the orientated_file_path based on orientation
+    const char *direction = NULL;
+    switch (orientation) {
+        case NORTH:
+            direction = "_north.png";
+            break;
+        case EAST:
+            direction = "_east.png";
+            break;
+        case SOUTH:
+            direction = "_south.png";
+            break;
+        case WEST:
+            direction = "_west.png";
+            break;
+        default:
+            // Handle invalid orientation
+            free(orientated_file_path);
+            return EXIT_FAILURE;
+    }
+
+    strcpy(orientated_file_path, file_path);
+    char * dot = strrchr(orientated_file_path, '.');
+    if (dot) {
+        *dot = '\0';
+        strcat(orientated_file_path, direction);
+    }
+
+    FILE *file = fopen(orientated_file_path, "r");
+    if (file) {
+        // File exists
+        has_directions = true;
+        fclose(file);
+    } else {
+        // File doesn't exist
+        has_directions = false;
+    }
+
+    if (has_directions) {
+        draw_image_in_rectangle_multiple_sprites(renderer, container, orientated_file_path);
+    } else {
+        draw_image_in_rectangle_single_sprite(renderer, container, file_path, orientation);
+    }
+
+    free(orientated_file_path);
+
+    return EXIT_SUCCESS;
+}
+
+int draw_image_in_rectangle_multiple_sprites(SDL_Renderer *renderer, SDL_Rect container, const char *file_path) {
+    SDL_Texture *image_texture = get_image_texture(renderer, file_path);
+    if (!image_texture) {
+        return EXIT_FAILURE;
+    }
+
+    SDL_RenderCopy(renderer, image_texture, NULL, &container);
+
+    return EXIT_SUCCESS;
+}
+
+int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation) {
+    SDL_Texture *image_texture = get_image_texture(renderer, file_path);
+    if (!image_texture) {
+        return EXIT_FAILURE;
+    }
+
+    if((orientation == EAST || orientation == WEST) && container.x != container.y) {
+        fprintf(stderr, "Can only use single sprite orientation for squares.");
+        return EXIT_FAILURE;
+    }
+
+    double angle = 0.0;
+    SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+    switch (orientation) {
+        case NORTH:
+            angle = 0.0;
+            flip = SDL_FLIP_NONE;
+            break;
+        case EAST:
+            angle = 270.0;
+            flip = SDL_FLIP_NONE;
+            break;
+        case SOUTH:
+            angle = 180.0;
+            flip = SDL_FLIP_NONE;
+            break;
+        case WEST:
+            angle = 90.0;
+            flip = SDL_FLIP_NONE;
+            break;
+        default:
+            SDL_DestroyTexture(image_texture);
+            return EXIT_FAILURE;
+    }
+
+    SDL_Point center = {container.x + container.w / 2, container.y + container.h / 2};
+
+    SDL_RenderCopyEx(renderer, image_texture, NULL, &container, angle, &center, flip);
+    SDL_DestroyTexture(image_texture);
 
     return EXIT_SUCCESS;
 }
