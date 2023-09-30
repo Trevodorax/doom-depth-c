@@ -1,4 +1,4 @@
-#include <malloc.h>
+#include <stdlib.h>
 #include "inventory.h"
 
 inventory_t * create_inventory(){
