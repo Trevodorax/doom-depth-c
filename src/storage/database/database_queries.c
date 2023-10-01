@@ -132,7 +132,7 @@ const char insert_spell_sql[] =
 
 const char insert_monster_sql[] =
         "INSERT INTO MONSTER (type, name, hp_max, hp, attack, defense, image)"
-        "VALUES (0, 'Bat', 10, 10, 2, 1, '../../../assets/bat.png'),"
+        "VALUES (0, 'bat', 10, 10, 2, 1, '../../../assets/bat.png'),"
         "(0, 'goblin', 15, 15, 3, 2, '../../../assets/gobelin.png'),"
         "(0, 'zombie', 20, 20, 4, 3, '../../../assets/zombie.png'),"
         "(0, 'skeleton', 25, 25, 5, 4, '../../../assets/skeleton.png'),"
@@ -193,3 +193,24 @@ Table_Info all_tables_info[] = {
                 NULL
         }
 };
+
+const char update_player_sql[] =
+        "UPDATE PLAYER SET "
+        "hp = ?, "
+        "hp_max = ?, "
+        "mana = ?, "
+        "mana_max = ?, "
+        "xp = ?, "
+        "level = ?, "
+        "base_attack = ?, "
+        "base_defense = ?, "
+        "gold = ?, "
+        "offensive_spell_id = ?, "
+        "defensive_spell_id = ?, "
+        "healing_spell_id = ?, "
+        "inventory_capacity = ?, "
+        "nb_weapons = ?, "
+        "nb_armors = ?, "
+        "nb_mana_potions = ?, "
+        "nb_health_potions = ? "
+        "WHERE id = ?;";
