@@ -4,8 +4,10 @@
 #include "../../storage/json/json.h"
 
 typedef struct {
-    unsigned int nb_enemies;
-    float *enemy_chances_to_appear;
+    unsigned int min_nb_enemies;
+    unsigned int max_nb_enemies;
+    char ** enemies_list;
+    float * enemies_chances_to_appear;
 } fight_t;
 
 /**

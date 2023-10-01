@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "../../sdl_utils/sdl_utils.h"
 
 /**
  * @brief Computes and updates the dimensions of the given stage.
@@ -232,4 +233,21 @@ stage_t *get_player_stage_rec(stage_t *stages) {
     if (result != NULL) return result;
 
     return NULL;
+}
+
+SDL_Texture ** get_stage_textures(SDL_Renderer * renderer) {
+    SDL_Texture ** stage_textures = malloc(sizeof(SDL_Texture*) * STAGE_TYPE_COUNT);
+    for(int i = 0; i < STAGE_TYPE_COUNT; i++) {
+        stage_textures[i] = get_image_texture(renderer, stage_texture_files[i]);
+        if(!stage_textures[i]) {
+            // cleanup and leave
+            fprintf(stderr, "\nget_stage_textures error: failed to get the file textures.");
+            for(int j = 0; j < i; j++) {
+                free(stage_textures[j]);
+            }
+            free(stage_textures);
+            return NULL;
+        }
+    }
+    return stage_textures;
 }
