@@ -7,12 +7,9 @@
 
 typedef struct {
     /**
-     * 's': start menu
-     * 'm': map
-     * 'f': fight
-     * 'p': preferences menu
+    see router for reference
      */
-    char current_screen;
+    int current_screen;
 } window_context_t;
 
 typedef struct {
