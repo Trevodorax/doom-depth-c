@@ -46,7 +46,7 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size);
+int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size, bool with_players);
 
 /**
  * @brief Uncounts and displays the given stage and its stages recursively
@@ -58,7 +58,7 @@ int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord,
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size);
+int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size, bool with_players);
 
 
 /**
@@ -71,7 +71,7 @@ int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_stage(game_window_t * game_window, stage_t * stage, int x_coord, int y_coord, int stage_size);
+int print_stage(game_window_t * game_window, stage_t * stage, int x_coord, int y_coord, int stage_size, bool with_players);
 
 /**
  * @brief Prints a player somewhere on the map
@@ -86,6 +86,16 @@ int print_stage(game_window_t * game_window, stage_t * stage, int x_coord, int y
  */
 int print_player_on_stage(game_window_t * game_window, orientation_t player_orientation, SDL_Rect stage_rect);
 
+/**
+ * @brief Moves the player and returns the stage he is on
+ *
+ * @param player_stage The stage the player is currently on
+ * @param direction In which direction the player desires to move
+ * @sideeffects Modifies the graph to make everything start from the player position
+ * @return The stage the player is on after the move
+ */
+stage_t * move_player(stage_t * player_stage, orientation_t direction);
+
 int map_screen(game_window_t *game_window, char *map_file) {
     Json * json_map = get_json_from_file(map_file);
     if(!json_map) {
@@ -99,23 +109,42 @@ int map_screen(game_window_t *game_window, char *map_file) {
         return EXIT_FAILURE;
     }
 
+    stage_t * player_stage = get_player_stage(map->first_stage);
+
     printf("\nMap name: %s\n", map->name);
 
     SDL_Event e;
-    int quit = 0;
+    bool quit = false;
     while (!quit){
         SDL_Delay(50);
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT){
-                quit = 1;
+                quit = true;
             }
             if (e.type == SDL_KEYDOWN){
-                quit = 1;
+                switch (e.key.keysym.sym) {
+                    case SDLK_z:
+                        player_stage = move_player(player_stage, NORTH);
+                        break;
+                    case SDLK_d:
+                        player_stage = move_player(player_stage, EAST);
+                        break;
+                    case SDLK_s:
+                        player_stage = move_player(player_stage, SOUTH);
+                        break;
+                    case SDLK_q:
+                        player_stage = move_player(player_stage, WEST);
+                        break;
+                    default:
+                        // Handle other keys
+                        break;
+                }
             }
             if (e.type == SDL_MOUSEBUTTONDOWN){
-                quit = 1;
+                quit = true;
             }
         }
+        map->first_stage = player_stage;
         display_map(game_window, map);
     }
 
@@ -183,7 +212,7 @@ int display_map(game_window_t * game_window, map_t * map) {
         return EXIT_FAILURE;
     }
 
-    print_stages(game_window, map->first_stage, initial_x, initial_y, stage_size);
+    print_stages(game_window, map->first_stage, initial_x, initial_y, stage_size, true);
 
     SDL_RenderPresent(game_window->renderer);
 
@@ -212,45 +241,105 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
     return EXIT_SUCCESS;
 }
 
-int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size) {
+int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size, bool with_players) {
     uncount_stages(stages);
-    print_stages_rec(game_window, stages, x_coord, y_coord, stage_size);
+    print_stages_rec(game_window, stages, x_coord, y_coord, stage_size, with_players);
+
+    return EXIT_SUCCESS;
 }
 
-int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size) {
+int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size, bool with_players) {
     if(!stages || stages->counted) {
         return EXIT_SUCCESS;
     }
 
     stages->counted = true;
 
-    print_stage(game_window, stages, x_coord * stage_size, y_coord * stage_size, stage_size);
+    print_stage(game_window, stages, x_coord * stage_size, y_coord * stage_size, stage_size, with_players);
 
-    print_stages_rec(game_window, stages->top, x_coord, y_coord - 1, stage_size);
-    print_stages_rec(game_window, stages->right, x_coord + 1, y_coord, stage_size);
-    print_stages_rec(game_window, stages->bottom, x_coord, y_coord + 1, stage_size);
-    print_stages_rec(game_window, stages->left, x_coord - 1, y_coord, stage_size);
+    print_stages_rec(game_window, stages->top, x_coord, y_coord - 1, stage_size, with_players);
+    print_stages_rec(game_window, stages->right, x_coord + 1, y_coord, stage_size, with_players);
+    print_stages_rec(game_window, stages->bottom, x_coord, y_coord + 1, stage_size, with_players);
+    print_stages_rec(game_window, stages->left, x_coord - 1, y_coord, stage_size, with_players);
 
     return EXIT_SUCCESS;
 }
 
-int print_stage(game_window_t * game_window, stage_t * stage, int x_coord, int y_coord, int stage_size) {
+int print_stage(game_window_t * game_window, stage_t * stage, int x_coord, int y_coord, int stage_size, bool with_players) {
     SDL_Rect stage_rect =  {x_coord, y_coord, stage_size, stage_size};
     SDL_Color * stage_color = get_stage_color(stage);
     if(draw_fill_rect(stage_rect, *stage_color, game_window->renderer) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
 
-    print_player_on_stage(game_window, SOUTH, stage_rect);
+    if(stage->player && with_players) {
+        print_player_on_stage(game_window, stage->player_orientation, stage_rect);
+    }
 
     return EXIT_SUCCESS;
 }
 
 int print_player_on_stage(game_window_t * game_window, orientation_t player_orientation, SDL_Rect stage_rect) {
-    SDL_Rect player_rect = {stage_rect.x + 10, stage_rect.y + 10, stage_rect.w - 20, stage_rect.h - 20};
+    int stage_padding = stage_rect.h / 10;
+    SDL_Rect player_rect = {stage_rect.x + stage_padding, stage_rect.y + stage_padding, stage_rect.w - 2 * stage_padding, stage_rect.h - 2 * stage_padding};
     if (!draw_image_in_rectangle(game_window->renderer, player_rect, "../assets/player.png", player_orientation)) {
         return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
+}
+
+stage_t * move_player(stage_t * player_stage, orientation_t direction) {
+    // safeguards
+    if (!player_stage) {
+        return NULL;
+    }
+
+    // get next stage
+    stage_t *next_stage = NULL;
+    switch (direction) {
+        case NORTH:
+            next_stage = player_stage->top;
+            break;
+        case EAST:
+            next_stage = player_stage->right;
+            break;
+        case SOUTH:
+            next_stage = player_stage->bottom;
+            break;
+        case WEST:
+            next_stage = player_stage->left;
+            break;
+    }
+    if (!next_stage) {
+        player_stage->player_orientation = direction;
+        return player_stage;
+    }
+
+    // switch player to next stage
+    next_stage->player = player_stage->player;
+    player_stage->player = NULL;
+    next_stage->player_orientation = direction;
+    player_stage->player_orientation = 0;
+
+    switch (direction) {
+        case NORTH:
+            next_stage->bottom = player_stage;
+            player_stage->top = NULL;
+            break;
+        case EAST:
+            next_stage->left = player_stage;
+            player_stage->right = NULL;
+            break;
+        case SOUTH:
+            next_stage->top = player_stage;
+            player_stage->bottom = NULL;
+            break;
+        case WEST:
+            next_stage->right = player_stage;
+            player_stage->left = NULL;
+            break;
+    }
+
+    return next_stage;
 }

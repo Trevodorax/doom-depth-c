@@ -258,11 +258,6 @@ int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect conta
         return EXIT_FAILURE;
     }
 
-    if((orientation == EAST || orientation == WEST) && container.x != container.y) {
-        fprintf(stderr, "Can only use single sprite orientation for squares.");
-        return EXIT_FAILURE;
-    }
-
     double angle = 0.0;
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
@@ -288,7 +283,7 @@ int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect conta
             return EXIT_FAILURE;
     }
 
-    SDL_Point center = {container.x + container.w / 2, container.y + container.h / 2};
+    SDL_Point center = {container.w / 2, container.h / 2};
 
     SDL_RenderCopyEx(renderer, image_texture, NULL, &container, angle, &center, flip);
     SDL_DestroyTexture(image_texture);

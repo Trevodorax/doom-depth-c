@@ -84,4 +84,6 @@ SDL_Color * get_stage_color(stage_t * stage);
  */
 void uncount_stages(stage_t * stage);
 
+stage_t *get_player_stage(stage_t *stages);
+
 #endif //DOOM_DEPTH_C_STAGE_H
