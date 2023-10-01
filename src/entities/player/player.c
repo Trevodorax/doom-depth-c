@@ -8,6 +8,7 @@ player_t * create_player(char *name) {
     strcpy(player->name, name);
 
     player->hp = 200u;
+    player->hp_max = 200u;
     player->mana = 100u;
     player->mana_max = 100u;
     player->xp = 0u;
