@@ -33,16 +33,15 @@ const char create_player_table_sql[] =
         "    level              INTEGER not null,"
         "    base_attack        INTEGER not null,"
         "    base_defense       INTEGER not null,"
-        "    offensive_spell_id INTEGER not null references SPELL,"
-        "    defensive_spell_id INTEGER not null references SPELL,"
-        "    healing_spell_id   INTEGER not null references SPELL,"
+        "    offensive_spell_id INTEGER references SPELL,"
+        "    defensive_spell_id INTEGER references SPELL,"
+        "    healing_spell_id   INTEGER references SPELL,"
         "    stats_id           INTEGER not null references STATS,"
         "    inventory_capacity INTEGER not null,"
         "    nb_weapons         INTEGER not null,"
         "    nb_armors          INTEGER not null,"
         "    nb_mana_potions    INTEGER not null,"
         "    nb_health_potions  INTEGER not null,"
-        "    image              TEXT    not null"
         ");";
 
 const char create_armor_table_sql[] =
