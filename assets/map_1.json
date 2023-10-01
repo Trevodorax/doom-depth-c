@@ -4,56 +4,47 @@
     {
       "done": 1,
       "start": 1,
-      "treasure": {},
       "left": {
-        "nb_monsters": 3,
-        "enemy_chances_to_appear": [50, 50],
+        "min_nb_enemies": 1,
+        "max_nb_enemies": 3,
+        "enemies_list": ["bat", "goblin", "skeleton"],
+        "enemies_chances_to_appear": [50, 30, 20],
         "done": 0
       },
       "right": {
-        "nb_monsters": 2,
-        "enemy_chances_to_appear": [50, 50],
+        "min_nb_enemies": 1,
+        "max_nb_enemies": 2,
+        "enemies_list": ["bat", "goblin"],
+        "enemies_chances_to_appear": [50, 50],
         "done": 0,
         "right": {
-          "nb_monsters": 4,
-          "enemy_chances_to_appear": [30, 40, 30],
+          "min_nb_enemies": 2,
+          "max_nb_enemies": 4,
+          "enemies_list": ["bat", "goblin", "skeleton", "troll"],
+          "enemies_chances_to_appear": [30, 40, 20, 10],
           "done": 0,
-          "right": {
-            "nb_monsters": 1,
-            "enemy_chances_to_appear": [0, 0, 0, 100],
-            "done": 0,
-            "linked_map": "map_2.json"
+          "bottom": {
+            "treasure": {}
           },
           "top": {
-            "nb_monsters": 3,
-            "enemy_chances_to_appear": [50, 50],
             "done": 0,
             "top": {
-              "nb_monsters": 3,
-              "enemy_chances_to_appear": [50, 50],
-              "done": 0
-            }
-          },
-          "bottom": {
-            "nb_monsters": 3,
-            "enemy_chances_to_appear": [50, 50],
-            "done": 0,
-            "bottom": {
-              "nb_monsters": 3,
-              "enemy_chances_to_appear": [50, 50],
               "done": 0,
-              "bottom": {
-                "done": 0,
-                "bottom": {
-                  "shop": {},
-                  "done": 0
-                }
+              "top": {
+                "shop": {}
               }
             }
+          },
+          "right": {
+            "min_nb_enemies": 1,
+            "max_nb_enemies": 1,
+            "enemies_list": ["troll"],
+            "enemies_chances_to_appear": [10],
+            "done": 0,
+            "linked_map": "map_2.json"
           }
         }
       }
     }
   ]
 }
-
