@@ -1,10 +1,11 @@
 #include "player.h"
 #include "../spell/spell.h"
+#include <string.h>
 
 player_t * create_player(char *name) {
     player_t * player = malloc(sizeof(player_t));
     player->name = malloc(sizeof(char)*strlen(name)+1);
-    strcpy_s(player->name,strlen(name),name);
+    strcpy(player->name, name);
 
     player->hp = 200u;
     player->mana = 100u;
