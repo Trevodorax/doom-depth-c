@@ -37,7 +37,13 @@ add_executable(doom_depth_c
         src/map/stage/stage.c
         src/map/stage/stage.h
         src/start_menu/start_menu.c
-        src/start_menu/start_menu.h)
+        src/start_menu/start_menu.h
+        src/fight_screen/fight_screen.c
+        src/fight_screen/fight_screen.h
+        src/fight_screen/fight_menu/fight_menu.c
+        src/fight_screen/fight_menu/fight_menu.h
+        src/fight_screen/fight_actions/fight_actions.c
+        src/fight_screen/fight_actions/fight_actions.h)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
