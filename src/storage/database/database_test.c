@@ -8,8 +8,17 @@ char * test_db_connection() {
     return 0;
 }
 
+char * test_save_player() {
+    sqlite3 *db = db_connection();
+    player_t *player = create_player("test");
+    int rc = save_player(db, player);
+    mu_assert("Error in test_save_player: rc is not SQLITE_OK", rc == SQLITE_OK);
+    return 0;
+}
+
 char * all_tests() {
     mu_run_test(test_db_connection);
+    mu_run_test(test_save_player);
     return 0;
 }
 

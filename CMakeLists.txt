@@ -59,6 +59,12 @@ add_executable(doom_depth_tests
         src/utils/array.h
         src/utils/array_test.c
         src/utils/array_test.h
+        src/entities/player/player.c
+        src/entities/player/player.h
+        src/entities/inventory/inventory.c
+        src/entities/inventory/inventory.h
+        src/entities/stats/stats.c
+        src/entities/stats/stats.h
         src/storage/database/database.h
         src/storage/database/database.c
         src/storage/database/database_queries.h

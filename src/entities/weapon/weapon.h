@@ -2,6 +2,7 @@
 #define WEAPON
 
 typedef struct {
+    int id;
     char *name;
     short rarity;
     unsigned int min_attack;

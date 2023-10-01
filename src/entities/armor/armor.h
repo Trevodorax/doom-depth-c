@@ -2,6 +2,7 @@
 #define ARMOR
 
 typedef struct {
+    int id;
     char *name;
     short rarity;
     unsigned int amount;

@@ -6,6 +6,7 @@ typedef enum SpellType {
 } spell_type_t;
 
 typedef struct {
+    int id;
     char *name;
     spell_type_t type;
     unsigned int amount;
