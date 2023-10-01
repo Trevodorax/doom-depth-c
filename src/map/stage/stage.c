@@ -18,6 +18,8 @@
  */
 void get_stage_dimensions_rec(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
 
+stage_t *get_player_stage_rec(stage_t *stages);
+
 stage_t * json_to_stage(Json * json_stage) {
     if (!json_stage || json_stage->type != 'o') {
         fprintf(stderr, "json_to_stage error: invalid input json\n");
@@ -58,6 +60,11 @@ stage_t * json_to_stage(Json * json_stage) {
         result->has_linked_map = true;
         result->linked_map_file_path = malloc(strlen(linked_map->string) + 1);
         strcpy(result->linked_map_file_path, linked_map->string);
+    }
+
+    if(result->is_start) {
+        result->player = malloc(sizeof(player_t));
+        result->player_orientation = SOUTH;
     }
 
     // set stage type
@@ -192,4 +199,37 @@ SDL_Color * get_stage_color(stage_t * stage) {
     }
 
     return stage_color;
+}
+
+stage_t *get_player_stage(stage_t *stages) {
+    uncount_stages(stages);
+    return get_player_stage_rec(stages);
+}
+
+stage_t *get_player_stage_rec(stage_t *stages) {
+    if (!stages || stages->counted) {
+        return NULL;
+    }
+
+    stages->counted = true;
+
+    if (stages->player != NULL) {
+        return stages;
+    }
+
+    stage_t *result;
+
+    result = get_player_stage_rec(stages->top);
+    if (result != NULL) return result;
+
+    result = get_player_stage_rec(stages->right);
+    if (result != NULL) return result;
+
+    result = get_player_stage_rec(stages->bottom);
+    if (result != NULL) return result;
+
+    result = get_player_stage_rec(stages->left);
+    if (result != NULL) return result;
+
+    return NULL;
 }
