@@ -46,8 +46,7 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int
-print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord,
+int print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord,
                  int stage_size, bool with_players);
 
 /**
@@ -60,8 +59,7 @@ print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **stag
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int
-print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord,
+int print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord,
              int stage_size, bool with_players);
 
 
@@ -75,8 +73,7 @@ print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_te
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_stage(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord,
-                int stage_size, bool with_players);
+int print_stage(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players);
 
 /**
  * @brief Prints a player somewhere on the map
