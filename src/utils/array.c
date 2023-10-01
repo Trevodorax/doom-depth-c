@@ -18,8 +18,8 @@
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void push(ArrayNode **head_ref, void *new_data, size_t data_size) {
-    ArrayNode *new_node = (ArrayNode *)malloc(sizeof(ArrayNode));
+void push(array_node_t **head_ref, void *new_data, size_t data_size) {
+    array_node_t *new_node = (array_node_t *)malloc(sizeof(array_node_t));
     new_node->value = malloc(data_size);
     new_node->next = *head_ref;
 
@@ -41,9 +41,9 @@ void push(ArrayNode **head_ref, void *new_data, size_t data_size) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void append(ArrayNode **head_ref, void *new_data, size_t data_size) {
-    ArrayNode *new_node = (ArrayNode *)malloc(sizeof(ArrayNode));
-    ArrayNode *last = *head_ref;
+void append(array_node_t **head_ref, void *new_data, size_t data_size) {
+    array_node_t *new_node = (array_node_t *)malloc(sizeof(array_node_t));
+    array_node_t *last = *head_ref;
     new_node->value = malloc(data_size);
     new_node->next = NULL;
 
@@ -74,12 +74,12 @@ void append(ArrayNode **head_ref, void *new_data, size_t data_size) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void delete_node(ArrayNode **head_ref, int index) {
+void delete_node(array_node_t **head_ref, int index) {
     if (*head_ref == NULL || index < 0) {
         return;
     }
 
-    ArrayNode *temp = *head_ref;
+    array_node_t *temp = *head_ref;
 
     if (index == 0) {
         *head_ref = temp->next;
@@ -96,7 +96,7 @@ void delete_node(ArrayNode **head_ref, int index) {
         return;
     }
 
-    ArrayNode *next = temp->next->next;
+    array_node_t *next = temp->next->next;
     free(temp->next->value);
     free(temp->next);
     temp->next = next;
@@ -118,12 +118,12 @@ void delete_node(ArrayNode **head_ref, int index) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-int insertAtIndex(ArrayNode **head_ref, void *new_data, size_t data_size, int index) {
+int insert_at_index(array_node_t **head_ref, void *new_data, size_t data_size, int index) {
     if (index < 0) {
         return -1;  // Index out of bounds
     }
 
-    ArrayNode *new_node = (ArrayNode *)malloc(sizeof(ArrayNode));
+    array_node_t *new_node = (array_node_t *)malloc(sizeof(array_node_t));
     new_node->value = malloc(data_size);
     memcpy(new_node->value, new_data, data_size);
 
@@ -133,7 +133,7 @@ int insertAtIndex(ArrayNode **head_ref, void *new_data, size_t data_size, int in
         return 0;
     }
 
-    ArrayNode *prev = *head_ref;
+    array_node_t *prev = *head_ref;
     for (int i = 0; i < index - 1; i++) {
         if (prev == NULL) {
             free(new_node->value);
@@ -164,8 +164,8 @@ int insertAtIndex(ArrayNode **head_ref, void *new_data, size_t data_size, int in
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-int find_node(ArrayNode *head, void *data_to_find, size_t data_size) {
-    ArrayNode *current = head;
+int find_node(array_node_t *head, void *data_to_find, size_t data_size) {
+    array_node_t *current = head;
     int index = 0;
 
     while (current != NULL) {
@@ -190,13 +190,13 @@ int find_node(ArrayNode *head, void *data_to_find, size_t data_size) {
  * @param index The 0-based index of the node to be retrieved.
  * @return Pointer to the node at the specified index, or NULL if the index is out of bounds.
  * @sideeffects No side effects.
- * @dependencies Assumes that the ArrayNode structure is defined with a 'next' field.
+ * @dependencies Assumes that the array_node_t structure is defined with a 'next' field.
  * @errors Returns NULL if the index is out of bounds.
  * @author Noam DE MASURE
  * @date 27/09/2023
  */
-void * get_value_at_index(ArrayNode *head, int index) {
-    ArrayNode *current = head;
+void * get_value_at_index(array_node_t *head, int index) {
+    array_node_t *current = head;
 
     while (index != 0){
         if(current->next!=NULL){
@@ -222,9 +222,9 @@ void * get_value_at_index(ArrayNode *head, int index) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void free_list(ArrayNode **head_ref) {
-    ArrayNode *current = *head_ref;
-    ArrayNode *next;
+void free_list(array_node_t **head_ref) {
+    array_node_t *current = *head_ref;
+    array_node_t *next;
 
     while (current != NULL) {
         next = current->next;
@@ -250,7 +250,7 @@ void free_list(ArrayNode **head_ref) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void print_list(ArrayNode *node, void (*fptr)(void *)) {
+void print_list(array_node_t *node, void (*fptr)(void *)) {
     while (node != NULL) {
         (*fptr)(node->value);
         node = node->next;

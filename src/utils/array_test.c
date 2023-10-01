@@ -5,7 +5,7 @@
 #include <string.h>
 
 char * test_get_node_int_value_at_index() {
-    ArrayNode *start = NULL;
+    array_node_t *start = NULL;
 
     unsigned int_size = sizeof(int);
     int arr[] = {10, 20, 30, 40, 50}, i;
@@ -18,7 +18,7 @@ char * test_get_node_int_value_at_index() {
 }
 
 char * test_get_node_float_value_at_index() {
-    ArrayNode *start = NULL;
+    array_node_t *start = NULL;
 
     // Example with floats
     unsigned float_size = sizeof(float);
@@ -33,7 +33,7 @@ char * test_get_node_float_value_at_index() {
 }
 
 char * test_get_node_string_value_at_index() {
-    ArrayNode *start = NULL;
+    array_node_t *start = NULL;
 
     // Example with strings
     unsigned string_size = sizeof(char *);
