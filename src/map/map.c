@@ -10,7 +10,7 @@
  * @sideeffects Displays the map on the window, removing any previously printed content
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_map(game_window_t * game_window, map_t * map);
+int display_map(game_window_t *game_window, map_t *map, SDL_Texture **stage_textures);
 
 /**
  * @brief Converts a json into a map (does all the required checks)
@@ -46,7 +46,9 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size, bool with_players);
+int
+print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord,
+                 int stage_size, bool with_players);
 
 /**
  * @brief Uncounts and displays the given stage and its stages recursively
@@ -58,7 +60,9 @@ int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord,
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size, bool with_players);
+int
+print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord,
+             int stage_size, bool with_players);
 
 
 /**
@@ -71,7 +75,8 @@ int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_stage(game_window_t * game_window, stage_t * stage, int x_coord, int y_coord, int stage_size, bool with_players);
+int print_stage(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord,
+                int stage_size, bool with_players);
 
 /**
  * @brief Prints a player somewhere on the map
@@ -97,21 +102,22 @@ int print_player_on_stage(game_window_t * game_window, orientation_t player_orie
 stage_t * move_player(stage_t * player_stage, orientation_t direction);
 
 int map_screen(game_window_t *game_window, char *map_file) {
+    // safeguards
     Json * json_map = get_json_from_file(map_file);
     if(!json_map) {
         fprintf(stderr, "\nmap_screen error: could not retrieve map from file.");
         return EXIT_FAILURE;
     }
-
     map_t * map = json_to_map(json_map);
     if(!map) {
         fprintf(stderr, "\nmap_screen error: could not convert json to map.");
         return EXIT_FAILURE;
     }
 
-    stage_t * player_stage = get_player_stage(map->first_stage);
+    // get all the textures for different types of stages
+    SDL_Texture ** stage_textures = get_stage_textures(game_window->renderer);
 
-    printf("\nMap name: %s\n", map->name);
+    stage_t * player_stage = get_player_stage(map->first_stage);
 
     SDL_Event e;
     bool quit = false;
@@ -145,7 +151,7 @@ int map_screen(game_window_t *game_window, char *map_file) {
             }
         }
         map->first_stage = player_stage;
-        display_map(game_window, map);
+        display_map(game_window, map, stage_textures);
     }
 
     return EXIT_SUCCESS;
@@ -183,7 +189,7 @@ map_t * json_to_map(Json * json_map) {
     return result;
 }
 
-int display_map(game_window_t * game_window, map_t * map) {
+int display_map(game_window_t *game_window, map_t *map, SDL_Texture **stage_textures) {
     if(!game_window || !map) {
         fprintf(stderr, "\ndisplay_map error: please provide all necessary arguments");
         return EXIT_FAILURE;
@@ -212,7 +218,7 @@ int display_map(game_window_t * game_window, map_t * map) {
         return EXIT_FAILURE;
     }
 
-    print_stages(game_window, map->first_stage, initial_x, initial_y, stage_size, true);
+    print_stages(game_window, map->first_stage, stage_textures, initial_x, initial_y, stage_size, true);
 
     SDL_RenderPresent(game_window->renderer);
 
@@ -241,34 +247,38 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
     return EXIT_SUCCESS;
 }
 
-int print_stages(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size, bool with_players) {
+int print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord,
+             int stage_size, bool with_players) {
     uncount_stages(stages);
-    print_stages_rec(game_window, stages, x_coord, y_coord, stage_size, with_players);
+    print_stages_rec(game_window, stages, stage_textures, x_coord, y_coord, stage_size, with_players);
 
     return EXIT_SUCCESS;
 }
 
-int print_stages_rec(game_window_t * game_window, stage_t * stages, int x_coord, int y_coord, int stage_size, bool with_players) {
+int print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord,
+                 int stage_size, bool with_players) {
     if(!stages || stages->counted) {
         return EXIT_SUCCESS;
     }
 
     stages->counted = true;
 
-    print_stage(game_window, stages, x_coord * stage_size, y_coord * stage_size, stage_size, with_players);
+    print_stage(game_window, stages, stage_textures, x_coord * stage_size, y_coord * stage_size, stage_size, with_players);
 
-    print_stages_rec(game_window, stages->top, x_coord, y_coord - 1, stage_size, with_players);
-    print_stages_rec(game_window, stages->right, x_coord + 1, y_coord, stage_size, with_players);
-    print_stages_rec(game_window, stages->bottom, x_coord, y_coord + 1, stage_size, with_players);
-    print_stages_rec(game_window, stages->left, x_coord - 1, y_coord, stage_size, with_players);
+    print_stages_rec(game_window, stages->top, stage_textures, x_coord, y_coord - 1, stage_size, with_players);
+    print_stages_rec(game_window, stages->right, stage_textures, x_coord + 1, y_coord, stage_size, with_players);
+    print_stages_rec(game_window, stages->bottom, stage_textures, x_coord, y_coord + 1, stage_size, with_players);
+    print_stages_rec(game_window, stages->left, stage_textures, x_coord - 1, y_coord, stage_size, with_players);
 
     return EXIT_SUCCESS;
 }
 
-int print_stage(game_window_t * game_window, stage_t * stage, int x_coord, int y_coord, int stage_size, bool with_players) {
+int print_stage(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord,
+                int stage_size, bool with_players) {
     SDL_Rect stage_rect =  {x_coord, y_coord, stage_size, stage_size};
     SDL_Color * stage_color = get_stage_color(stage);
-    if(draw_fill_rect(stage_rect, *stage_color, game_window->renderer) == EXIT_FAILURE) {
+
+    if(SDL_RenderCopy(game_window->renderer, stage_textures[stage->type], NULL, &stage_rect) != 0) {
         return EXIT_FAILURE;
     }
 

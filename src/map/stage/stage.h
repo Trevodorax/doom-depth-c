@@ -11,8 +11,16 @@ typedef enum {
     EMPTY,
     FIGHT,
     SHOP,
-    TREASURE
+    TREASURE,
+    STAGE_TYPE_COUNT
 } stage_type_t;
+
+static const char * stage_texture_files[STAGE_TYPE_COUNT] = {
+        "../assets/empty_stage.png",
+        "../assets/fight_stage.png",
+        "../assets/shop_stage.png",
+        "../assets/treasure_stage.png"
+};
 
 typedef enum {
     NORTH,
@@ -84,6 +92,22 @@ SDL_Color * get_stage_color(stage_t * stage);
  */
 void uncount_stages(stage_t * stage);
 
+/**
+ * @brief Returns the stage where there is a player
+ *
+ * If there are multiple players, returns the first encountered player
+ *
+ * @param stages The stages to search for the player
+ * @return A stage with a player on it or NULL if no player is found
+ */
 stage_t *get_player_stage(stage_t *stages);
+
+/**
+ * @brief Gets the list of textures for each stage type
+ *
+ * @param renderer The renderer for which to create the textures
+ * @return The list of textures in the order of the stages enum
+ */
+SDL_Texture ** get_stage_textures(SDL_Renderer * renderer);
 
 #endif //DOOM_DEPTH_C_STAGE_H
