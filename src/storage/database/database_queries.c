@@ -133,18 +133,18 @@ const char insert_spell_sql[] =
 const char insert_monster_sql[] =
         "INSERT INTO MONSTER (type, name, hp_max, hp, attack, defense, image)"
         "VALUES (0, 'Bat', 10, 10, 2, 1, '../../../assets/bat.png'),"
-        "(0, 'Gobelin', 15, 15, 3, 2, '../../../assets/gobelin.png'),"
-        "(0, 'Zombie', 20, 20, 4, 3, '../../../assets/zombie.png'),"
-        "(0, 'Skeleton', 25, 25, 5, 4, '../../../assets/skeleton.png'),"
-        "(0, 'Troll', 30, 30, 6, 5, '../../../assets/troll.png'),"
-        "(0, 'Ghost', 35, 35, 7, 6, '../../../assets/ghost.png'),"
-        "(0, 'Ghoul', 40, 40, 8, 7, '../../../assets/ghoul.png'),"
-        "(0, 'Demon', 45, 45, 9, 8, '../../../assets/demon.png'),"
-        "(0, 'Flowey', 50, 50, 10, 9, '../../../assets/flowey.png'),"
-        "(2, 'M. Sananes', 100, 100, 10, 10, '../../../assets/sananes.png'),"
-        "(2, 'M. Delon', 100, 100, 10, 10, '../../../assets/delon.png'),"
-        "(2, 'M. Demacon', 100, 100, 10, 10, '../../../assets/demacon.png'),"
-        "(2, 'M. Machavoine', 100, 100, 10, 10, '../../../assets/machavoine.png');";
+        "(0, 'goblin', 15, 15, 3, 2, '../../../assets/gobelin.png'),"
+        "(0, 'zombie', 20, 20, 4, 3, '../../../assets/zombie.png'),"
+        "(0, 'skeleton', 25, 25, 5, 4, '../../../assets/skeleton.png'),"
+        "(0, 'troll', 30, 30, 6, 5, '../../../assets/troll.png'),"
+        "(0, 'ghost', 35, 35, 7, 6, '../../../assets/ghost.png'),"
+        "(0, 'ghoul', 40, 40, 8, 7, '../../../assets/ghoul.png'),"
+        "(0, 'demon', 45, 45, 9, 8, '../../../assets/demon.png'),"
+        "(0, 'flowey', 50, 50, 10, 9, '../../../assets/flowey.png'),"
+        "(2, 'sananes', 100, 100, 10, 10, '../../../assets/sananes.png'),"
+        "(2, 'delon', 100, 100, 10, 10, '../../../assets/delon.png'),"
+        "(2, 'demacon', 100, 100, 10, 10, '../../../assets/demacon.png'),"
+        "(2, 'machavoine', 100, 100, 10, 10, '../../../assets/machavoine.png');";
 
 Table_Info all_tables_info[] = {
         {
