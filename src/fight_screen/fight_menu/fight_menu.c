@@ -102,6 +102,7 @@ int display_menu_item(SDL_Renderer * renderer, const char * title, const char * 
         }
 
         SDL_RenderCopy(renderer, image_texture, NULL, &content_container);
+        SDL_DestroyTexture(image_texture);
     }
 
     // print the title if there is one
