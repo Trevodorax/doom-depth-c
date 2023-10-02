@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "../fight_actions/fight_actions.h"
 #include "../../sdl_utils/sdl_utils.h"
+#include "../fight_dimensions/fight_dimensions.h"
 
 menu_t* create_menu(int nb_options, const char * title, const char * image_path, fight_action action) {
     menu_t *new_menu = malloc(sizeof(menu_t));
@@ -15,19 +16,20 @@ menu_t* create_menu(int nb_options, const char * title, const char * image_path,
 }
 
 menu_t* build_nested_menu() {
-    menu_t *root_menu = create_menu(4, "Root Menu", NULL, NULL);
+    menu_t *root_menu = create_menu(2, "Root Menu", NULL, NULL);
 
-    menu_t *submenu1 = create_menu(2, "Submenu1", NULL, NULL);
-    submenu1->options[0] = create_menu(0, "Option1", NULL, action_1);
-    submenu1->options[1] = create_menu(0, "Option2", NULL, action_2);
+    menu_t *submenu1 = create_menu(2, "Think", NULL, NULL);
 
-    menu_t *submenu2 = create_menu(1, "Submenu2", NULL, NULL);
-    submenu2->options[0] = create_menu(0, "Option3", NULL, action_3);
+    submenu1->options[0] = create_menu(0, "Quit", NULL, quit);
+    submenu1->options[1] = create_menu(1, "Bag", NULL, NULL);
+    submenu1->options[1]->options[0] = create_menu(0, "Potion", NULL, potion);
+
+    menu_t *submenu2 = create_menu(2, "Attack", NULL, NULL);
+    submenu2->options[0] = create_menu(0, "Sword", NULL, attack_weapon);
+    submenu2->options[1] = create_menu(0, "Spell", NULL, attack_spell);
 
     root_menu->options[0] = submenu1;
     root_menu->options[1] = submenu2;
-    root_menu->options[2] = create_menu(0, "Option1", NULL, action_1);
-    root_menu->options[3] = create_menu(0, "Option2", NULL, action_2);
     return root_menu;
 }
 
@@ -45,11 +47,74 @@ void free_menu(menu_t * menu) {
     free(menu);
 }
 
+fight_action fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, SDL_Rect * fight_zone, SDL_Rect * menu_zone, bool is_nested) {
+    int selected_item_index = 0;
+
+    SDL_Event e;
+    bool quit = false;
+    while (!quit){
+        SDL_Delay(50);
+        while (SDL_PollEvent(&e)){
+            if (e.type == SDL_QUIT){
+                quit = true;
+            }
+            if (e.type == SDL_KEYDOWN){
+                switch (e.key.keysym.sym) {
+                    case SDLK_z:
+                        selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, NORTH);
+                        break;
+                    case SDLK_d:
+                        selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, EAST);
+                        break;
+                    case SDLK_s:
+                        selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, SOUTH);
+                        break;
+                    case SDLK_q:
+                        selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, WEST);
+                        break;
+                    case SDLK_ESCAPE:
+                        if(is_nested) {
+                            return NULL;
+                        }
+                        break;
+                    case SDLK_RETURN: {
+                        menu_t * clicked_menu = menu->options[selected_item_index];
+                        if(clicked_menu->nb_options > 0) {
+                            fight_action selected_action = fight_menu(game_window, clicked_menu, fight_context, fight_zone, menu_zone, true);
+                            if(!selected_action) {
+                                break;
+                            } else {
+                                return selected_action;
+                            }
+                        }
+                        if(clicked_menu->action) {
+                            return clicked_menu->action;
+                        }
+                        // if there is no submenu AND no action, then there is a problem and nothing happens
+                        return NULL;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            if (e.type == SDL_MOUSEBUTTONDOWN){
+                quit = true;
+            }
+        }
+        update_section_dimensions(game_window->window, fight_zone, menu_zone);
+        display_menu(game_window->renderer, menu, menu_zone, selected_item_index);
+        SDL_RenderPresent(game_window->renderer);
+    }
+}
+
 int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, int selected_item_index) {
     if (!renderer || !menu || !container || selected_item_index >= menu->nb_options || selected_item_index < 0) {
         fprintf(stderr, "\ndisplay_menu error: Please provide all necessary arguments.");
         return EXIT_FAILURE;
     }
+
+    draw_fill_rect(*container, (SDL_Color){0, 0, 0, 255}, renderer);
 
     SDL_Rect * menu_items_grid = get_rectangle_grid(menu->nb_options, container);
     for (int i = 0; i < menu->nb_options; i++) {
@@ -132,3 +197,34 @@ int display_menu_item(SDL_Renderer * renderer, const char * title, const char * 
     return EXIT_SUCCESS;
 }
 
+int handle_fight_menu_movement(int selected_item_index, int nb_items, orientation_t direction) {
+    int nb_rows = (int)sqrt(nb_items);
+    int nb_cols = (nb_items + nb_rows - 1) / nb_rows;
+
+    switch (direction) {
+        case NORTH:
+            selected_item_index -= nb_cols;
+            break;
+        case EAST:
+            selected_item_index ++;
+            break;
+        case SOUTH:
+            selected_item_index += nb_cols;
+            break;
+        case WEST:
+            selected_item_index--;
+            break;
+        default:
+            return selected_item_index;
+    }
+
+    if(selected_item_index < 0) {
+        return 0;
+    }
+
+    if(selected_item_index >= nb_items) {
+        return nb_items - 1;
+    }
+
+    return selected_item_index;
+}
