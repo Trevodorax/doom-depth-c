@@ -1,4 +1,4 @@
-#include <malloc.h>
+#include <stdlib.h>
 #include "stats.h"
 
 stats_t * create_stats(){
