@@ -52,7 +52,7 @@ int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, i
  * @param is_selected If the user is currently selecting this menu item
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_menu_item(SDL_Renderer * renderer, char * title, char * image_path, SDL_Rect * container, bool is_selected);
+int display_menu_item(SDL_Renderer * renderer, const char * title, const char * image_path, SDL_Rect * container, bool is_selected);
 
 /**
  * @brief Recursively frees a menu
@@ -60,5 +60,7 @@ int display_menu_item(SDL_Renderer * renderer, char * title, char * image_path, 
  * @param menu The freed menu
  */
 void free_menu(menu_t * menu);
+
+menu_t* build_nested_menu();
 
 #endif //DOOM_DEPTH_C_FIGHT_MENU_H

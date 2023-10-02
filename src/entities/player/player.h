@@ -6,7 +6,7 @@
 #include "../spell/spell.h"
 #include "../stats/stats.h"
 #include "../weapon/weapon.h"
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 
 typedef struct player_t {

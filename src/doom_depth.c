@@ -6,6 +6,7 @@
 #include "map/map.h"
 #include "game_over/game_over.h"
 #include "utils/router.h"
+#include "fight_screen/fight_screen.h"
 
 int doom_depth() {
     SDL_Init(SDL_INIT_VIDEO);
@@ -37,8 +38,6 @@ int doom_depth() {
                 break;
         }
     }
-
-
 
     free_game_window(main_window);
     SDL_Quit();

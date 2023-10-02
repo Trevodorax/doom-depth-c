@@ -143,7 +143,7 @@ int draw_fill_rect(
     return EXIT_SUCCESS;
 }
 
-int drawThickRect(
+int draw_thick_rect(
         SDL_Rect rect,
         unsigned int thickness,
         SDL_Color color,
@@ -355,3 +355,35 @@ SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_path
 
     return image_texture;
 }
+
+SDL_Rect *get_rectangle_grid(int nb_rectangles, SDL_Rect *container) {
+    if (nb_rectangles <= 0 || container == NULL) {
+        return NULL;
+    }
+
+    int rows = (int)sqrt(nb_rectangles);
+    int cols = (nb_rectangles + rows - 1) / rows; // calculate columns based on rows
+
+    // Calculate width and height for each cell with a small margin
+    int cell_width = (container->w / cols) - 2;
+    int cell_height = (container->h / rows) - 2;
+
+    SDL_Rect *rect_grid = malloc(rows * cols * sizeof(SDL_Rect));
+    if (!rect_grid) {
+        fprintf(stderr, "\nget_rectangle_grid error: couldn't allocate memory");
+        return NULL;
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            int index = i * cols + j; // calculate the index in the 1D array
+            rect_grid[index].x = container->x + j * (cell_width + 2);
+            rect_grid[index].y = container->y + i * (cell_height + 2);
+            rect_grid[index].w = cell_width;
+            rect_grid[index].h = cell_height;
+        }
+    }
+
+    return rect_grid;
+}
+
