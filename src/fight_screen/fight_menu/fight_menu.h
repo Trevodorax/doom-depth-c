@@ -24,12 +24,16 @@ struct menu_t {
  * Recursive function that displays the menu, and gets user input for each level of menu, returning the action when the
  * user gets to one.
  *
- * @param renderer
- * @param fight_context
- * @param container The rectangle in which to display the menu
+ * @param game_window
+ * @param menu The displayed menu
+ * @param fight_context Pointer to the data bout the fight
+ * @param fight_zone Pointer to the rectangle where the fight is displayed
+ * @param menu_zone Pointer to the rectangle where the menu is displayed
+ * @param is_nested If the menu is called from another menu
+ * @sideeffects modifies the fight and menu zone if window is resized
  * @return The action selected in the menu
  */
-fight_action fight_menu(SDL_Renderer * renderer, fight_context_t * fight_context, SDL_Rect * container);
+fight_action fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, SDL_Rect * fight_zone, SDL_Rect * menu_zone, bool is_nested);
 
 /**
  * @brief Prints one level of menu
@@ -60,6 +64,16 @@ int display_menu_item(SDL_Renderer * renderer, const char * title, const char * 
  * @param menu The freed menu
  */
 void free_menu(menu_t * menu);
+
+/**
+ * @brief Gets a movement and returns the newly selected item
+ *
+ * @param selected_item_index The currently selected item
+ * @param nb_items The total number of items
+ * @param direction Which way the selection is moved
+ * @return The new index or the previous one if the move is impossible
+ */
+int handle_fight_menu_movement(int selected_item_index, int nb_items, orientation_t direction);
 
 menu_t* build_nested_menu();
 

@@ -6,8 +6,9 @@ typedef enum {
     TRY_AGAIN,
     QUIT = 2,
     START_MENU,
-    MAP,
-    GAME_OVER
+    MAP_SCREEN,
+    GAME_OVER,
+    FIGHT_SCREEN
 } Router;
 
 #endif

@@ -13,7 +13,7 @@ int doom_depth() {
 
     game_window_t * main_window = init_game_window();
 
-    main_window->context->current_screen = START_MENU;
+    main_window->context->current_screen = FIGHT_SCREEN;
     while (main_window->context->current_screen != QUIT) {
         switch (main_window->context->current_screen) {
             case START_MENU :
@@ -23,8 +23,14 @@ int doom_depth() {
                 }
                 break;
 
-            case MAP :
+            case MAP_SCREEN :
                 main_window->context->current_screen = map_screen(main_window, "../assets/map_1.json");
+                if(main_window->context->current_screen == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                break;
+            case FIGHT_SCREEN :
+                main_window->context->current_screen = fight_screen(main_window, NULL, NULL);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

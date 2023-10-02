@@ -1,18 +1,22 @@
 #include "fight_actions.h"
 #include <stdio.h>
 
-// Sample fight_action functions
-int action_1(fight_context_t * fight_context) {
-    printf("\nCalled action1");
+int quit(fight_context_t * fight_context) {
+    printf("\nExit");
+    return -1;
+}
+
+int potion(fight_context_t * fight_context) {
+    printf("\nDrink potion");
     return 0;
 }
 
-int action_2(fight_context_t * fight_context) {
-    printf("\nCalled action2");
+int attack_spell(fight_context_t * fight_context) {
+    printf("\nAttack with spell");
     return 0;
 }
 
-int action_3(fight_context_t * fight_context) {
-    printf("\nCalled action3");
+int attack_weapon(fight_context_t * fight_context) {
+    printf("\nAttack with weapon");
     return 0;
 }
