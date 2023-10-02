@@ -4,12 +4,13 @@
 #include <SDL2/SDL.h>
 #include "../entities/player/player.h"
 #include "../map/stage/stage.h"
+#include "../utils/router.h"
 
 typedef struct {
     /**
     see router for reference
      */
-    int current_screen;
+    Router current_screen;
 } window_context_t;
 
 typedef struct {
