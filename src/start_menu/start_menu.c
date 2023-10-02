@@ -14,11 +14,13 @@ int start_menu_screen(game_window_t *game_window) {
             if (e.type == SDL_QUIT){
                 return QUIT;
             }
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN && active_option == 0){
-                active_option = 1;
-            }
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP && active_option == 1){
-                active_option = 0;
+            if (e.type == SDL_KEYDOWN){
+                if(e.key.keysym.sym == SDLK_DOWN && active_option == 0){
+                    active_option = 1;
+                }
+                if (e.key.keysym.sym == SDLK_UP && active_option == 1){
+                    active_option = 0;
+                }
             }
         }
         display_start_menu(game_window, active_option);

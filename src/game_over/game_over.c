@@ -14,14 +14,16 @@ int game_over_screen(game_window_t *game_window) {
             if (e.type == SDL_QUIT){
                 return QUIT;
             }
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN && active_option == TRY_AGAIN){
-                active_option = START_MENU;
-            }
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP && active_option == START_MENU){
-                active_option = TRY_AGAIN;
-            }
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN && active_option == START_MENU){
-                return START_MENU;
+            if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_DOWN && active_option == TRY_AGAIN) {
+                    active_option = START_MENU;
+                }
+                if (e.key.keysym.sym == SDLK_UP && active_option == START_MENU) {
+                    active_option = TRY_AGAIN;
+                }
+                if (e.key.keysym.sym == SDLK_RETURN && active_option == START_MENU) {
+                    return START_MENU;
+                }
             }
         }
         display_game_over(game_window, active_option);
