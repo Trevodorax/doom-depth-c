@@ -43,7 +43,10 @@ add_executable(doom_depth_c
         src/fight_screen/fight_menu/fight_menu.c
         src/fight_screen/fight_menu/fight_menu.h
         src/fight_screen/fight_actions/fight_actions.c
-        src/fight_screen/fight_actions/fight_actions.h)
+        src/fight_screen/fight_actions/fight_actions.h
+        src/game_over/game_over.h
+        src/game_over/game_over.c
+        src/utils/router.h)
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)

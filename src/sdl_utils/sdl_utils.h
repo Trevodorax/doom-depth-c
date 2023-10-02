@@ -4,15 +4,13 @@
 #include <SDL2/SDL.h>
 #include "../entities/player/player.h"
 #include "../map/stage/stage.h"
+#include "../utils/router.h"
 
 typedef struct {
     /**
-     * 's': start menu
-     * 'm': map
-     * 'f': fight
-     * 'p': preferences menu
+    see router for reference
      */
-    char current_screen;
+    Router current_screen;
 } window_context_t;
 
 typedef struct {

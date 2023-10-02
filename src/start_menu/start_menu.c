@@ -1,26 +1,26 @@
 #include "start_menu.h"
 #include "../sdl_utils/sdl_utils.h"
+#include "../utils/router.h"
 
 int display_start_menu(game_window_t *game_window, unsigned short active_option);
 
 int start_menu_screen(game_window_t *game_window) {
     SDL_Event e;
-    int quit = 0;
+    bool quit = false;
     unsigned short active_option = 0;
     while (!quit){
         // TODO: link to next screens
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT){
-                quit = 1;
+                return QUIT;
             }
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN && active_option == 0){
-                active_option = 1;
-            }
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP && active_option == 1){
-                active_option = 0;
-            }
-            if (e.type == SDL_MOUSEBUTTONDOWN){
-                quit = 1;
+            if (e.type == SDL_KEYDOWN){
+                if(e.key.keysym.sym == SDLK_DOWN && active_option == 0){
+                    active_option = 1;
+                }
+                if (e.key.keysym.sym == SDLK_UP && active_option == 1){
+                    active_option = 0;
+                }
             }
         }
         display_start_menu(game_window, active_option);
