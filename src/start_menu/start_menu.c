@@ -43,7 +43,7 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
             window_height + 20
     };
 
-    draw_image_in_rectangle(game_window->renderer, background_rect, "../assets/flames_around.png",  NORTH);
+    draw_image_in_rectangle(game_window->renderer, background_rect, "../assets/backgrounds/flames_around.png",  NORTH);
 
     // create texture for title
     SDL_Texture *title_texture = get_string_texture(
