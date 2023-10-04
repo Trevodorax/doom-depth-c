@@ -42,6 +42,10 @@ int doom_depth() {
                     return EXIT_FAILURE;
                 }
                 break;
+            case TRY_AGAIN:
+                break;
+            case QUIT:
+                break;
         }
     }
 

@@ -16,6 +16,4 @@ int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight
             return MAP_SCREEN;
         }
     }
-
-    return EXIT_SUCCESS;
 }
