@@ -9,8 +9,8 @@ menu_t* create_menu(int nb_options, const char * title, const char * image_path,
     menu_t *new_menu = malloc(sizeof(menu_t));
     new_menu->nb_options = nb_options;
     new_menu->options = malloc(sizeof(menu_t *) * nb_options);
-    new_menu->title = title;
-    new_menu->image_path = image_path;
+    new_menu->title = strdup(title);
+    new_menu->image_path = strdup(image_path);
     new_menu->action = action;
     return new_menu;
 }
@@ -106,6 +106,8 @@ fight_action fight_menu(game_window_t * game_window, menu_t * menu, fight_contex
         display_menu(game_window->renderer, menu, menu_zone, selected_item_index);
         SDL_RenderPresent(game_window->renderer);
     }
+
+    return EXIT_SUCCESS;
 }
 
 int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, int selected_item_index) {
