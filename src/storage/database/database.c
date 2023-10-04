@@ -136,13 +136,13 @@ int save_player(sqlite3 *db, player_t *player) {
         // TODO: update the player's weapons in the database : weapons_in_inventory
         // TODO: update the player's armors in the database : armors_in_inventory
 
-    /**
-     * @param db
-     * @param update_player_sql --> sql command to update the player
-     * @param -1 --> length of the sql command (if -1, the command is read up to the first null terminator)
-     * @param &stmt --> pointer to the statement object
-     * @param NULL --> pointer to the unused portion of the sql command
-     */
+        
+    /* This function take in parameter the database,
+     * the sql command to update the player,
+     * the length of the sql command (if -1, the command is read up to the first null terminator),
+     * a pointer to the statement object and
+     * a pointer to the unused portion of the sql command
+    */
     int rc = sqlite3_prepare_v2(db, update_player_sql, -1, &stmt, NULL);
 
     if (rc != SQLITE_OK) {
