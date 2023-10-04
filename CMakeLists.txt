@@ -10,6 +10,7 @@ add_executable(doom_depth_c
         src/entities/armor/armor.h
         src/entities/inventory/inventory.h
         src/entities/monster/monster.h
+        src/entities/monster/monster.c
         src/entities/player/player.h
         src/entities/spell/spell.h
         src/entities/fight/fight.h
@@ -136,6 +137,8 @@ add_executable(doom_depth_tests
         src/map/map.h
         src/map/map_test.c
         src/map/map_test.h
+        src/entities/monster/monster.c
+        src/entities/monster/monster.h
 )
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)

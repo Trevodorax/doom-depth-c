@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "../../minunit/minunit.h"
 #include "database.h"
+#include "../../entities/monster/monster.h"
 
 char * test_db_connection() {
     sqlite3 *db = db_connection();
@@ -16,9 +17,30 @@ char * test_save_player() {
     return 0;
 }
 
+void print_monster(void *monster) {
+    monster_t *m = (monster_t *)monster;
+    printf("id: %d\n", m->id);
+    printf("type: %d\n", m->type);
+    printf("name: %s\n", m->name);
+    printf("hp: %d\n", m->hp);
+    printf("hp_max: %d\n", m->hp_max);
+    printf("attack: %d\n", m->attack);
+    printf("defense: %d\n", m->defense);
+    printf("image: %s\n", m->image);
+}
+
+char * test_create_monsters_from_db() {
+    sqlite3 *db = db_connection();
+    array_node_t *monsters = create_monsters_from_db(db);
+    // print_list(monsters, print_monster);
+    mu_assert("Error in test_create_monsters_from_db: monsters is null", monsters != NULL);
+    return 0;
+}
+
 char * all_tests() {
     mu_run_test(test_db_connection);
     mu_run_test(test_save_player);
+    mu_run_test(test_create_monsters_from_db);
     return 0;
 }
 
