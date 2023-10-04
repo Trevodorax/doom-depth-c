@@ -2,6 +2,7 @@
 #define MONSTER
 
 typedef struct {
+    int id;
     char *name;
     short type;
     unsigned int hp;

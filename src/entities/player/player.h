@@ -10,8 +10,10 @@
 #include <string.h>
 
 typedef struct player_t {
+    int id;
     char *name;
     unsigned int hp;
+    unsigned int hp_max;
     unsigned int mana;
     unsigned int mana_max;
     unsigned int xp;
