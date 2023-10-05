@@ -8,7 +8,8 @@ typedef enum {
     START_MENU,
     MAP_SCREEN,
     GAME_OVER,
-    FIGHT_SCREEN
+    FIGHT_SCREEN,
+    INVENTORY_SCREEN
 } Router;
 
 #endif
