@@ -126,6 +126,42 @@ sqlite3 *db_connection() {
     return NULL;
 }
 
+array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback) {
+
+    sqlite3_stmt *stmt;
+    int rc = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
+
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        return NULL;
+    }
+
+    array_node_t *head = NULL;
+
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+
+        void *struct_ptr = callback(stmt);
+
+        if (!struct_ptr) {
+            fprintf(stderr, "Failed to allocate memory for struct.\n");
+            sqlite3_finalize(stmt);
+            return NULL;
+        }
+
+        append(&head, struct_ptr, sizeof(struct_ptr));
+    }
+
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return NULL;
+    }
+
+    sqlite3_finalize(stmt);
+    return head;
+
+}
+
 int save_player(sqlite3 *db, player_t *player) {
 
     char *z_err_msg = NULL;

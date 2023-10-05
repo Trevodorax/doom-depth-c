@@ -6,6 +6,10 @@
 #include <sqlite3.h>
 #include "database_queries.h"
 #include "../../entities/player/player.h"
+#include "../../utils/array.h"
+
+// pointer to a function that takes a sqlite3_stmt and returns a void pointer
+typedef void* (*sql_to_struct_callback)(sqlite3_stmt *stmt);
 
 /**
  * @brief Connects to the SQLite database or returns NULL if it fails.
@@ -66,6 +70,22 @@ int db_init(sqlite3 *db);
  * @errors Potential errors from SQLite during database connection or initialization.
  */
 sqlite3 *db_connection();
+
+/**
+ * @brief Creates a struct from the database using a given query and callback function.
+ *
+ * This function executes a given SQL query on the database and creates a struct from the result.
+ *
+ * @param db A pointer to the SQLite3 database connection.
+ * @param query The SQL query to be executed.
+ * @param callback A pointer to a function that takes a sqlite3_stmt and returns a void pointer.
+ *
+ * @return A pointer to the struct created from the database, or NULL if the query execution fails.
+ * @sideeffects May modify the SQLite database by inserting new data.
+ * @dependencies Depends on the SQLite3 library.
+ * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
+ */
+array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback);
 
 /**
  * @brief Saves the player's data to the database.
