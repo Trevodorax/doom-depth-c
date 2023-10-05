@@ -3,6 +3,8 @@
 
 #include "../../utils/array.h"
 #include <sqlite3.h>
+#include <string.h>
+#include <stdlib.h>
 
 typedef struct {
     int id;
@@ -14,5 +16,22 @@ typedef struct {
     unsigned int cost;
     char *image_path;
 } armor_t;
+
+
+/**
+ * @brief Creates an armor from the database.
+ *
+ * This function queries the database for an armor with the given ID and constructs
+ * an armor with details fetched from the database.
+ *
+ * @param stmt  The SQLite statement which contains the armor's data.
+ * @return   Returns a pointer to the armor with the given ID, or NULL if there was an error
+ *           or no armor was found.
+ *
+ * @sideeffects Allocates memory for the armor.
+ * @dependencies Depends on the SQLite library.
+ * @errors Errors during database operations or memory allocation can result in NULL being returned.
+ */
+void *create_armor_from_db(sqlite3_stmt *stmt);
 
 #endif

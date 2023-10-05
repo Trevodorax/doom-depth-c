@@ -2,6 +2,7 @@
 #include "../../minunit/minunit.h"
 #include "database.h"
 #include "../../entities/monster/monster.h"
+#include "../../entities/armor/armor.h"
 
 char * test_db_connection() {
     sqlite3 *db = db_connection();
@@ -26,7 +27,7 @@ void print_monster(void *monster) {
     printf("hp_max: %d\n", m->hp_max);
     printf("attack: %d\n", m->attack);
     printf("defense: %d\n", m->defense);
-    printf("image: %s\n", m->image);
+    printf("image: %s\n", m->image_path);
 }
 
 char * test_create_monsters_from_db() {
@@ -37,10 +38,31 @@ char * test_create_monsters_from_db() {
     return 0;
 }
 
+void print_armors(void *armor) {
+    armor_t *a = (armor_t *)armor;
+    printf("id: %d\n", a->id);
+    printf("name: %s\n", a->name);
+    printf("rarity: %d\n", a->rarity);
+    printf("amount: %d\n", a->amount);
+    printf("max_uses: %d\n", a->max_uses);
+    printf("uses: %d\n", a->uses);
+    printf("cost: %d\n", a->cost);
+    printf("image: %s\n", a->image_path);
+}
+
+char * test_create_armors_from_db() {
+    sqlite3 *db = db_connection();
+    array_node_t *armors = create_struct_from_db(db, "SELECT * FROM ARMOR", create_armor_from_db);
+    print_list(armors, print_armors);
+    mu_assert("Error in test_create_armors_from_db: armors is null", armors != NULL);
+    return 0;
+}
+
 char * all_tests() {
     mu_run_test(test_db_connection);
     mu_run_test(test_save_player);
-    mu_run_test(test_create_monsters_from_db);
+    // mu_run_test(test_create_monsters_from_db);
+    mu_run_test(test_create_armors_from_db);
     return 0;
 }
 
