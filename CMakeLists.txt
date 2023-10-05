@@ -50,15 +50,55 @@ add_executable(doom_depth_c
         src/fight_screen/fight_dimensions/fight_dimensions.c
         src/fight_screen/fight_dimensions/fight_dimensions.h
         src/cli_utils/cli_utils.c
-        src/cli_utils/cli_utils.h)
+        src/cli_utils/cli_utils.h
+)
 
-find_package(unofficial-sqlite3 CONFIG REQUIRED)
-target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
-find_package(SDL2 CONFIG REQUIRED)
-target_link_libraries(doom_depth_c
-        PRIVATE
-        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+add_executable(doom_depth_c_windows
+        main.c
+        src/doom_depth.c
+        src/doom_depth.h
+        src/entities/armor/armor.h
+        src/entities/inventory/inventory.h
+        src/entities/monster/monster.h
+        src/entities/player/player.h
+        src/entities/spell/spell.h
+        src/entities/fight/fight.h
+        src/entities/fight/fight.c
+        src/entities/stats/stats.h
+        src/entities/weapon/weapon.h
+        src/storage/json/json.c
+        src/storage/json/json.h
+        src/utils/array.c
+        src/utils/array.h
+        src/map/map.c
+        src/map/map.h
+        src/sdl_utils/sdl_utils.c
+        src/sdl_utils/sdl_utils.h
+        src/storage/database/database.h
+        src/storage/database/database.c
+        src/storage/database/database_queries.h
+        src/storage/database/database_queries.c
+        src/entities/player/player.c
+        src/entities/spell/spell.c
+        src/entities/stats/stats.c
+        src/entities/inventory/inventory.c
+        src/entities/weapon/weapon.c
+        src/entities/armor/armor.c
+        src/map/stage/stage.c
+        src/map/stage/stage.h
+        src/start_menu/start_menu.c
+        src/start_menu/start_menu.h
+        src/fight_screen/fight_screen.c
+        src/fight_screen/fight_screen.h
+        src/fight_screen/fight_menu/fight_menu.c
+        src/fight_screen/fight_menu/fight_menu.h
+        src/fight_screen/fight_actions/fight_actions.c
+        src/fight_screen/fight_actions/fight_actions.h
+        src/game_over/game_over.h
+        src/game_over/game_over.c
+        src/utils/router.h
+        src/fight_screen/fight_dimensions/fight_dimensions.c
+        src/fight_screen/fight_dimensions/fight_dimensions.h
 )
 
 add_executable(doom_depth_tests
@@ -94,36 +134,54 @@ add_executable(doom_depth_tests
         src/map/map.h
         src/map/map_test.c
         src/map/map_test.h
-
 )
 
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
+target_link_libraries(doom_depth_c PRIVATE unofficial::sqlite3::sqlite3)
 target_link_libraries(doom_depth_tests PRIVATE unofficial::sqlite3::sqlite3)
+target_link_libraries(doom_depth_c_windows PRIVATE unofficial::sqlite3::sqlite3)
+
+find_package(SDL2 CONFIG REQUIRED)
+target_link_libraries(doom_depth_c
+        PRIVATE
+        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+)
 target_link_libraries(doom_depth_tests
+        PRIVATE
+        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+)
+target_link_libraries(doom_depth_c_windows
         PRIVATE
         $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
         $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
 
 find_package(SDL2_ttf CONFIG REQUIRED)
+target_link_libraries(doom_depth_c
+        PRIVATE
+        $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
+)
 target_link_libraries(doom_depth_tests
+        PRIVATE
+        $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
+)
+target_link_libraries(doom_depth_c_windows
         PRIVATE
         $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
 )
 
 find_package(SDL2_image CONFIG REQUIRED)
+target_link_libraries(doom_depth_c
+        PRIVATE
+        $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>
+)
 target_link_libraries(doom_depth_tests
         PRIVATE
         $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>
 )
-
-find_package(SDL2_ttf CONFIG REQUIRED)
-target_link_libraries(doom_depth_c
-        PRIVATE
-        $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
-)
-
-find_package(SDL2_image CONFIG REQUIRED)
-target_link_libraries(doom_depth_c
+target_link_libraries(doom_depth_c_windows
         PRIVATE
         $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>
 )
