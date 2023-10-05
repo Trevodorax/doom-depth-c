@@ -34,49 +34,62 @@ int cli_render_present(cli_matrix_t * current_matrix) {
     // kept in memory between function calls
     static cli_matrix_t * previous_matrix;
 
+    int window_width;
+    int window_height;
+    cli_get_window_size(&window_width, &window_height);
+
     if (!previous_matrix) {
-        previous_matrix = malloc(sizeof(cli_matrix_t));
-        previous_matrix->matrix = malloc(0);
-        previous_matrix->nb_rows = 0;
-        previous_matrix->nb_cols = 0;
+        previous_matrix = create_cli_matrix(0, 0, ' ', BLACK);
     }
 
     // make some space in terminal if more is needed
-    for (int i = 0; i < current_matrix->nb_rows - previous_matrix->nb_rows; i++) {
+    for (int i = 0; i < (int)current_matrix->nb_rows - (int)previous_matrix->nb_rows; i++) { // casting to int to avoid overflow when negative (just lost a LOT of time because of that)
         printf("\n");
     }
 
-    // cursor to beginning of matrix
+    // TODO: if the new matrix has less rows than the previous one, delete the excess rows
+    // TODO: same for columns
+    int excess_rows = (int)previous_matrix->nb_rows - (int)current_matrix->nb_rows;
+    if(excess_rows > 0) {
+        for (int i = 0; i < excess_rows; i++) {
+            printf("\033[2K");
+            cli_move_cursor(1, CURSOR_UP);
+        }
+    }
+
     cli_move_cursor((int) current_matrix->nb_rows, CURSOR_UP);
     cli_move_cursor(0, CURSOR_BEGINNING);
 
     // reprint only changed chars of the matrix
-    for (int i = 0; i < current_matrix->nb_rows; i++) {
+    for (size_t i = 0; i < current_matrix->nb_rows; i++) {
         cli_move_cursor(0, CURSOR_BEGINNING);
         cli_move_cursor(1, CURSOR_DOWN);
-        for (int j = 0; j < current_matrix->nb_cols; j++) {
+        for (size_t j = 0; j < current_matrix->nb_cols; j++) {
             if (
-                previous_matrix->nb_rows <= i ||
-                previous_matrix->nb_cols <= i ||
-                previous_matrix->matrix[i][j] != current_matrix->matrix[i][j]
+                i >= previous_matrix->nb_rows ||
+                j >= previous_matrix->nb_cols ||
+                previous_matrix->matrix[i][j].character != current_matrix->matrix[i][j].character ||
+                previous_matrix->matrix[i][j].color != current_matrix->matrix[i][j].color
             ) {
-                printf("%c", current_matrix->matrix[i][j]);
+                cli_print_color(current_matrix->matrix[i][j].color, "%c", current_matrix->matrix[i][j].character);
                 continue;
             }
 
             cli_move_cursor(1, CURSOR_FRONT);
         }
+        for(size_t j = current_matrix->nb_cols; j < previous_matrix->nb_cols && j < window_width; j++) {
+            printf(" ");
+        }
     }
 
     // copy current matrix for next call
-    previous_matrix->matrix = realloc(previous_matrix->matrix, sizeof(char *) * current_matrix->nb_rows);
-    for (int i = 0; i < current_matrix->nb_rows; i++) {
-        previous_matrix->matrix[i] = realloc(previous_matrix->matrix[i], current_matrix->nb_cols);
-        strcpy(previous_matrix->matrix[i], current_matrix->matrix[i]);
+    free_matrix(previous_matrix); // free the previous matrix
+    previous_matrix = create_cli_matrix(current_matrix->nb_rows, current_matrix->nb_cols, ' ', BLACK);
+    for (size_t i = 0; i < current_matrix->nb_rows; i++) {
+        for (size_t j = 0; j < current_matrix->nb_cols; j++) {
+            previous_matrix->matrix[i][j] = current_matrix->matrix[i][j];
+        }
     }
-
-    previous_matrix->nb_rows = current_matrix->nb_rows;
-    previous_matrix->nb_cols = current_matrix->nb_cols;
 
     return EXIT_SUCCESS;
 }
@@ -154,4 +167,102 @@ void cli_print_special_char(special_char_t printed_char, color_code_t color) {
             fprintf(stderr, "\ncli_print_special_char error: unexpected special character value");
             break;
     }
+}
+
+cli_matrix_t* create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_char, color_code_t default_color) {
+    cli_matrix_t *matrix = malloc(sizeof(cli_matrix_t));
+    if(matrix == NULL) {
+        fprintf(stderr, "\ncreate_cli_matrix error: failed memory allocation");
+        return NULL;
+    }
+
+    matrix->nb_rows = nb_rows;
+    matrix->nb_cols = nb_cols;
+
+    matrix->matrix = malloc(nb_rows * sizeof(colored_char_t *));
+    if(matrix->matrix == NULL) {
+        fprintf(stderr, "\ncreate_cli_matrix error: failed memory allocation");
+        free(matrix);
+        return NULL;
+    }
+
+    // rows
+    for(size_t i = 0; i < nb_rows; ++i) {
+        matrix->matrix[i] = malloc(nb_cols * sizeof(colored_char_t));
+        if(matrix->matrix[i] == NULL) {
+            fprintf(stderr, "\ncreate_cli_matrix error: failed memory allocation");
+            for(size_t j = 0; j < i; j++)
+                free(matrix->matrix[j]);  // Free previously allocated rows
+            free(matrix->matrix);
+            free(matrix);
+            return NULL;
+        }
+
+        // columns
+        for(size_t j = 0; j < nb_cols; ++j) {
+            matrix->matrix[i][j] = (colored_char_t){default_char, default_color};
+        }
+    }
+
+    return matrix;
+}
+
+void free_matrix(cli_matrix_t * matrix) {
+    if(matrix != NULL) {
+        for(size_t i = 0; i < matrix->nb_rows; ++i) {
+            free(matrix->matrix[i]);
+        }
+        free(matrix->matrix);
+        free(matrix);
+    }
+}
+
+int resize_cli_matrix(cli_matrix_t *matrix, size_t new_nb_rows, size_t new_nb_cols, char default_char, color_code_t default_color) {
+    if (!matrix) {
+        return EXIT_FAILURE;
+    }
+
+    // removed rows
+    for (size_t i = new_nb_rows; i < matrix->nb_rows; ++i) {
+        free(matrix->matrix[i]);
+    }
+
+    // resize rows
+    matrix->matrix = realloc(matrix->matrix, new_nb_rows * sizeof(colored_char_t *));
+    if (!matrix->matrix) {
+        fprintf(stderr, "\nresize_cli_matrix error: failed memory allocation");
+        return EXIT_FAILURE;
+    }
+
+    // added rows
+    for (size_t i = matrix->nb_rows; i < new_nb_rows; ++i) {
+        matrix->matrix[i] = malloc(new_nb_cols * sizeof(colored_char_t));
+        if (!matrix->matrix[i]) {
+            fprintf(stderr, "\nresize_cli_matrix error: failed memory allocation");
+            return EXIT_FAILURE;
+        }
+        // new cells
+        for (size_t j = 0; j < new_nb_cols; ++j) {
+            matrix->matrix[i][j] = (colored_char_t){default_char, default_color};
+        }
+    }
+
+    // existing rows
+    for (size_t i = 0; i < matrix->nb_rows && i < new_nb_rows; ++i) {
+        matrix->matrix[i] = realloc(matrix->matrix[i], new_nb_cols * sizeof(colored_char_t));
+        if (!matrix->matrix[i]) {
+            fprintf(stderr, "\nresize_cli_matrix error: failed memory allocation");
+            return EXIT_FAILURE;
+        }
+        // new cells
+        for (size_t j = matrix->nb_cols; j < new_nb_cols; ++j) {
+            matrix->matrix[i][j] = (colored_char_t){default_char, default_color};
+        }
+    }
+
+    // update dimensions
+    matrix->nb_rows = new_nb_rows;
+    matrix->nb_cols = new_nb_cols;
+
+    return EXIT_SUCCESS;
 }

@@ -10,7 +10,9 @@ menu_t* create_menu(int nb_options, const char * title, const char * image_path,
     new_menu->nb_options = nb_options;
     new_menu->options = malloc(sizeof(menu_t *) * nb_options);
     new_menu->title = strdup(title);
-    new_menu->image_path = strdup(image_path);
+    if(image_path) {
+        new_menu->image_path = strdup(image_path);
+    }
     new_menu->action = action;
     return new_menu;
 }
