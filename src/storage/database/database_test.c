@@ -31,7 +31,7 @@ void print_monster(void *monster) {
 
 char * test_create_monsters_from_db() {
     sqlite3 *db = db_connection();
-    array_node_t *monsters = create_monsters_from_db(db);
+    array_node_t *monsters = create_struct_from_db(db, "SELECT * FROM MONSTER", create_monster_from_db);
     // print_list(monsters, print_monster);
     mu_assert("Error in test_create_monsters_from_db: monsters is null", monsters != NULL);
     return 0;
