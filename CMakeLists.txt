@@ -51,8 +51,7 @@ add_executable(doom_depth_c
         src/fight_screen/fight_dimensions/fight_dimensions.h
         src/cli_utils/cli_utils.c
         src/cli_utils/cli_utils.h
-        src/inventory_screen/inventory_screen.c
-        src/inventory_screen/inventory_screen.h)
+)
 
 add_executable(doom_depth_c_windows
         main.c
@@ -100,8 +99,7 @@ add_executable(doom_depth_c_windows
         src/utils/router.h
         src/fight_screen/fight_dimensions/fight_dimensions.c
         src/fight_screen/fight_dimensions/fight_dimensions.h
-        src/inventory_screen/inventory_screen.c
-        src/inventory_screen/inventory_screen.h)
+)
 
 add_executable(doom_depth_tests
         test.c
@@ -136,8 +134,6 @@ add_executable(doom_depth_tests
         src/map/map.h
         src/map/map_test.c
         src/map/map_test.h
-        src/inventory_screen/inventory_screen.h
-
 )
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
