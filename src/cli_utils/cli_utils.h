@@ -40,9 +40,14 @@ typedef enum {
 } cursor_movement_t;
 
 typedef struct {
+    char character;
+    color_code_t color;
+} colored_char_t;
+
+typedef struct {
     size_t nb_rows;
     size_t nb_cols;
-    char ** matrix;
+    colored_char_t ** matrix;
 } cli_matrix_t;
 
 /**
@@ -85,5 +90,34 @@ void cli_move_cursor(int nb_moves, cursor_movement_t cursor_movement);
  * @param color Optional: the color to print it in
  */
 void cli_print_special_char(special_char_t printed_char, color_code_t color);
+
+/**
+ * @brief Allocates and initializes a new cli_matrix_t object.
+ *
+ * @param nb_rows The number of rows in the new matrix.
+ * @param nb_cols The number of columns in the new matrix.
+ * @param default_char The character used to initialize each cell in the matrix.
+ * @param default_color The color code used to initialize each cell in the matrix.
+ * @return A pointer to the newly allocated and initialized cli_matrix_t object.
+ */
+cli_matrix_t * create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_char, color_code_t default_color);
+
+/**
+ * @brief Deallocates the memory used by a cli_matrix_t object.
+ *
+ * @param matrix A pointer to the cli_matrix_t object to be deallocated.
+ */
+void free_matrix(cli_matrix_t *matrix);
+
+/**
+ * @brief Resizes a cli_matrix_t object to new dimensions.
+ *
+ * @param matrix A pointer to the cli_matrix_t object to be resized.
+ * @param new_nb_rows The new number of rows for the matrix.
+ * @param new_nb_cols The new number of columns for the matrix.
+ * @param default_char The character used to initialize new cells (if any).
+ * @param default_color The color code used to initialize new cells (if any).
+ */
+int resize_cli_matrix(cli_matrix_t *matrix, size_t new_nb_rows, size_t new_nb_cols, char default_char, color_code_t default_color);
 
 #endif //DOOM_DEPTH_C_CLI_UTILS_H
