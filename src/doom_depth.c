@@ -9,6 +9,7 @@
 #include "game_over/game_over.h"
 #include "fight_screen/fight_screen.h"
 #include "cli_utils/cli_utils.h"
+#include "inventory_screen/inventory_screen.h"
 
 int main_loop(game_window_t * main_window) {
     main_window->context->current_screen = MAP_SCREEN;
@@ -26,12 +27,21 @@ int main_loop(game_window_t * main_window) {
                     return EXIT_FAILURE;
                 }
                 break;
+
             case FIGHT_SCREEN :
                 main_window->context->current_screen = fight_screen(main_window, NULL, NULL);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
+
+            case INVENTORY_SCREEN :
+                main_window->context->current_screen = inventory_screen(main_window);
+                if(main_window->context->current_screen == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                break;
+
             case GAME_OVER :
                 main_window->context->current_screen = game_over_screen(main_window);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
