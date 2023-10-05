@@ -16,7 +16,7 @@ void *create_monster_from_db(sqlite3_stmt *stmt) {
     monster->hp_max = sqlite3_column_int(stmt, 4);
     monster->attack = sqlite3_column_int(stmt, 5);
     monster->defense = sqlite3_column_int(stmt, 6);
-    monster->image = strdup((char *) sqlite3_column_text(stmt, 7));
+    monster->image_path = strdup((char *) sqlite3_column_text(stmt, 7));
 
     return monster;
 
