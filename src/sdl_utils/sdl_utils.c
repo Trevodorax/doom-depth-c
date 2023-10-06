@@ -6,7 +6,7 @@
 int draw_image_in_rectangle_multiple_sprites(SDL_Renderer *renderer, SDL_Rect container, const char *file_path);
 int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation);
 
-void free_game_window(game_window_t * game_window) {
+void free_game_window(game_window_t *game_window, ui_type_t ui_type) {
     if(game_window->window)
     {
         SDL_DestroyWindow(game_window->window);
@@ -20,45 +20,6 @@ void free_game_window(game_window_t * game_window) {
     }
 
     TTF_Quit();
-}
-
-game_window_t * init_game_window() {
-    game_window_t *game_window = malloc(sizeof(game_window_t));
-    if(!game_window) {
-        return NULL;
-    }
-
-    game_window->window = SDL_CreateWindow(
-            "Doom depth c",
-            SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED,
-            700,
-            500,
-            SDL_WINDOW_RESIZABLE
-    );
-    if(!game_window->window) {
-        return NULL;
-    }
-
-    game_window->renderer = SDL_CreateRenderer(
-            game_window->window,
-            1,
-            SDL_RENDERER_ACCELERATED
-    );
-    if(!game_window->renderer) {
-        return NULL;
-    }
-
-    game_window->context = malloc(sizeof(window_context_t));
-    if(!game_window->context) {
-        return NULL;
-    }
-
-    if (TTF_Init()) {
-        return NULL;
-    }
-
-    return game_window;
 }
 
 int set_draw_color(SDL_Renderer * renderer, SDL_Color color) {

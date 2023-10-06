@@ -5,17 +5,23 @@
 #include "../entities/player/player.h"
 #include "../map/stage/stage.h"
 #include "../utils/router.h"
+#include "../cli_utils/cli_utils.h"
+#include "../doom_depth.h"
 
 typedef struct {
-    /**
-    see router for reference
-     */
     Router current_screen;
 } window_context_t;
 
 typedef struct {
+    ui_type_t ui_type;
+
+    // for GUI mode
     SDL_Window * window;
     SDL_Renderer * renderer;
+
+    // for CLI mode
+    cli_matrix_t * matrix;
+
     window_context_t * context;
 } game_window_t;
 
@@ -27,17 +33,7 @@ typedef struct {
  *
  * @param game_window Pointer to the game window structure to be freed
  */
-void free_game_window(game_window_t * game_window);
-
-/**
- * @brief Initializes a new game window
- *
- * This function allocates and initializes a new game window structure,
- * creating a window, renderer, and context for the game
- *
- * @return Pointer to the newly created game window structure
- */
-game_window_t * init_game_window(void);
+void free_game_window(game_window_t *game_window, ui_type_t ui_type);
 
 /**
  * @brief Sets the drawing color for a renderer
