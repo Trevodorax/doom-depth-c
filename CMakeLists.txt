@@ -99,6 +99,8 @@ add_executable(doom_depth_c_windows
         src/utils/router.h
         src/fight_screen/fight_dimensions/fight_dimensions.c
         src/fight_screen/fight_dimensions/fight_dimensions.h
+        src/cli_utils/cli_utils.h
+        src/cli_utils/cli_utils_windows.c
 )
 
 add_executable(doom_depth_tests
