@@ -9,6 +9,7 @@ typedef struct {
     unsigned int uses;
     unsigned int max_uses;
     unsigned int cost;
+    char *image_path;
 } armor_t;
 
 armor_t *create_armor_from_database(char *name,
