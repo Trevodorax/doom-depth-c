@@ -126,7 +126,7 @@ sqlite3 *db_connection() {
     return NULL;
 }
 
-array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback) {
+array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback, size_t struct_size) {
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
@@ -148,7 +148,7 @@ array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struc
             return NULL;
         }
 
-        append(&head, struct_ptr, sizeof(struct_ptr));
+        append(&head, struct_ptr, struct_size);
     }
 
     if (rc != SQLITE_DONE) {

@@ -79,13 +79,14 @@ sqlite3 *db_connection();
  * @param db A pointer to the SQLite3 database connection.
  * @param query The SQL query to be executed.
  * @param callback A pointer to a function that takes a sqlite3_stmt and returns a void pointer.
+ * @param struct_size The size of the struct to be created.
  *
  * @return A pointer to the struct created from the database, or NULL if the query execution fails.
  * @sideeffects May modify the SQLite database by inserting new data.
  * @dependencies Depends on the SQLite3 library.
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
  */
-array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback);
+array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback, size_t struct_size);
 
 /**
  * @brief Saves the player's data to the database.
