@@ -11,7 +11,10 @@ typedef struct {
     monster_t * monsters;
 } fight_context_t;
 
-typedef int (*fight_action)(fight_context_t *);
+typedef struct {
+    int (*callback)(fight_context_t *, void * custom_params);
+    void * params;
+} fight_action_t ;
 
 /**
  * @brief Screen for fights

@@ -5,28 +5,44 @@
 #include "../../sdl_utils/sdl_utils.h"
 #include "../fight_dimensions/fight_dimensions.h"
 
-menu_t* create_menu(int nb_options, const char * title, const char * image_path, fight_action action) {
+menu_t* create_menu(int nb_options, const char * title, const char * image_path, int (*callback)(fight_context_t *, void * custom_params), void * custom_params) {
     menu_t *new_menu = malloc(sizeof(menu_t));
     new_menu->nb_options = nb_options;
     new_menu->options = malloc(sizeof(menu_t *) * nb_options);
     new_menu->title = strdup(title);
-    new_menu->image_path = strdup(image_path);
-    new_menu->action = action;
+
+    // no idea why this breaks, fuck C, this is a workaround
+    if(image_path) {
+        new_menu->image_path = malloc(strlen(image_path));
+        strcpy(new_menu->image_path, image_path);
+    } else {
+        new_menu->image_path = malloc(1);
+        new_menu->image_path[0] = '\0';
+    }
+
+
+    new_menu->action = malloc(sizeof(fight_action_t));
+    new_menu->action->callback = callback;
+    new_menu->action->params = custom_params;
+
     return new_menu;
 }
 
 menu_t* build_nested_menu() {
-    menu_t *root_menu = create_menu(2, "Root Menu", NULL, NULL);
+    menu_t *root_menu = create_menu(2, "Root Menu", NULL, NULL, NULL);
 
-    menu_t *submenu1 = create_menu(2, "Think", NULL, NULL);
+    menu_t *submenu1 = create_menu(2, "Think", NULL, NULL, NULL);
 
-    submenu1->options[0] = create_menu(0, "Quit", NULL, quit);
-    submenu1->options[1] = create_menu(1, "Bag", NULL, NULL);
-    submenu1->options[1]->options[0] = create_menu(0, "Potion", NULL, potion);
+    submenu1->options[0] = create_menu(0, "Quit", NULL, quit, NULL);
+    submenu1->options[1] = create_menu(1, "Bag", NULL, NULL, NULL);
+    submenu1->options[1]->options[0] = create_menu(0, "Potion", NULL, potion, NULL);
 
-    menu_t *submenu2 = create_menu(2, "Attack", NULL, NULL);
-    submenu2->options[0] = create_menu(0, "Sword", NULL, attack_weapon);
-    submenu2->options[1] = create_menu(0, "Spell", NULL, attack_spell);
+    menu_t *submenu2 = create_menu(2, "Attack", NULL, NULL, NULL);
+    submenu2->options[0] = create_menu(0, "Sword", NULL, attack_weapon, NULL);
+    // TODO: improve this to adapt with the custom monsters in the fight
+    attack_spell_params_t * attack_spell_params = malloc(sizeof(attack_spell_params_t));
+    attack_spell_params->test_number = 42;
+    submenu2->options[1] = create_menu(0, "Spell", NULL, attack_spell, attack_spell_params);
 
     root_menu->options[0] = submenu1;
     root_menu->options[1] = submenu2;
@@ -47,7 +63,7 @@ void free_menu(menu_t * menu) {
     free(menu);
 }
 
-fight_action fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, SDL_Rect * fight_zone, SDL_Rect * menu_zone, bool is_nested) {
+fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, SDL_Rect * fight_zone, SDL_Rect * menu_zone, bool is_nested) {
     int selected_item_index = 0;
 
     SDL_Event e;
@@ -80,14 +96,14 @@ fight_action fight_menu(game_window_t * game_window, menu_t * menu, fight_contex
                     case SDLK_RETURN: {
                         menu_t * clicked_menu = menu->options[selected_item_index];
                         if(clicked_menu->nb_options > 0) {
-                            fight_action selected_action = fight_menu(game_window, clicked_menu, fight_context, fight_zone, menu_zone, true);
-                            if(!selected_action) {
+                            fight_action_t * selected_action = fight_menu(game_window, clicked_menu, fight_context, fight_zone, menu_zone, true);
+                            if(!selected_action->callback) {
                                 break;
                             } else {
                                 return selected_action;
                             }
                         }
-                        if(clicked_menu->action) {
+                        if(clicked_menu->action->callback) {
                             return clicked_menu->action;
                         }
                         // if there is no submenu AND no action, then there is a problem and nothing happens
@@ -161,7 +177,7 @@ int display_menu_item(SDL_Renderer * renderer, const char * title, const char * 
     };
 
     // print the image if there is one
-    if(image_path) {
+    if(strlen(image_path) > 0) {
         SDL_Texture * image_texture = get_image_texture(renderer, image_path);
         if(!image_texture) {
             fprintf(stderr, "\ndisplay_menu_item error: could not retrieve image texture.");

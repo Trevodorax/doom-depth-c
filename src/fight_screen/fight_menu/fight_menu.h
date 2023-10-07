@@ -15,7 +15,8 @@ struct menu_t {
     char * title;
     char * image_path;
 
-    fight_action action;
+    // callback
+    fight_action_t * action;
 };
 
 /**
@@ -33,7 +34,7 @@ struct menu_t {
  * @sideeffects modifies the fight and menu zone if window is resized
  * @return The action selected in the menu
  */
-fight_action fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, SDL_Rect * fight_zone, SDL_Rect * menu_zone, bool is_nested);
+fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, SDL_Rect * fight_zone, SDL_Rect * menu_zone, bool is_nested);
 
 /**
  * @brief Prints one level of menu
