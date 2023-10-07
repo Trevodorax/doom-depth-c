@@ -4,8 +4,8 @@
 #include "../sdl_utils/sdl_utils.h"
 
 typedef enum {
-    CATEGORY,
-    ITEM,
+    CATEGORIES,
+    ITEMS,
     ACTIONS
 } section_options;
 
@@ -22,8 +22,8 @@ typedef enum {
     THROW_AWAY
 } action_options;
 
-int display_inventory(game_window_t *game_window, section_options active_section, category_options active_category, action_options active_action);
+int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options active_section, category_options active_category, action_options active_action, unsigned short active_item);
 
-int inventory_screen(game_window_t *game_window);
+int inventory_screen(game_window_t *game_window, player_t *player);
 
 #endif

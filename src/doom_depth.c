@@ -10,6 +10,7 @@
 #include "fight_screen/fight_screen.h"
 #include "cli_utils/cli_utils.h"
 #include "inventory_screen/inventory_screen.h"
+#include "utils/array.h"
 
 int main_loop(game_window_t * main_window) {
     main_window->context->current_screen = MAP_SCREEN;
@@ -36,7 +37,7 @@ int main_loop(game_window_t * main_window) {
                 break;
 
             case INVENTORY_SCREEN :
-                main_window->context->current_screen = inventory_screen(main_window);
+                main_window->context->current_screen = inventory_screen(main_window, player);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
