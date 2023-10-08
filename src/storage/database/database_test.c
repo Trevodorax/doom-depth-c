@@ -98,13 +98,32 @@ char * test_create_spells_from_db() {
     return 0;
 }
 
+void print_stats(void *stats) {
+    stats_t *s = (stats_t *)stats;
+    printf("id: %d\n", s->id);
+    printf("nb_monsters_killed: %d\n", s->nb_monsters_killed);
+    printf("nb_deaths: %d\n", s->nb_deaths);
+    printf("damages_dealt: %d\n", s->damages_dealt);
+    printf("health_healed: %d\n", s->health_healed);
+    printf("max_level_reached: %d\n", s->max_level_reached);
+}
+
+char * test_create_stats_from_db() {
+    sqlite3 *db = db_connection();
+    array_node_t *stats = create_struct_from_db(db, "SELECT * FROM STATS", create_stats_from_db, sizeof (stats_t));
+    print_list(stats, print_stats);
+    mu_assert("Error in test_create_stats_from_db: stats is null", stats != NULL);
+    return 0;
+}
+
 char * all_tests() {
     mu_run_test(test_db_connection);
     mu_run_test(test_save_player);
     // mu_run_test(test_create_monsters_from_db);
     // mu_run_test(test_create_armors_from_db);
     // mu_run_test(test_create_weapons_from_db);
-    mu_run_test(test_create_spells_from_db);
+    // mu_run_test(test_create_spells_from_db);
+    mu_run_test(test_create_stats_from_db);
     return 0;
 }
 
