@@ -81,12 +81,30 @@ char * test_create_weapons_from_db() {
     return 0;
 }
 
+void print_spells(void *spell) {
+    spell_t *s = (spell_t *)spell;
+    printf("id: %d\n", s->id);
+    printf("type: %d\n", s->type);
+    printf("name: %s\n", s->name);
+    printf("amount: %d\n", s->amount);
+    printf("cost: %d\n", s->cost);
+}
+
+char * test_create_spells_from_db() {
+    sqlite3 *db = db_connection();
+    array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
+    print_list(spells, print_spells);
+    mu_assert("Error in test_create_spells_from_db: spells is null", spells != NULL);
+    return 0;
+}
+
 char * all_tests() {
     mu_run_test(test_db_connection);
     mu_run_test(test_save_player);
     // mu_run_test(test_create_monsters_from_db);
     // mu_run_test(test_create_armors_from_db);
-    mu_run_test(test_create_weapons_from_db);
+    // mu_run_test(test_create_weapons_from_db);
+    mu_run_test(test_create_spells_from_db);
     return 0;
 }
 

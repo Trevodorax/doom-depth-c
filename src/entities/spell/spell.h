@@ -1,18 +1,38 @@
 #ifndef SPELL
 #define SPELL
 
+#include "../../utils/array.h"
+#include <sqlite3.h>
+#include <string.h>
+#include <stdlib.h>
+
 typedef enum SpellType {
-    ATTACK, DEFENSE, HEALING
+    HEALING = 1, DEFENSE = 2, ATTACK = 3
 } spell_type_t;
 
 typedef struct {
     int id;
-    char *name;
     spell_type_t type;
+    char *name;
     unsigned int amount;
     unsigned int cost;
 } spell_t;
 
-spell_t *create_spell_from_database(char *name, spell_type_t type, unsigned int amount, unsigned int cost);
+/**
+ * @brief Creates a spell from the database.
+ *
+ * This function queries the database for a spell with the given ID and constructs
+ * a spell with details fetched from the database.
+ *
+ * @param stmt  The SQLite statement which contains the spell's data.
+ * @return   Returns a pointer to the spell with the given ID, or NULL if there was an error
+ *           or no spell was found.
+ *
+ * @sideeffects Allocates memory for the spell.
+ * @dependencies Depends on the SQLite library.
+ * @errors Errors during database operations or memory allocation can result in NULL being returned.
+ */
+void *create_spell_from_db(sqlite3_stmt *stmt);
+
 
 #endif
