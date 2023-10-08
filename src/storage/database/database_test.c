@@ -110,8 +110,17 @@ void print_stats(void *stats) {
 
 char * test_create_stats_from_db() {
     sqlite3 *db = db_connection();
-    array_node_t *stats = create_struct_from_db(db, "SELECT * FROM STATS", create_stats_from_db, sizeof (stats_t));
+
+    // in the game, the player_id is the id of the player who is playing
+    int player_id = 1;
+
+    char *sql = malloc(sizeof(char) * 100);
+    sprintf(sql, "SELECT * FROM STATS WHERE id = (SELECT stats_id FROM PLAYER WHERE id = %d)", player_id);
+
+    array_node_t *stats = create_struct_from_db(db, sql, create_stats_from_db, sizeof (stats_t));
     print_list(stats, print_stats);
+
+    free(sql);
     mu_assert("Error in test_create_stats_from_db: stats is null", stats != NULL);
     return 0;
 }
