@@ -1,17 +1,38 @@
 #ifndef WEAPON
 #define WEAPON
 
+#include "../../utils/array.h"
+#include <sqlite3.h>
+#include <string.h>
+#include <stdlib.h>
+
 typedef struct {
     int id;
     char *name;
-    short rarity;
     unsigned int min_attack;
     unsigned int max_attack;
     unsigned int attacks_per_turn;
-    unsigned int uses;
+    short rarity;
     unsigned int max_uses;
+    unsigned int uses;
     unsigned int cost;
     char *image_path;
 } weapon_t;
+
+/**
+ * @brief Creates a weapon from the database.
+ *
+ * This function queries the database for a weapon with the given ID and constructs
+ * a weapon with details fetched from the database.
+ *
+ * @param stmt  The SQLite statement which contains the weapon's data.
+ * @return   Returns a pointer to the weapon with the given ID, or NULL if there was an error
+ *           or no weapon was found.
+ *
+ * @sideeffects Allocates memory for the weapon.
+ * @dependencies Depends on the SQLite library.
+ * @errors Errors during database operations or memory allocation can result in NULL being returned.
+ */
+void *create_weapon_from_db(sqlite3_stmt *stmt);
 
 #endif

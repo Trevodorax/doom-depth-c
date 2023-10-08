@@ -141,6 +141,8 @@ add_executable(doom_depth_tests
         src/entities/monster/monster.h
         src/entities/armor/armor.c
         src/entities/armor/armor.h
+        src/entities/weapon/weapon.c
+        src/entities/weapon/weapon.h
 )
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)

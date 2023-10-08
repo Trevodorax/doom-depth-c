@@ -3,6 +3,7 @@
 #include "database.h"
 #include "../../entities/monster/monster.h"
 #include "../../entities/armor/armor.h"
+#include "../../entities/weapon/weapon.h"
 
 char * test_db_connection() {
     sqlite3 *db = db_connection();
@@ -58,11 +59,34 @@ char * test_create_armors_from_db() {
     return 0;
 }
 
+void print_weapons(void *weapon) {
+    weapon_t *w = (weapon_t *)weapon;
+    printf("id: %d\n", w->id);
+    printf("name: %s\n", w->name);
+    printf("min_attack: %d\n", w->min_attack);
+    printf("max_attack: %d\n", w->max_attack);
+    printf("attacks_per_turn: %d\n", w->attacks_per_turn);
+    printf("rarity: %d\n", w->rarity);
+    printf("max_uses: %d\n", w->max_uses);
+    printf("uses: %d\n", w->uses);
+    printf("cost: %d\n", w->cost);
+    printf("image: %s\n", w->image_path);
+}
+
+char * test_create_weapons_from_db() {
+    sqlite3 *db = db_connection();
+    array_node_t *weapons = create_struct_from_db(db, "SELECT * FROM WEAPON", create_weapon_from_db, sizeof (weapon_t));
+    print_list(weapons, print_weapons);
+    mu_assert("Error in test_create_weapons_from_db: weapons is null", weapons != NULL);
+    return 0;
+}
+
 char * all_tests() {
     mu_run_test(test_db_connection);
     mu_run_test(test_save_player);
     // mu_run_test(test_create_monsters_from_db);
-    mu_run_test(test_create_armors_from_db);
+    // mu_run_test(test_create_armors_from_db);
+    mu_run_test(test_create_weapons_from_db);
     return 0;
 }
 
