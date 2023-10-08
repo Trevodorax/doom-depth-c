@@ -1,11 +1,12 @@
 #include "inventory_screen.h"
 #include "../sdl_utils/sdl_utils.h"
 #include "../utils/router.h"
-#include "math.h"
 #include "../utils/array.h"
+#include "SDL_keycode.h"
 
 int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options active_section, category_options active_category, action_options active_action, unsigned short active_item);
 int display_nothing_to_see(SDL_Renderer *renderer, int rect_x, int rect_y);
+void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *active_section, category_options *active_category, unsigned short *active_item);
 
 int inventory_screen(game_window_t *game_window, player_t *player) {
     if (!game_window) {
@@ -19,9 +20,9 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
 
     SDL_Event e;
     bool quit = false;
-    unsigned short active_section = CATEGORIES;
-    unsigned short active_category = WEAPONS;
-    unsigned short active_action = USE;
+    section_options active_section = CATEGORIES;
+    category_options active_category = WEAPONS;
+    action_options active_action = USE;
     unsigned short active_item = 0;
     while (!quit){
         // TODO: link to next screens
@@ -32,32 +33,7 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
             if (e.type == SDL_KEYDOWN){
                 switch (active_section){
                     case CATEGORIES:
-                        // navigating through the categories
-                        if (e.key.keysym.sym == SDLK_DOWN && active_category != MANA_POTIONS) {
-                            active_category++;
-                            active_item = 0;
-                        }
-                        if (e.key.keysym.sym == SDLK_UP && active_category != GO_BACK) {
-                            active_category--;
-                            active_item = 0;
-                        }
-                        // accessing the chosen category
-                        if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_KP_ENTER) {
-                            switch (active_category) {
-                                case GO_BACK:
-                                    return EXIT_SUCCESS;
-
-                                case ARMORS:
-                                case WEAPONS:
-                                    active_section++;
-                                    break;
-
-                                case MANA_POTIONS:
-                                case HEALTH_POTIONS:
-                                    active_section = ACTIONS;
-                                    break;
-                            }
-                        }
+                        handle_categories_input(e.key.keysym.sym, &quit, &active_section, &active_category, &active_item);
                         break;
 
                     case ITEMS:
@@ -262,4 +238,34 @@ int display_nothing_to_see(SDL_Renderer *renderer, int rect_x, int rect_y) {
 
     SDL_RenderCopy(renderer, nothing_to_see_texture, NULL, &nothing_to_see_rect);
     return EXIT_SUCCESS;
+}
+
+void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *active_section, category_options *active_category, unsigned short *active_item) {
+    // navigating through the categories
+    if (keycode == SDLK_DOWN && *active_category != MANA_POTIONS) {
+    (*active_category)++;
+    *active_item = 0;
+    }
+    if (keycode == SDLK_UP && *active_category != GO_BACK) {
+    (*active_category)--;
+    *active_item = 0;
+    }
+    // accessing the chosen category
+    if (keycode == SDLK_RETURN || keycode == SDLK_KP_ENTER) {
+    switch (*active_category) {
+        case GO_BACK:
+            *quit = true;
+            return;
+
+        case ARMORS:
+        case WEAPONS:
+            (*active_section)++;
+            break;
+
+        case MANA_POTIONS:
+        case HEALTH_POTIONS:
+            *active_section = ACTIONS;
+            break;
+        }
+    }
 }
