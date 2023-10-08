@@ -15,9 +15,14 @@ void *create_weapon_from_db(sqlite3_stmt *stmt) {
     weapon->attacks_per_turn = sqlite3_column_int(stmt, 4);
     weapon->rarity = (short)sqlite3_column_int(stmt, 5);
     weapon->max_uses = sqlite3_column_int(stmt, 6);
-    weapon->uses = weapon->max_uses;
     weapon->cost = sqlite3_column_int(stmt, 7);
     weapon->image_path = strdup((char *) sqlite3_column_text(stmt, 8));
+
+    if (sqlite3_column_count(stmt) == 10) {
+        weapon->uses = sqlite3_column_int(stmt, 9);
+    } else {
+        weapon->uses = weapon->max_uses;
+    }
 
     return weapon;
 

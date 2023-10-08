@@ -144,7 +144,7 @@ char * test_create_inventory_from_db() {
     sprintf(sql, "SELECT inventory_capacity, nb_weapons, nb_armors, nb_mana_potions, nb_health_potions FROM PLAYER WHERE id = %d", player_id);
     array_node_t *inventory = create_struct_from_db(db, sql, create_inventory_from_db, sizeof (inventory_t));
 
-    sprintf(sql, "SELECT W.* FROM WEAPON W JOIN WEAPONS_IN_INVENTORY WI ON W.id = WI.weapon_id WHERE WI.player_id = %d", player_id);
+    sprintf(sql, "SELECT W.*, WI.uses FROM WEAPON W JOIN WEAPONS_IN_INVENTORY WI ON W.id = WI.weapon_id WHERE WI.player_id = %d", player_id);
     array_node_t *weapons_in_inventory = create_struct_from_db(db, sql, create_weapon_from_db, sizeof (weapon_t));
 
     sprintf(sql, "SELECT A.* FROM ARMOR A JOIN ARMORS_IN_INVENTORY AI ON A.id = AI.armor_id WHERE AI.player_id = %d", player_id);
@@ -167,7 +167,7 @@ char * all_tests() {
     // mu_run_test(test_save_player);
     // mu_run_test(test_create_monsters_from_db);
     // mu_run_test(test_create_armors_from_db);
-    // mu_run_test(test_create_weapons_from_db);
+    mu_run_test(test_create_weapons_from_db);
     // mu_run_test(test_create_spells_from_db);
     // mu_run_test(test_create_stats_from_db);
     mu_run_test(test_create_inventory_from_db);
