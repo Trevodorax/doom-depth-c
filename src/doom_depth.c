@@ -38,6 +38,10 @@ int main_loop(game_window_t * main_window) {
                 break;
 
             case FIGHT_SCREEN :
+                // FIXME : remove test struct
+                fight_t * fight = malloc(sizeof(fight_t));
+
+
                 main_window->context->current_screen = fight_screen(main_window, NULL, NULL);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;

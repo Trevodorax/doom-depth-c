@@ -7,9 +7,16 @@
 #include "../sdl_utils/sdl_utils.h"
 #include "../game_window/game_window.h"
 
+
 typedef struct {
+
     player_t * player;
-    monster_t * monsters;
+
+
+    array_node_t * monsters;
+
+    // Optional : only when
+    monster_t * attack_target;
 } fight_context_t;
 
 typedef struct {

@@ -24,6 +24,14 @@ fight_t * json_to_fight(Json * fight_json) {
     result->min_nb_enemies = min_nb_enemies->number;
     result->max_nb_enemies = max_nb_enemies->number;
 
+    Json * enemies_size = get_object_at_key(fight_json, "enemies_size");
+    if(!enemies_size || enemies_size->type != 'n' || enemies_size->number == 0){
+        fprintf(stderr,"\njson_to_fight error: enemies size is not a number.\n");
+        free(result);
+        return NULL;
+    }
+    result->enemies_size = enemies_size->number;
+
     Json *enemies_list = get_object_at_key(fight_json, "enemies_list");
     if (!enemies_list || enemies_list->type != 'a') {
         fprintf(stderr, "\njson_to_fight error: enemies_list not found or invalid\n");
@@ -39,6 +47,7 @@ fight_t * json_to_fight(Json * fight_json) {
         }
         result->enemies_list[i] = strdup(enemies_list->values[i].string);
     }
+
 
     Json *chances = get_object_at_key(fight_json, "enemies_chances_to_appear");
     if (!chances || chances->type != 'a') {
