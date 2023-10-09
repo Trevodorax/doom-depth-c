@@ -1,6 +1,7 @@
 #include "start_menu.h"
 #include "../sdl_utils/sdl_utils.h"
 #include "../utils/router.h"
+#include "../game_window/game_window.h"
 
 int display_start_menu(game_window_t *game_window, unsigned short active_option);
 

@@ -5,20 +5,8 @@
 #include <stdbool.h>
 #include "../../sdl_utils/sdl_utils.h"
 
-/**
- * @brief Computes and updates the dimensions of the given stage.
- *
- * @warning Stages must be uncounted before calling.
- * @param stage Pointer to the stage whose dimensions are to be computed.
- * @param x Current x-coord of the stage.
- * @param y Current y-coord of the stage.
- * @param max_x Pointer to store the maximum x-coord.
- * @param max_y Pointer to store the maximum y-coord.
- * @param min_x Pointer to store the minimum x-coord.
- * @param min_y Pointer to store the minimum y-coord.
- */
+// internal functions, must be used only by the functions exposed in the header file (or the stages must be uncounted before)
 void get_stage_dimensions_rec(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
-
 stage_t *get_player_stage_rec(stage_t *stages);
 
 stage_t * json_to_stage(Json * json_stage) {
@@ -233,21 +221,4 @@ stage_t *get_player_stage_rec(stage_t *stages) {
     if (result != NULL) return result;
 
     return NULL;
-}
-
-SDL_Texture ** get_stage_textures(SDL_Renderer * renderer) {
-    SDL_Texture ** stage_textures = malloc(sizeof(SDL_Texture*) * STAGE_TYPE_COUNT);
-    for(int i = 0; i < STAGE_TYPE_COUNT; i++) {
-        stage_textures[i] = get_image_texture(renderer, stage_texture_files[i]);
-        if(!stage_textures[i]) {
-            // cleanup and leave
-            fprintf(stderr, "\nget_stage_textures error: failed to get the file textures.");
-            for(int j = 0; j < i; j++) {
-                free(stage_textures[j]);
-            }
-            free(stage_textures);
-            return NULL;
-        }
-    }
-    return stage_textures;
 }

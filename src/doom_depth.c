@@ -5,21 +5,10 @@
 #include "doom_depth.h"
 #include "sdl_utils/sdl_utils.h"
 #include "start_menu/start_menu.h"
-#include "map/map.h"
+#include "map_screen/map_screen.h"
 #include "game_over/game_over.h"
 #include "fight_screen/fight_screen.h"
 #include "cli_utils/cli_utils.h"
-
-/**
- * @brief Initializes a new game window
- *
- * This function allocates and initializes a new game window structure,
- * initializing the right parts for the requested ui_type
- *
- * @param ui_type
- * @return Pointer to the newly created game window structure
- */
-game_window_t *init_game_window(ui_type_t ui_type);
 
 int main_loop(game_window_t * main_window) {
     main_window->context->current_screen = FIGHT_SCREEN;
@@ -117,62 +106,3 @@ doom_depth_main doom_depth_factory(ui_type_t ui_type) {
             return doom_depth_gui;
     }
 }
-
-game_window_t *init_game_window(ui_type_t ui_type) {
-    game_window_t *game_window = malloc(sizeof(game_window_t));
-    if(!game_window) {
-        return NULL;
-    }
-
-    game_window->context = malloc(sizeof(window_context_t));
-    if(!game_window->context) {
-        return NULL;
-    }
-
-    game_window->ui_type = ui_type;
-
-    // starting here, it is specific per ui types
-    switch (ui_type) {
-        case CLI: {
-            int cli_width;
-            int cli_height;
-            cli_get_window_size(&cli_width, &cli_height);
-
-            game_window->matrix = create_cli_matrix(cli_height, cli_width, 0, RED);
-            break;
-        }
-        case GUI: {
-            SDL_Init(SDL_INIT_VIDEO);
-
-            game_window->window = SDL_CreateWindow(
-                    "Doom depth c",
-                    SDL_WINDOWPOS_CENTERED,
-                    SDL_WINDOWPOS_CENTERED,
-                    700,
-                    500,
-                    SDL_WINDOW_RESIZABLE
-            );
-            if(!game_window->window) {
-                return NULL;
-            }
-
-            game_window->renderer = SDL_CreateRenderer(
-                    game_window->window,
-                    1,
-                    SDL_RENDERER_ACCELERATED
-            );
-            if(!game_window->renderer) {
-                return NULL;
-            }
-
-            if (TTF_Init()) {
-                return NULL;
-            }
-            break;
-        }
-    }
-
-    return game_window;
-}
-
-

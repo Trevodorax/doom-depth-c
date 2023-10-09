@@ -1,13 +1,9 @@
-#ifndef DOOM_DEPTH_C_MAP_H
-#define DOOM_DEPTH_C_MAP_H
+#ifndef DOOM_DEPTH_C_MAP_SCREEN_H
+#define DOOM_DEPTH_C_MAP_SCREEN_H
 
 #include "../sdl_utils/sdl_utils.h"
 #include "stage/stage.h"
-
-typedef struct {
-    char * name;
-    stage_t * first_stage;
-} map_t;
+#include "../game_window/game_window.h"
 
 /**
  * @brief switches the window to map mode
@@ -20,4 +16,4 @@ typedef struct {
  */
 int map_screen(game_window_t *game_window, char *current_map);
 
-#endif //DOOM_DEPTH_C_MAP_H
+#endif //DOOM_DEPTH_C_MAP_SCREEN_H

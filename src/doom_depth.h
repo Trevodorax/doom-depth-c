@@ -1,10 +1,9 @@
 #ifndef DOOM_DEPTH_C_DOOM_DEPTH_H
 #define DOOM_DEPTH_C_DOOM_DEPTH_H
 
-typedef enum {
-    CLI,
-    GUI
-} ui_type_t;
+#include "utils/router.h"
+#include "sdl_utils/sdl_utils.h"
+#include "game_window/game_window.h"
 
 typedef int (*doom_depth_main)();
 
