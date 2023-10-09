@@ -6,22 +6,6 @@
 int draw_image_in_rectangle_multiple_sprites(SDL_Renderer *renderer, SDL_Rect container, const char *file_path);
 int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation);
 
-void free_game_window(game_window_t *game_window, ui_type_t ui_type) {
-    if(game_window->window)
-    {
-        SDL_DestroyWindow(game_window->window);
-    }
-    if(game_window->renderer)
-    {
-        SDL_DestroyRenderer(game_window->renderer);
-    }
-    if(game_window->context) {
-        free(game_window->context);
-    }
-
-    TTF_Quit();
-}
-
 int set_draw_color(SDL_Renderer * renderer, SDL_Color color) {
     if (SDL_SetRenderDrawColor(
             renderer,

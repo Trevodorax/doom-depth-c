@@ -21,6 +21,12 @@
  */
 game_window_t *init_game_window(ui_type_t ui_type);
 
+void free_game_window_cli(game_window_t * game_window);
+void free_game_window_gui(game_window_t *game_window);
+
+int init_game_window_cli(game_window_t * game_window);
+int init_game_window_gui(game_window_t * game_window);
+
 int main_loop(game_window_t * main_window) {
     main_window->context->current_screen = FIGHT_SCREEN;
     while (main_window->context->current_screen != QUIT) {
@@ -134,38 +140,13 @@ game_window_t *init_game_window(ui_type_t ui_type) {
     // starting here, it is specific per ui types
     switch (ui_type) {
         case CLI: {
-            int cli_width;
-            int cli_height;
-            cli_get_window_size(&cli_width, &cli_height);
-
-            game_window->matrix = create_cli_matrix(cli_height, cli_width, 0, RED);
+            if(init_game_window_cli(game_window) == EXIT_FAILURE) {
+                return NULL;
+            }
             break;
         }
         case GUI: {
-            SDL_Init(SDL_INIT_VIDEO);
-
-            game_window->window = SDL_CreateWindow(
-                    "Doom depth c",
-                    SDL_WINDOWPOS_CENTERED,
-                    SDL_WINDOWPOS_CENTERED,
-                    700,
-                    500,
-                    SDL_WINDOW_RESIZABLE
-            );
-            if(!game_window->window) {
-                return NULL;
-            }
-
-            game_window->renderer = SDL_CreateRenderer(
-                    game_window->window,
-                    1,
-                    SDL_RENDERER_ACCELERATED
-            );
-            if(!game_window->renderer) {
-                return NULL;
-            }
-
-            if (TTF_Init()) {
+            if(init_game_window_gui(game_window) == EXIT_FAILURE) {
                 return NULL;
             }
             break;
@@ -176,3 +157,71 @@ game_window_t *init_game_window(ui_type_t ui_type) {
 }
 
 
+int init_game_window_cli(game_window_t * game_window) {
+    int cli_width;
+    int cli_height;
+    cli_get_window_size(&cli_width, &cli_height);
+
+    game_window->matrix = create_cli_matrix(cli_height, cli_width, 0, RED);
+}
+
+int init_game_window_gui(game_window_t * game_window) {
+    if (SDL_Init(SDL_INIT_VIDEO) || TTF_Init()) {
+        return EXIT_FAILURE;
+    }
+
+    game_window->window = SDL_CreateWindow(
+            "Doom depth c",
+            SDL_WINDOWPOS_CENTERED,
+            SDL_WINDOWPOS_CENTERED,
+            700,
+            500,
+            SDL_WINDOW_RESIZABLE
+    );
+    if (!game_window->window) {
+        return EXIT_FAILURE;
+    }
+
+    game_window->renderer = SDL_CreateRenderer(
+            game_window->window,
+            1,
+            SDL_RENDERER_ACCELERATED
+    );
+    if (!game_window->renderer) {
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+void free_game_window(game_window_t *game_window, ui_type_t ui_type) {
+    switch(ui_type) {
+        case CLI:
+            free_game_window_cli(game_window);
+            break;
+        case GUI:
+            free_game_window_gui(game_window);
+            break;
+    }
+}
+
+void free_game_window_cli(game_window_t * game_window) {
+    free_matrix(game_window->matrix);
+}
+
+void free_game_window_gui(game_window_t *game_window) {
+    if(game_window->window)
+    {
+        SDL_DestroyWindow(game_window->window);
+    }
+    if(game_window->renderer)
+    {
+        SDL_DestroyRenderer(game_window->renderer);
+    }
+    if(game_window->context) {
+        free(game_window->context);
+    }
+
+    TTF_Quit();
+    SDL_Quit();
+}
