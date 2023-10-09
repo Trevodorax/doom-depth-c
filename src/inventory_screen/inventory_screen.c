@@ -11,6 +11,7 @@
 int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options active_section, category_options active_category, action_options active_action, unsigned short active_item);
 int display_nothing_to_see(SDL_Renderer *renderer, int rect_x, int rect_y);
 void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *active_section, category_options *active_category, unsigned short *active_item);
+void handle_items_input(SDL_Keycode keycode, section_options *active_section, category_options *active_category, unsigned short *active_item, unsigned short category_items_count);
 char *armor_details_to_string(armor_t *armor);
 char *weapon_details_to_string(weapon_t *weapon);
 char *health_potions_details_to_string(unsigned int quantity);
@@ -45,33 +46,10 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
                         break;
 
                     case ITEMS:
-                        if (e.key.keysym.sym == SDLK_LEFT) {
-                            // going back to categories when pressing the left arrow on the left column
-                            if (active_item % 3 == 0) {
-                                active_section--;
-                            } else {
-                                active_item--;
-                            }
-                        }
-                        if (e.key.keysym.sym == SDLK_RIGHT) {
-                            if (active_item % 3 != 2) {
-                                active_item++;
-                            }
-                        }
-                        if (e.key.keysym.sym == SDLK_DOWN) {
-                            if ((active_category == WEAPONS && active_item + 3 < player->inventory->nb_weapons) ||
-                                (active_category == ARMORS && active_item + 3 < player->inventory->nb_armors)) {
-                                active_item += 3;
-                            }
-                        }
-                        if (e.key.keysym.sym == SDLK_UP) {
-                            if ((active_category == WEAPONS && active_item - 3 >= 0) ||
-                                (active_category == ARMORS && active_item - 3 >= 0)) {
-                                active_item -= 3;
-                            }
-                        }
-                        if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_KP_ENTER) {
-                            active_section++;
+                        if (active_category == WEAPONS) {
+                            handle_items_input(e.key.keysym.sym, &active_section, &active_category, &active_item, player->inventory->nb_weapons);
+                        } else if (active_category == ARMORS) {
+                            handle_items_input(e.key.keysym.sym, &active_section, &active_category, &active_item, player->inventory->nb_armors);
                         }
                         break;
 
@@ -196,13 +174,13 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
                 }
                 draw_image_in_rectangle(game_window->renderer, items[i], weapon_to_print->image_path, NORTH);
             }
-            details = weapon_details_to_string(get_value_at_index(inventory->weaponsHead, active_item));
-            item_details = get_string_texture(game_window->renderer,
-                                              details,
-                                              "../assets/PixelifySans-Regular.ttf",
-                                              14,
-                                              (SDL_Color) {255, 255, 255, 255}
-            );
+//            details = weapon_details_to_string(get_value_at_index(inventory->weaponsHead, active_item));
+//            item_details = get_string_texture(game_window->renderer,
+//                                              details,
+//                                              "../assets/PixelifySans-Regular.ttf",
+//                                              14,
+//                                              (SDL_Color) {255, 255, 255, 255}
+//            );
             break;
 
         case ARMORS:
@@ -332,6 +310,36 @@ void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *a
             *active_section = ACTIONS;
             break;
         }
+    }
+}
+
+void handle_items_input(SDL_Keycode keycode, section_options *active_section, category_options *active_category, unsigned short *active_item, unsigned short category_items_count) {
+    if (keycode == SDLK_LEFT) {
+        // going back to categories when pressing the left arrow on the left column
+        if (*active_item % 3 == 0) {
+            (*active_section)--;
+        } else {
+            (*active_item)--;
+        }
+    }
+    if (keycode == SDLK_RIGHT) {
+        if (*active_item % 3 != 2) {
+            (*active_item)++;
+        }
+    }
+    if (keycode == SDLK_DOWN) {
+        if ((*active_category == WEAPONS || *active_category == ARMORS) && *active_item + 3 < category_items_count) {
+            (*active_item) += 3;
+        }
+    }
+    if (keycode == SDLK_UP) {
+        if ((*active_category == WEAPONS && *active_item - 3 >= 0) ||
+            (*active_category == ARMORS && *active_item - 3 >= 0)) {
+            (*active_item) -= 3;
+        }
+    }
+    if (keycode == SDLK_RETURN || keycode == SDLK_KP_ENTER) {
+        (*active_section)++;
     }
 }
 
