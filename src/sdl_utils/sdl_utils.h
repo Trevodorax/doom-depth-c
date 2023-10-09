@@ -79,7 +79,7 @@ int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const ch
 /**
  * @brief Returns string as a texture with the specified font, font size and color.
  *
- * Creates a texture from the given string
+ * Creates a texture from the given string, accepts new line caracters.
  *
  * @param renderer Pointer to the renderer
  * @param string String to render

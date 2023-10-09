@@ -3,10 +3,16 @@
 #include "../utils/router.h"
 #include "../utils/array.h"
 #include "SDL_keycode.h"
+#include "string.h"
+#include "SDL_ttf.h"
 
 int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options active_section, category_options active_category, action_options active_action, unsigned short active_item);
 int display_nothing_to_see(SDL_Renderer *renderer, int rect_x, int rect_y);
 void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *active_section, category_options *active_category, unsigned short *active_item);
+char *armor_details_to_string(armor_t *armor);
+char *weapon_details_to_string(weapon_t *weapon);
+char *health_potions_details_to_string(unsigned int quantity);
+char *mana_potions_details_to_string(unsigned int quantity);
 
 int inventory_screen(game_window_t *game_window, player_t *player) {
     if (!game_window) {
@@ -69,7 +75,11 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
 
                     case ACTIONS:
                         if (e.key.keysym.sym == SDLK_LEFT) {
-                            active_section = CATEGORIES;
+                            if (active_category == MANA_POTIONS || active_category == HEALTH_POTIONS) {
+                                active_section = CATEGORIES;
+                            } else {
+                               active_section--;
+                            };
                         }
                         if (e.key.keysym.sym == SDLK_DOWN && active_action != THROW_AWAY) {
                             active_action++;
@@ -100,6 +110,7 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
             }
         }
         display_inventory(game_window, player->inventory, active_section, active_category, active_action, active_item);
+        SDL_Delay(50);
     }
     return EXIT_SUCCESS;
 }
@@ -120,7 +131,7 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
     int unit = min(window_width, window_height) / 3;
     int unit_padding = unit / 10;
 
-    int category_size = unit / 4;
+    int category_size = unit / 5;
 
     const int categories_count = 5;
     SDL_Rect categories[5];
@@ -154,13 +165,19 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
             3 * unit - 2 * unit_padding
     };
 
+    SDL_Rect item_details_container = (SDL_Rect) {
+            category_size + 3 * unit,
+            unit_padding,
+            window_width - (category_size + 3 * unit) - unit_padding,
+            0
+    };
+    SDL_Texture *item_details = NULL;
+
     const int items_count = 9;
     SDL_Rect *items = get_rectangle_grid(9, &items_container);
-//    for (int i = 0; i < items_count; i++) {
-//        draw_thick_rect(items[i], 2, (SDL_Color) {255, 255, 255, 255}, game_window->renderer);
-//    }
 
     int first_item_to_print = (active_item / items_count) * items_count;
+    const char *details;
     switch (active_category) {
         case WEAPONS:
             if (inventory->nb_weapons == 0) {
@@ -172,9 +189,18 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
                 if (weapon_to_print == NULL) {
                     break;
                 }
-                draw_thick_rect(items[i], 2, (SDL_Color) {255, 255, 255, 255}, game_window->renderer);
+                if (active_item == i) {
+                    draw_thick_rect(items[i], 2, (SDL_Color) {255, 255, 255, 255}, game_window->renderer);
+                }
                 draw_image_in_rectangle(game_window->renderer, items[i], weapon_to_print->image_path, NORTH);
             }
+            details = weapon_details_to_string(get_value_at_index(inventory->weaponsHead, active_item));
+            item_details = get_string_texture(game_window->renderer,
+                                              details,
+                                              "../assets/PixelifySans-Regular.ttf",
+                                              14,
+                                              (SDL_Color) {255, 255, 255, 255}
+            );
             break;
 
         case ARMORS:
@@ -187,9 +213,18 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
                 if (armor_to_print == NULL) {
                     break;
                 }
-                draw_thick_rect(items[i], 2, (SDL_Color) {255, 255, 255, 255}, game_window->renderer);
+                if (active_item == i) {
+                    draw_thick_rect(items[i], 2, (SDL_Color) {255, 255, 255, 255}, game_window->renderer);
+                }
                 draw_image_in_rectangle(game_window->renderer, items[i], armor_to_print->image_path, NORTH);
             }
+            details = armor_details_to_string(get_value_at_index(inventory->armorsHead, active_item));
+            item_details = get_string_texture(game_window->renderer,
+                                                      details,
+                                                      "../assets/PixelifySans-Regular.ttf",
+                                                      14,
+                                                      (SDL_Color) {255, 255, 255, 255}
+            );
             break;
 
         case HEALTH_POTIONS:
@@ -197,6 +232,13 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
                 display_nothing_to_see(game_window->renderer, category_size + 2 * unit_padding, unit_padding);
                 break;
             }
+            details = health_potions_details_to_string(inventory->nb_health_potions);
+            item_details = get_string_texture(game_window->renderer,
+                                                      details,
+                                                      "../assets/PixelifySans-Regular.ttf",
+                                                      14,
+                                                      (SDL_Color) {255, 255, 255, 255}
+            );
             break;
 
         case MANA_POTIONS:
@@ -204,9 +246,28 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
                 display_nothing_to_see(game_window->renderer, category_size + 2 * unit_padding, unit_padding);
                 break;
             }
+            details = mana_potions_details_to_string(inventory->nb_mana_potions);
+            item_details = get_string_texture(game_window->renderer,
+                                              details,
+                                              "../assets/PixelifySans-Regular.ttf",
+                                              14,
+                                              (SDL_Color) {255, 255, 255, 255}
+            );
+            break;
+
+        case GO_BACK:
+        default:
             break;
     }
 
+    int item_details_width = 0;
+    int item_details_height = 0;
+    SDL_QueryTexture(item_details, NULL, NULL, &item_details_width, &item_details_height);
+    item_details_container.h = item_details_height;
+    printf("item_details_container.h : %d\n", item_details_container.h);
+
+    SDL_RenderCopy(game_window->renderer, item_details, NULL, &item_details_container);
+    SDL_DestroyTexture(item_details);
 
     SDL_RenderPresent(game_window->renderer);
 
@@ -237,6 +298,8 @@ int display_nothing_to_see(SDL_Renderer *renderer, int rect_x, int rect_y) {
     };
 
     SDL_RenderCopy(renderer, nothing_to_see_texture, NULL, &nothing_to_see_rect);
+    SDL_DestroyTexture(nothing_to_see_texture);
+
     return EXIT_SUCCESS;
 }
 
@@ -268,4 +331,98 @@ void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *a
             break;
         }
     }
+}
+
+char *armor_details_to_string(armor_t *armor) {
+    char buffer[4];
+
+    char *res = malloc(sizeof(char));
+    res[0] = '\0';
+
+    strcat(res, "Name : ");
+    strcat(res, strupr(armor->name));
+    strcat(res, "\n");
+
+    strcat(res, "Rarity : ");
+    strcat(res, itoa((int)armor->rarity, buffer, 10));
+    strcat(res, "\n");
+
+    strcat(res, "Defense value : ");
+    strcat(res, itoa((int)armor->amount, buffer, 10));
+    strcat(res, "\n");
+
+    strcat(res, "Uses left : ");
+    strcat(res, itoa((int)armor->uses, buffer, 10));
+    strcat(res, " out of ");
+    strcat(res, itoa((int)armor->max_uses, buffer, 10));
+    strcat(res, "\n");
+
+    strcat(res, "Cost : ");
+    strcat(res, itoa((int)armor->cost, buffer, 10));
+
+    return res;
+}
+
+char *weapon_details_to_string(weapon_t *weapon) {
+    char buffer[4];
+
+    char *res = malloc(sizeof(char));
+    res[0] = '\0';
+
+    strcat(res, "Name : ");
+    strcat(res, strupr(weapon->name));
+    strcat(res, "\n");
+
+    strcat(res, "Rarity : ");
+    strcat(res, itoa((int)weapon->rarity, buffer, 10));
+    strcat(res, "\n");
+
+    strcat(res, "Attacks per turn : ");
+    strcat(res, itoa((int)weapon->attacks_per_turn, buffer, 10));
+    strcat(res, "\n");
+
+    strcat(res, "Attack range : ");
+    strcat(res, itoa((int)weapon->min_attack, buffer, 10));
+    strcat(res, " - ");
+    strcat(res, itoa((int)weapon->max_attack, buffer, 10));
+    strcat(res, "\n");
+
+    strcat(res, "Uses left : ");
+    strcat(res, itoa((int)weapon->uses, buffer, 10));
+    strcat(res, " out of ");
+    strcat(res, itoa((int)weapon->max_uses, buffer, 10));
+    strcat(res, "\n");
+
+    strcat(res, "Cost : ");
+    strcat(res, itoa((int)weapon->cost, buffer, 10));
+
+    return res;
+}
+
+char *health_potions_details_to_string(unsigned int quantity) {
+    char buffer[4];
+
+    char *res = malloc(sizeof(char));
+    res[0] = '\0';
+
+    strcat(res, "Name : HEALTH POTION\n");
+    strcat(res, "Healing power : 20\n");
+    strcat(res, "In stock : ");
+    strcat(res, itoa((int)quantity, buffer, 10));
+
+    return res;
+}
+
+char *mana_potions_details_to_string(unsigned int quantity) {
+    char buffer[4];
+
+    char *res = malloc(sizeof(char));
+    res[0] = '\0';
+
+    strcat(res, "Name : MANA POTION\n");
+    strcat(res, "Mana value : 20\n");
+    strcat(res, "In stock : ");
+    strcat(res, itoa((int)quantity, buffer, 10));
+
+    return res;
 }
