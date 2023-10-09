@@ -5,6 +5,8 @@
 #include "SDL_keycode.h"
 #include "string.h"
 #include "SDL_ttf.h"
+#include "../utils/utils.h"
+#include <stdlib.h>
 
 int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options active_section, category_options active_category, action_options active_action, unsigned short active_item);
 int display_nothing_to_see(SDL_Renderer *renderer, int rect_x, int rect_y);
@@ -340,25 +342,25 @@ char *armor_details_to_string(armor_t *armor) {
     res[0] = '\0';
 
     strcat(res, "Name : ");
-    strcat(res, strupr(armor->name));
+    strcat(res, custom_strupr(armor->name));
     strcat(res, "\n");
 
     strcat(res, "Rarity : ");
-    strcat(res, itoa((int)armor->rarity, buffer, 10));
+    strcat(res, custom_itoa((int) armor->rarity, buffer, 10));
     strcat(res, "\n");
 
     strcat(res, "Defense value : ");
-    strcat(res, itoa((int)armor->amount, buffer, 10));
+    strcat(res, custom_itoa((int) armor->amount, buffer, 10));
     strcat(res, "\n");
 
     strcat(res, "Uses left : ");
-    strcat(res, itoa((int)armor->uses, buffer, 10));
+    strcat(res, custom_itoa((int) armor->uses, buffer, 10));
     strcat(res, " out of ");
-    strcat(res, itoa((int)armor->max_uses, buffer, 10));
+    strcat(res, custom_itoa((int) armor->max_uses, buffer, 10));
     strcat(res, "\n");
 
     strcat(res, "Cost : ");
-    strcat(res, itoa((int)armor->cost, buffer, 10));
+    strcat(res, custom_itoa((int) armor->cost, buffer, 10));
 
     return res;
 }
@@ -370,31 +372,31 @@ char *weapon_details_to_string(weapon_t *weapon) {
     res[0] = '\0';
 
     strcat(res, "Name : ");
-    strcat(res, strupr(weapon->name));
+    strcat(res, custom_strupr(weapon->name));
     strcat(res, "\n");
 
     strcat(res, "Rarity : ");
-    strcat(res, itoa((int)weapon->rarity, buffer, 10));
+    strcat(res, custom_itoa((int) weapon->rarity, buffer, 10));
     strcat(res, "\n");
 
     strcat(res, "Attacks per turn : ");
-    strcat(res, itoa((int)weapon->attacks_per_turn, buffer, 10));
+    strcat(res, custom_itoa((int) weapon->attacks_per_turn, buffer, 10));
     strcat(res, "\n");
 
     strcat(res, "Attack range : ");
-    strcat(res, itoa((int)weapon->min_attack, buffer, 10));
+    strcat(res, custom_itoa((int) weapon->min_attack, buffer, 10));
     strcat(res, " - ");
-    strcat(res, itoa((int)weapon->max_attack, buffer, 10));
+    strcat(res, custom_itoa((int) weapon->max_attack, buffer, 10));
     strcat(res, "\n");
 
     strcat(res, "Uses left : ");
-    strcat(res, itoa((int)weapon->uses, buffer, 10));
+    strcat(res, custom_itoa((int) weapon->uses, buffer, 10));
     strcat(res, " out of ");
-    strcat(res, itoa((int)weapon->max_uses, buffer, 10));
+    strcat(res, custom_itoa((int) weapon->max_uses, buffer, 10));
     strcat(res, "\n");
 
     strcat(res, "Cost : ");
-    strcat(res, itoa((int)weapon->cost, buffer, 10));
+    strcat(res, custom_itoa((int) weapon->cost, buffer, 10));
 
     return res;
 }
@@ -408,7 +410,7 @@ char *health_potions_details_to_string(unsigned int quantity) {
     strcat(res, "Name : HEALTH POTION\n");
     strcat(res, "Healing power : 20\n");
     strcat(res, "In stock : ");
-    strcat(res, itoa((int)quantity, buffer, 10));
+    strcat(res, custom_itoa((int) quantity, buffer, 10));
 
     return res;
 }
@@ -422,7 +424,7 @@ char *mana_potions_details_to_string(unsigned int quantity) {
     strcat(res, "Name : MANA POTION\n");
     strcat(res, "Mana value : 20\n");
     strcat(res, "In stock : ");
-    strcat(res, itoa((int)quantity, buffer, 10));
+    strcat(res, custom_itoa((int) quantity, buffer, 10));
 
     return res;
 }

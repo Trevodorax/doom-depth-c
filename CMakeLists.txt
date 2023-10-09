@@ -63,6 +63,8 @@ add_executable(doom_depth_c
         src/event/event.h
         src/inventory_screen/inventory_screen.c
         src/inventory_screen/inventory_screen.h
+        src/utils/utils.c
+        src/utils/utils.h
 )
 
 add_executable(doom_depth_c_windows
@@ -125,6 +127,8 @@ add_executable(doom_depth_c_windows
         src/event/event.h
         src/inventory_screen/inventory_screen.c
         src/inventory_screen/inventory_screen.h
+        src/utils/utils.c
+        src/utils/utils.h
 )
 
 add_executable(doom_depth_tests

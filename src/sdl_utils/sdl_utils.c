@@ -240,10 +240,10 @@ SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, c
     SDL_Surface * string_surface = NULL;
     SDL_Texture * string_texture = NULL;
 
-    if(!string)
-    {
+    if(!string) {
         return NULL;
     }
+
 
     TTF_Font *font = TTF_OpenFont(font_path, font_size);
     if (!font) {
