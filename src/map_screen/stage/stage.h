@@ -6,6 +6,7 @@
 #include "../../entities/fight/fight.h"
 #include "../../storage/json/json.h"
 #include "../../entities/player/player.h"
+#include "../../game_window/game_window.h"
 
 typedef enum {
     EMPTY,
@@ -101,13 +102,5 @@ void uncount_stages(stage_t * stage);
  * @return A stage with a player on it or NULL if no player is found
  */
 stage_t *get_player_stage(stage_t *stages);
-
-/**
- * @brief Gets the list of textures for each stage type
- *
- * @param renderer The renderer for which to create the textures
- * @return The list of textures in the order of the stages enum
- */
-SDL_Texture ** get_stage_textures(SDL_Renderer * renderer);
 
 #endif //DOOM_DEPTH_C_STAGE_H

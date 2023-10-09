@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../minunit/minunit.h"
+#include "../../minunit/minunit.h"
 #include "map_test.h"
 #include "map.h"
 

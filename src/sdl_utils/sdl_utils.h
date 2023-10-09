@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include "../entities/player/player.h"
-#include "../map/stage/stage.h"
+#include "../map_screen//stage/stage.h"
 #include "../utils/router.h"
 #include "../cli_utils/cli_utils.h"
 

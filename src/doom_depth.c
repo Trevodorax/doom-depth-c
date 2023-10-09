@@ -5,7 +5,7 @@
 #include "doom_depth.h"
 #include "sdl_utils/sdl_utils.h"
 #include "start_menu/start_menu.h"
-#include "map/map.h"
+#include "map_screen/map_screen.h"
 #include "game_over/game_over.h"
 #include "fight_screen/fight_screen.h"
 #include "cli_utils/cli_utils.h"

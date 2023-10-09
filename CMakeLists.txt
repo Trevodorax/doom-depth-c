@@ -20,8 +20,8 @@ add_executable(doom_depth_c
         src/storage/json/json.h
         src/utils/array.c
         src/utils/array.h
-        src/map/map.c
-        src/map/map.h
+        src/map_screen/map_screen.c
+        src/map_screen/map_screen.h
         src/sdl_utils/sdl_utils.c
         src/sdl_utils/sdl_utils.h
         src/storage/database/database.h
@@ -34,8 +34,8 @@ add_executable(doom_depth_c
         src/entities/inventory/inventory.c
         src/entities/weapon/weapon.c
         src/entities/armor/armor.c
-        src/map/stage/stage.c
-        src/map/stage/stage.h
+        src/map_screen/stage/stage.c
+        src/map_screen/stage/stage.h
         src/start_menu/start_menu.c
         src/start_menu/start_menu.h
         src/fight_screen/fight_screen.c
@@ -53,6 +53,12 @@ add_executable(doom_depth_c
         src/cli_utils/cli_utils.h
         src/game_window/game_window.c
         src/game_window/game_window.h
+        src/map_screen/map/map.c
+        src/map_screen/map/map.h
+        src/map_screen/stage/display/display.c
+        src/map_screen/stage/display/display.h
+        src/map_screen/map/display/display.c
+        src/map_screen/map/display/display.h
 )
 
 add_executable(doom_depth_c_windows
@@ -72,8 +78,8 @@ add_executable(doom_depth_c_windows
         src/storage/json/json.h
         src/utils/array.c
         src/utils/array.h
-        src/map/map.c
-        src/map/map.h
+        src/map_screen/map_screen.c
+        src/map_screen/map_screen.h
         src/sdl_utils/sdl_utils.c
         src/sdl_utils/sdl_utils.h
         src/storage/database/database.h
@@ -86,8 +92,8 @@ add_executable(doom_depth_c_windows
         src/entities/inventory/inventory.c
         src/entities/weapon/weapon.c
         src/entities/armor/armor.c
-        src/map/stage/stage.c
-        src/map/stage/stage.h
+        src/map_screen/stage/stage.c
+        src/map_screen/stage/stage.h
         src/start_menu/start_menu.c
         src/start_menu/start_menu.h
         src/fight_screen/fight_screen.c
@@ -105,6 +111,12 @@ add_executable(doom_depth_c_windows
         src/cli_utils/cli_utils_windows.c
         src/game_window/game_window.c
         src/game_window/game_window.h
+        src/map_screen/map/map.c
+        src/map_screen/map/map.h
+        src/map_screen/stage/display/display.c
+        src/map_screen/stage/display/display.h
+        src/map_screen/map/display/display.c
+        src/map_screen/map/display/display.h
 )
 
 add_executable(doom_depth_tests
@@ -132,14 +144,14 @@ add_executable(doom_depth_tests
         src/storage/database/database_test.h
         src/sdl_utils/sdl_utils.c
         src/sdl_utils/sdl_utils.h
-        src/map/stage/stage.c
-        src/map/stage/stage.h
+        src/map_screen/stage/stage.c
+        src/map_screen/stage/stage.h
         src/entities/fight/fight.c
         src/entities/fight/fight.h
-        src/map/map.c
-        src/map/map.h
-        src/map/map_test.c
-        src/map/map_test.h
+        src/map_screen/map_screen.c
+        src/map_screen/map_screen.h
+        src/map_screen/map/map_test.c
+        src/map_screen/map/map_test.h
 )
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
