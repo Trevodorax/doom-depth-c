@@ -2,6 +2,7 @@
 #define DOOM_DEPTH_C_GAME_OVER_H
 
 #include "../sdl_utils/sdl_utils.h"
+#include "../game_window/game_window.h"
 
 /**
  * @brief switches the window to game over screen

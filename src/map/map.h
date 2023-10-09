@@ -3,6 +3,7 @@
 
 #include "../sdl_utils/sdl_utils.h"
 #include "stage/stage.h"
+#include "../game_window/game_window.h"
 
 typedef struct {
     char * name;

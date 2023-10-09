@@ -6,20 +6,6 @@
 #include "../map/stage/stage.h"
 #include "../utils/router.h"
 #include "../cli_utils/cli_utils.h"
-#include "../doom_depth.h"
-
-typedef struct {
-    ui_type_t ui_type;
-
-    // for GUI mode
-    SDL_Window * window;
-    SDL_Renderer * renderer;
-
-    // for CLI mode
-    cli_matrix_t * matrix;
-
-    window_context_t * context;
-} game_window_t;
 
 /**
  * @brief Sets the drawing color for a renderer

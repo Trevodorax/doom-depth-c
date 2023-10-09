@@ -51,6 +51,8 @@ add_executable(doom_depth_c
         src/fight_screen/fight_dimensions/fight_dimensions.h
         src/cli_utils/cli_utils.c
         src/cli_utils/cli_utils.h
+        src/game_window/game_window.c
+        src/game_window/game_window.h
 )
 
 add_executable(doom_depth_c_windows
@@ -101,6 +103,8 @@ add_executable(doom_depth_c_windows
         src/fight_screen/fight_dimensions/fight_dimensions.h
         src/cli_utils/cli_utils.h
         src/cli_utils/cli_utils_windows.c
+        src/game_window/game_window.c
+        src/game_window/game_window.h
 )
 
 add_executable(doom_depth_tests
