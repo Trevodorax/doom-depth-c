@@ -383,4 +383,10 @@ int resize_cli_matrix_to_window(cli_matrix_t * matrix, cli_char_t default_cli_ch
     }
 
     return resize_cli_matrix(matrix, (size_t) height, (size_t) width, default_cli_char.character, default_cli_char.color);
+int cli_render_clear(cli_matrix_t * matrix, ) {
+    for (size_t i = 0; i < matrix->nb_rows; i++) {
+        for (size_t j = 0; j < matrix->nb_cols; j++) {
+            matrix[]
+        }
+    }
 }
