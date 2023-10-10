@@ -9,9 +9,13 @@
 #include <stdlib.h>
 
 int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options active_section, category_options active_category, action_options active_action, unsigned short active_item);
+bool display_categories(SDL_Renderer *renderer, int icon_size, int padding, section_options active_section, category_options active_category);
+bool display_health_potions(SDL_Renderer *renderer, int rect_x, int rect_y, unsigned int quantity);
+bool display_mana_potions(SDL_Renderer *renderer, int rect_x, int rect_y, unsigned int quantity);
 int display_nothing_to_see(SDL_Renderer *renderer, int rect_x, int rect_y);
 void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *active_section, category_options *active_category, unsigned short *active_item);
-void handle_items_input(SDL_Keycode keycode, section_options *active_section, category_options *active_category, unsigned short *active_item, unsigned short category_items_count);
+void handle_items_input(SDL_Keycode keycode, section_options *active_section, category_options active_category, unsigned short *active_item, unsigned short category_items_count);
+void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options *active_section, category_options active_category, unsigned short active_item, action_options *active_action);
 char *armor_details_to_string(armor_t *armor);
 char *weapon_details_to_string(weapon_t *weapon);
 char *health_potions_details_to_string(unsigned int quantity);
@@ -47,44 +51,14 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
 
                     case ITEMS:
                         if (active_category == WEAPONS) {
-                            handle_items_input(e.key.keysym.sym, &active_section, &active_category, &active_item, player->inventory->nb_weapons);
+                            handle_items_input(e.key.keysym.sym, &active_section, active_category, &active_item, player->inventory->nb_weapons);
                         } else if (active_category == ARMORS) {
-                            handle_items_input(e.key.keysym.sym, &active_section, &active_category, &active_item, player->inventory->nb_armors);
+                            handle_items_input(e.key.keysym.sym, &active_section, active_category, &active_item, player->inventory->nb_armors);
                         }
                         break;
 
                     case ACTIONS:
-                        if (e.key.keysym.sym == SDLK_LEFT) {
-                            if (active_category == MANA_POTIONS || active_category == HEALTH_POTIONS) {
-                                active_section = CATEGORIES;
-                            } else {
-                               active_section--;
-                            };
-                        }
-                        if (e.key.keysym.sym == SDLK_DOWN && active_action != THROW_AWAY) {
-                            active_action++;
-                        }
-                        if (e.key.keysym.sym == SDLK_UP && active_action != USE) {
-                            active_action--;
-                        }
-                        if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_KP_ENTER) {
-                            if (active_action == USE) {
-                                if (active_category == WEAPONS) {
-                                    player->chosen_weapon = get_value_at_index(player->inventory->weaponsHead, active_item);
-                                }
-                                if (active_category == ARMORS) {
-                                    player->chosen_armor = get_value_at_index(player->inventory->armorsHead, active_item);
-                                }
-                            }
-                            if (active_action == THROW_AWAY) {
-                                if (active_category == WEAPONS) {
-                                    delete_node(&(player->inventory->weaponsHead), active_item);
-                                }
-                                if (active_category == ARMORS) {
-                                    delete_node(&(player->inventory->armorsHead), active_item);
-                                }
-                            }
-                        }
+                        handle_actions_input(e.key.keysym.sym, player, &active_section, active_category, active_item, &active_action);
                         break;
                 }
             }
@@ -110,33 +84,13 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
 
     int unit = min(window_width, window_height) / 3;
     int unit_padding = unit / 10;
-
     int category_size = unit / 5;
 
-    const int categories_count = 5;
-    SDL_Rect categories[5];
-    for (int i = 0; i < categories_count; i++) {
-        categories[i] = (SDL_Rect) {
-            unit_padding,
-            i * category_size + unit_padding * (2*i + 1),
-            category_size,
-            category_size
-        };
-    }
-
-    draw_image_in_rectangle(game_window->renderer, categories[GO_BACK], "../assets/inventory_categories/go_back.png", NORTH);
-    draw_image_in_rectangle(game_window->renderer, categories[WEAPONS], "../assets/inventory_categories/weapons.png", NORTH);
-    draw_image_in_rectangle(game_window->renderer, categories[ARMORS], "../assets/inventory_categories/armors.png", NORTH);
-    draw_image_in_rectangle(game_window->renderer, categories[HEALTH_POTIONS], "../assets/inventory_categories/health_potions.png", NORTH);
-    draw_image_in_rectangle(game_window->renderer, categories[MANA_POTIONS], "../assets/inventory_categories/mana_potions.png", NORTH);
-
-    if (active_section == CATEGORIES) {
-        draw_thick_rect(categories[active_category], 2, (SDL_Color) {255, 255, 255, 255}, game_window->renderer);
+    if (!display_categories(game_window->renderer, category_size, unit_padding, active_section, active_category)){
         SDL_RenderPresent(game_window->renderer);
         return EXIT_SUCCESS;
-    } else {
-        draw_thick_rect(categories[active_category], 2, (SDL_Color) {255, 0, 0, 255}, game_window->renderer);
     }
+
 
     SDL_Rect items_container = (SDL_Rect) {
             category_size + 2 * unit_padding,
@@ -174,13 +128,6 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
                 }
                 draw_image_in_rectangle(game_window->renderer, items[i], weapon_to_print->image_path, NORTH);
             }
-//            details = weapon_details_to_string(get_value_at_index(inventory->weaponsHead, active_item));
-//            item_details = get_string_texture(game_window->renderer,
-//                                              details,
-//                                              "../assets/PixelifySans-Regular.ttf",
-//                                              14,
-//                                              (SDL_Color) {255, 255, 255, 255}
-//            );
             break;
 
         case ARMORS:
@@ -198,41 +145,18 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
                 }
                 draw_image_in_rectangle(game_window->renderer, items[i], armor_to_print->image_path, NORTH);
             }
-            details = armor_details_to_string(get_value_at_index(inventory->armorsHead, active_item));
-            item_details = get_string_texture(game_window->renderer,
-                                                      details,
-                                                      "../assets/PixelifySans-Regular.ttf",
-                                                      14,
-                                                      (SDL_Color) {255, 255, 255, 255}
-            );
             break;
 
         case HEALTH_POTIONS:
-            if (inventory->nb_health_potions == 0) {
+            if (!display_health_potions(game_window->renderer, item_details_container.x, item_details_container.y, inventory->nb_health_potions)){
                 display_nothing_to_see(game_window->renderer, category_size + 2 * unit_padding, unit_padding);
-                break;
             }
-            details = health_potions_details_to_string(inventory->nb_health_potions);
-            item_details = get_string_texture(game_window->renderer,
-                                                      details,
-                                                      "../assets/PixelifySans-Regular.ttf",
-                                                      14,
-                                                      (SDL_Color) {255, 255, 255, 255}
-            );
             break;
 
         case MANA_POTIONS:
-            if (inventory->nb_mana_potions == 0) {
+            if (!display_mana_potions(game_window->renderer, item_details_container.x, item_details_container.y, inventory->nb_mana_potions)){
                 display_nothing_to_see(game_window->renderer, category_size + 2 * unit_padding, unit_padding);
-                break;
             }
-            details = mana_potions_details_to_string(inventory->nb_mana_potions);
-            item_details = get_string_texture(game_window->renderer,
-                                              details,
-                                              "../assets/PixelifySans-Regular.ttf",
-                                              14,
-                                              (SDL_Color) {255, 255, 255, 255}
-            );
             break;
 
         case GO_BACK:
@@ -240,18 +164,116 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
             break;
     }
 
-    int item_details_width = 0;
-    int item_details_height = 0;
-    SDL_QueryTexture(item_details, NULL, NULL, &item_details_width, &item_details_height);
-    item_details_container.h = item_details_height;
-    printf("item_details_container.h : %d\n", item_details_container.h);
-
-    SDL_RenderCopy(game_window->renderer, item_details, NULL, &item_details_container);
-    SDL_DestroyTexture(item_details);
+//    int item_details_width = 0;
+//    int item_details_height = 0;
+//    SDL_QueryTexture(item_details, NULL, NULL, &item_details_width, &item_details_height);
+//    item_details_container.h = item_details_height;
+//
+//    SDL_RenderCopy(game_window->renderer, item_details, NULL, &item_details_container);
+//    SDL_DestroyTexture(item_details);
 
     SDL_RenderPresent(game_window->renderer);
 
     return EXIT_SUCCESS;
+}
+
+bool display_categories(SDL_Renderer *renderer, int icon_size, int padding, section_options active_section, category_options active_category) {
+    const int categories_count = 5;
+    SDL_Rect categories[5];
+
+    for (int i = 0; i < categories_count; i++) {
+        categories[i] = (SDL_Rect) {
+            padding,
+            i * icon_size + padding * (2*i + 1),
+            icon_size,
+            icon_size
+        };
+    }
+
+    draw_image_in_rectangle(renderer, categories[GO_BACK], "../assets/inventory_categories/go_back.png", NORTH);
+    draw_image_in_rectangle(renderer, categories[WEAPONS], "../assets/inventory_categories/weapons.png", NORTH);
+    draw_image_in_rectangle(renderer, categories[ARMORS], "../assets/inventory_categories/armors.png", NORTH);
+    draw_image_in_rectangle(renderer, categories[HEALTH_POTIONS], "../assets/inventory_categories/health_potions.png", NORTH);
+    draw_image_in_rectangle(renderer, categories[MANA_POTIONS], "../assets/inventory_categories/mana_potions.png", NORTH);
+
+    if (active_section == CATEGORIES) {
+        draw_thick_rect(categories[active_category], 2, (SDL_Color) {255, 255, 255, 255}, renderer);
+        return false;
+    } else {
+        draw_thick_rect(categories[active_category], 2, (SDL_Color) {255, 0, 0, 255}, renderer);
+        return true;
+    }
+}
+
+bool display_health_potions(SDL_Renderer *renderer, int rect_x, int rect_y, unsigned int quantity) {
+    if (quantity == 0) {
+        return false;
+    }
+
+    const char *details = health_potions_details_to_string(quantity);
+    array_node_t *details_head = NULL;
+    str_split_lines(&details_head, details);
+
+    array_node_t *iterator = details_head;
+    int line_counter = 0;
+    while(iterator->next != NULL){
+        int font_size = 14;
+        int line_spacing = 4;
+        SDL_Texture *details_line_texture = get_string_texture(renderer, iterator->value, "../assets/PixelifySans-Regular.ttf", font_size, (SDL_Color) {255, 255, 255, 255});
+
+        int details_line_width = 0;
+        int details_line_height = 0;
+        SDL_QueryTexture(details_line_texture, NULL, NULL, &details_line_width, &details_line_height);
+
+        SDL_Rect details_line_rect = (SDL_Rect) {
+            rect_x,
+            rect_y + line_counter * (font_size + line_spacing),
+            details_line_width,
+            details_line_height
+        };
+
+        SDL_RenderCopy(renderer, details_line_texture, NULL, &details_line_rect);
+        SDL_DestroyTexture(details_line_texture);
+
+        iterator = iterator->next;
+        line_counter++;
+    }
+
+    return true;
+}
+
+bool display_mana_potions(SDL_Renderer *renderer, int rect_x, int rect_y, unsigned int quantity) {
+    if (quantity == 0) {
+        return false;
+    }
+
+    const char *details = mana_potions_details_to_string(quantity);
+    SDL_Texture *details_texture = get_string_texture(
+            renderer,
+            details,
+            "../assets/PixelifySans-Regular.ttf",
+            14,
+            (SDL_Color) {255, 255, 255, 255}
+    );
+    if (!details_texture) {
+        return false;
+    }
+
+    int details_width = 0;
+    int details_height = 0;
+    SDL_QueryTexture(details_texture, NULL, NULL, &details_width, &details_height);
+
+    SDL_Rect details_rect = (SDL_Rect) {
+            rect_x,
+            rect_y,
+            details_width,
+            details_height
+    };
+
+    SDL_RenderCopy(renderer, details_texture, NULL, &details_rect);
+    SDL_DestroyTexture(details_texture);
+
+    return true;
 }
 
 int display_nothing_to_see(SDL_Renderer *renderer, int rect_x, int rect_y) {
@@ -313,7 +335,7 @@ void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *a
     }
 }
 
-void handle_items_input(SDL_Keycode keycode, section_options *active_section, category_options *active_category, unsigned short *active_item, unsigned short category_items_count) {
+void handle_items_input(SDL_Keycode keycode, section_options *active_section, category_options active_category, unsigned short *active_item, unsigned short category_items_count) {
     if (keycode == SDLK_LEFT) {
         // going back to categories when pressing the left arrow on the left column
         if (*active_item % 3 == 0) {
@@ -328,18 +350,52 @@ void handle_items_input(SDL_Keycode keycode, section_options *active_section, ca
         }
     }
     if (keycode == SDLK_DOWN) {
-        if ((*active_category == WEAPONS || *active_category == ARMORS) && *active_item + 3 < category_items_count) {
+        if ((active_category == WEAPONS || active_category == ARMORS) && *active_item + 3 < category_items_count) {
             (*active_item) += 3;
         }
     }
     if (keycode == SDLK_UP) {
-        if ((*active_category == WEAPONS && *active_item - 3 >= 0) ||
-            (*active_category == ARMORS && *active_item - 3 >= 0)) {
+        if ((active_category == WEAPONS && *active_item - 3 >= 0) ||
+            (active_category == ARMORS && *active_item - 3 >= 0)) {
             (*active_item) -= 3;
         }
     }
     if (keycode == SDLK_RETURN || keycode == SDLK_KP_ENTER) {
         (*active_section)++;
+    }
+}
+
+void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options *active_section, category_options active_category, unsigned short active_item, action_options *active_action) {
+    if (keycode == SDLK_LEFT) {
+        if (active_category == MANA_POTIONS || active_category == HEALTH_POTIONS) {
+            *active_section = CATEGORIES;
+        } else {
+            (*active_section)--;
+        };
+    }
+    if (keycode == SDLK_DOWN && *active_action != THROW_AWAY) {
+        (*active_action)++;
+    }
+    if (keycode == SDLK_UP && *active_action != USE) {
+        (*active_action)--;
+    }
+    if (keycode == SDLK_RETURN || keycode == SDLK_KP_ENTER) {
+        if (*active_action == USE) {
+            if (active_category == WEAPONS) {
+                player->chosen_weapon = get_value_at_index(player->inventory->weaponsHead, active_item);
+            }
+            if (active_category == ARMORS) {
+                player->chosen_armor = get_value_at_index(player->inventory->armorsHead, active_item);
+            }
+        }
+        if (*active_action == THROW_AWAY) {
+            if (active_category == WEAPONS) {
+                delete_node(&(player->inventory->weaponsHead), active_item);
+            }
+            if (active_category == ARMORS) {
+                delete_node(&(player->inventory->armorsHead), active_item);
+            }
+        }
     }
 }
 
