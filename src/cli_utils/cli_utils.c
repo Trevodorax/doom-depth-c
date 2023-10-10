@@ -33,10 +33,31 @@ void cli_print_color(color_code_t color, const char *format, ...) {
 int cli_render_present(cli_matrix_t * current_matrix) {
     // kept in memory between function calls
     static cli_matrix_t * previous_matrix;
+    static int previous_window_width = -1;
+    static int previous_window_height = -1;
 
     int window_width;
     int window_height;
     cli_get_window_size(&window_width, &window_height);
+
+    if (previous_window_width == -1 || previous_window_height ==  -1) {
+        previous_window_width = window_width;
+        previous_window_height = window_height;
+    }
+
+    bool is_full_rewrite = window_width != previous_window_width || window_height != previous_window_height;
+
+    if(is_full_rewrite) {
+        printf("canard\n");
+
+        previous_window_width = window_width;
+        previous_window_height = window_height;
+
+        for (int i = 0; i < window_height; i++) {
+            printf("\033[2K");
+            cli_move_cursor(1, CURSOR_UP);
+        }
+    }
 
     if (!previous_matrix) {
         previous_matrix = create_cli_matrix(0, 0, ' ', BLACK);
@@ -47,8 +68,6 @@ int cli_render_present(cli_matrix_t * current_matrix) {
         printf("\n");
     }
 
-    // TODO: if the new matrix has less rows than the previous one, delete the excess rows
-    // TODO: same for columns
     int excess_rows = (int)previous_matrix->nb_rows - (int)current_matrix->nb_rows;
     if(excess_rows > 0) {
         for (int i = 0; i < excess_rows; i++) {
@@ -69,7 +88,8 @@ int cli_render_present(cli_matrix_t * current_matrix) {
                 i >= previous_matrix->nb_rows ||
                 j >= previous_matrix->nb_cols ||
                 previous_matrix->matrix[i][j].character != current_matrix->matrix[i][j].character ||
-                previous_matrix->matrix[i][j].color != current_matrix->matrix[i][j].color
+                previous_matrix->matrix[i][j].color != current_matrix->matrix[i][j].color ||
+                is_full_rewrite
             ) {
                 cli_print_color(current_matrix->matrix[i][j].color, "%c", current_matrix->matrix[i][j].character);
                 continue;
@@ -382,11 +402,20 @@ int resize_cli_matrix_to_window(cli_matrix_t * matrix, cli_char_t default_cli_ch
         return EXIT_FAILURE;
     }
 
-    return resize_cli_matrix(matrix, (size_t) height, (size_t) width, default_cli_char.character, default_cli_char.color);
-int cli_render_clear(cli_matrix_t * matrix, ) {
+    return resize_cli_matrix(matrix, (size_t) height, (size_t) width, default_cli_char.character,default_cli_char.color);
+}
+
+int cli_render_clear(cli_matrix_t * matrix, cli_char_t character) {
+    if(!matrix || !matrix->matrix) {
+        return EXIT_FAILURE;
+    }
+
     for (size_t i = 0; i < matrix->nb_rows; i++) {
         for (size_t j = 0; j < matrix->nb_cols; j++) {
-            matrix[]
+            matrix->matrix[i][j].character = character.character;
+            matrix->matrix[i][j].color = character.color;
         }
     }
+
+    return EXIT_SUCCESS;
 }

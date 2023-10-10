@@ -83,7 +83,7 @@ void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y
  * @param stage The stage for which we are getting the color
  * @return The allocated color object or NULL in case of failure
  */
-SDL_Color * get_stage_color(stage_t * stage);
+color_code_t get_stage_color(stage_t * stage);
 
 /**
  * @brief Sets all stages to not counted so the count can proceed normally

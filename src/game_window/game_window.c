@@ -40,6 +40,12 @@ int init_game_window_cli(game_window_t * game_window) {
     cli_get_window_size(&cli_width, &cli_height);
 
     game_window->matrix = create_cli_matrix(cli_height, cli_width, 0, RED);
+
+    if(game_window->matrix == NULL) {
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
 }
 
 int init_game_window_gui(game_window_t * game_window) {

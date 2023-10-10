@@ -177,4 +177,13 @@ int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const ch
  */
 int resize_cli_matrix_to_window(cli_matrix_t * matrix, cli_char_t default_cli_char);
 
+/**
+ * @brief Fills the cli matrix with the given char
+ *
+ * @param matrix The modified matrix
+ * @param character The character to fill it with
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int cli_render_clear(cli_matrix_t * matrix, cli_char_t character);
+
 #endif //DOOM_DEPTH_C_CLI_UTILS_H

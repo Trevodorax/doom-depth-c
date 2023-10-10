@@ -37,14 +37,13 @@ int display_map_cli(game_window_t *game_window, map_t *map) {
 
     int stage_size = window_size / map_size;
 
+    char background_char = ' ';
     color_code_t background_color = WHITE;
-    if(set_background_color(game_window->renderer, background_color) == EXIT_FAILURE) {
+    if(cli_render_clear(game_window->matrix, (cli_char_t){background_char, background_color}) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
 
-    print_stages(game_window, map->first_stage, stage_textures, initial_x, initial_y, stage_size, true);
-
-    SDL_RenderPresent(game_window->renderer);
+    print_stages(game_window, map->first_stage, NULL, initial_x, initial_y, stage_size, true);
 
     return EXIT_SUCCESS;
 }
@@ -79,8 +78,6 @@ int display_map_gui(game_window_t *game_window, map_t *map, SDL_Texture **stage_
     }
 
     print_stages(game_window, map->first_stage, stage_textures, initial_x, initial_y, stage_size, true);
-
-    SDL_RenderPresent(game_window->renderer);
 
     return EXIT_SUCCESS;
 }
