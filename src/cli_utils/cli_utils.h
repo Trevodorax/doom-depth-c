@@ -16,6 +16,13 @@ typedef enum {
     WHITE,
 } color_code_t;
 
+typedef struct {
+    size_t x;
+    size_t y;
+    size_t width;
+    size_t height;
+} cli_rect_t;
+
 typedef enum {
     FULL_BLOCK,
     LEFT_HALF_BLOCK,
@@ -42,12 +49,12 @@ typedef enum {
 typedef struct {
     char character;
     color_code_t color;
-} colored_char_t;
+} cli_char_t;
 
 typedef struct {
     size_t nb_rows;
     size_t nb_cols;
-    colored_char_t ** matrix;
+    cli_char_t ** matrix;
 } cli_matrix_t;
 
 /**
@@ -119,5 +126,55 @@ void free_matrix(cli_matrix_t *matrix);
  * @param default_color The color code used to initialize new cells (if any).
  */
 int resize_cli_matrix(cli_matrix_t *matrix, size_t new_nb_rows, size_t new_nb_cols, char default_char, color_code_t default_color);
+
+/**
+ * @brief Draws a fill rectangle on the matrix
+ *
+ * Draws the part of the rectangle that appears on the matrix, with the provided char and color
+ *
+ * @param matrix The modified matrix
+ * @param rect The rectangle to be printed
+ * @param fill The char with which to draw the rectangle
+ *
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int cli_draw_fill_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t fill);
+
+/**
+ * @brief Draws a fill rectangle on the matrix
+ *
+ * Draws the stroke of the part of the rectangle that appears on the matrix, with the provided char and color
+ *
+ * @param matrix The modified matrix
+ * @param rect The rectangle to be printed
+ * @param stroke The char with which to draw the stroke of the rectangle
+ *
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int cli_draw_stroke_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t stroke);
+
+/**
+ * @brief prints the given text in the rectangle
+ *
+ * Will try to print the given text in one line, if it can't, it will print it on multiple lines, and if it still
+ * doesn't fit, it will add an ellipse at the end of the text
+ * And if there is no space for the ellipse, it will print nothing
+ *
+ * @param matrix The modified matrix
+ * @param rect The rectangle to write the text in
+ * @param text The text to be printed
+ *
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const char * text, color_code_t text_color);
+
+/**
+ * @brief Resizes the matrix to the size of the terminal
+ *
+ * @param matrix The modified matrix
+ * @param default_cli_char The cli char to use if matrix gets bigger
+ * @return
+ */
+int resize_cli_matrix_to_window(cli_matrix_t * matrix, cli_char_t default_cli_char);
 
 #endif //DOOM_DEPTH_C_CLI_UTILS_H

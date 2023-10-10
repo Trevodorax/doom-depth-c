@@ -82,7 +82,7 @@ int doom_depth_gui() {
 
     int result = main_loop(main_window);
 
-    free_game_window(main_window, CLI);
+    free_game_window(main_window, GUI);
     SDL_Quit();
 
     return result;
