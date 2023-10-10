@@ -6,6 +6,9 @@
 #include "../spell/spell.h"
 #include "../stats/stats.h"
 #include "../weapon/weapon.h"
+#include "../../utils/array.h"
+#include "../../storage/database/database.h"
+#include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -40,7 +43,21 @@ create_player_from_database(char *name, unsigned int hp, unsigned int mana, unsi
                             spell_t *healing_spell, armor_t *chosen_armor, weapon_t *chosen_weapon, inventory_t *inventory,
                             stats_t *stats);
 
-void give_exp(player_t * player, unsigned int amount);
+/**
+ * @brief Saves the player's data to the database.
+ *
+ * This function saves the player's data to the database.
+ *
+ * @param db A pointer to the SQLite3 database connection.
+ * @param player A pointer to the player whose data is to be saved.
+ *
+ * @return SQLITE_OK if the player's data is successfully saved. Otherwise, it returns an error code.
+ * @sideeffects May modify the SQLite database by inserting new data.
+ * @dependencies Depends on the SQLite3 library.
+ * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
+ */
+int save_player(sqlite3 *db, player_t *player);
 
+void give_exp(player_t * player, unsigned int amount);
 
 #endif

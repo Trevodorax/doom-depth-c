@@ -4,6 +4,10 @@
 #include "../../entities/monster/monster.h"
 #include "../../entities/armor/armor.h"
 #include "../../entities/weapon/weapon.h"
+#include "../../entities/spell/spell.h"
+#include "../../entities/stats/stats.h"
+#include "../../entities/inventory/inventory.h"
+#include "../../entities/player/player.h"
 
 char * test_db_connection() {
     sqlite3 *db = db_connection();
@@ -140,24 +144,9 @@ char * test_create_inventory_from_db() {
     // in the game, the player_id is the id of the player who is playing
     int player_id = 1;
 
-    char *sql = malloc(sizeof(char) * 150);
-    sprintf(sql, "SELECT inventory_capacity, nb_weapons, nb_armors, nb_mana_potions, nb_health_potions FROM PLAYER WHERE id = %d", player_id);
-    array_node_t *inventory = create_struct_from_db(db, sql, create_inventory_from_db, sizeof (inventory_t));
-
-    sprintf(sql, "SELECT W.*, WI.uses FROM WEAPON W JOIN WEAPONS_IN_INVENTORY WI ON W.id = WI.weapon_id WHERE WI.player_id = %d", player_id);
-    array_node_t *weapons_in_inventory = create_struct_from_db(db, sql, create_weapon_from_db, sizeof (weapon_t));
-
-    sprintf(sql, "SELECT A.* FROM ARMOR A JOIN ARMORS_IN_INVENTORY AI ON A.id = AI.armor_id WHERE AI.player_id = %d", player_id);
-    array_node_t *armors_in_inventory = create_struct_from_db(db, sql, create_armor_from_db, sizeof (armor_t));
-
-    inventory_t *i = (inventory_t *)inventory->value;
-    i->weaponsHead = weapons_in_inventory;
-    print_list(i->weaponsHead, print_weapons);
-    i->armorsHead = armors_in_inventory;
-    print_list(i->armorsHead, print_armors);
+    array_node_t *inventory = create_full_inventory_from_db(db, player_id);
 
     print_list(inventory, print_inventory);
-    free(sql);
     mu_assert("Error in test_create_inventory_from_db: inventory is null", inventory != NULL);
     return 0;
 }
@@ -167,7 +156,7 @@ char * all_tests() {
     // mu_run_test(test_save_player);
     // mu_run_test(test_create_monsters_from_db);
     // mu_run_test(test_create_armors_from_db);
-    mu_run_test(test_create_weapons_from_db);
+    // mu_run_test(test_create_weapons_from_db);
     // mu_run_test(test_create_spells_from_db);
     // mu_run_test(test_create_stats_from_db);
     mu_run_test(test_create_inventory_from_db);

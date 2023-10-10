@@ -5,7 +5,6 @@
 
 #include <sqlite3.h>
 #include "database_queries.h"
-#include "../../entities/player/player.h"
 #include "../../utils/array.h"
 
 // pointer to a function that takes a sqlite3_stmt and returns a void pointer
@@ -87,20 +86,5 @@ sqlite3 *db_connection();
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
  */
 array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback, size_t struct_size);
-
-/**
- * @brief Saves the player's data to the database.
- *
- * This function saves the player's data to the database.
- *
- * @param db A pointer to the SQLite3 database connection.
- * @param player A pointer to the player whose data is to be saved.
- *
- * @return SQLITE_OK if the player's data is successfully saved. Otherwise, it returns an error code.
- * @sideeffects May modify the SQLite database by inserting new data.
- * @dependencies Depends on the SQLite3 library.
- * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
- */
-int save_player(sqlite3 *db, player_t *player);
 
 #endif //DOOM_DEPTH_C_DATABASE_H
