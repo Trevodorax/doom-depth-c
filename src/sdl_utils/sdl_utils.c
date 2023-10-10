@@ -253,14 +253,12 @@ SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, c
     }
 
     // get the string surface
-    string_surface = TTF_RenderText_Solid(font, string, color);
+    string_surface = TTF_RenderText_Solid_Wrapped(font, string, color, 0);
     if(!string_surface)
     {
-        printf("not string_surface\n");
         TTF_CloseFont(font);
         return NULL;
     }
-    printf("string_surface\n");
 
     // transform the surface into a texture
     string_texture = SDL_CreateTextureFromSurface(renderer, string_surface);

@@ -10,8 +10,8 @@
 
 int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options active_section, category_options active_category, action_options active_action, unsigned short active_item);
 bool display_categories(SDL_Renderer *renderer, int icon_size, int padding, section_options active_section, category_options active_category);
-bool display_health_potions(SDL_Renderer *renderer, int rect_x, int rect_y, unsigned int quantity);
-bool display_mana_potions(SDL_Renderer *renderer, int rect_x, int rect_y, unsigned int quantity);
+bool display_items(SDL_Renderer *renderer, SDL_Rect *items_container, SDL_Rect *details_container, item_types type, inventory_t *inventory, unsigned short active_item);
+bool display_potions(SDL_Renderer *renderer, potion_types type, SDL_Rect *details_container, unsigned int quantity);
 int display_nothing_to_see(SDL_Renderer *renderer, int rect_x, int rect_y);
 void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *active_section, category_options *active_category, unsigned short *active_item);
 void handle_items_input(SDL_Keycode keycode, section_options *active_section, category_options active_category, unsigned short *active_item, unsigned short category_items_count);
@@ -91,7 +91,6 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
         return EXIT_SUCCESS;
     }
 
-
     SDL_Rect items_container = (SDL_Rect) {
             category_size + 2 * unit_padding,
             unit_padding,
@@ -105,56 +104,31 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
             window_width - (category_size + 3 * unit) - unit_padding,
             0
     };
-    SDL_Texture *item_details = NULL;
 
-    const int items_count = 9;
-    SDL_Rect *items = get_rectangle_grid(9, &items_container);
-
-    int first_item_to_print = (active_item / items_count) * items_count;
     const char *details;
     switch (active_category) {
         case WEAPONS:
-            if (inventory->nb_weapons == 0) {
+            if (!display_items(game_window->renderer, &items_container, &item_details_container, WEAPON, inventory, active_item)) {
                 display_nothing_to_see(game_window->renderer, category_size + 2 * unit_padding, unit_padding);
                 break;
-            }
-            for (int i = 0; i < items_count; i++) {
-                weapon_t *weapon_to_print = get_value_at_index(inventory->weaponsHead, first_item_to_print + i);
-                if (weapon_to_print == NULL) {
-                    break;
-                }
-                if (active_item == i) {
-                    draw_thick_rect(items[i], 2, (SDL_Color) {255, 255, 255, 255}, game_window->renderer);
-                }
-                draw_image_in_rectangle(game_window->renderer, items[i], weapon_to_print->image_path, NORTH);
             }
             break;
 
         case ARMORS:
-            if (inventory->nb_armors == 0) {
+            if (!display_items(game_window->renderer, &items_container, &item_details_container, ARMOR, inventory, active_item)) {
                 display_nothing_to_see(game_window->renderer, category_size + 2 * unit_padding, unit_padding);
                 break;
-            }
-            for (int i = 0; i < items_count; i++) {
-                armor_t *armor_to_print = get_value_at_index(inventory->armorsHead, first_item_to_print + i);
-                if (armor_to_print == NULL) {
-                    break;
-                }
-                if (active_item == i) {
-                    draw_thick_rect(items[i], 2, (SDL_Color) {255, 255, 255, 255}, game_window->renderer);
-                }
-                draw_image_in_rectangle(game_window->renderer, items[i], armor_to_print->image_path, NORTH);
             }
             break;
 
         case HEALTH_POTIONS:
-            if (!display_health_potions(game_window->renderer, item_details_container.x, item_details_container.y, inventory->nb_health_potions)){
+            if (!display_potions(game_window->renderer, HEALTH, &item_details_container, inventory->nb_health_potions)){
                 display_nothing_to_see(game_window->renderer, category_size + 2 * unit_padding, unit_padding);
             }
             break;
 
         case MANA_POTIONS:
-            if (!display_mana_potions(game_window->renderer, item_details_container.x, item_details_container.y, inventory->nb_mana_potions)){
+            if (!display_potions(game_window->renderer, MANA, &item_details_container, inventory->nb_mana_potions)){
                 display_nothing_to_see(game_window->renderer, category_size + 2 * unit_padding, unit_padding);
             }
             break;
@@ -163,14 +137,6 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
         default:
             break;
     }
-
-//    int item_details_width = 0;
-//    int item_details_height = 0;
-//    SDL_QueryTexture(item_details, NULL, NULL, &item_details_width, &item_details_height);
-//    item_details_container.h = item_details_height;
-//
-//    SDL_RenderCopy(game_window->renderer, item_details, NULL, &item_details_container);
-//    SDL_DestroyTexture(item_details);
 
     SDL_RenderPresent(game_window->renderer);
 
@@ -205,49 +171,49 @@ bool display_categories(SDL_Renderer *renderer, int icon_size, int padding, sect
     }
 }
 
-bool display_health_potions(SDL_Renderer *renderer, int rect_x, int rect_y, unsigned int quantity) {
+bool display_items(SDL_Renderer *renderer, SDL_Rect *items_container, SDL_Rect *details_container, item_types type, inventory_t *inventory, unsigned short active_item) {
+    unsigned int quantity = (type == ARMOR) ? inventory->nb_armors : (type == WEAPON) ? inventory->nb_weapons : 0;
     if (quantity == 0) {
         return false;
     }
 
-    const char *details = health_potions_details_to_string(quantity);
-    array_node_t *details_head = NULL;
-    str_split_lines(&details_head, details);
+    const int items_count = 9;
+    SDL_Rect *items = get_rectangle_grid(9, items_container);
+    int first_item_to_print = (active_item / items_count) * items_count;
 
-    array_node_t *iterator = details_head;
-    int line_counter = 0;
-    while(iterator->next != NULL){
-        int font_size = 14;
-        int line_spacing = 4;
-        SDL_Texture *details_line_texture = get_string_texture(renderer, iterator->value, "../assets/PixelifySans-Regular.ttf", font_size, (SDL_Color) {255, 255, 255, 255});
+    const char *details;
+    switch (type) {
+        case ARMOR:
+            for (int i = 0; i < items_count; i++) {
+                armor_t *armor_to_print = get_value_at_index(inventory->armorsHead, first_item_to_print + i);
+                if (armor_to_print == NULL) {
+                    break;
+                }
+                if (active_item == i) {
+                    draw_thick_rect(items[i], 2, (SDL_Color) {255, 255, 255, 255}, renderer);
+                }
+                draw_image_in_rectangle(renderer, items[i], armor_to_print->image_path, NORTH);
+            }
 
-        int details_line_width = 0;
-        int details_line_height = 0;
-        SDL_QueryTexture(details_line_texture, NULL, NULL, &details_line_width, &details_line_height);
+            details = armor_details_to_string(get_value_at_index(inventory->weaponsHead, active_item));
+            break;
 
-        SDL_Rect details_line_rect = (SDL_Rect) {
-            rect_x,
-            rect_y + line_counter * (font_size + line_spacing),
-            details_line_width,
-            details_line_height
-        };
+        case WEAPON:
+            for (int i = 0; i < items_count; i++) {
+                weapon_t *weapon_to_print = get_value_at_index(inventory->weaponsHead, first_item_to_print + i);
+                if (weapon_to_print == NULL) {
+                    break;
+                }
+                if (active_item == i) {
+                    draw_thick_rect(items[i], 2, (SDL_Color) {255, 255, 255, 255}, renderer);
+                }
+                draw_image_in_rectangle(renderer, items[i], weapon_to_print->image_path, NORTH);
+            }
 
-        SDL_RenderCopy(renderer, details_line_texture, NULL, &details_line_rect);
-        SDL_DestroyTexture(details_line_texture);
-
-        iterator = iterator->next;
-        line_counter++;
+            details = weapon_details_to_string(get_value_at_index(inventory->weaponsHead, active_item));
+            break;
     }
 
-    return true;
-}
-
-bool display_mana_potions(SDL_Renderer *renderer, int rect_x, int rect_y, unsigned int quantity) {
-    if (quantity == 0) {
-        return false;
-    }
-
-    const char *details = mana_potions_details_to_string(quantity);
     SDL_Texture *details_texture = get_string_texture(
             renderer,
             details,
@@ -259,18 +225,44 @@ bool display_mana_potions(SDL_Renderer *renderer, int rect_x, int rect_y, unsign
         return false;
     }
 
-    int details_width = 0;
-    int details_height = 0;
-    SDL_QueryTexture(details_texture, NULL, NULL, &details_width, &details_height);
+    SDL_QueryTexture(details_texture, NULL, NULL, &(details_container->w), &(details_container->h));
 
-    SDL_Rect details_rect = (SDL_Rect) {
-            rect_x,
-            rect_y,
-            details_width,
-            details_height
-    };
+    SDL_RenderCopy(renderer, details_texture, NULL, details_container);
+    SDL_DestroyTexture(details_texture);
 
-    SDL_RenderCopy(renderer, details_texture, NULL, &details_rect);
+    return true;
+}
+
+bool display_potions(SDL_Renderer *renderer, potion_types type, SDL_Rect *details_container, unsigned int quantity) {
+    if (quantity == 0) {
+        return false;
+    }
+
+    const char *details;
+    switch (type) {
+        case HEALTH:
+            details = health_potions_details_to_string(quantity);
+            break;
+
+        case MANA:
+            details = mana_potions_details_to_string(quantity);
+            break;
+    }
+
+    SDL_Texture *details_texture = get_string_texture(
+            renderer,
+            details,
+            "../assets/PixelifySans-Regular.ttf",
+            14,
+            (SDL_Color) {255, 255, 255, 255}
+    );
+    if (!details_texture) {
+        return false;
+    }
+
+    SDL_QueryTexture(details_texture, NULL, NULL, &(details_container->w), &(details_container->h));
+
+    SDL_RenderCopy(renderer, details_texture, NULL, details_container);
     SDL_DestroyTexture(details_texture);
 
     return true;
@@ -402,7 +394,7 @@ void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options
 char *armor_details_to_string(armor_t *armor) {
     char buffer[4];
 
-    char *res = malloc(sizeof(char));
+    char *res = malloc(sizeof(char) * 1000);
     res[0] = '\0';
 
     strcat(res, "Name : ");
@@ -426,13 +418,18 @@ char *armor_details_to_string(armor_t *armor) {
     strcat(res, "Cost : ");
     strcat(res, custom_itoa((int) armor->cost, buffer, 10));
 
+    res = realloc(res, sizeof(char) * (strlen(res) + 1));
+    if (!res) {
+        return NULL;
+    }
+
     return res;
 }
 
 char *weapon_details_to_string(weapon_t *weapon) {
     char buffer[4];
 
-    char *res = malloc(sizeof(char));
+    char *res = malloc(sizeof(char) * 1000);
     res[0] = '\0';
 
     strcat(res, "Name : ");
@@ -462,13 +459,18 @@ char *weapon_details_to_string(weapon_t *weapon) {
     strcat(res, "Cost : ");
     strcat(res, custom_itoa((int) weapon->cost, buffer, 10));
 
+    res = realloc(res, sizeof(char) * (strlen(res) + 1));
+    if (!res) {
+        return NULL;
+    }
+
     return res;
 }
 
 char *health_potions_details_to_string(unsigned int quantity) {
     char buffer[4];
 
-    char *res = malloc(sizeof(char));
+    char *res = malloc(sizeof(char) * 1000);
     res[0] = '\0';
 
     strcat(res, "Name : HEALTH POTION\n");
@@ -476,19 +478,29 @@ char *health_potions_details_to_string(unsigned int quantity) {
     strcat(res, "In stock : ");
     strcat(res, custom_itoa((int) quantity, buffer, 10));
 
+    res = realloc(res, sizeof(char) * (strlen(res) + 1));
+    if (!res) {
+        return NULL;
+    }
+
     return res;
 }
 
 char *mana_potions_details_to_string(unsigned int quantity) {
     char buffer[4];
 
-    char *res = malloc(sizeof(char));
+    char *res = malloc(sizeof(char) * 1000);
     res[0] = '\0';
 
     strcat(res, "Name : MANA POTION\n");
     strcat(res, "Mana value : 20\n");
     strcat(res, "In stock : ");
     strcat(res, custom_itoa((int) quantity, buffer, 10));
+
+    res = realloc(res, sizeof(char) * (strlen(res) + 1));
+    if (!res) {
+        return NULL;
+    }
 
     return res;
 }

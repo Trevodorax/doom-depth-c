@@ -22,6 +22,16 @@ typedef enum {
     THROW_AWAY
 } action_options;
 
+typedef enum {
+    HEALTH,
+    MANA
+} potion_types;
+
+typedef enum {
+    ARMOR,
+    WEAPON
+} item_types;
+
 int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options active_section, category_options active_category, action_options active_action, unsigned short active_item);
 
 int inventory_screen(game_window_t *game_window, player_t *player);
