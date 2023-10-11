@@ -48,8 +48,6 @@ int cli_render_present(cli_matrix_t * current_matrix) {
     bool is_full_rewrite = window_width != previous_window_width || window_height != previous_window_height;
 
     if(is_full_rewrite) {
-        printf("canard\n");
-
         previous_window_width = window_width;
         previous_window_height = window_height;
 
