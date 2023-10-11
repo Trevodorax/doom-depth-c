@@ -28,15 +28,17 @@ int map_screen(game_window_t *game_window, char *map_file) {
         return EXIT_FAILURE;
     }
 
-    // get all the textures for different types of stages
-    SDL_Texture ** stage_textures = get_stage_textures(game_window->renderer);
+    SDL_Texture ** stage_textures = NULL;
+    if(game_window->ui_type == GUI) {
+        stage_textures = get_stage_textures(game_window->renderer);
+    }
 
     stage_t * player_stage = get_player_stage(map->first_stage);
 
     SDL_Event e;
     bool quit = false;
     while (!quit){
-        SDL_Delay(50);
+        SDL_Delay(100);
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT){
                 quit = true;
@@ -66,9 +68,18 @@ int map_screen(game_window_t *game_window, char *map_file) {
         }
         map->first_stage = player_stage;
         display_map(game_window, map, stage_textures);
+        switch(game_window->ui_type) {
+            case CLI:
+                resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
+                cli_render_present(game_window->matrix);
+                break;
+            case GUI:
+                SDL_RenderPresent(game_window->renderer);
+                break;
+        }
     }
 
-    return EXIT_SUCCESS;
+    return QUIT;
 }
 
 stage_t * move_player(stage_t * player_stage, orientation_t direction) {

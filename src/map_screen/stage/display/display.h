@@ -38,17 +38,4 @@ int print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stag
  */
 int print_stage(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players);
 
-/**
- * @brief Prints a player somewhere on the map
- *
- * Draws the player image orientated in the player orientation.
- *
- * @param game_window The game window
- * @param player The player to be displayed (ignored by the current implementation)
- * @param player_orientation The orientation of the player on the map
- * @param stage_rect The rectangle to print the player in
- * @return EXIT_SUCCESS or EXIT_FAILURE
- */
-int print_player_on_stage(game_window_t * game_window, orientation_t player_orientation, SDL_Rect stage_rect);
-
 #endif //DOOM_DEPTH_C_STAGE_DISPLAY_H

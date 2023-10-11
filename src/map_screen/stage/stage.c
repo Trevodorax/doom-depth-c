@@ -146,48 +146,23 @@ void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y
     get_stage_dimensions_rec(stage, x, y, max_x, max_y, min_x, min_y);
 }
 
-SDL_Color * get_stage_color(stage_t * stage) {
+color_code_t get_stage_color(stage_t * stage) {
     if(!stage) {
-        fprintf(stderr, "\nget_stage_color error: please provide all the necessary arguments");
-        return NULL;
+        return WHITE;
     }
-
-    SDL_Color  * stage_color = malloc(sizeof(SDL_Color));
 
     switch(stage->type) {
         case EMPTY:
-            stage_color->r = 0;
-            stage_color->g = 150;
-            stage_color->b = 0;
-            stage_color->a = 255;
-            break;
+            return GREEN;
         case FIGHT:
-            stage_color->r = 150;
-            stage_color->g = 0;
-            stage_color->b = 0;
-            stage_color->a = 255;
-            break;
+            return RED;
         case SHOP:
-            stage_color->r = 0;
-            stage_color->g = 0;
-            stage_color->b = 150;
-            stage_color->a = 255;
-            break;
+            return BLUE;
         case TREASURE:
-            stage_color->r = 150;
-            stage_color->g = 150;
-            stage_color->b = 0;
-            stage_color->a = 255;
-            break;
+            return YELLOW;
         default:
-            stage_color->r = 0;
-            stage_color->g = 0;
-            stage_color->b = 0;
-            stage_color->a = 255;
-            break;
+            return WHITE;
     }
-
-    return stage_color;
 }
 
 stage_t *get_player_stage(stage_t *stages) {

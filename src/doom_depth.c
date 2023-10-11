@@ -11,7 +11,7 @@
 #include "cli_utils/cli_utils.h"
 
 int main_loop(game_window_t * main_window) {
-    main_window->context->current_screen = FIGHT_SCREEN;
+    main_window->context->current_screen = MAP_SCREEN;
     while (main_window->context->current_screen != QUIT) {
         switch (main_window->context->current_screen) {
             case START_MENU :
