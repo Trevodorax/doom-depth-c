@@ -82,9 +82,25 @@ int save_player(sqlite3 *db, player_t *player) {
     sqlite3_bind_int64(stmt, 7, player->base_attack);
     sqlite3_bind_int64(stmt, 8, player->base_defense);
     sqlite3_bind_int64(stmt, 9, player->gold);
-    sqlite3_bind_int64(stmt, 10, 1);
-    sqlite3_bind_int64(stmt, 11, 1);
-    sqlite3_bind_int64(stmt, 12, 1);
+
+    if (player->offensive_spell != NULL) {
+        sqlite3_bind_int64(stmt, 10, player->offensive_spell->id);
+    } else {
+        sqlite3_bind_null(stmt, 10);
+    }
+
+    if (player->defensive_spell != NULL) {
+        sqlite3_bind_int64(stmt, 11, player->defensive_spell->id);
+    } else {
+        sqlite3_bind_null(stmt, 11);
+    }
+
+    if (player->healing_spell != NULL) {
+        sqlite3_bind_int64(stmt, 12, player->healing_spell->id);
+    } else {
+        sqlite3_bind_null(stmt, 12);
+    }
+
     sqlite3_bind_int64(stmt, 13, player->inventory->capacity);
     sqlite3_bind_int64(stmt, 14, player->inventory->nb_weapons);
     sqlite3_bind_int64(stmt, 15, player->inventory->nb_armors);
