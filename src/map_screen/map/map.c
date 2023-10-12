@@ -3,20 +3,20 @@
 #include "../stage/display/display.h"
 
 map_t * json_to_map(Json * json_map) {
-    if(!json_map) {
+    if (!json_map) {
         fprintf(stderr, "\njson_to_map error: empty json_map");
         return NULL;
     }
     map_t * result = malloc(sizeof(map_t));
 
-    if(json_map->nb_elements < 2) {
+    if (json_map->nb_elements < 2) {
         fprintf(stderr, "\njson_to_map error: too few elements in json");
         return NULL;
     }
 
     Json * name = get_object_at_key(json_map, "name");
     Json * stages = get_object_at_key(json_map, "stages");
-    if(!name || !stages || name->type != 's' || stages->type != 'a' || stages->nb_elements < 1) {
+    if (!name || !stages || name->type != 's' || stages->type != 'a' || stages->nb_elements < 1) {
         fprintf(stderr, "\njson_to_map error: wrong map name or stages");
         return NULL;
     }
@@ -24,7 +24,7 @@ map_t * json_to_map(Json * json_map) {
     result->name = name->string;
 
     stage_t * first_stage = json_to_stage(&(stages->values[0]));
-    if(!first_stage) {
+    if (!first_stage) {
         fprintf(stderr, "\njson_to_map error: error retrieving stages.");
         return NULL;
     }

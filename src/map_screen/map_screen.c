@@ -1,9 +1,8 @@
 #include "map_screen.h"
-#include "../storage/json/json.h"
-#include "../sdl_utils/sdl_utils.h"
 #include "map/map.h"
 #include "map/display/display.h"
 #include "stage/display/display.h"
+#include "../event/event.h"
 
 /**
  * @brief Moves the player and returns the stage he is on
@@ -18,60 +17,71 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction);
 int map_screen(game_window_t *game_window, char *map_file) {
     // safeguards
     Json * json_map = get_json_from_file(map_file);
-    if(!json_map) {
+    if (!json_map) {
         fprintf(stderr, "\nmap_screen error: could not retrieve map from file.");
         return EXIT_FAILURE;
     }
     map_t * map = json_to_map(json_map);
-    if(!map) {
+    if (!map) {
         fprintf(stderr, "\nmap_screen error: could not convert json to map.");
         return EXIT_FAILURE;
     }
 
     SDL_Texture ** stage_textures = NULL;
-    if(game_window->ui_type == GUI) {
+    if (game_window->ui_type == GUI) {
         stage_textures = get_stage_textures(game_window->renderer);
     }
 
     stage_t * player_stage = get_player_stage(map->first_stage);
 
-    SDL_Event e;
+    event_t event;
     bool quit = false;
     while (!quit){
-        SDL_Delay(100);
-        while (SDL_PollEvent(&e)){
-            if (e.type == SDL_QUIT){
-                quit = true;
-            }
-            if (e.type == SDL_KEYDOWN){
-                switch (e.key.keysym.sym) {
-                    case SDLK_z:
-                        player_stage = move_player(player_stage, NORTH);
-                        break;
-                    case SDLK_d:
-                        player_stage = move_player(player_stage, EAST);
-                        break;
-                    case SDLK_s:
-                        player_stage = move_player(player_stage, SOUTH);
-                        break;
-                    case SDLK_q:
-                        player_stage = move_player(player_stage, WEST);
-                        break;
-                    default:
-                        // Handle other keys
-                        break;
-                }
-            }
-            if (e.type == SDL_MOUSEBUTTONDOWN){
-                quit = true;
+        if (game_window->ui_type == CLI) {
+            set_cli_raw_mode(true);
+        }
+        switch (game_window->ui_type) {
+            case CLI:
+                cli_delay(50);
+                break;
+            case GUI:
+                SDL_Delay(50);
+                break;
+        }
+
+        while (get_event(game_window->ui_type, &event)) {
+            switch (event) {
+                case QUIT:
+                    quit = true;
+                    break;
+                case Z_KEY:
+                    player_stage = move_player(player_stage, NORTH);
+                    break;
+                case D_KEY:
+                    player_stage = move_player(player_stage, EAST);
+                    break;
+                case S_KEY:
+                    player_stage = move_player(player_stage, SOUTH);
+                    break;
+                case Q_KEY:
+                    player_stage = move_player(player_stage, WEST);
+                    break;
+                default:
+                    break;
             }
         }
         map->first_stage = player_stage;
+        if (game_window->ui_type == CLI) {
+            set_cli_raw_mode(false);
+        }
+
         display_map(game_window, map, stage_textures);
-        switch(game_window->ui_type) {
+        switch (game_window->ui_type) {
             case CLI:
                 resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
+                set_cli_raw_mode(true);
                 cli_render_present(game_window->matrix);
+                set_cli_raw_mode(false);
                 break;
             case GUI:
                 SDL_RenderPresent(game_window->renderer);
@@ -79,7 +89,7 @@ int map_screen(game_window_t *game_window, char *map_file) {
         }
     }
 
-    return QUIT;
+    return QUIT_GAME;
 }
 
 stage_t * move_player(stage_t * player_stage, orientation_t direction) {

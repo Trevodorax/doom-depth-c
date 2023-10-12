@@ -1,7 +1,7 @@
 #include "src/utils/array_test.h"
 #include "src/storage/json/json_test.h"
 #include "src/storage/database/database_test.h"
-#include "src/map/map_test.h"
+#include "src/map_screen/map/map_test.h"
 
 int tests_run = 0;
 

@@ -12,7 +12,7 @@ menu_t* create_menu(int nb_options, const char * title, const char * image_path,
     new_menu->title = strdup(title);
 
     // no idea why this breaks, fuck C, this is a workaround
-    if(image_path) {
+    if (image_path) {
         new_menu->image_path = malloc(strlen(image_path));
         strcpy(new_menu->image_path, image_path);
     } else {
@@ -89,21 +89,21 @@ fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_co
                         selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, WEST);
                         break;
                     case SDLK_ESCAPE:
-                        if(is_nested) {
+                        if (is_nested) {
                             return NULL;
                         }
                         break;
                     case SDLK_RETURN: {
                         menu_t * clicked_menu = menu->options[selected_item_index];
-                        if(clicked_menu->nb_options > 0) {
+                        if (clicked_menu->nb_options > 0) {
                             fight_action_t * selected_action = fight_menu(game_window, clicked_menu, fight_context, fight_zone, menu_zone, true);
-                            if(!selected_action->callback) {
+                            if (!selected_action->callback) {
                                 break;
                             } else {
                                 return selected_action;
                             }
                         }
-                        if(clicked_menu->action->callback) {
+                        if (clicked_menu->action->callback) {
                             return clicked_menu->action;
                         }
                         // if there is no submenu AND no action, then there is a problem and nothing happens
@@ -177,9 +177,9 @@ int display_menu_item(SDL_Renderer * renderer, const char * title, const char * 
     };
 
     // print the image if there is one
-    if(strlen(image_path) > 0) {
+    if (strlen(image_path) > 0) {
         SDL_Texture * image_texture = get_image_texture(renderer, image_path);
-        if(!image_texture) {
+        if (!image_texture) {
             fprintf(stderr, "\ndisplay_menu_item error: could not retrieve image texture.");
             return EXIT_FAILURE;
         }
@@ -197,7 +197,7 @@ int display_menu_item(SDL_Renderer * renderer, const char * title, const char * 
                 14,
                 (SDL_Color) {255, 255, 255, 255}
         );
-        if(!title_texture) {
+        if (!title_texture) {
             fprintf(stderr, "\ndisplay_menu_item error: could not retrieve title texture.");
             return EXIT_FAILURE;
         }
@@ -236,11 +236,11 @@ int handle_fight_menu_movement(int selected_item_index, int nb_items, orientatio
             return selected_item_index;
     }
 
-    if(selected_item_index < 0) {
+    if (selected_item_index < 0) {
         return 0;
     }
 
-    if(selected_item_index >= nb_items) {
+    if (selected_item_index >= nb_items) {
         return nb_items - 1;
     }
 

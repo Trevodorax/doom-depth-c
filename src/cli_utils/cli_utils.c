@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <termios.h>
+#include <poll.h>
 #include <string.h>
 #include <wchar.h>
 
@@ -47,7 +49,7 @@ int cli_render_present(cli_matrix_t * current_matrix) {
 
     bool is_full_rewrite = window_width != previous_window_width || window_height != previous_window_height;
 
-    if(is_full_rewrite) {
+    if (is_full_rewrite) {
         previous_window_width = window_width;
         previous_window_height = window_height;
 
@@ -67,7 +69,7 @@ int cli_render_present(cli_matrix_t * current_matrix) {
     }
 
     int excess_rows = (int)previous_matrix->nb_rows - (int)current_matrix->nb_rows;
-    if(excess_rows > 0) {
+    if (excess_rows > 0) {
         for (int i = 0; i < excess_rows; i++) {
             printf("\033[2K");
             cli_move_cursor(1, CURSOR_UP);
@@ -95,7 +97,7 @@ int cli_render_present(cli_matrix_t * current_matrix) {
 
             cli_move_cursor(1, CURSOR_FRONT);
         }
-        for(size_t j = current_matrix->nb_cols; j < previous_matrix->nb_cols && j < window_width; j++) {
+        for (size_t j = current_matrix->nb_cols; j < previous_matrix->nb_cols && j < window_width; j++) {
             printf(" ");
         }
     }
@@ -189,7 +191,7 @@ void cli_print_special_char(special_char_t printed_char, color_code_t color) {
 
 cli_matrix_t* create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_char, color_code_t default_color) {
     cli_matrix_t *matrix = malloc(sizeof(cli_matrix_t));
-    if(matrix == NULL) {
+    if (matrix == NULL) {
         fprintf(stderr, "\ncreate_cli_matrix error: failed memory allocation");
         return NULL;
     }
@@ -198,18 +200,18 @@ cli_matrix_t* create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_cha
     matrix->nb_cols = nb_cols;
 
     matrix->matrix = malloc(nb_rows * sizeof(cli_char_t *));
-    if(matrix->matrix == NULL) {
+    if (matrix->matrix == NULL) {
         fprintf(stderr, "\ncreate_cli_matrix error: failed memory allocation");
         free(matrix);
         return NULL;
     }
 
     // rows
-    for(size_t i = 0; i < nb_rows; ++i) {
+    for (size_t i = 0; i < nb_rows; ++i) {
         matrix->matrix[i] = malloc(nb_cols * sizeof(cli_char_t));
-        if(matrix->matrix[i] == NULL) {
+        if (matrix->matrix[i] == NULL) {
             fprintf(stderr, "\ncreate_cli_matrix error: failed memory allocation");
-            for(size_t j = 0; j < i; j++)
+            for (size_t j = 0; j < i; j++)
                 free(matrix->matrix[j]);  // Free previously allocated rows
             free(matrix->matrix);
             free(matrix);
@@ -217,7 +219,7 @@ cli_matrix_t* create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_cha
         }
 
         // columns
-        for(size_t j = 0; j < nb_cols; ++j) {
+        for (size_t j = 0; j < nb_cols; ++j) {
             matrix->matrix[i][j] = (cli_char_t){default_char, default_color};
         }
     }
@@ -226,8 +228,8 @@ cli_matrix_t* create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_cha
 }
 
 void free_matrix(cli_matrix_t * matrix) {
-    if(matrix != NULL) {
-        for(size_t i = 0; i < matrix->nb_rows; ++i) {
+    if (matrix != NULL) {
+        for (size_t i = 0; i < matrix->nb_rows; ++i) {
             free(matrix->matrix[i]);
         }
         free(matrix->matrix);
@@ -404,7 +406,7 @@ int resize_cli_matrix_to_window(cli_matrix_t * matrix, cli_char_t default_cli_ch
 }
 
 int cli_render_clear(cli_matrix_t * matrix, cli_char_t character) {
-    if(!matrix || !matrix->matrix) {
+    if (!matrix || !matrix->matrix) {
         return EXIT_FAILURE;
     }
 
@@ -416,4 +418,54 @@ int cli_render_clear(cli_matrix_t * matrix, cli_char_t character) {
     }
 
     return EXIT_SUCCESS;
+}
+
+void cli_delay(int time) {
+    struct timespec ts;
+
+    // milliseconds to seconds
+    ts.tv_sec = time / 1000;
+    // milliseconds left to nanoseconds
+    ts.tv_nsec = (time % 1000) * 1000000L;
+
+    nanosleep(&ts, NULL);
+}
+
+void set_cli_raw_mode(bool on) {
+    static struct termios old_tio;
+
+    if (on) {
+        struct termios new_tio;
+
+        // store previous settings
+        tcgetattr(STDIN_FILENO, &old_tio);
+
+        // disable line buffering and echo in terminal
+        new_tio = old_tio;
+        new_tio.c_lflag &=(~ICANON & ~ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &new_tio);
+    } else {
+        // apply previous settings
+        tcsetattr(STDIN_FILENO, TCSANOW, &old_tio);
+    }
+}
+
+int cli_poll_char(char * value) {
+    // args for poll
+    struct pollfd fds[1];
+    fds[0].fd = STDIN_FILENO; // stdin
+    fds[0].events = POLLIN; // poll mode
+
+    int ret = poll(fds, 1, 0);
+    if (ret > 0 && (fds[0].revents & POLLIN)) {
+        // there is a char
+        char c;
+        read(STDIN_FILENO, &c, 1);
+        *value = c;
+    } else {
+        // there is no char
+        *value = 0;
+    }
+
+    return *value != 0;
 }

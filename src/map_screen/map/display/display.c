@@ -6,7 +6,7 @@ int display_map_gui(game_window_t *game_window, map_t *map, SDL_Texture **stage_
 int display_map_cli(game_window_t *game_window, map_t *map);
 
 int display_map(game_window_t *game_window, map_t *map, SDL_Texture **stage_textures) {
-    switch(game_window->ui_type) {
+    switch (game_window->ui_type) {
         case CLI:
             return display_map_cli(game_window, map);
         case GUI:
@@ -15,7 +15,7 @@ int display_map(game_window_t *game_window, map_t *map, SDL_Texture **stage_text
 }
 
 int display_map_cli(game_window_t *game_window, map_t *map) {
-    if(!game_window || !map) {
+    if (!game_window || !map) {
         fprintf(stderr, "\ndisplay_map_cli error: please provide all necessary arguments");
         return EXIT_FAILURE;
     }
@@ -23,8 +23,6 @@ int display_map_cli(game_window_t *game_window, map_t *map) {
     // process all dimensions
     int window_width = (int)game_window->matrix->nb_cols;
     int window_height = (int)game_window->matrix->nb_rows;
-
-    stage_t * test = map->first_stage;
 
     int map_width;
     int map_height;
@@ -39,7 +37,7 @@ int display_map_cli(game_window_t *game_window, map_t *map) {
 
     char background_char = ' ';
     color_code_t background_color = WHITE;
-    if(cli_render_clear(game_window->matrix, (cli_char_t){background_char, background_color}) == EXIT_FAILURE) {
+    if (cli_render_clear(game_window->matrix, (cli_char_t){background_char, background_color}) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
 
@@ -49,7 +47,7 @@ int display_map_cli(game_window_t *game_window, map_t *map) {
 }
 
 int display_map_gui(game_window_t *game_window, map_t *map, SDL_Texture **stage_textures) {
-    if(!game_window || !map) {
+    if (!game_window || !map) {
         fprintf(stderr, "\ndisplay_map_gui error: please provide all necessary arguments");
         return EXIT_FAILURE;
     }
@@ -73,7 +71,7 @@ int display_map_gui(game_window_t *game_window, map_t *map, SDL_Texture **stage_
     int stage_size = window_size / map_size;
 
     SDL_Color background_color = { 255, 255, 255, 255};
-    if(set_background_color(game_window->renderer, background_color) == EXIT_FAILURE) {
+    if (set_background_color(game_window->renderer, background_color) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
 

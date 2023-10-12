@@ -3,12 +3,12 @@
 
 game_window_t *init_game_window(ui_type_t ui_type) {
     game_window_t *game_window = malloc(sizeof(game_window_t));
-    if(!game_window) {
+    if (!game_window) {
         return NULL;
     }
 
     game_window->context = malloc(sizeof(window_context_t));
-    if(!game_window->context) {
+    if (!game_window->context) {
         return NULL;
     }
 
@@ -17,13 +17,13 @@ game_window_t *init_game_window(ui_type_t ui_type) {
     // starting here, it is specific per ui types
     switch (ui_type) {
         case CLI: {
-            if(init_game_window_cli(game_window) == EXIT_FAILURE) {
+            if (init_game_window_cli(game_window) == EXIT_FAILURE) {
                 return NULL;
             }
             break;
         }
         case GUI: {
-            if(init_game_window_gui(game_window) == EXIT_FAILURE) {
+            if (init_game_window_gui(game_window) == EXIT_FAILURE) {
                 return NULL;
             }
             break;
@@ -41,7 +41,7 @@ int init_game_window_cli(game_window_t * game_window) {
 
     game_window->matrix = create_cli_matrix(cli_height, cli_width, 0, RED);
 
-    if(game_window->matrix == NULL) {
+    if (game_window->matrix == NULL) {
         return EXIT_FAILURE;
     }
 
@@ -78,7 +78,7 @@ int init_game_window_gui(game_window_t * game_window) {
 }
 
 void free_game_window(game_window_t *game_window, ui_type_t ui_type) {
-    switch(ui_type) {
+    switch (ui_type) {
         case CLI:
             free_game_window_cli(game_window);
             break;
@@ -93,15 +93,15 @@ void free_game_window_cli(game_window_t * game_window) {
 }
 
 void free_game_window_gui(game_window_t *game_window) {
-    if(game_window->window)
+    if (game_window->window)
     {
         SDL_DestroyWindow(game_window->window);
     }
-    if(game_window->renderer)
+    if (game_window->renderer)
     {
         SDL_DestroyRenderer(game_window->renderer);
     }
-    if(game_window->context) {
+    if (game_window->context) {
         free(game_window->context);
     }
 

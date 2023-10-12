@@ -20,12 +20,12 @@ int print_player_on_stage_cli(game_window_t * game_window, orientation_t player_
 
 SDL_Texture ** get_stage_textures(SDL_Renderer * renderer) {
     SDL_Texture ** stage_textures = malloc(sizeof(SDL_Texture*) * STAGE_TYPE_COUNT);
-    for(int i = 0; i < STAGE_TYPE_COUNT; i++) {
+    for (int i = 0; i < STAGE_TYPE_COUNT; i++) {
         stage_textures[i] = get_image_texture(renderer, stage_texture_files[i]);
-        if(!stage_textures[i]) {
+        if (!stage_textures[i]) {
             // cleanup and leave
             fprintf(stderr, "\nget_stage_textures error: failed to get the file textures.");
-            for(int j = 0; j < i; j++) {
+            for (int j = 0; j < i; j++) {
                 free(stage_textures[j]);
             }
             free(stage_textures);
@@ -43,7 +43,7 @@ int print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stag
 }
 
 int print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players) {
-    if(!stages || stages->counted) {
+    if (!stages || stages->counted) {
         return EXIT_SUCCESS;
     }
 
@@ -63,7 +63,7 @@ int print_stage_cli(game_window_t *game_window, stage_t *stage, int x_coord, int
 int print_stage_gui(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players);
 
 int print_stage(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players) {
-    switch(game_window->ui_type) {
+    switch (game_window->ui_type) {
         case CLI:
             return print_stage_cli(game_window, stage, x_coord, y_coord, stage_size, with_players);
         case GUI:
