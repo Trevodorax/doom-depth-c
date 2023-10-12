@@ -30,6 +30,35 @@ player_t * create_player(char *name) {
     return player;
 }
 
+void *create_player_from_db(sqlite3_stmt *stmt) {
+
+    player_t *player = malloc(sizeof(player_t));
+
+    if (!player) {
+        fprintf(stderr, "Failed to allocate memory for player.\n");
+        return NULL;
+    }
+
+    player->id = sqlite3_column_int(stmt, 0);
+    player->name = strdup((char *) sqlite3_column_text(stmt, 1));
+    player->hp = sqlite3_column_int(stmt, 2);
+    player->hp_max = sqlite3_column_int(stmt, 3);
+    player->mana = sqlite3_column_int(stmt, 4);
+    player->mana_max = sqlite3_column_int(stmt, 5);
+    player->gold = sqlite3_column_int(stmt, 6);
+    player->xp = sqlite3_column_int(stmt, 7);
+    player->level = sqlite3_column_int(stmt, 8);
+    player->base_attack = sqlite3_column_int(stmt, 9);
+    player->base_defense = sqlite3_column_int(stmt, 10);
+
+// TODO: find spell struct from id in database and assign it to player->offensive_spell
+
+
+
+    return player;
+}
+
+
 unsigned int compute_xp_needed(unsigned int level){
     int total_xp = 0;
     for (int i = 1; i <= level; ++i) {

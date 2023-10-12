@@ -36,12 +36,19 @@ typedef struct player_t {
 
 player_t *create_player(char *name);
 
-player_t *
-create_player_from_database(char *name, unsigned int hp, unsigned int mana, unsigned int mana_max, unsigned int xp,
-                            unsigned int level, unsigned int base_attack, unsigned int base_defense, unsigned int gold,
-                            unsigned int action_points, spell_t *offensive_spell, spell_t *defensive_spell,
-                            spell_t *healing_spell, armor_t *chosen_armor, weapon_t *chosen_weapon, inventory_t *inventory,
-                            stats_t *stats);
+/**
+ * @brief Creates a player from the database.
+ *
+ * This function creates a player from the database.
+ *
+ * @param stmt A pointer to the SQLite3 statement.
+ *
+ * @return A pointer to the player created from the database.
+ * @sideeffects May modify the SQLite database by inserting new data.
+ * @dependencies Depends on the SQLite3 library.
+ * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
+ */
+void *create_player_from_db(sqlite3_stmt *stmt);
 
 /**
  * @brief Saves the player's data to the database.
