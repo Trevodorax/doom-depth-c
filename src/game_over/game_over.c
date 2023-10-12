@@ -12,7 +12,7 @@ int game_over_screen(game_window_t *game_window) {
         // TODO: link to try again option
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT){
-                return QUIT;
+                return QUIT_GAME;
             }
             if (e.type == SDL_KEYDOWN) {
                 if (e.key.keysym.sym == SDLK_DOWN && active_option == TRY_AGAIN) {

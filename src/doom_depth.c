@@ -12,34 +12,34 @@
 
 int main_loop(game_window_t * main_window) {
     main_window->context->current_screen = MAP_SCREEN;
-    while (main_window->context->current_screen != QUIT) {
+    while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
                 main_window->context->current_screen = start_menu_screen(main_window);
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
             case MAP_SCREEN :
                 main_window->context->current_screen = map_screen(main_window, "../assets/map_1.json");
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
             case FIGHT_SCREEN :
                 main_window->context->current_screen = fight_screen(main_window, NULL, NULL);
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
             case GAME_OVER :
                 main_window->context->current_screen = game_over_screen(main_window);
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
             case TRY_AGAIN:
-            case QUIT:
+            case QUIT_GAME:
                 break;
         }
     }

@@ -186,4 +186,27 @@ int resize_cli_matrix_to_window(cli_matrix_t * matrix, cli_char_t default_cli_ch
  */
 int cli_render_clear(cli_matrix_t * matrix, cli_char_t character);
 
+/**
+ * @brief Wais for the given time
+ *
+ * @param time The time to wait in milliseconds
+ */
+void cli_delay(int time);
+
+/**
+ * @brief Makes the terminal send input directly to program without printing it or needing to press enter
+ *
+ * @param on Enable of disable the raw mode
+ */
+void set_cli_raw_mode(bool on);
+
+/**
+ * @brief Poll a char in stdin if there is one
+ *
+ * @param value The variable where to put the polled char
+ *
+ * @return true if there is a char
+ */
+int cli_poll_char(char * value);
+
 #endif //DOOM_DEPTH_C_CLI_UTILS_H

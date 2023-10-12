@@ -24,12 +24,12 @@ int set_draw_color(SDL_Renderer * renderer, SDL_Color color) {
 
 int set_background_color(SDL_Renderer * renderer, SDL_Color color)
 {
-    if(set_draw_color(renderer, color) != 0)
+    if (set_draw_color(renderer, color) != 0)
     {
         return EXIT_FAILURE;
     }
 
-    if(SDL_RenderClear(renderer) != 0)
+    if (SDL_RenderClear(renderer) != 0)
     {
         fprintf(stderr, "\nSDL_RenderClear error : %s", SDL_GetError());
         return EXIT_FAILURE;
@@ -42,21 +42,21 @@ SDL_Texture * get_bmp_texture(SDL_Renderer * renderer, const char * image_file_n
     SDL_Surface * img_surface = NULL;
     SDL_Texture * img_texture = NULL;
 
-    if(!image_file_name)
+    if (!image_file_name)
     {
         return NULL;
     }
 
     // get the image surface
     img_surface = SDL_LoadBMP(image_file_name);
-    if(!img_surface)
+    if (!img_surface)
     {
         return NULL;
     }
 
     // transform the surface into a texture
     img_texture = SDL_CreateTextureFromSurface(renderer, img_surface);
-    if(!img_texture)
+    if (!img_texture)
     {
         fprintf(stderr, "\nError SDL_CreateTextureFromSurface : %s", SDL_GetError());
         return NULL;
@@ -74,12 +74,12 @@ int draw_fill_rect(
         SDL_Renderer * renderer
 )
 {
-    if(set_draw_color(renderer, color) != 0)
+    if (set_draw_color(renderer, color) != 0)
     {
         return EXIT_FAILURE;
     }
 
-    if(SDL_RenderFillRect(renderer, &rect) != 0)
+    if (SDL_RenderFillRect(renderer, &rect) != 0)
     {
         fprintf(stderr, "\nSDL_RenderFillRect error : %s", SDL_GetError());
         return EXIT_FAILURE;
@@ -95,7 +95,7 @@ int draw_thick_rect(
         SDL_Renderer * renderer
 )
 {
-    if(SDL_SetRenderDrawColor(
+    if (SDL_SetRenderDrawColor(
             renderer,
             color.r,
             color.g,
@@ -109,14 +109,14 @@ int draw_thick_rect(
 
     SDL_Rect current_container_rect;
 
-    for(int i = 0; i < thickness; i++)
+    for (int i = 0; i < thickness; i++)
     {
         current_container_rect.x = rect.x - i;
         current_container_rect.y = rect.y - i;
         current_container_rect.w = rect.w + 2 * i;
         current_container_rect.h = rect.h + 2 * i;
 
-        if(SDL_RenderDrawRect(
+        if (SDL_RenderDrawRect(
                 renderer,
                 &current_container_rect
         ) != 0)
@@ -246,21 +246,21 @@ SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, c
         return NULL;
     }
 
-    if(!string)
+    if (!string)
     {
         return NULL;
     }
 
     // get the string surface
     string_surface = TTF_RenderText_Solid(font, string, color);
-    if(!string_surface)
+    if (!string_surface)
     {
         return NULL;
     }
 
     // transform the surface into a texture
     string_texture = SDL_CreateTextureFromSurface(renderer, string_surface);
-    if(!string_texture)
+    if (!string_texture)
     {
         fprintf(stderr, "\nError SDL_CreateTextureFromSurface : %s", SDL_GetError());
         return NULL;
@@ -282,14 +282,14 @@ SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_path
 
     // get the image surface
     image_surface = IMG_Load(image_path);
-    if(!image_surface)
+    if (!image_surface)
     {
         return NULL;
     }
 
     // transform the surface into a texture
     image_texture = SDL_CreateTextureFromSurface(renderer, image_surface);
-    if(!image_texture)
+    if (!image_texture)
     {
         fprintf(stderr, "\nError SDL_CreateTextureFromSurface : %s", SDL_GetError());
         return NULL;

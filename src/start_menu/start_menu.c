@@ -13,10 +13,10 @@ int start_menu_screen(game_window_t *game_window) {
         // TODO: link to next screens
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT){
-                return QUIT;
+                return QUIT_GAME;
             }
             if (e.type == SDL_KEYDOWN){
-                if(e.key.keysym.sym == SDLK_DOWN && active_option == 0){
+                if (e.key.keysym.sym == SDLK_DOWN && active_option == 0){
                     active_option = 1;
                 }
                 if (e.key.keysym.sym == SDLK_UP && active_option == 1){

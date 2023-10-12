@@ -59,6 +59,8 @@ add_executable(doom_depth_c
         src/map_screen/stage/display/display.h
         src/map_screen/map/display/display.c
         src/map_screen/map/display/display.h
+        src/event/event.c
+        src/event/event.h
 )
 
 add_executable(doom_depth_c_windows
@@ -117,6 +119,8 @@ add_executable(doom_depth_c_windows
         src/map_screen/stage/display/display.h
         src/map_screen/map/display/display.c
         src/map_screen/map/display/display.h
+        src/event/event.c
+        src/event/event.h
 )
 
 add_executable(doom_depth_tests
@@ -152,6 +156,16 @@ add_executable(doom_depth_tests
         src/map_screen/map_screen.h
         src/map_screen/map/map_test.c
         src/map_screen/map/map_test.h
+        src/cli_utils/cli_utils.h
+        src/cli_utils/cli_utils.c
+        src/map_screen/map/map.c
+        src/map_screen/map/map.h
+        src/event/event.c
+        src/event/event.h
+        src/map_screen/map/display/display.c
+        src/map_screen/map/display/display.h
+        src/map_screen/stage/display/display.c
+        src/map_screen/stage/display/display.h
 )
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)

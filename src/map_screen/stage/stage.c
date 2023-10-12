@@ -39,7 +39,7 @@ stage_t * json_to_stage(Json * json_stage) {
         result->is_done = done->number;
 
     fight_t * fight = json_to_fight(json_stage);
-    if(fight) {
+    if (fight) {
         result->fight = fight;
     }
 
@@ -51,26 +51,26 @@ stage_t * json_to_stage(Json * json_stage) {
         strcpy(result->linked_map_file_path, linked_map->string);
     }
 
-    if(result->is_start) {
+    if (result->is_start) {
         result->player = malloc(sizeof(player_t));
         result->player_orientation = SOUTH;
     }
 
     // set stage type
-    if(result->fight) {
+    if (result->fight) {
         result->type = FIGHT;
     } else {
         result->type = EMPTY;
     }
 
     Json * treasure = get_object_at_key(json_stage, "treasure");
-    if(treasure && treasure->type == 'o') {
+    if (treasure && treasure->type == 'o') {
         result->type = TREASURE;
         // TODO: set treasure
     }
 
     Json * shop = get_object_at_key(json_stage, "shop");
-    if(shop && shop->type == 'o') {
+    if (shop && shop->type == 'o') {
         result->type = SHOP;
         // TODO: set shop
     }
@@ -100,7 +100,7 @@ stage_t * json_to_stage(Json * json_stage) {
 }
 
 void uncount_stages(stage_t * stage) {
-    if(!stage) {
+    if (!stage) {
         return;
     }
 
@@ -113,7 +113,7 @@ void uncount_stages(stage_t * stage) {
 }
 
 void get_stage_dimensions_rec(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y) {
-    if(!stage || stage->counted) {
+    if (!stage || stage->counted) {
         return;
     }
 
@@ -147,11 +147,11 @@ void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y
 }
 
 color_code_t get_stage_color(stage_t * stage) {
-    if(!stage) {
+    if (!stage) {
         return WHITE;
     }
 
-    switch(stage->type) {
+    switch (stage->type) {
         case EMPTY:
             return GREEN;
         case FIGHT:

@@ -45,7 +45,7 @@ void level_up(player_t * player) {
 }
 
 void check_level_up(player_t * player){
-    if(compute_xp_needed(player->level+1) <= player->xp){
+    if (compute_xp_needed(player->level+1) <= player->xp){
         level_up(player);
     }
 }
