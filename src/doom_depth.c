@@ -13,7 +13,43 @@
 #include "utils/array.h"
 
 int main_loop(game_window_t * main_window) {
-    main_window->context->current_screen = MAP_SCREEN;
+    // FIXME : remove later
+    player_t *player = create_player("aea");
+    weapon_t *weapon = malloc(sizeof(weapon_t));
+    weapon->name = "TEST";
+    weapon->uses = 3;
+    weapon->max_uses = 10;
+    weapon->rarity = 3;
+    weapon->min_attack = 3;
+    weapon->max_attack = 5;
+    weapon->id = 1;
+    weapon->cost = 10;
+    weapon->attacks_per_turn = 3;
+    weapon->image_path = "../assets/weapons/lightsaber.png";
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+
+
+    weapon_t *weapon2 = malloc(sizeof(weapon_t));
+    weapon2->name = "TEST2";
+    weapon2->uses = 3;
+    weapon2->max_uses = 10;
+    weapon2->rarity = 3;
+    weapon2->min_attack = 3;
+    weapon2->max_attack = 5;
+    weapon2->id = 1;
+    weapon2->cost = 10;
+    weapon2->attacks_per_turn = 3;
+    weapon2->image_path = "../assets/weapons/flip_flop.png";
+    push(&(player->inventory->weapons_head), weapon2, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    main_window->context->current_screen = INVENTORY_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
