@@ -72,20 +72,20 @@ const char create_weapon_table_sql[] =
 
 const char create_armors_in_inventory_table_sql[] =
         "CREATE TABLE IF NOT EXISTS ARMORS_IN_INVENTORY ("
+        "    id INTEGER primary key autoincrement,"
         "    player_id INTEGER not null references PLAYER,"
         "    armor_id     INTEGER not null references ARMOR,"
         "    uses         INTEGER not null,"
-        "    chosen       INTEGER not null,"
-        "    primary key (player_id, armor_id)"
+        "    chosen       INTEGER not null"
         ");";
 
 const char create_weapons_in_inventory_table_sql[] =
         "CREATE TABLE IF NOT EXISTS WEAPONS_IN_INVENTORY ("
+        "    id INTEGER primary key autoincrement,"
         "    player_id INTEGER not null references PLAYER,"
         "    weapon_id     INTEGER not null references WEAPON,"
         "    uses         INTEGER not null,"
-        "    chosen       INTEGER not null,"
-        "    primary key (player_id, weapon_id)"
+        "    chosen       INTEGER not null"
         ");";
 
 const char create_monster_table_sql[] =

@@ -24,6 +24,17 @@ void *create_weapon_from_db(sqlite3_stmt *stmt) {
         weapon->uses = weapon->max_uses;
     }
 
-    return weapon;
+    if (sqlite3_column_count(stmt) == 11) {
+        weapon->chosen = sqlite3_column_int(stmt, 10);
+    } else {
+        weapon->chosen = 0;
+    }
 
+    if (sqlite3_column_count(stmt) == 12) {
+        weapon->id_in_inventory = sqlite3_column_int(stmt, 11);
+    } else {
+        weapon->id_in_inventory = 0;
+    }
+
+    return weapon;
 }

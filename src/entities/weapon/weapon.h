@@ -17,6 +17,8 @@ typedef struct {
     unsigned int uses;
     unsigned int cost;
     char *image_path;
+    int chosen;
+    int id_in_inventory;
 } weapon_t;
 
 /**
