@@ -140,21 +140,21 @@ void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options
     if (keycode == SDLK_RETURN || keycode == SDLK_KP_ENTER) {
         if (*active_action == USE) {
             if (active_category == WEAPONS) {
-                player->chosen_weapon = get_value_at_index(player->inventory->weaponsHead, active_item);
+                player->chosen_weapon = get_value_at_index(player->inventory->weapons_head, active_item);
                 *active_section = ITEMS;
             }
             if (active_category == ARMORS) {
-                player->chosen_armor = get_value_at_index(player->inventory->armorsHead, active_item);
+                player->chosen_armor = get_value_at_index(player->inventory->armors_head, active_item);
                 *active_section = ITEMS;
             }
         }
         if (*active_action == THROW_AWAY) {
             if (active_category == WEAPONS) {
-                delete_node(&(player->inventory->weaponsHead), active_item);
+                delete_node(&(player->inventory->weapons_head), active_item);
                 *active_section = ITEMS;
             }
             if (active_category == ARMORS) {
-                delete_node(&(player->inventory->armorsHead), active_item);
+                delete_node(&(player->inventory->armors_head), active_item);
                 *active_section = ITEMS;
             }
         }

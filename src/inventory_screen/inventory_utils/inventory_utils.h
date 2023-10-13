@@ -12,7 +12,7 @@
  * uses left before it breaks,
  * cost
  *
- * @param armor // the armor from which to get the details
+ * @param armor the armor from which to get the details
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 char *armor_details_to_string(armor_t *armor);
@@ -26,7 +26,7 @@ char *armor_details_to_string(armor_t *armor);
  * uses left before it breaks,
  * cost
  *
- * @param weapon // the weapon from which to get the details
+ * @param weapon the weapon from which to get the details
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 char *weapon_details_to_string(weapon_t *weapon);
@@ -37,7 +37,7 @@ char *weapon_details_to_string(weapon_t *weapon);
  * healing value (20),
  * the number of health potions available
  *
- * @param quantity // the number of health potions in the inventory
+ * @param quantity the number of health potions in the inventory
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 char *health_potions_details_to_string(unsigned int quantity);
@@ -48,7 +48,7 @@ char *health_potions_details_to_string(unsigned int quantity);
  * mana value (20),
  * the number of mana potions available
  *
- * @param quantity // the number of mana potions in the inventory
+ * @param quantity the number of mana potions in the inventory
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 char *mana_potions_details_to_string(unsigned int quantity);
