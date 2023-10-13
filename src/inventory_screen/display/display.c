@@ -70,7 +70,6 @@ int display_inventory(game_window_t *game_window,
 
         case HEALTH_POTIONS:
             if (!inventory->nb_health_potions) {
-                printf("in nothing to see condition\n");
                 display_nothing_to_see(game_window->renderer, &items_container);
             } else {
                 display_potions(game_window->renderer, HEALTH, &item_details_container, inventory->nb_health_potions, unit_padding);
@@ -79,7 +78,6 @@ int display_inventory(game_window_t *game_window,
 
         case MANA_POTIONS:
             if (inventory->nb_mana_potions == 0) {
-                printf("in nothing to see condition\n");
                 display_nothing_to_see(game_window->renderer, &items_container);
             } else {
                 display_potions(game_window->renderer, MANA, &item_details_container, inventory->nb_mana_potions, unit_padding);
@@ -328,7 +326,6 @@ int display_actions(SDL_Renderer *renderer,
 }
 
 int display_nothing_to_see(SDL_Renderer *renderer, SDL_Rect *container) {
-    printf("in nothing to see\n");
     SDL_Texture *nothing_to_see_texture = get_string_texture(
             renderer,
             "Nothing to see here",
