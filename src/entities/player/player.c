@@ -1,6 +1,6 @@
 #include "player.h"
 
-player_t * create_player(char *name) {
+player_t * create_player(char *name, array_node_t *spells) {
     player_t * player = malloc(sizeof(player_t));
     player->name = malloc(sizeof(char)*strlen(name)+1);
     strcpy(player->name, name);
@@ -17,9 +17,9 @@ player_t * create_player(char *name) {
     player->action_points = (unsigned short)3;
 
     // TODO : add one spell at least for the beginning, see with @TomBrd
-    player->offensive_spell = NULL;
-    player->defensive_spell = NULL;
-    player->healing_spell = NULL;
+    player->offensive_spell = find_noob_spell(spells, 3);
+    player->defensive_spell = find_noob_spell(spells, 2);
+    player->healing_spell = find_noob_spell(spells, 1);
 
     player->chosen_armor = NULL;
     player->chosen_weapon = NULL;

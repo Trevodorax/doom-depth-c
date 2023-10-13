@@ -15,9 +15,35 @@ char * test_db_connection() {
     return 0;
 }
 
+void print_player(void *player) {
+    player_t *p = (player_t *)player;
+    printf("id: %d\n", p->id);
+    printf("name: %s\n", p->name);
+    printf("hp: %d\n", p->hp);
+    printf("hp_max: %d\n", p->hp_max);
+    printf("mana: %d\n", p->mana);
+    printf("mana_max: %d\n", p->mana_max);
+    printf("gold: %d\n", p->gold);
+    printf("xp: %d\n", p->xp);
+    printf("level: %d\n", p->level);
+    printf("base_attack: %d\n", p->base_attack);
+    printf("base_defense: %d\n", p->base_defense);
+    printf("offensive_spell: %s\n", p->offensive_spell->name);
+    printf("defensive_spell: %s\n", p->defensive_spell->name);
+    printf("healing_spell: %s\n", p->healing_spell->name);
+    printf("chosen_armor: %s\n", p->chosen_armor->name);
+    printf("chosen_weapon: %s\n", p->chosen_weapon->name);
+    printf("inventory: %p\n", p->inventory);
+    printf("stats: %p\n", p->stats);
+}
+
 char * test_save_player() {
     sqlite3 *db = db_connection();
-    player_t *player = create_player("test");
+    array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
+    player_t *player = create_player("test", spells);
+
+    print_player(player);
+
     int rc = save_player(db, player);
     mu_assert("Error in test_save_player: rc is not SQLITE_OK", rc == SQLITE_OK);
     return 0;
@@ -153,13 +179,13 @@ char * test_create_inventory_from_db() {
 
 char * all_tests() {
     mu_run_test(test_db_connection);
-    // mu_run_test(test_save_player);
+    mu_run_test(test_save_player);
     // mu_run_test(test_create_monsters_from_db);
     // mu_run_test(test_create_armors_from_db);
     // mu_run_test(test_create_weapons_from_db);
     // mu_run_test(test_create_spells_from_db);
     // mu_run_test(test_create_stats_from_db);
-    mu_run_test(test_create_inventory_from_db);
+    // mu_run_test(test_create_inventory_from_db);
     return 0;
 }
 

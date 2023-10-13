@@ -16,3 +16,20 @@ void *create_spell_from_db(sqlite3_stmt *stmt) {
     return spell;
 
 }
+
+spell_t *find_noob_spell(array_node_t * spells, int type) {
+    array_node_t * current = spells;
+    spell_t * noob_spell = NULL;
+    while(current != NULL){
+        spell_t * spell = (spell_t *)current->value;
+            if (spell->type == type) {
+                if (noob_spell == NULL) {
+                    noob_spell = spell;
+                } else if (spell->amount < noob_spell->amount) {
+                    noob_spell = spell;
+                }
+            }
+        current = current->next;
+    }
+    return noob_spell;
+}

@@ -34,5 +34,20 @@ typedef struct {
  */
 void *create_spell_from_db(sqlite3_stmt *stmt);
 
+/**
+ * @brief Finds the noob spell.
+ *
+ * This function finds the noob spell.
+ *
+ * @param spells  The array of spells.
+ * @param type  The type of the spell.
+ * @return   Returns a pointer to the noob spell.
+ *
+ * @sideeffects Allocates memory for the spell.
+ * @dependencies Depends on the SQLite library.
+ * @errors Errors during database operations or memory allocation can result in NULL being returned.
+ */
+spell_t *find_noob_spell(array_node_t * spells, int type);
+
 
 #endif

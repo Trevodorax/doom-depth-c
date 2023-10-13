@@ -34,7 +34,7 @@ typedef struct player_t {
     stats_t *stats;
 } player_t;
 
-player_t *create_player(char *name);
+player_t *create_player(char *name, array_node_t *spells);
 
 /**
  * @brief Creates a player from the database.
