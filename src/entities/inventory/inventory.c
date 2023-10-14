@@ -3,8 +3,8 @@
 
 inventory_t * create_inventory(){
     inventory_t * inv = malloc(sizeof(inventory_t));
-    inv->armorsHead = NULL;
-    inv->weaponsHead = NULL;
+    inv->armors_head = NULL;
+    inv->weapons_head = NULL;
     inv->nb_armors = 0u;
     inv->nb_weapons = 0u;
     inv->nb_health_potions = 1u;

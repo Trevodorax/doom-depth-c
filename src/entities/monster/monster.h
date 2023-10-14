@@ -9,6 +9,7 @@ typedef struct {
     unsigned int hp_max;
     unsigned int attack;
     unsigned int defense;
+    char *image_path;
 } monster_t;
 
 monster_t *create_monster_from_database(char *name,

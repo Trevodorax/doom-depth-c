@@ -240,21 +240,23 @@ SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, c
     SDL_Surface * string_surface = NULL;
     SDL_Texture * string_texture = NULL;
 
-    TTF_Font *font = TTF_OpenFont(font_path, font_size);
-    if (!font) {
-        fprintf(stderr, "\nError TTF_OpenFont : %s", TTF_GetError());
+    if(!string) {
         return NULL;
     }
 
-    if (!string)
-    {
+
+    TTF_Font *font = TTF_OpenFont(font_path, font_size);
+    if (!font) {
+        fprintf(stderr, "\nError TTF_OpenFont : %s", TTF_GetError());
+        TTF_CloseFont(font);
         return NULL;
     }
 
     // get the string surface
-    string_surface = TTF_RenderText_Solid(font, string, color);
-    if (!string_surface)
+    string_surface = TTF_RenderText_Solid_Wrapped(font, string, color, 0);
+    if(!string_surface)
     {
+        TTF_CloseFont(font);
         return NULL;
     }
 
@@ -263,6 +265,7 @@ SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, c
     if (!string_texture)
     {
         fprintf(stderr, "\nError SDL_CreateTextureFromSurface : %s", SDL_GetError());
+        TTF_CloseFont(font);
         return NULL;
     }
 

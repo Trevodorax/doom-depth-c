@@ -61,6 +61,14 @@ add_executable(doom_depth_c
         src/map_screen/map/display/display.h
         src/event/event.c
         src/event/event.h
+        src/inventory_screen/inventory_screen.c
+        src/inventory_screen/inventory_screen.h
+        src/utils/utils.c
+        src/utils/utils.h
+        src/inventory_screen/display/display.c
+        src/inventory_screen/display/display.h
+        src/inventory_screen/inventory_utils/inventory_utils.c
+        src/inventory_screen/inventory_utils/inventory_utils.h
 )
 
 add_executable(doom_depth_c_windows
@@ -121,6 +129,14 @@ add_executable(doom_depth_c_windows
         src/map_screen/map/display/display.h
         src/event/event.c
         src/event/event.h
+        src/inventory_screen/inventory_screen.c
+        src/inventory_screen/inventory_screen.h
+        src/utils/utils.c
+        src/utils/utils.h
+        src/inventory_screen/display/display.c
+        src/inventory_screen/display/display.h
+        src/inventory_screen/inventory_utils/inventory_utils.c
+        src/inventory_screen/inventory_utils/inventory_utils.h
 )
 
 add_executable(doom_depth_tests
@@ -166,6 +182,12 @@ add_executable(doom_depth_tests
         src/map_screen/map/display/display.h
         src/map_screen/stage/display/display.c
         src/map_screen/stage/display/display.h
+        src/inventory_screen/inventory_screen.c
+        src/inventory_screen/inventory_screen.h
+        src/inventory_screen/display/display.c
+        src/inventory_screen/display/display.h
+        src/inventory_screen/inventory_utils/inventory_utils.c
+        src/inventory_screen/inventory_utils/inventory_utils.h
 )
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)

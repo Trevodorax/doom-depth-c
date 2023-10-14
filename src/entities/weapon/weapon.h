@@ -1,5 +1,5 @@
-#ifndef WEAPON
-#define WEAPON
+#ifndef WEAPON_H
+#define WEAPON_H
 
 typedef struct {
     int id;
@@ -11,6 +11,7 @@ typedef struct {
     unsigned int uses;
     unsigned int max_uses;
     unsigned int cost;
+    char *image_path;
 } weapon_t;
 
 weapon_t * create_weapon_from_database(char *name,
