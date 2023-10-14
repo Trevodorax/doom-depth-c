@@ -15,6 +15,8 @@ typedef struct {
     unsigned int max_uses;
     unsigned int cost;
     char *image_path;
+    int chosen;
+    int id_in_inventory;
 } armor_t;
 
 

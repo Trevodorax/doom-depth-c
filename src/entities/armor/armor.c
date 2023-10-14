@@ -14,9 +14,26 @@ void *create_armor_from_db(sqlite3_stmt *stmt) {
     armor->rarity = (short)sqlite3_column_int(stmt, 2);
     armor->amount = sqlite3_column_int(stmt, 3);
     armor->max_uses = sqlite3_column_int(stmt, 4);
-    armor->uses = armor->max_uses;
     armor->cost = sqlite3_column_int(stmt, 5);
     armor->image_path = strdup((char *) sqlite3_column_text(stmt, 6));
+
+    if (sqlite3_column_count(stmt) == 8) {
+        armor->uses = sqlite3_column_int(stmt, 7);
+    } else {
+        armor->uses = armor->max_uses;
+    }
+
+    if (sqlite3_column_count(stmt) == 9) {
+        armor->chosen = sqlite3_column_int(stmt, 8);
+    } else {
+        armor->chosen = 0;
+    }
+
+    if (sqlite3_column_count(stmt) == 10) {
+        armor->id_in_inventory = sqlite3_column_int(stmt, 9);
+    } else {
+        armor->id_in_inventory = 0;
+    }
 
     return armor;
 
