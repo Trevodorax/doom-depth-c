@@ -79,4 +79,17 @@ int display_actions(SDL_Renderer *renderer, SDL_Rect *actions_container, int fon
  */
 int display_nothing_to_see(SDL_Renderer *renderer, SDL_Rect *container);
 
+/**
+ * @brief displays indicators at the right side of a container if the user can scroll up or down
+ *
+ * @param renderer the renderer to use
+ * @param container the rectangle in which the indicator will be
+ * @param font_size the font size of the indicator
+ * @param items_count the number of items displayed on one page
+ * @param quantity the total number of items
+ * @param first_item_to_print the index of the first item to be printed on the page
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int display_scroll_indicator(SDL_Renderer *renderer, SDL_Rect *container, int font_size, int items_count, int quantity, int first_item_to_print);
+
 #endif
