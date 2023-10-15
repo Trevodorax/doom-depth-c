@@ -79,7 +79,7 @@ int main_loop(game_window_t * main_window) {
     player->inventory->nb_weapons++;
 
 
-    main_window->context->current_screen = INVENTORY_SCREEN;
+    main_window->context->current_screen = MAP_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
@@ -89,7 +89,7 @@ int main_loop(game_window_t * main_window) {
                 }
                 break;
             case MAP_SCREEN :
-                main_window->context->current_screen = map_screen(main_window, "../assets/map_1.json");
+                main_window->context->current_screen = map_screen(main_window, "../assets/maps/map_1.json");
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

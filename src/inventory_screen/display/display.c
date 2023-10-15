@@ -1,5 +1,6 @@
 #include "display.h"
 #include "../inventory_utils/inventory_utils.h"
+#include "../../utils/utils.h"
 
 #define ACTIONS_COUNT 2
 
