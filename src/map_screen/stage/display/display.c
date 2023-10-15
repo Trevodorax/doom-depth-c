@@ -101,7 +101,7 @@ int print_stage_cli(game_window_t *game_window, stage_t *stage, int x_coord, int
 int print_player_on_stage_gui(game_window_t * game_window, orientation_t player_orientation, SDL_Rect stage_rect) {
     int stage_padding = stage_rect.h / 10;
     SDL_Rect player_rect = {stage_rect.x + stage_padding, stage_rect.y + stage_padding, stage_rect.w - 2 * stage_padding, stage_rect.h - 2 * stage_padding};
-    if (!draw_image_in_rectangle(game_window->renderer, player_rect, "../assets/player.png", player_orientation)) {
+    if (!draw_image_in_rectangle(game_window->renderer, player_rect, "../assets/player/player.png", player_orientation)) {
         return EXIT_FAILURE;
     }
 
