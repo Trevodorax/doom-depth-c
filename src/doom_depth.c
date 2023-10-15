@@ -11,6 +11,7 @@
 #include "cli_utils/cli_utils.h"
 #include "inventory_screen/inventory_screen.h"
 #include "utils/array.h"
+#include "new_game_screen/new_game_screen.h"
 
 int main_loop(game_window_t * main_window) {
     // FIXME : remove later
@@ -78,7 +79,7 @@ int main_loop(game_window_t * main_window) {
     push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
     player->inventory->nb_weapons++;
 
-    main_window->context->current_screen = GAME_OVER;
+    main_window->context->current_screen = NEW_GAME_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
@@ -103,6 +104,13 @@ int main_loop(game_window_t * main_window) {
 
             case INVENTORY_SCREEN :
                 main_window->context->current_screen = inventory_screen(main_window, player);
+                if(main_window->context->current_screen == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                break;
+
+            case NEW_GAME_SCREEN :
+                main_window->context->current_screen = new_game_screen(main_window, player);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

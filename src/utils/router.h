@@ -9,7 +9,8 @@ typedef enum {
     MAP_SCREEN,
     GAME_OVER,
     FIGHT_SCREEN,
-    INVENTORY_SCREEN
+    INVENTORY_SCREEN,
+    NEW_GAME_SCREEN
 } Router;
 
 #endif
