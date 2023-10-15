@@ -34,6 +34,14 @@ int main_loop(game_window_t * main_window) {
     player->inventory->nb_weapons++;
     push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
     player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
 
 
     weapon_t *weapon2 = malloc(sizeof(weapon_t));
@@ -49,6 +57,28 @@ int main_loop(game_window_t * main_window) {
     weapon2->image_path = "../assets/weapons/flip_flop.png";
     push(&(player->inventory->weapons_head), weapon2, sizeof(weapon_t));
     player->inventory->nb_weapons++;
+
+
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+
+
     main_window->context->current_screen = INVENTORY_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {

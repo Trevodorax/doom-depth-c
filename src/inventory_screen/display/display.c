@@ -21,7 +21,7 @@ int display_inventory(game_window_t *game_window,
             game_window->renderer
     );
 
-    int unit = min(window_width, window_height) / 3;
+    int unit = (min(window_width, window_height) == window_height) ? window_height / 3 : window_width / 4;
     int unit_padding = unit / 10;
     int category_size = unit / 5;
 
@@ -39,13 +39,13 @@ int display_inventory(game_window_t *game_window,
     };
 
     SDL_Rect item_details_container = (SDL_Rect) {
-            category_size + 3 * unit,
+            category_size + 3 * unit + 2 * unit_padding,
             unit_padding,
-            window_width - (category_size + 3 * unit) - unit_padding,
+            window_width - (category_size + 3 * (unit - unit_padding)),
             0
     };
     SDL_Rect actions_container = (SDL_Rect) {
-            category_size + 3 * unit,
+            category_size + 3 * unit + 2 * unit_padding,
             unit_padding + 2 * unit,
             window_width - (category_size + 3 * unit) - unit_padding,
             0
@@ -56,7 +56,7 @@ int display_inventory(game_window_t *game_window,
             if (!inventory->nb_weapons) {
                 display_nothing_to_see(game_window->renderer, &items_container);
             } else {
-                display_items(game_window->renderer, &items_container, &item_details_container, WEAPON, inventory, unit_padding, active_item, active_section);
+                display_items(game_window->renderer, &items_container, &item_details_container, WEAPON, inventory, unit_padding - 2, active_item, active_section);
             }
             break;
 
@@ -64,7 +64,7 @@ int display_inventory(game_window_t *game_window,
             if (!inventory->nb_armors) {
                 display_nothing_to_see(game_window->renderer, &items_container);
             } else {
-                display_items(game_window->renderer, &items_container, &item_details_container, ARMOR, inventory, unit_padding, active_item, active_section);
+                display_items(game_window->renderer, &items_container, &item_details_container, ARMOR, inventory, unit_padding - 2, active_item, active_section);
             }
             break;
 
@@ -72,7 +72,7 @@ int display_inventory(game_window_t *game_window,
             if (!inventory->nb_health_potions) {
                 display_nothing_to_see(game_window->renderer, &items_container);
             } else {
-                display_potions(game_window->renderer, HEALTH, &item_details_container, inventory->nb_health_potions, unit_padding);
+                display_potions(game_window->renderer, HEALTH, &item_details_container, inventory->nb_health_potions, unit_padding - 2);
             }
             break;
 
@@ -80,7 +80,7 @@ int display_inventory(game_window_t *game_window,
             if (inventory->nb_mana_potions == 0) {
                 display_nothing_to_see(game_window->renderer, &items_container);
             } else {
-                display_potions(game_window->renderer, MANA, &item_details_container, inventory->nb_mana_potions, unit_padding);
+                display_potions(game_window->renderer, MANA, &item_details_container, inventory->nb_mana_potions, unit_padding - 2);
             }
             break;
 
@@ -94,7 +94,7 @@ int display_inventory(game_window_t *game_window,
         return EXIT_SUCCESS;
     }
 
-    display_actions(game_window->renderer, &actions_container, unit_padding, active_action);
+    display_actions(game_window->renderer, &actions_container, unit_padding - 2, active_action);
 
     SDL_RenderPresent(game_window->renderer);
 
@@ -159,10 +159,11 @@ int display_items(SDL_Renderer *renderer,
     SDL_Color red = (SDL_Color) {255, 0, 0, 255};
 
     const int items_count = 9;
-    SDL_Rect *items = get_rectangle_grid(9, items_container);
+    SDL_Rect *items = get_rectangle_grid(items_count, items_container);
     int first_item_to_print = (active_item / items_count) * items_count;
 
-    // TODO : create scrollbar or indicator to tell the user they can scroll if they have more than 9 items in the category
+    display_scroll_indicator(renderer, items_container, details_font_size, items_count, quantity, first_item_to_print);
+
     char *details;
     switch (type) {
         case ARMOR:
@@ -171,7 +172,7 @@ int display_items(SDL_Renderer *renderer,
                 if (!armor_to_print) {
                     break;
                 }
-                if (active_item == i) {
+                if (active_item % items_count == i) {
                     if (active_section == ITEMS) {
                         draw_thick_rect(items[i], 2, white, renderer);
                     } else {
@@ -192,7 +193,7 @@ int display_items(SDL_Renderer *renderer,
                 if (!weapon_to_print) {
                     break;
                 }
-                if (active_item == i) {
+                if (active_item % items_count == i) {
                     if (active_section == ITEMS) {
                         draw_thick_rect(items[i], 2, white, renderer);
                     } else {
@@ -341,6 +342,56 @@ int display_nothing_to_see(SDL_Renderer *renderer, SDL_Rect *container) {
 
     SDL_RenderCopy(renderer, nothing_to_see_texture, NULL, container);
     SDL_DestroyTexture(nothing_to_see_texture);
+
+    return EXIT_SUCCESS;
+}
+
+int display_scroll_indicator(SDL_Renderer *renderer,
+                             SDL_Rect *container,
+                             int font_size,
+                             int items_count,
+                             int quantity,
+                             int first_item_to_print) {
+    if (quantity > items_count) {
+        SDL_Texture *arrow_texture = get_string_texture(
+                renderer,
+                "v",
+                "../assets/PixelifySans-Regular.ttf",
+                font_size,
+                (SDL_Color) {255, 255, 255, 255}
+        );
+        if (!arrow_texture) {
+            return EXIT_FAILURE;
+        }
+
+        int arrow_width = 0;
+        int arrow_height = 0;
+        SDL_QueryTexture(arrow_texture, NULL, NULL, &arrow_width, &arrow_height);
+
+        if (first_item_to_print > 0) {
+            SDL_Rect up_container = (SDL_Rect) {
+                    container->x + container->w - arrow_width,
+                    container->y,
+                    arrow_width,
+                    arrow_height
+            };
+
+            SDL_Point up_center = (SDL_Point) {up_container.w / 2, up_container.h / 2};
+
+            SDL_RenderCopyEx(renderer, arrow_texture, NULL, &up_container, 180, &up_center, SDL_FLIP_NONE);
+        }
+
+        if (first_item_to_print < quantity - items_count){
+            SDL_Rect down_container = (SDL_Rect) {
+                    container->x + container->w - arrow_width,
+                    container->y + container->h - arrow_height,
+                    arrow_width,
+                    arrow_height
+            };
+
+            SDL_RenderCopy(renderer, arrow_texture, NULL, &down_container);
+        }
+    }
 
     return EXIT_SUCCESS;
 }
