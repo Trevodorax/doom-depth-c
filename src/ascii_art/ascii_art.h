@@ -30,7 +30,7 @@ ascii_art_t * parse_ascii_art_file(char * file_path);
 /**
  * @brief Get a cli_matrix from the string of an ascii art version
  *
- * @param raw_ascii_art The string of the version
+ * @param raw_ascii_art The string of the ascii art
  * @return The matrix of the ascii art
  */
 cli_matrix_t * ascii_art_to_matrix(char * raw_ascii_art);

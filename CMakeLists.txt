@@ -194,6 +194,10 @@ add_executable(doom_depth_tests
         src/inventory_screen/inventory_utils/inventory_utils.h
         src/ascii_art/ascii_art.c
         src/ascii_art/ascii_art.h
+        src/ascii_art/ascii_art_test.c
+        src/ascii_art/ascii_art_test.h
+        src/utils/utils.h
+        src/utils/utils.c
 )
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
