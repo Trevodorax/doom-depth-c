@@ -6,5 +6,7 @@
 int display_new_game(game_window_t *game_window, char *name);
 int display_welcome(SDL_Renderer *renderer, SDL_Rect *container, int window_width, int window_height);
 int display_name_question(SDL_Renderer *renderer, SDL_Rect *container, int width_ref, int height_ref);
+int display_name_input(SDL_Renderer *renderer, SDL_Rect *container, int width_ref, int height_ref, const char *name);
+int display_name_input_cursor(SDL_Renderer *renderer, SDL_Rect *container, int width_ref, int height_ref);
 
 #endif
