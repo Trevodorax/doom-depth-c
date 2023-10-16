@@ -469,3 +469,8 @@ int cli_poll_char(char * value) {
 
     return *value != 0;
 }
+
+int cli_copy_matrix(cli_matrix_t * dst_matrix, cli_rect_t dst_rect, cli_matrix_t * src_matrix) {
+    return EXIT_SUCCESS;
+    // TODO: implement this.
+}

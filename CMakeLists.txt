@@ -69,6 +69,8 @@ add_executable(doom_depth_c
         src/inventory_screen/display/display.h
         src/inventory_screen/inventory_utils/inventory_utils.c
         src/inventory_screen/inventory_utils/inventory_utils.h
+        src/ascii_art/ascii_art.c
+        src/ascii_art/ascii_art.h
 )
 
 add_executable(doom_depth_c_windows
@@ -137,6 +139,8 @@ add_executable(doom_depth_c_windows
         src/inventory_screen/display/display.h
         src/inventory_screen/inventory_utils/inventory_utils.c
         src/inventory_screen/inventory_utils/inventory_utils.h
+        src/ascii_art/ascii_art.c
+        src/ascii_art/ascii_art.h
 )
 
 add_executable(doom_depth_tests
@@ -188,6 +192,8 @@ add_executable(doom_depth_tests
         src/inventory_screen/display/display.h
         src/inventory_screen/inventory_utils/inventory_utils.c
         src/inventory_screen/inventory_utils/inventory_utils.h
+        src/ascii_art/ascii_art.c
+        src/ascii_art/ascii_art.h
 )
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)

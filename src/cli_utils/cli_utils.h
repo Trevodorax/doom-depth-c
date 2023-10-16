@@ -209,4 +209,14 @@ void set_cli_raw_mode(bool on);
  */
 int cli_poll_char(char * value);
 
+/**
+ * @brief Copy a matrix on another one.
+ *
+ * @param dst_matrix The matrix to copy the other one on.
+ * @param dst_rect The rectangle where to print it on the destination.
+ * @param src_matrix The matrix to copy.
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int cli_copy_matrix(cli_matrix_t * dst_matrix, cli_rect_t dst_rect, cli_matrix_t * src_matrix);
+
 #endif //DOOM_DEPTH_C_CLI_UTILS_H
