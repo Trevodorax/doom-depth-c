@@ -53,3 +53,99 @@ array_node_t *create_full_inventory_from_db(sqlite3 *db, int player_id) {
     return inventory;
 
 }
+
+int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id) {
+
+    char *z_err_msg = NULL;
+    sqlite3_stmt *stmt;
+
+    // Delete all items from the tables WEAPONS_IN_INVENTORY and ARMORS_IN_INVENTORY for the given player_id
+    char *delete_weapons_in_inventory_sql = "DELETE FROM WEAPONS_IN_INVENTORY WHERE PLAYER_ID = ?";
+    int rc = sqlite3_prepare_v2(db, delete_weapons_in_inventory_sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return rc;
+    }
+    sqlite3_bind_int64(stmt, 1, player_id);
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return rc;
+    }
+    sqlite3_finalize(stmt);
+
+    char *delete_armors_in_inventory_sql = "DELETE FROM ARMORS_IN_INVENTORY WHERE PLAYER_ID = ?";
+    rc = sqlite3_prepare_v2(db, delete_armors_in_inventory_sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return rc;
+    }
+    sqlite3_bind_int64(stmt, 1, player_id);
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return rc;
+    }
+    sqlite3_finalize(stmt);
+
+    // Insert all items from the inventory into the tables WEAPONS_IN_INVENTORY and ARMORS_IN_INVENTORY for the given player_id
+    char *insert_weapons_in_inventory_sql = "INSERT INTO WEAPONS_IN_INVENTORY (player_id, weapon_id, uses, chosen) VALUES (?, ?, ?, ?)";
+    rc = sqlite3_prepare_v2(db, insert_weapons_in_inventory_sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return rc;
+    }
+
+    array_node_t *current_node = inventory->weaponsHead;
+    while (current_node != NULL) {
+        weapon_t *weapon = (weapon_t *) current_node->value;
+        sqlite3_bind_int64(stmt, 1, player_id);
+        sqlite3_bind_int64(stmt, 2, weapon->id);
+        sqlite3_bind_int64(stmt, 3, weapon->uses);
+        sqlite3_bind_int64(stmt, 4, weapon->chosen);
+        rc = sqlite3_step(stmt);
+        if (rc != SQLITE_DONE) {
+            fprintf(stderr, "SQL error: %s\n", z_err_msg);
+            sqlite3_free(z_err_msg);
+            return rc;
+        }
+        sqlite3_reset(stmt);
+        current_node = current_node->next;
+    }
+
+    sqlite3_finalize(stmt);
+
+    char *insert_armors_in_inventory_sql = "INSERT INTO ARMORS_IN_INVENTORY (player_id, armor_id, uses, chosen) VALUES (?, ?, ?, ?)";
+    rc = sqlite3_prepare_v2(db, insert_armors_in_inventory_sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return rc;
+    }
+
+    current_node = inventory->armorsHead;
+    while (current_node != NULL) {
+        armor_t *armor = (armor_t *) current_node->value;
+        sqlite3_bind_int64(stmt, 1, player_id);
+        sqlite3_bind_int64(stmt, 2, armor->id);
+        sqlite3_bind_int64(stmt, 3, armor->uses);
+        sqlite3_bind_int64(stmt, 4, armor->chosen);
+        rc = sqlite3_step(stmt);
+        if (rc != SQLITE_DONE) {
+            fprintf(stderr, "SQL error: %s\n", z_err_msg);
+            sqlite3_free(z_err_msg);
+            return rc;
+        }
+        sqlite3_reset(stmt);
+        current_node = current_node->next;
+    }
+
+    sqlite3_finalize(stmt);
+
+    return SQLITE_OK;
+}

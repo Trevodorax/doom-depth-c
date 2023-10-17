@@ -83,9 +83,13 @@ int save_player(sqlite3 *db, player_t *player) {
     sqlite3_stmt *stmt;
 
     // TODO: update the player's stats in the database
-    // TODO: update the player's inventory in the database
-    // TODO: update the player's weapons in the database : weapons_in_inventory
-    // TODO: update the player's armors in the database : armors_in_inventory
+
+    int rc = save_inventory(db, player->inventory, player->id);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return rc;
+    }
 
 
     /* This function take in parameter the database,
@@ -94,7 +98,7 @@ int save_player(sqlite3 *db, player_t *player) {
      * a pointer to the statement object and
      * a pointer to the unused portion of the sql command
     */
-    int rc = sqlite3_prepare_v2(db, update_player_sql, -1, &stmt, NULL);
+    rc = sqlite3_prepare_v2(db, update_player_sql, -1, &stmt, NULL);
 
     if (rc != SQLITE_OK) {
         fprintf(stderr, "SQL error: %s\n", z_err_msg);

@@ -54,4 +54,20 @@ void *create_inventory_from_db(sqlite3_stmt *stmt);
  */
 array_node_t *create_full_inventory_from_db(sqlite3 *db, int player_id);
 
+/**
+ * @brief Saves the inventory's data to the database.
+ *
+ * This function saves the inventory's data to the database.
+ *
+ * @param db A pointer to the SQLite3 database connection.
+ * @param inventory A pointer to the inventory whose data is to be saved.
+ * @param player_id The ID of the player whose inventory is to be saved.
+ * @return Returns SQLITE_OK if the query was executed successfully, or an error code otherwise.
+ *
+ * @sideeffects May modify the SQLite database by inserting new data.
+ * @dependencies Depends on the SQLite3 library.
+ * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
+ */
+int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id);
+
 #endif
