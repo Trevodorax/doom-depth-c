@@ -49,5 +49,20 @@ void *create_spell_from_db(sqlite3_stmt *stmt);
  */
 spell_t *find_noob_spell(array_node_t * spells, int type);
 
+/**
+ * @brief Finds the spell.
+ *
+ * This function finds the spell.
+ *
+ * @param spells  The array of spells.
+ * @param id  The id of the spell.
+ * @return   Returns a pointer to the spell.
+ *
+ * @sideeffects Allocates memory for the spell.
+ * @dependencies Depends on the SQLite library.
+ * @errors Errors during database operations or memory allocation can result in NULL being returned.
+ */
+spell_t *find_spell(array_node_t * spells, int id);
+
 
 #endif

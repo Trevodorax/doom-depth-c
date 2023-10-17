@@ -42,13 +42,14 @@ player_t *create_player(char *name, array_node_t *spells);
  * This function creates a player from the database.
  *
  * @param stmt A pointer to the SQLite3 statement.
+ * @param spells A pointer to the array of spells.
  *
  * @return A pointer to the player created from the database.
  * @sideeffects May modify the SQLite database by inserting new data.
  * @dependencies Depends on the SQLite3 library.
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
  */
-void *create_player_from_db(sqlite3_stmt *stmt);
+void *create_player_from_db(sqlite3_stmt *stmt, array_node_t *spells);
 
 /**
  * @brief Saves the player's data to the database.

@@ -33,3 +33,18 @@ spell_t *find_noob_spell(array_node_t * spells, int type) {
     }
     return noob_spell;
 }
+
+spell_t *find_spell(array_node_t * spells, int id) {
+
+    array_node_t * current = spells;
+    spell_t * spell = NULL;
+    while(current != NULL){
+        spell = (spell_t *)current->value;
+            if (spell->id == id) {
+                return spell;
+            }
+        current = current->next;
+    }
+    return NULL;
+
+}

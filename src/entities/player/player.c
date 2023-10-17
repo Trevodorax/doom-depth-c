@@ -30,7 +30,7 @@ player_t * create_player(char *name, array_node_t *spells) {
     return player;
 }
 
-void *create_player_from_db(sqlite3_stmt *stmt) {
+void *create_player_from_db(sqlite3_stmt *stmt, array_node_t *spells) {
 
     player_t *player = malloc(sizeof(player_t));
 
@@ -51,9 +51,9 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
     player->base_attack = sqlite3_column_int(stmt, 9);
     player->base_defense = sqlite3_column_int(stmt, 10);
 
-// TODO: find spell struct from id in database and assign it to player->offensive_spell
-
-
+    player->offensive_spell = find_spell(spells, sqlite3_column_int(stmt, 11));
+    player->defensive_spell = find_spell(spells, sqlite3_column_int(stmt, 12));
+    player->healing_spell = find_spell(spells, sqlite3_column_int(stmt, 13));
 
     return player;
 }

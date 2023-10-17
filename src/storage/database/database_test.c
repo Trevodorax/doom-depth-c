@@ -31,10 +31,20 @@ void print_player(void *player) {
     printf("offensive_spell: %s\n", p->offensive_spell->name);
     printf("defensive_spell: %s\n", p->defensive_spell->name);
     printf("healing_spell: %s\n", p->healing_spell->name);
-    printf("chosen_armor: %s\n", p->chosen_armor->name);
-    printf("chosen_weapon: %s\n", p->chosen_weapon->name);
-    printf("inventory: %p\n", p->inventory);
-    printf("stats: %p\n", p->stats);
+    if (p->chosen_armor != NULL) {
+        printf("chosen_armor: %s\n", p->chosen_armor->name);
+    }
+    else {
+        printf("chosen_armor: NULL\n");
+    }
+    if (p->chosen_weapon != NULL) {
+        printf("chosen_weapon: %s\n", p->chosen_weapon->name);
+    }
+    else {
+        printf("chosen_weapon: NULL\n");
+    }
+    printf("inventory: %d\n", p->inventory->nb_mana_potions);
+    printf("stats: %d\n", p->stats->damages_dealt);
 }
 
 char * test_save_player() {
