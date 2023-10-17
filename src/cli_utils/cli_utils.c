@@ -469,3 +469,31 @@ int cli_poll_char(char * value) {
 
     return *value != 0;
 }
+
+int cli_copy_matrix(cli_matrix_t * dst_matrix, cli_rect_t dst_rect, cli_matrix_t * src_matrix) {
+    if (!dst_matrix || !src_matrix) {
+        return EXIT_FAILURE;
+    }
+
+    // get copy bounds that fits in both matrix
+    size_t max_dst_row = dst_rect.y + dst_rect.height;
+    size_t max_dst_col = dst_rect.x + dst_rect.width;
+
+    if (max_dst_row > dst_matrix->nb_rows || max_dst_col > dst_matrix->nb_cols) {
+        max_dst_row = (max_dst_row > dst_matrix->nb_rows) ? dst_matrix->nb_rows : max_dst_row;
+        max_dst_col = (max_dst_col > dst_matrix->nb_cols) ? dst_matrix->nb_cols : max_dst_col;
+    }
+
+    for (size_t i = 0; i < dst_rect.height; i++) {
+        for (size_t j = 0; j < dst_rect.width; j++) {
+            size_t dst_x = dst_rect.x + j;
+            size_t dst_y = dst_rect.y + i;
+
+            if (i < src_matrix->nb_rows && j < src_matrix->nb_cols && dst_x < max_dst_col && dst_y < max_dst_row) {
+                dst_matrix->matrix[dst_y][dst_x] = src_matrix->matrix[i][j];
+            }
+        }
+    }
+
+    return EXIT_SUCCESS;
+}
