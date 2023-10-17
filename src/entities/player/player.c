@@ -1,8 +1,8 @@
 #include "player.h"
 
-player_t * create_player(char *name, array_node_t *spells) {
-    player_t * player = malloc(sizeof(player_t));
-    player->name = malloc(sizeof(char)*strlen(name)+1);
+player_t *create_player(char *name, array_node_t *spells) {
+    player_t *player = malloc(sizeof(player_t));
+    player->name = malloc(sizeof(char) * strlen(name) + 1);
     strcpy(player->name, name);
 
     player->hp = 200u;
@@ -14,7 +14,7 @@ player_t * create_player(char *name, array_node_t *spells) {
     player->base_attack = 5u;
     player->base_defense = 2u;
     player->gold = 100u;
-    player->action_points = (unsigned short)3;
+    player->action_points = (unsigned short) 3;
 
     // TODO : add one spell at least for the beginning, see with @TomBrd
     player->offensive_spell = find_noob_spell(spells, 3);
@@ -59,20 +59,20 @@ void *create_player_from_db(sqlite3_stmt *stmt, array_node_t *spells) {
 }
 
 
-unsigned int compute_xp_needed(unsigned int level){
+unsigned int compute_xp_needed(unsigned int level) {
     int total_xp = 0;
     for (int i = 1; i <= level; ++i) {
         total_xp += 100 * i;
     }
-    return (unsigned int)total_xp;
+    return (unsigned int) total_xp;
 }
 
-void level_up(player_t * player) {
+void level_up(player_t *player) {
 
 }
 
-void check_level_up(player_t * player){
-    if(compute_xp_needed(player->level+1) <= player->xp){
+void check_level_up(player_t *player) {
+    if (compute_xp_needed(player->level + 1) <= player->xp) {
         level_up(player);
     }
 }
@@ -150,7 +150,7 @@ int save_player(sqlite3 *db, player_t *player) {
 
 }
 
-void give_exp(player_t * player, unsigned int amount){
+void give_exp(player_t *player, unsigned int amount) {
     player->xp += amount;
     check_level_up(player);
 }
