@@ -4,8 +4,22 @@
 #include <stdlib.h>
 
 cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width, size_t max_height) {
-    return NULL;
-    // TODO: implement this
+    if (ascii_art->nb_versions == 0) {
+        return NULL;
+    }
+    size_t picked_ascii_art_index = 0;
+
+    for (size_t i = 1; i < ascii_art->nb_versions; i++) {
+        if(ascii_art->versions[i]->nb_cols > max_width || ascii_art->versions[i]->nb_rows > max_height) {
+            continue;
+        }
+
+        if(ascii_art->versions[i]->nb_cols + ascii_art->versions[i]->nb_rows > ascii_art->versions[picked_ascii_art_index]->nb_cols + ascii_art->versions[picked_ascii_art_index]->nb_rows) {
+            picked_ascii_art_index = i;
+        }
+    }
+
+    return ascii_art->versions[picked_ascii_art_index];
 }
 
 ascii_art_t * parse_ascii_art_file(char * file_path) {
@@ -102,31 +116,9 @@ cli_matrix_t * ascii_art_to_matrix(char * raw_ascii_art) {
     }
 
     // allocate necessary memory
-    cli_matrix_t *matrix = (cli_matrix_t *)malloc(sizeof(cli_matrix_t));
+    cli_matrix_t *matrix = create_cli_matrix(nb_rows, nb_cols, ' ', WHITE);
     if (!matrix) {
         return NULL;
-    }
-
-    matrix->nb_rows = nb_rows;
-    matrix->nb_cols = nb_cols;
-
-    // TODO: use cli_create_matrix to create this and fill it with ' ' (WILL NOT WORK OTHERWISE, DO NOT ACCEPT MR)
-    matrix->matrix = (cli_char_t **)malloc(nb_rows * sizeof(cli_char_t *));
-    if (!matrix->matrix) {
-        free(matrix);
-        return NULL;
-    }
-
-    for (size_t i = 0; i < nb_rows; i++) {
-        matrix->matrix[i] = (cli_char_t *)calloc(nb_cols, sizeof(cli_char_t));
-        if (!matrix->matrix[i]) {
-            for (size_t j = 0; j < i; j++) {
-                free(matrix->matrix[j]);
-            }
-            free(matrix->matrix);
-            free(matrix);
-            return NULL;
-        }
     }
 
     // set the values in the matrix

@@ -8,11 +8,10 @@ int tests_run = 0;
 
 int main(int argc, char **argv) {
     int ascii = ascii_test();
-    /*
     int json = json_test();
     int array = array_test();
     int database = database_test();
     int map = map_test();
-*/
-    return ascii /*&& json && array && database && map*/;
+
+    return ascii && json && array && database && map;
 }

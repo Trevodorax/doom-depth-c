@@ -50,3 +50,7 @@ void set_cli_raw_mode(bool on) {}
 int cli_poll_char(char * value) {
     return EXIT_SUCCESS;
 }
+
+int cli_copy_matrix(cli_matrix_t * dst_matrix, cli_rect_t dst_rect, cli_matrix_t * src_matrix) {
+    return EXIT_SUCCESS;
+}
