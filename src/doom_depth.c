@@ -79,7 +79,7 @@ int main_loop(game_window_t * main_window) {
     player->inventory->nb_weapons++;
 
 
-    main_window->context->current_screen = MAP_SCREEN;
+    main_window->context->current_screen = START_MENU;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :

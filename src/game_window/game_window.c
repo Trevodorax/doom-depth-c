@@ -90,6 +90,7 @@ void free_game_window(game_window_t *game_window, ui_type_t ui_type) {
 
 void free_game_window_cli(game_window_t * game_window) {
     free_matrix(game_window->matrix);
+    system("clear");
 }
 
 void free_game_window_gui(game_window_t *game_window) {
@@ -107,4 +108,29 @@ void free_game_window_gui(game_window_t *game_window) {
 
     TTF_Quit();
     SDL_Quit();
+}
+
+int render_present_cli(game_window_t * game_window);
+int render_present_gui(game_window_t * game_window);
+int render_present(game_window_t * game_window) {
+    switch (game_window->ui_type) {
+        case CLI:
+            return render_present_cli(game_window);
+        case GUI:
+            return render_present_gui(game_window);
+    }
+}
+
+int render_present_cli(game_window_t * game_window) {
+    resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
+    set_cli_raw_mode(true);
+    cli_render_present(game_window->matrix);
+    set_cli_raw_mode(false);
+
+    return EXIT_SUCCESS;
+}
+
+int render_present_gui(game_window_t * game_window) {
+    SDL_RenderPresent(game_window->renderer);
+    return EXIT_SUCCESS;
 }

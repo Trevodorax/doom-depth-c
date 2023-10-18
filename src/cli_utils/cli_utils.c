@@ -360,7 +360,7 @@ int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const ch
     size_t max_chars_in_rect = (end_row - start_row) * (end_col - start_col);
     size_t text_len = strlen(text);
 
-    if (max_chars_in_rect < 3) {
+    if (max_chars_in_rect < 3 && text_len >= 3) {
         return EXIT_FAILURE; // too small to print anything
     }
 
@@ -421,6 +421,7 @@ int cli_render_clear(cli_matrix_t * matrix, cli_char_t character) {
 }
 
 void cli_delay(int time) {
+    set_cli_raw_mode(true);
     struct timespec ts;
 
     // milliseconds to seconds
@@ -429,6 +430,7 @@ void cli_delay(int time) {
     ts.tv_nsec = (time % 1000) * 1000000L;
 
     nanosleep(&ts, NULL);
+    set_cli_raw_mode(false);
 }
 
 void set_cli_raw_mode(bool on) {

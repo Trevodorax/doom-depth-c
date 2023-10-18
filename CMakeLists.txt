@@ -71,6 +71,8 @@ add_executable(doom_depth_c
         src/inventory_screen/inventory_utils/inventory_utils.h
         src/ascii_art/ascii_art.c
         src/ascii_art/ascii_art.h
+        src/start_menu/display/display.c
+        src/start_menu/display/display.h
 )
 
 add_executable(doom_depth_c_windows
@@ -141,6 +143,8 @@ add_executable(doom_depth_c_windows
         src/inventory_screen/inventory_utils/inventory_utils.h
         src/ascii_art/ascii_art.c
         src/ascii_art/ascii_art.h
+        src/start_menu/display/display.c
+        src/start_menu/display/display.h
 )
 
 add_executable(doom_depth_tests

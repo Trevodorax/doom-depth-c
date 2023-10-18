@@ -163,6 +163,7 @@ int cli_draw_stroke_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t stro
  * @param matrix The modified matrix
  * @param rect The rectangle to write the text in
  * @param text The text to be printed
+ * @param text_color The color of the text
  *
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */

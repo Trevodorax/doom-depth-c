@@ -52,4 +52,12 @@ game_window_t *init_game_window(ui_type_t ui_type);
 int init_game_window_cli(game_window_t * game_window);
 int init_game_window_gui(game_window_t * game_window);
 
+/**
+ * @brief Renders the changes made to the UI
+ *
+ * @param game_window
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int render_present(game_window_t * game_window);
+
 #endif //DOOM_DEPTH_C_GAME_WINDOW_H

@@ -52,12 +52,16 @@ event_t sdl_get_event() {
                 return D_KEY;
             case SDLK_s:
                 return S_KEY;
+            case SDLK_y:
+                return Y_KEY;
             case SDLK_q:
                 if (event.key.keysym.mod & KMOD_SHIFT) { // uppercase check
                     return QUIT;
                 } else {
                     return Q_KEY;
                 }
+            case SDLK_RETURN:
+                return ENTER_KEY;
             default:
                 return Z_KEY;
         }
