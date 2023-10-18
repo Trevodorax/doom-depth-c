@@ -9,7 +9,9 @@ typedef enum {
     Z_KEY,
     Q_KEY,
     S_KEY,
-    D_KEY
+    D_KEY,
+    Y_KEY,
+    ENTER_KEY
 } event_t;
 
 static char event_to_char_map[] = {
@@ -18,7 +20,9 @@ static char event_to_char_map[] = {
         'z',
         'q',
         's',
-        'd'
+        'd',
+        'y',
+        '\n'
 };
 
 /**

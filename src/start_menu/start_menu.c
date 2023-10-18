@@ -2,26 +2,36 @@
 #include "../sdl_utils/sdl_utils.h"
 #include "../utils/router.h"
 #include "../game_window/game_window.h"
+#include "../event/event.h"
 
 int display_start_menu(game_window_t *game_window, unsigned short active_option);
 
 int start_menu_screen(game_window_t *game_window) {
-    SDL_Event e;
+    event_t event;
     bool quit = false;
     unsigned short active_option = 0;
     while (!quit){
         // TODO: link to next screens
-        while (SDL_PollEvent(&e)){
-            if (e.type == SDL_QUIT){
-                return QUIT_GAME;
-            }
-            if (e.type == SDL_KEYDOWN){
-                if (e.key.keysym.sym == SDLK_DOWN && active_option == 0){
-                    active_option = 1;
-                }
-                if (e.key.keysym.sym == SDLK_UP && active_option == 1){
-                    active_option = 0;
-                }
+        while (get_event(game_window->ui_type, &event)){
+            switch (event) {
+                case QUIT:
+                    return QUIT_GAME;
+                case D_KEY:
+                case S_KEY:
+                    if(active_option == 0) {
+                        active_option = 1;
+                    }
+                    break;
+                case Q_KEY:
+                case Z_KEY:
+                    if(active_option == 1) {
+                        active_option = 0;
+                    }
+                    break;
+                case ENTER_KEY:
+                    return MAP_SCREEN;
+                default:
+                    break;
             }
         }
         display_start_menu(game_window, active_option);
