@@ -31,5 +31,6 @@ int start_menu_screen(game_window_t *game_window) {
         if(display_start_menu(game_window, active_option) == EXIT_FAILURE) {
             return QUIT_GAME;
         }
+        SDL_RenderPresent(game_window->renderer);
     }
 }

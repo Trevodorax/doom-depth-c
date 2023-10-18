@@ -1,8 +1,19 @@
 #include "display.h"
 #include "../../sdl_utils/sdl_utils.h"
 
+int display_start_menu_gui(game_window_t *game_window, unsigned short active_option);
+int display_start_menu_cli(game_window_t *game_window, unsigned short active_option);
 
 int display_start_menu(game_window_t *game_window, unsigned short active_option) {
+    switch(game_window->ui_type) {
+        case GUI:
+            return display_start_menu_gui(game_window, active_option);
+        case CLI:
+            return display_start_menu_cli(game_window, active_option);
+    }
+}
+
+int display_start_menu_gui(game_window_t *game_window, unsigned short active_option) {
     int window_height = 0;
     int window_width = 0;
     SDL_GetWindowSize(game_window->window, &window_width, &window_height);
@@ -145,7 +156,10 @@ int display_start_menu(game_window_t *game_window, unsigned short active_option)
     SDL_RenderCopy(game_window->renderer, cursor_texture, NULL, &cursor_rect);
     SDL_DestroyTexture(cursor_texture);
 
-    SDL_RenderPresent(game_window->renderer);
-
     return EXIT_SUCCESS;
 }
+
+int display_start_menu_cli(game_window_t *game_window, unsigned short active_option) {
+    return EXIT_SUCCESS;
+}
+
