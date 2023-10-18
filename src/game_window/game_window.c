@@ -90,6 +90,7 @@ void free_game_window(game_window_t *game_window, ui_type_t ui_type) {
 
 void free_game_window_cli(game_window_t * game_window) {
     free_matrix(game_window->matrix);
+    system("clear");
 }
 
 void free_game_window_gui(game_window_t *game_window) {
