@@ -421,6 +421,7 @@ int cli_render_clear(cli_matrix_t * matrix, cli_char_t character) {
 }
 
 void cli_delay(int time) {
+    set_cli_raw_mode(true);
     struct timespec ts;
 
     // milliseconds to seconds
@@ -429,6 +430,7 @@ void cli_delay(int time) {
     ts.tv_nsec = (time % 1000) * 1000000L;
 
     nanosleep(&ts, NULL);
+    set_cli_raw_mode(false);
 }
 
 void set_cli_raw_mode(bool on) {

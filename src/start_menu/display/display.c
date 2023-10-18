@@ -164,14 +164,12 @@ int display_start_menu_cli(game_window_t *game_window, unsigned short active_opt
     int window_width = 0;
     cli_get_window_size(&window_width, &window_height);
 
-    // clear renderer
-    SDL_RenderClear(game_window->renderer);
-
     cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
 
     // print title
-    // TODO: get rectangle for title
+    cli_rect_t title_rect = {0, 0, window_width, window_height / 2};
     // TODO: print title in this rectangle
+    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Doom Depth C", RED);
 
     // print options
     // TODO: get rectangle for each option

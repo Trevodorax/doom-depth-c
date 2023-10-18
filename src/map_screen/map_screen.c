@@ -3,6 +3,7 @@
 #include "map/display/display.h"
 #include "stage/display/display.h"
 #include "../event/event.h"
+#include "../utils/utils.h"
 
 /**
  * @brief Moves the player and returns the stage he is on
@@ -40,14 +41,7 @@ int map_screen(game_window_t *game_window, char *map_file) {
         if (game_window->ui_type == CLI) {
             set_cli_raw_mode(true);
         }
-        switch (game_window->ui_type) {
-            case CLI:
-                cli_delay(50);
-                break;
-            case GUI:
-                SDL_Delay(50);
-                break;
-        }
+        delay(game_window->ui_type, 50);
 
         while (get_event(game_window->ui_type, &event)) {
             switch (event) {
@@ -76,17 +70,7 @@ int map_screen(game_window_t *game_window, char *map_file) {
         }
 
         display_map(game_window, map, stage_textures);
-        switch (game_window->ui_type) {
-            case CLI:
-                resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
-                set_cli_raw_mode(true);
-                cli_render_present(game_window->matrix);
-                set_cli_raw_mode(false);
-                break;
-            case GUI:
-                SDL_RenderPresent(game_window->renderer);
-                break;
-        }
+        render_present(game_window);
     }
 
     return QUIT_GAME;

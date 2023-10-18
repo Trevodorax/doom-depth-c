@@ -20,3 +20,14 @@ char* custom_strupr(char* str) {
     }
     return new_str;
 }
+
+void delay(ui_type_t ui_type, int ms) {
+    switch (ui_type) {
+        case CLI:
+            cli_delay(50);
+            break;
+        case GUI:
+            SDL_Delay(50);
+            break;
+    }
+}
