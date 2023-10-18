@@ -82,9 +82,14 @@ int save_player(sqlite3 *db, player_t *player) {
     char *z_err_msg = NULL;
     sqlite3_stmt *stmt;
 
-    // TODO: update the player's stats in the database
+    int rc = save_stats(db, player->stats, player->id);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return rc;
+    }
 
-    int rc = save_inventory(db, player->inventory, player->id);
+    rc = save_inventory(db, player->inventory, player->id);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "SQL error: %s\n", z_err_msg);
         sqlite3_free(z_err_msg);
