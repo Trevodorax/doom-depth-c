@@ -360,7 +360,7 @@ int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const ch
     size_t max_chars_in_rect = (end_row - start_row) * (end_col - start_col);
     size_t text_len = strlen(text);
 
-    if (max_chars_in_rect < 3) {
+    if (max_chars_in_rect < 3 && text_len >= 3) {
         return EXIT_FAILURE; // too small to print anything
     }
 
