@@ -54,6 +54,35 @@ array_node_t *create_full_inventory_from_db(sqlite3 *db, int player_id) {
 
 }
 
+weapon_t *get_chosen_weapon(inventory_t *inventory){
+
+    array_node_t * current_node = inventory->weaponsHead;
+    while(current_node != NULL){
+        weapon_t * weapon = (weapon_t *) current_node->value;
+        if(weapon->chosen == 1){
+            return weapon;
+        }
+        current_node = current_node->next;
+    }
+
+    return NULL;
+
+}
+
+armor_t *get_chosen_armor(inventory_t *inventory) {
+
+    array_node_t *current_node = inventory->armorsHead;
+    while (current_node != NULL) {
+        armor_t *armor = (armor_t *) current_node->value;
+        if (armor->chosen == 1) {
+            return armor;
+        }
+        current_node = current_node->next;
+    }
+
+    return NULL;
+}
+
 int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id) {
 
     char *z_err_msg = NULL;

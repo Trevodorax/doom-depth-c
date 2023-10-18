@@ -70,4 +70,33 @@ array_node_t *create_full_inventory_from_db(sqlite3 *db, int player_id);
  */
 int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id);
 
+/**
+ * @brief Gets the chosen weapon from the inventory.
+ *
+ * This function gets the chosen weapon from the inventory.
+ *
+ * @param inventory A pointer to the inventory.
+ * @return Returns a pointer to the chosen weapon.
+ *
+ * @sideeffects None.
+ * @dependencies None.
+ * @errors None.
+ */
+weapon_t *get_chosen_weapon(inventory_t *inventory);
+
+/**
+ * @brief Gets the chosen armor from the inventory.
+ *
+ * This function gets the chosen armor from the inventory.
+ *
+ * @param inventory A pointer to the inventory.
+ * @return Returns a pointer to the chosen armor.
+ *
+ * @sideeffects None.
+ * @dependencies None.
+ * @errors None.
+ */
+armor_t *get_chosen_armor(inventory_t *inventory);
+
+
 #endif

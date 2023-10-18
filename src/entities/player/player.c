@@ -55,6 +55,17 @@ void *create_player_from_db(sqlite3_stmt *stmt, array_node_t *spells) {
     player->defensive_spell = find_spell(spells, sqlite3_column_int(stmt, 12));
     player->healing_spell = find_spell(spells, sqlite3_column_int(stmt, 13));
 
+    array_node_t *inventory = create_full_inventory_from_db(db_connection(), player->id);
+    player->inventory = (inventory_t *)inventory->value;
+
+    char *sql = malloc(sizeof(char) * 150);
+    sprintf(sql, "SELECT * FROM STATS WHERE id = (SELECT stats_id FROM PLAYER WHERE id = %d)", player->id);
+    array_node_t *stats = create_struct_from_db(db_connection(), sql, create_stats_from_db, sizeof (stats_t));
+    player->stats = (stats_t *)stats->value;
+
+    player->chosen_weapon = get_chosen_weapon(player->inventory);
+    player->chosen_armor = get_chosen_armor(player->inventory);
+
     return player;
 }
 
