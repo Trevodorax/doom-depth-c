@@ -160,6 +160,24 @@ int display_start_menu_gui(game_window_t *game_window, unsigned short active_opt
 }
 
 int display_start_menu_cli(game_window_t *game_window, unsigned short active_option) {
+    int window_height = 0;
+    int window_width = 0;
+    cli_get_window_size(&window_width, &window_height);
+
+    // clear renderer
+    SDL_RenderClear(game_window->renderer);
+
+    cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
+
+    // print title
+    // TODO: get rectangle for title
+    // TODO: print title in this rectangle
+
+    // print options
+    // TODO: get rectangle for each option
+    // TODO: draw each option in there
+    // TODO: print cursor before selected option
+
     return EXIT_SUCCESS;
 }
 

@@ -6,6 +6,7 @@ int start_menu_screen(game_window_t *game_window) {
     event_t event;
     unsigned short active_option = 0;
     while (true){
+        // TODO: add delay here
         while (get_event(game_window->ui_type, &event)){
             switch (event) {
                 case QUIT:
@@ -31,6 +32,7 @@ int start_menu_screen(game_window_t *game_window) {
         if(display_start_menu(game_window, active_option) == EXIT_FAILURE) {
             return QUIT_GAME;
         }
+        // TODO: make this generic
         SDL_RenderPresent(game_window->renderer);
     }
 }
