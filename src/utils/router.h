@@ -4,11 +4,12 @@
 // no value for 1 to avoid equality with EXIT_FAILURE
 typedef enum {
     TRY_AGAIN,
-    QUIT = 2,
+    QUIT_GAME = 2,
     START_MENU,
     MAP_SCREEN,
     GAME_OVER,
-    FIGHT_SCREEN
+    FIGHT_SCREEN,
+    INVENTORY_SCREEN
 } Router;
 
 #endif

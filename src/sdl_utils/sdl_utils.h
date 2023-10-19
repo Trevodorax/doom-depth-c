@@ -3,37 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include "../entities/player/player.h"
-#include "../map/stage/stage.h"
+#include "../map_screen//stage/stage.h"
 #include "../utils/router.h"
 #include "../cli_utils/cli_utils.h"
-#include "../doom_depth.h"
-
-typedef struct {
-    Router current_screen;
-} window_context_t;
-
-typedef struct {
-    ui_type_t ui_type;
-
-    // for GUI mode
-    SDL_Window * window;
-    SDL_Renderer * renderer;
-
-    // for CLI mode
-    cli_matrix_t * matrix;
-
-    window_context_t * context;
-} game_window_t;
-
-/**
- * @brief Frees completely a game window
- *
- * Cleans up and frees the resources that are associated with
- * a game window, including the window, renderer, and context
- *
- * @param game_window Pointer to the game window structure to be freed
- */
-void free_game_window(game_window_t *game_window, ui_type_t ui_type);
 
 /**
  * @brief Sets the drawing color for a renderer
@@ -107,7 +79,7 @@ int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const ch
 /**
  * @brief Returns string as a texture with the specified font, font size and color.
  *
- * Creates a texture from the given string
+ * Creates a texture from the given string, accepts new line caracters.
  *
  * @param renderer Pointer to the renderer
  * @param string String to render

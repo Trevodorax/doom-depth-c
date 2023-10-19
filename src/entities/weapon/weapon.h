@@ -1,5 +1,5 @@
-#ifndef WEAPON
-#define WEAPON
+#ifndef WEAPON_H
+#define WEAPON_H
 
 #include "../../utils/array.h"
 #include <sqlite3.h>

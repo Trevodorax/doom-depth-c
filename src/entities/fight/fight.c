@@ -33,7 +33,7 @@ fight_t * json_to_fight(Json * fight_json) {
 
     result->enemies_list = malloc(enemies_list->nb_elements * sizeof(char *));
     for (unsigned int i = 0; i < enemies_list->nb_elements; i++) {
-        if(enemies_list->values[i].type != 's') {
+        if (enemies_list->values[i].type != 's') {
             fprintf(stderr, "\njson_to_fight error: enemy name is not a string.\n");
             return NULL;
         }
@@ -41,7 +41,7 @@ fight_t * json_to_fight(Json * fight_json) {
     }
 
     Json *chances = get_object_at_key(fight_json, "enemies_chances_to_appear");
-    if(!chances || chances->type != 'a') {
+    if (!chances || chances->type != 'a') {
         fprintf(stderr, "\njson_to_fight error: enemies_chances_to_appear not found or invalid\n");
         free(result->enemies_list);
         free(result);
@@ -50,7 +50,7 @@ fight_t * json_to_fight(Json * fight_json) {
 
     result->enemies_chances_to_appear = malloc(enemies_list->nb_elements * sizeof(float));
     for (unsigned int i = 0; i < chances->nb_elements; i++) {
-        if(chances->values[i].type != 'n') {
+        if (chances->values[i].type != 'n') {
             fprintf(stderr, "\njson_to_fight error: enemy chances to appear is not a number.");
             return NULL;
         }

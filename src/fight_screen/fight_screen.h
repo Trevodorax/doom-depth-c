@@ -5,13 +5,17 @@
 #include "../entities/monster/monster.h"
 #include "../entities/fight/fight.h"
 #include "../sdl_utils/sdl_utils.h"
+#include "../game_window/game_window.h"
 
 typedef struct {
     player_t * player;
     monster_t * monsters;
 } fight_context_t;
 
-typedef int (*fight_action)(fight_context_t *);
+typedef struct {
+    int (*callback)(fight_context_t *, void * custom_params);
+    void * params;
+} fight_action_t ;
 
 /**
  * @brief Screen for fights

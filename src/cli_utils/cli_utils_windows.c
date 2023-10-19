@@ -1,34 +1,56 @@
 #include "cli_utils.h"
 #include <stdlib.h>
 
-void cli_get_window_size(int * width, int * height) {
-    return;
-}
+void cli_get_window_size(int * width, int * height) {}
 
-void cli_print_color(color_code_t color, const char *format, ...) {
-    return;
-}
+void cli_print_color(color_code_t color, const char *format, ...) {}
 
 int cli_render_present(cli_matrix_t * current_matrix) {
     return EXIT_SUCCESS;
 }
 
-void cli_move_cursor(int nb_moves, cursor_movement_t cursor_movement) {
-    return;
-}
+void cli_move_cursor(int nb_moves, cursor_movement_t cursor_movement) {}
 
-void cli_print_special_char(special_char_t printed_char, color_code_t color) {
-    return;
-}
+void cli_print_special_char(special_char_t printed_char, color_code_t color) {}
 
-cli_matrix_t* create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_char, color_code_t default_color) {
+cli_matrix_t * create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_char, color_code_t default_color) {
     return NULL;
 }
 
-void free_matrix(cli_matrix_t * matrix) {
-    return;
-}
+void free_matrix(cli_matrix_t * matrix) {}
 
 int resize_cli_matrix(cli_matrix_t *matrix, size_t new_nb_rows, size_t new_nb_cols, char default_char, color_code_t default_color) {
+    return EXIT_SUCCESS;
+}
+
+void cli_delay(int time) {}
+
+int resize_cli_matrix_to_window(cli_matrix_t * matrix, cli_char_t default_cli_char) {
+    return EXIT_SUCCESS;
+}
+
+int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const char * text, color_code_t text_color) {
+    return EXIT_SUCCESS;
+}
+
+int cli_draw_stroke_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t stroke) {
+    return EXIT_SUCCESS;
+}
+
+int cli_draw_fill_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t fill) {
+    return EXIT_SUCCESS;
+}
+
+int cli_render_clear(cli_matrix_t * matrix, cli_char_t character) {
+    return EXIT_SUCCESS;
+}
+
+void set_cli_raw_mode(bool on) {}
+
+int cli_poll_char(char * value) {
+    return EXIT_SUCCESS;
+}
+
+int cli_copy_matrix(cli_matrix_t * dst_matrix, cli_rect_t dst_rect, cli_matrix_t * src_matrix) {
     return EXIT_SUCCESS;
 }

@@ -199,7 +199,7 @@ void * get_value_at_index(array_node_t *head, int index) {
     array_node_t *current = head;
 
     while (index != 0){
-        if(current->next!=NULL){
+        if (current->next!=NULL){
             current = current->next;
         } else {
             return NULL;

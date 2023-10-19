@@ -1,5 +1,5 @@
-#ifndef ARMOR
-#define ARMOR
+#ifndef ARMOR_H
+#define ARMOR_H
 
 #include "../../utils/array.h"
 #include <sqlite3.h>

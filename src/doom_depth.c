@@ -5,52 +5,118 @@
 #include "doom_depth.h"
 #include "sdl_utils/sdl_utils.h"
 #include "start_menu/start_menu.h"
-#include "map/map.h"
+#include "map_screen/map_screen.h"
 #include "game_over/game_over.h"
 #include "fight_screen/fight_screen.h"
 #include "cli_utils/cli_utils.h"
-
-/**
- * @brief Initializes a new game window
- *
- * This function allocates and initializes a new game window structure,
- * initializing the right parts for the requested ui_type
- *
- * @param ui_type
- * @return Pointer to the newly created game window structure
- */
-game_window_t *init_game_window(ui_type_t ui_type);
+#include "inventory_screen/inventory_screen.h"
+#include "utils/array.h"
 
 int main_loop(game_window_t * main_window) {
-    main_window->context->current_screen = FIGHT_SCREEN;
-    while (main_window->context->current_screen != QUIT) {
+    // FIXME : remove later
+    player_t *player = create_player("aea");
+    weapon_t *weapon = malloc(sizeof(weapon_t));
+    weapon->name = "TEST";
+    weapon->uses = 3;
+    weapon->max_uses = 10;
+    weapon->rarity = 3;
+    weapon->min_attack = 3;
+    weapon->max_attack = 5;
+    weapon->id = 1;
+    weapon->cost = 10;
+    weapon->attacks_per_turn = 3;
+    weapon->image_path = "../assets/weapons/lightsaber.png";
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+
+
+    weapon_t *weapon2 = malloc(sizeof(weapon_t));
+    weapon2->name = "TEST2";
+    weapon2->uses = 3;
+    weapon2->max_uses = 10;
+    weapon2->rarity = 3;
+    weapon2->min_attack = 3;
+    weapon2->max_attack = 5;
+    weapon2->id = 1;
+    weapon2->cost = 10;
+    weapon2->attacks_per_turn = 3;
+    weapon2->image_path = "../assets/weapons/flip_flop.png";
+    push(&(player->inventory->weapons_head), weapon2, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+
+
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+    push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
+    player->inventory->nb_weapons++;
+
+
+    main_window->context->current_screen = START_MENU;
+    while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
                 main_window->context->current_screen = start_menu_screen(main_window);
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
             case MAP_SCREEN :
-                main_window->context->current_screen = map_screen(main_window, "../assets/map_1.json");
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                main_window->context->current_screen = map_screen(main_window, "../assets/maps/map_1.json");
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
+
             case FIGHT_SCREEN :
                 main_window->context->current_screen = fight_screen(main_window, NULL, NULL);
+                if (main_window->context->current_screen == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                break;
+
+            case INVENTORY_SCREEN :
+                main_window->context->current_screen = inventory_screen(main_window, player);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
+
             case GAME_OVER :
                 main_window->context->current_screen = game_over_screen(main_window);
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
             case TRY_AGAIN:
-            case QUIT:
+            case QUIT_GAME:
                 break;
         }
     }
@@ -93,7 +159,7 @@ int doom_depth_gui() {
 
     int result = main_loop(main_window);
 
-    free_game_window(main_window, CLI);
+    free_game_window(main_window, GUI);
     SDL_Quit();
 
     return result;
@@ -117,62 +183,3 @@ doom_depth_main doom_depth_factory(ui_type_t ui_type) {
             return doom_depth_gui;
     }
 }
-
-game_window_t *init_game_window(ui_type_t ui_type) {
-    game_window_t *game_window = malloc(sizeof(game_window_t));
-    if(!game_window) {
-        return NULL;
-    }
-
-    game_window->context = malloc(sizeof(window_context_t));
-    if(!game_window->context) {
-        return NULL;
-    }
-
-    game_window->ui_type = ui_type;
-
-    // starting here, it is specific per ui types
-    switch (ui_type) {
-        case CLI: {
-            int cli_width;
-            int cli_height;
-            cli_get_window_size(&cli_width, &cli_height);
-
-            game_window->matrix = create_cli_matrix(cli_height, cli_width, 0, RED);
-            break;
-        }
-        case GUI: {
-            SDL_Init(SDL_INIT_VIDEO);
-
-            game_window->window = SDL_CreateWindow(
-                    "Doom depth c",
-                    SDL_WINDOWPOS_CENTERED,
-                    SDL_WINDOWPOS_CENTERED,
-                    700,
-                    500,
-                    SDL_WINDOW_RESIZABLE
-            );
-            if(!game_window->window) {
-                return NULL;
-            }
-
-            game_window->renderer = SDL_CreateRenderer(
-                    game_window->window,
-                    1,
-                    SDL_RENDERER_ACCELERATED
-            );
-            if(!game_window->renderer) {
-                return NULL;
-            }
-
-            if (TTF_Init()) {
-                return NULL;
-            }
-            break;
-        }
-    }
-
-    return game_window;
-}
-
-

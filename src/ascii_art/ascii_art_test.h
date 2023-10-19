@@ -1,0 +1,7 @@
+
+#ifndef DOOM_DEPTH_C_ASCII_ART_TEST_H
+#define DOOM_DEPTH_C_ASCII_ART_TEST_H
+
+int ascii_test();
+
+#endif //DOOM_DEPTH_C_ASCII_ART_TEST_H
