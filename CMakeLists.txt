@@ -74,6 +74,8 @@ add_executable(doom_depth_c
         src/ascii_art/ascii_art.h
         src/start_menu/display/display.c
         src/start_menu/display/display.h
+        src/game_over/display/display.c
+        src/game_over/display/display.h
 )
 
 add_executable(doom_depth_c_windows
@@ -146,6 +148,8 @@ add_executable(doom_depth_c_windows
         src/ascii_art/ascii_art.h
         src/start_menu/display/display.c
         src/start_menu/display/display.h
+        src/game_over/display/display.c
+        src/game_over/display/display.h
 )
 
 add_executable(doom_depth_tests
@@ -213,6 +217,8 @@ add_executable(doom_depth_tests
         src/ascii_art/ascii_art_test.h
         src/utils/utils.h
         src/utils/utils.c
+        src/game_over/display/display.c
+        src/game_over/display/display.h
 )
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
