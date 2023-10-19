@@ -27,8 +27,8 @@ void *create_inventory_from_db(sqlite3_stmt *stmt) {
     inventory->nb_armors = sqlite3_column_int(stmt, 2);
     inventory->nb_mana_potions = sqlite3_column_int(stmt, 3);
     inventory->nb_health_potions = sqlite3_column_int(stmt, 4);
-    inventory->armorsHead = NULL;
-    inventory->weaponsHead = NULL;
+    inventory->armors_head = NULL;
+    inventory->weapons_head = NULL;
 
     return inventory;
 }
@@ -46,8 +46,8 @@ array_node_t *create_full_inventory_from_db(sqlite3 *db, int player_id) {
     array_node_t *armors_in_inventory = create_struct_from_db(db, sql, create_armor_from_db, sizeof (armor_t));
 
     inventory_t *i = (inventory_t *)inventory->value;
-    i->weaponsHead = weapons_in_inventory;
-    i->armorsHead = armors_in_inventory;
+    i->weapons_head = weapons_in_inventory;
+    i->armors_head = armors_in_inventory;
 
     free(sql);
     return inventory;
@@ -56,7 +56,7 @@ array_node_t *create_full_inventory_from_db(sqlite3 *db, int player_id) {
 
 weapon_t *get_chosen_weapon(inventory_t *inventory){
 
-    array_node_t * current_node = inventory->weaponsHead;
+    array_node_t * current_node = inventory->weapons_head;
     while(current_node != NULL){
         weapon_t * weapon = (weapon_t *) current_node->value;
         if(weapon->chosen == 1){
@@ -71,7 +71,7 @@ weapon_t *get_chosen_weapon(inventory_t *inventory){
 
 armor_t *get_chosen_armor(inventory_t *inventory) {
 
-    array_node_t *current_node = inventory->armorsHead;
+    array_node_t *current_node = inventory->armors_head;
     while (current_node != NULL) {
         armor_t *armor = (armor_t *) current_node->value;
         if (armor->chosen == 1) {
@@ -130,7 +130,7 @@ int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id) {
         return rc;
     }
 
-    array_node_t *current_node = inventory->weaponsHead;
+    array_node_t *current_node = inventory->weapons_head;
     while (current_node != NULL) {
         weapon_t *weapon = (weapon_t *) current_node->value;
         sqlite3_bind_int64(stmt, 1, player_id);
@@ -157,7 +157,7 @@ int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id) {
         return rc;
     }
 
-    current_node = inventory->armorsHead;
+    current_node = inventory->armors_head;
     while (current_node != NULL) {
         armor_t *armor = (armor_t *) current_node->value;
         sqlite3_bind_int64(stmt, 1, player_id);

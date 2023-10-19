@@ -177,10 +177,6 @@ add_executable(doom_depth_tests
         src/map_screen/stage/stage.h
         src/entities/fight/fight.c
         src/entities/fight/fight.h
-        src/map/map.c
-        src/map/map.h
-        src/map/map_test.c
-        src/map/map_test.h
         src/entities/monster/monster.c
         src/entities/monster/monster.h
         src/entities/armor/armor.c
