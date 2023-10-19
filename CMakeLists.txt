@@ -10,6 +10,7 @@ add_executable(doom_depth_c
         src/entities/armor/armor.h
         src/entities/inventory/inventory.h
         src/entities/monster/monster.h
+        src/entities/monster/monster.c
         src/entities/player/player.h
         src/entities/spell/spell.h
         src/entities/fight/fight.h
@@ -176,6 +177,16 @@ add_executable(doom_depth_tests
         src/map_screen/stage/stage.h
         src/entities/fight/fight.c
         src/entities/fight/fight.h
+        src/entities/monster/monster.c
+        src/entities/monster/monster.h
+        src/entities/armor/armor.c
+        src/entities/armor/armor.h
+        src/entities/weapon/weapon.c
+        src/entities/weapon/weapon.h
+        src/entities/spell/spell.c
+        src/entities/spell/spell.h
+        src/entities/stats/stats.c
+        src/entities/stats/stats.h
         src/map_screen/map_screen.c
         src/map_screen/map_screen.h
         src/map_screen/map/map_test.c

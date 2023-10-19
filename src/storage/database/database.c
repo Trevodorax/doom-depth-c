@@ -126,59 +126,38 @@ sqlite3 *db_connection() {
     return NULL;
 }
 
-int save_player(sqlite3 *db, player_t *player) {
+array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback, size_t struct_size) {
 
-    char *z_err_msg = NULL;
     sqlite3_stmt *stmt;
-
-    // TODO: update the player's stats in the database
-    // TODO: update the player's inventory in the database
-        // TODO: update the player's weapons in the database : weapons_in_inventory
-        // TODO: update the player's armors in the database : armors_in_inventory
-
-        
-    /* This function take in parameter the database,
-     * the sql command to update the player,
-     * the length of the sql command (if -1, the command is read up to the first null terminator),
-     * a pointer to the statement object and
-     * a pointer to the unused portion of the sql command
-    */
-    int rc = sqlite3_prepare_v2(db, update_player_sql, -1, &stmt, NULL);
+    int rc = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
 
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error: %s\n", z_err_msg);
-        sqlite3_free(z_err_msg);
-        return rc;
+        fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        return NULL;
     }
 
-    sqlite3_bind_int64(stmt, 1, player->hp);
-    sqlite3_bind_int64(stmt, 2, player->hp_max);
-    sqlite3_bind_int64(stmt, 3, player->mana);
-    sqlite3_bind_int64(stmt, 4, player->mana_max);
-    sqlite3_bind_int64(stmt, 5, player->xp);
-    sqlite3_bind_int64(stmt, 6, player->level);
-    sqlite3_bind_int64(stmt, 7, player->base_attack);
-    sqlite3_bind_int64(stmt, 8, player->base_defense);
-    sqlite3_bind_int64(stmt, 9, player->gold);
-    sqlite3_bind_int64(stmt, 10, player->offensive_spell->id);
-    sqlite3_bind_int64(stmt, 11, player->defensive_spell->id);
-    sqlite3_bind_int64(stmt, 12, player->healing_spell->id);
-    sqlite3_bind_int64(stmt, 13, player->inventory->capacity);
-    sqlite3_bind_int64(stmt, 14, player->inventory->nb_weapons);
-    sqlite3_bind_int64(stmt, 15, player->inventory->nb_armors);
-    sqlite3_bind_int64(stmt, 16, player->inventory->nb_mana_potions);
-    sqlite3_bind_int64(stmt, 17, player->inventory->nb_health_potions);
-    sqlite3_bind_int64(stmt, 18, player->id);
+    array_node_t *head = NULL;
 
-    rc = sqlite3_step(stmt);
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+
+        void *struct_ptr = callback(stmt);
+
+        if (!struct_ptr) {
+            fprintf(stderr, "Failed to allocate memory for struct.\n");
+            sqlite3_finalize(stmt);
+            return NULL;
+        }
+
+        append(&head, struct_ptr, struct_size);
+    }
 
     if (rc != SQLITE_DONE) {
-        fprintf(stderr, "SQL error: %s\n", z_err_msg);
-        sqlite3_free(z_err_msg);
-        return rc;
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return NULL;
     }
 
     sqlite3_finalize(stmt);
-    return SQLITE_OK;
+    return head;
 
 }

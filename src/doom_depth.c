@@ -14,7 +14,7 @@
 
 int main_loop(game_window_t * main_window) {
     // FIXME : remove later
-    player_t *player = create_player("aea");
+    player_t *player = create_player("aea", NULL);
     weapon_t *weapon = malloc(sizeof(weapon_t));
     weapon->name = "TEST";
     weapon->uses = 3;
@@ -78,8 +78,7 @@ int main_loop(game_window_t * main_window) {
     push(&(player->inventory->weapons_head), weapon, sizeof(weapon_t));
     player->inventory->nb_weapons++;
 
-
-    main_window->context->current_screen = START_MENU;
+    main_window->context->current_screen = GAME_OVER;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
