@@ -53,7 +53,7 @@ void heal_player(player_t * player, unsigned int amount){
     }
 }
 
-player_t * create_player(char *name) {
+player_t * create_player(char *name, array_node_t *spells) {
     player_t * player = malloc(sizeof(player_t));
     player->name = malloc(sizeof(char)*strlen(name)+1);
     strcpy(player->name, name);
@@ -127,25 +127,6 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
     player->chosen_armor = get_chosen_armor(player->inventory);
 
     return player;
-}
-
-
-unsigned int compute_xp_needed(unsigned int level) {
-    int total_xp = 0;
-    for (int i = 1; i <= level; ++i) {
-        total_xp += 100 * i;
-    }
-    return (unsigned int) total_xp;
-}
-
-void level_up(player_t *player) {
-
-}
-
-void check_level_up(player_t *player) {
-    if (compute_xp_needed(player->level + 1) <= player->xp) {
-        level_up(player);
-    }
 }
 
 int save_player(sqlite3 *db, player_t *player) {
@@ -228,9 +209,4 @@ int save_player(sqlite3 *db, player_t *player) {
     sqlite3_finalize(stmt);
     return SQLITE_OK;
 
-}
-
-void give_exp(player_t *player, unsigned int amount) {
-    player->xp += amount;
-    check_level_up(player);
 }

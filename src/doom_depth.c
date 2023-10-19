@@ -56,7 +56,7 @@ int main_loop(game_window_t * main_window) {
                 fight->min_nb_enemies = 1;
                 fight->max_nb_enemies = 5;
 
-                player_t * player = create_player("TEST_PLAYER");
+                player_t * player = create_player("TEST_PLAYER", NULL);
                 player->offensive_spell = malloc(sizeof(spell_t));
                 player->offensive_spell->name = malloc(sizeof(char)*5);
                 strcpy(player->offensive_spell->name,"Fire");
