@@ -31,34 +31,37 @@ menu_t* create_menu(int nb_options, const char * title, const char * image_path,
 menu_t* build_nested_menu(fight_context_t * fight_context) {
     int monsters_size = get_size(fight_context->monsters);
 
-    menu_t *root_menu = create_menu(2, "Root Menu", NULL, NULL, NULL);
+    menu_t *root_menu = create_menu(3, "Root Menu", NULL, NULL, NULL);
 
-    menu_t *submenu1 = create_menu(2, "Attack", NULL, NULL, NULL);
+    menu_t *sub_menu_weapon = create_menu(monsters_size, "Weapon", NULL, NULL, NULL);
+    menu_t *sub_menu_spells = create_menu(3, "Spells", NULL, NULL, NULL);
 
+    sub_menu_spells->options[0] = create_menu(monsters_size, "Attack Spell", NULL, NULL, NULL);
+    sub_menu_spells->options[1] = create_menu(0, "Defend Spell", NULL, defend_spell, NULL);
+    sub_menu_spells->options[2] = create_menu(0, "Heal Spell", NULL, heal_spell, NULL);
 
-    submenu1->options[0] = create_menu(monsters_size, "Sword", NULL, NULL, NULL);
-    submenu1->options[1] = create_menu(monsters_size, "Spell", NULL, attack_spell, NULL);
     array_node_t * head = fight_context->monsters;
     int i = 0;
     while(head != NULL){
         monster_t * monster = (monster_t*)head->value;
         char * name_and_hp = malloc(sizeof(char)*(strlen(monster->name)+10));
         sprintf(name_and_hp,"%s (%d)",monster->name,monster->hp);
-        submenu1->options[0]->options[i] = create_menu(0,name_and_hp,NULL,attack_weapon,monster);
-        submenu1->options[1]->options[i++] = create_menu(0, name_and_hp, NULL, attack_spell, monster);
+        sub_menu_weapon->options[i] = create_menu(0, name_and_hp, NULL, attack_weapon, monster);
+        sub_menu_spells->options[0]->options[i++] = create_menu(0, name_and_hp, NULL, attack_spell, monster);
         head = head->next;
     }
 
-    menu_t *submenu2 = create_menu(3, "Others", NULL, NULL, NULL);
+    menu_t *sub_menu_others = create_menu(2, "Others", NULL, NULL, NULL);
 
-    submenu2->options[0] = create_menu(2, "Bag", NULL, NULL, NULL);
-    submenu2->options[1] = create_menu(0, "End Turn", NULL, end_turn, NULL);
-    submenu2->options[2] = create_menu(0, "Quit", NULL, quit, NULL);
-    submenu2->options[0]->options[0] = create_menu(0, "Heal Potion", NULL, heal_potion, NULL);
-    submenu2->options[0]->options[1] = create_menu(0, "Mana Potion", NULL, mana_potion, NULL);
+    sub_menu_others->options[0] = create_menu(2, "Bag", NULL, NULL, NULL);
+    sub_menu_others->options[0]->options[0] = create_menu(0, "Heal Potion", NULL, heal_potion, NULL);
+    sub_menu_others->options[0]->options[1] = create_menu(0, "Mana Potion", NULL, mana_potion, NULL);
 
-    root_menu->options[0] = submenu1;
-    root_menu->options[1] = submenu2;
+    sub_menu_others->options[1] = create_menu(0, "End Turn", NULL, end_turn, NULL);
+
+    root_menu->options[0] = sub_menu_weapon;
+    root_menu->options[1] = sub_menu_spells;
+    root_menu->options[2] = sub_menu_others;
     return root_menu;
 }
 

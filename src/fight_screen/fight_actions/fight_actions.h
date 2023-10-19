@@ -3,9 +3,7 @@
 
 #include "../fight_screen.h"
 
-typedef enum fight_action_type_e {FA_QUIT,FA_POTION,FA_SPELL,FA_WEAPON} fight_action_type_e;
-
-int quit(fight_context_t * fight_context, void * custom_params);
+typedef enum fight_action_type_e {FA_END_TURN,FA_QUIT,FA_NOTHING} fight_action_type_e;
 
 int heal_potion(fight_context_t * fight_context, void * custom_params);
 
@@ -14,6 +12,8 @@ int mana_potion(fight_context_t * fight_context, void * custom_params);
 int end_turn(fight_context_t * fight_context, void * custom_params);
 
 int attack_spell(fight_context_t * fight_context, void * custom_params);
+int defend_spell(fight_context_t * fight_context, void * custom_params);
+int heal_spell(fight_context_t * fight_context, void * custom_params);
 
 int attack_weapon(fight_context_t * fight_context, void * custom_params);
 

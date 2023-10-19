@@ -58,12 +58,26 @@ int main_loop(game_window_t * main_window) {
 
                 player_t * player = create_player("TEST_PLAYER", NULL);
                 player->offensive_spell = malloc(sizeof(spell_t));
-                player->offensive_spell->name = malloc(sizeof(char)*5);
-                strcpy(player->offensive_spell->name,"Fire");
+                player->offensive_spell->name = malloc(sizeof(char)*10);
+                strcpy(player->offensive_spell->name,"Fire Ball");
                 player->offensive_spell->cost = 10;
                 player->offensive_spell->id = 0;
                 player->offensive_spell->type = ATTACK;
                 player->offensive_spell->amount = 15;
+                player->healing_spell = malloc(sizeof(spell_t));
+                player->healing_spell->name = malloc(sizeof(char)*13);
+                strcpy(player->healing_spell->name,"Fire Healing");
+                player->healing_spell->cost = 40;
+                player->healing_spell->id = 1;
+                player->healing_spell->type = HEALING;
+                player->healing_spell->amount = 80;
+                player->defensive_spell = malloc(sizeof(spell_t));
+                player->defensive_spell->name = malloc(sizeof(char)*16);
+                strcpy(player->defensive_spell->name,"Fire Protection");
+                player->defensive_spell->cost = 20;
+                player->defensive_spell->id = 2;
+                player->defensive_spell->type = DEFENSE;
+                player->defensive_spell->amount = 10;
 
                 main_window->context->current_screen = fight_screen(main_window, player, fight);
                 if(main_window->context->current_screen == EXIT_FAILURE) {

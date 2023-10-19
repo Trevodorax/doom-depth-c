@@ -104,9 +104,12 @@ int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight
 
     fight_context_t * fight_context = build_fight_context(fight,player);
 
-
     while (true) {
         menu_t * menu = build_nested_menu(fight_context);
+        if(fight_context->player->is_defending){
+            fight_context->player->base_defense -= fight_context->player->defensive_spell->amount;
+            fight_context->player->is_defending = false;
+        }
         fight_action_t * selected_action = fight_menu(game_window, menu, fight_context, &fight_zone, &menu_zone, false);
         switch (selected_action->callback(fight_context,selected_action->params)){
             case FA_QUIT:
