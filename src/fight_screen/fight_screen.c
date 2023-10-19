@@ -29,6 +29,7 @@ int find_index(int rand_num, const int probs[], int size) {
     return -1;  // This should never happen if input data is correct
 }
 
+// FIXME : to remove when we can search on monsters by name
 void * get_monster_with_name(char * name){
     if(strcmp(name,"bat") == 0){
         monster_t * bat = malloc(sizeof(monster_t));
@@ -89,13 +90,19 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player){
     for(int i = 0; i < number_of_monsters; i++){
         int random_number = rand() % 100;
         int index = find_index(random_number,probs,fight->enemies_size);
-        // TODO : add monster chosen on fight context, waiting so we can search on monsters by name
+        // FIXME : add monster chosen on fight context, waiting so we can search on monsters by name
         append(&fight_context->monsters,get_monster_with_name(fight->enemies_list[index]),sizeof(monster_t));
     }
 
     fight_context->notification_message = NULL;
     fight_context->player_turn = true;
     return fight_context;
+}
+
+void monsters_turn(fight_context_t * fight_context){
+    // TODO
+    //  implement monsters turn
+    //  don't forget to set player_turn to true at the end
 }
 
 int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight) {
