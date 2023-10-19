@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 typedef enum SpellType {
-    HEALING = 1, DEFENSE = 2, ATTACK = 3
+    HEALING = 1, DEFENSE, ATTACK
 } spell_type_t;
 
 typedef struct {
