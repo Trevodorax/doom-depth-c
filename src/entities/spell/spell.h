@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef enum SpellType {
+typedef enum {
     HEALING = 1, DEFENSE, ATTACK
 } spell_type_t;
 
