@@ -161,9 +161,22 @@ int display_game_over_cli(game_window_t *game_window, unsigned short active_opti
 
     cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
 
-    // TODO : print title
-    // TODO : print options
-    // TODO : print cursor
+    // print title
+    cli_rect_t title_rect = {0, 0, window_width, window_height / 2};
+    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Game Over", BLACK);
+
+    // print options
+    cli_rect_t option_1_rect = {2, window_height / 2, window_width, window_height / 4};
+    cli_rect_t option_2_rect = {2, 3 * (window_height / 4), window_width, window_height / 4};
+
+    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, "Try again", BLACK);
+    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, "Go back to main menu", BLACK);
+
+    // print cursor
+    cli_rect_t cursor_rect = {0, 0, 1, 1};
+    cursor_rect.y = active_option == TRY_AGAIN ? option_1_rect.y : option_2_rect.y;
+
+    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", RED);
 
     return EXIT_SUCCESS;
 }
