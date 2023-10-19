@@ -32,6 +32,9 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
                 switch (active_section){
                     case CATEGORIES:
                         handle_categories_input(e.key.keysym.sym, &quit, &active_section, &active_category, &active_item);
+                        if (quit) {
+                            return QUIT_GAME;
+                        }
                         break;
 
                     case ITEMS:
