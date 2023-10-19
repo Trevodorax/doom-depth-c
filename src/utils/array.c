@@ -61,6 +61,34 @@ void append(array_node_t **head_ref, void *new_data, size_t data_size) {
     last->next = new_node;
 }
 
+void remove_node(array_node_t **head_ref, void **data_to_remove) {
+    if (*head_ref == NULL) {
+        return;
+    }
+
+    array_node_t *temp = *head_ref;
+
+    if (temp->value == *data_to_remove) {
+        *head_ref = temp->next;
+        free(temp->value);
+        free(temp);
+        return;
+    }
+
+    while (temp->next != NULL && temp->next->value != *data_to_remove) {
+        temp = temp->next;
+    }
+
+    if (temp->next == NULL) {
+        return;
+    }
+
+    array_node_t *next = temp->next->next;
+    free(temp->next->value);
+    free(temp->next);
+    temp->next = next;
+}
+
 /**
  * @brief Deletes an element at a given index.
  *
@@ -236,6 +264,23 @@ void free_list(array_node_t **head_ref) {
     *head_ref = NULL;
 }
 
+/**
+ * @brief Get size of the linked list.
+ *
+ * This function return the size of the linked list providing the head node.
+ *
+ * @param node Pointer to the head of the linked list.
+ * @errors No error handling implemented.
+ * @return Size of the linked list, 0 if empty.
+ */
+int get_size(array_node_t *node) {
+    int count = 0;
+    while (node != NULL){
+        node = node->next;
+        count++;
+    }
+    return count;
+}
 
 /**
  * @brief Prints the linked list.

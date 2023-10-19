@@ -28,21 +28,34 @@ menu_t* create_menu(int nb_options, const char * title, const char * image_path,
     return new_menu;
 }
 
-menu_t* build_nested_menu() {
+menu_t* build_nested_menu(fight_context_t * fight_context) {
+    int monsters_size = get_size(fight_context->monsters);
+
     menu_t *root_menu = create_menu(2, "Root Menu", NULL, NULL, NULL);
 
-    menu_t *submenu1 = create_menu(2, "Think", NULL, NULL, NULL);
+    menu_t *submenu1 = create_menu(2, "Attack", NULL, NULL, NULL);
 
-    submenu1->options[0] = create_menu(0, "Quit", NULL, quit, NULL);
-    submenu1->options[1] = create_menu(1, "Bag", NULL, NULL, NULL);
-    submenu1->options[1]->options[0] = create_menu(0, "Potion", NULL, potion, NULL);
 
-    menu_t *submenu2 = create_menu(2, "Attack", NULL, NULL, NULL);
-    submenu2->options[0] = create_menu(0, "Sword", NULL, attack_weapon, NULL);
-    // TODO: improve this to adapt with the custom monsters in the fight
-    attack_spell_params_t * attack_spell_params = malloc(sizeof(attack_spell_params_t));
-    attack_spell_params->test_number = 42;
-    submenu2->options[1] = create_menu(0, "Spell", NULL, attack_spell, attack_spell_params);
+    submenu1->options[0] = create_menu(monsters_size, "Sword", NULL, NULL, NULL);
+    submenu1->options[1] = create_menu(monsters_size, "Spell", NULL, attack_spell, NULL);
+    array_node_t * head = fight_context->monsters;
+    int i = 0;
+    while(head != NULL){
+        monster_t * monster = (monster_t*)head->value;
+        char * name_and_hp = malloc(sizeof(char)*(strlen(monster->name)+10));
+        sprintf(name_and_hp,"%s (%d)",monster->name,monster->hp);
+        submenu1->options[0]->options[i] = create_menu(0,name_and_hp,NULL,attack_weapon,monster);
+        submenu1->options[1]->options[i++] = create_menu(0, name_and_hp, NULL, attack_spell, monster);
+        head = head->next;
+    }
+
+    menu_t *submenu2 = create_menu(3, "Others", NULL, NULL, NULL);
+
+    submenu2->options[0] = create_menu(2, "Bag", NULL, NULL, NULL);
+    submenu2->options[1] = create_menu(0, "End Turn", NULL, end_turn, NULL);
+    submenu2->options[2] = create_menu(0, "Quit", NULL, quit, NULL);
+    submenu2->options[0]->options[0] = create_menu(0, "Heal Potion", NULL, heal_potion, NULL);
+    submenu2->options[0]->options[1] = create_menu(0, "Mana Potion", NULL, mana_potion, NULL);
 
     root_menu->options[0] = submenu1;
     root_menu->options[1] = submenu2;
@@ -94,6 +107,9 @@ fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_co
                         }
                         break;
                     case SDLK_RETURN: {
+                        if(!fight_context->player_turn){
+                            break;
+                        }
                         menu_t * clicked_menu = menu->options[selected_item_index];
                         if (clicked_menu->nb_options > 0) {
                             fight_action_t * selected_action = fight_menu(game_window, clicked_menu, fight_context, fight_zone, menu_zone, true);
@@ -119,20 +135,22 @@ fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_co
             }
         }
         update_section_dimensions(game_window->window, fight_zone, menu_zone);
-        display_menu(game_window->renderer, menu, menu_zone, selected_item_index);
+        display_fight(game_window->renderer, fight_context, fight_zone);
+        display_menu(game_window->renderer, menu, menu_zone, selected_item_index, fight_context->player_turn);
         SDL_RenderPresent(game_window->renderer);
     }
 
     return EXIT_SUCCESS;
 }
 
-int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, int selected_item_index) {
+int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, int selected_item_index, bool player_turn) {
     if (!renderer || !menu || !container || selected_item_index >= menu->nb_options || selected_item_index < 0) {
         fprintf(stderr, "\ndisplay_menu error: Please provide all necessary arguments.");
         return EXIT_FAILURE;
     }
 
-    draw_fill_rect(*container, (SDL_Color){0, 0, 0, 255}, renderer);
+    int a_value = player_turn ? 255 : 80;
+    draw_fill_rect(*container, (SDL_Color){0, 0, 0, a_value}, renderer);
 
     SDL_Rect * menu_items_grid = get_rectangle_grid(menu->nb_options, container);
     for (int i = 0; i < menu->nb_options; i++) {
@@ -145,7 +163,26 @@ int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, i
     return EXIT_SUCCESS;
 }
 
+int display_fight(SDL_Renderer * renderer, fight_context_t * fight_context, SDL_Rect * fight_zone) {
+    if (!renderer) {
+        fprintf(stderr, "\ndisplay_menu error: Please provide all necessary arguments.");
+        return EXIT_FAILURE;
+    }
+
+    draw_fill_rect(*fight_zone, (SDL_Color){0, 180, 50, 255}, renderer);
+
+
+    // TODO add notification part
+    //  add fight_context->notification_message in top of the screen
+
+    // TODO add fight part
+
+    return EXIT_SUCCESS;
+}
+
 int display_menu_item(SDL_Renderer * renderer, const char * title, const char * image_path, SDL_Rect * container, bool is_selected) {
+
+    int a_value = is_selected ? 255 : 80;
     // safeguards
     if (!renderer || (!title && !image_path) || !container) {
         fprintf(stderr, "\ndisplay_menu_item error: please provide all necessary arguments.");
@@ -165,7 +202,7 @@ int display_menu_item(SDL_Renderer * renderer, const char * title, const char * 
     }
 
     // draw the item background
-    draw_fill_rect(item_container, (SDL_Color){66, 22, 144, 255}, renderer);
+    draw_fill_rect(item_container, (SDL_Color){66, 22, 144, a_value}, renderer);
 
     // get the content zone
     int container_padding = item_container.w / 10;
@@ -195,7 +232,7 @@ int display_menu_item(SDL_Renderer * renderer, const char * title, const char * 
                 title,
                 "../assets/PixelifySans-Bold.ttf",
                 14,
-                (SDL_Color) {255, 255, 255, 255}
+                (SDL_Color) {255, 255, 255, a_value >= 235 ? 255 : a_value+20}
         );
         if (!title_texture) {
             fprintf(stderr, "\ndisplay_menu_item error: could not retrieve title texture.");

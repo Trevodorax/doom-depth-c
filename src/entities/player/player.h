@@ -10,6 +10,7 @@
 #include "../../storage/database/database.h"
 #include "../entities.h"
 #include <sqlite3.h>
+#include "../monster/monster.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -33,6 +34,9 @@ typedef struct player_t {
     weapon_t *chosen_weapon;
     inventory_t *inventory;
     stats_t *stats;
+    unsigned int (*attack)(struct player_t * player, monster_t * target);
+    void (*give_exp)(struct player_t * player, unsigned int amount);
+    void (*heal)(struct player_t * player, unsigned int amount);
 } player_t;
 
 player_t *create_player(char *name);

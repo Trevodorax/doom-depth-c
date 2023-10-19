@@ -48,13 +48,13 @@ int display_categories(SDL_Renderer *renderer, int icon_size, int padding, secti
 int display_items(SDL_Renderer *renderer, SDL_Rect *items_container, SDL_Rect *details_container, item_types type, inventory_t *inventory, int details_font_size, unsigned short active_item, section_options active_section);
 
 /**
- * @brief displays details on the selected potion
+ * @brief displays details on the selected heal_potion
  *
  * @param renderer the renderer to use
- * @param type the type of potion selected (health or mana)
+ * @param type the type of heal_potion selected (health or mana)
  * @param details_container the rectangle in which to display the item details
  * @param quantity the quantity of selected potions in the inventory
- * @param details_font_size the font size for the potion details
+ * @param details_font_size the font size for the heal_potion details
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int display_potions(SDL_Renderer *renderer, potion_types type, SDL_Rect *details_container, unsigned int quantity, int details_font_size);

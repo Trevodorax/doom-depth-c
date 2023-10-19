@@ -45,7 +45,7 @@ fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_co
  * @param selected_item_index The index of the selected item
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, int selected_item_index);
+int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, int selected_item_index, bool player_turn);
 
 /**
  * @brief Prints one item of one level of menu
@@ -58,6 +58,16 @@ int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, i
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int display_menu_item(SDL_Renderer * renderer, const char * title, const char * image_path, SDL_Rect * container, bool is_selected);
+
+/**
+ * @brief Prints the fight
+ *
+ * @param renderer
+ * @param fight_context Pointer to the data bout the fight
+ * @param fight_zone Pointer to the rectangle where the fight is displayed
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int display_fight(SDL_Renderer * renderer, fight_context_t * fight_context, SDL_Rect * fight_zone);
 
 /**
  * @brief Recursively frees a menu
@@ -76,6 +86,6 @@ void free_menu(menu_t * menu);
  */
 int handle_fight_menu_movement(int selected_item_index, int nb_items, orientation_t direction);
 
-menu_t* build_nested_menu();
+menu_t* build_nested_menu(fight_context_t * fight_context);
 
 #endif //DOOM_DEPTH_C_FIGHT_MENU_H

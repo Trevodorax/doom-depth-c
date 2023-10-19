@@ -9,14 +9,10 @@
 
 
 typedef struct {
-
     player_t * player;
-
-
     array_node_t * monsters;
-
-    // Optional : only when
-    monster_t * attack_target;
+    char * notification_message;
+    bool player_turn;
 } fight_context_t;
 
 typedef struct {
@@ -33,5 +29,8 @@ typedef struct {
  * @return 0 if game over, 1 if victory
  */
 int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight);
+
+void build_notification(fight_context_t * fight_context, char * message);
+void build_notification_formatted(fight_context_t * fight_context, char * message, ...);
 
 #endif //DOOM_DEPTH_C_FIGHT_SCREEN_H

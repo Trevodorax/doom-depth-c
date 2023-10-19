@@ -1,8 +1,61 @@
 #include "player.h"
 
-player_t *create_player(char *name) {
-    player_t *player = malloc(sizeof(player_t));
-    player->name = malloc(sizeof(char) * strlen(name) + 1);
+unsigned int attackMonster(player_t * player, monster_t * target){
+    weapon_t * weapon = player->chosen_weapon;
+    unsigned int damages = 0;
+    if(weapon != NULL){
+        unsigned int random = weapon->min_attack + (rand() % (weapon->max_attack - weapon->min_attack + 1));
+        damages = (random + player->base_attack) - target->defense;
+    } else {
+        damages = player->base_attack - target->defense;
+    }
+
+    if(damages > target->hp){
+        damages = target->hp;
+    }
+    target->hp -= damages;
+
+    player->give_exp(player,damages);
+
+    return damages;
+}
+
+unsigned int compute_xp_needed(unsigned int level){
+    unsigned int total_xp = 0;
+    for (int i = 1; i <= level; ++i) {
+        total_xp += 50 * i;
+    }
+    return total_xp;
+}
+
+void level_up(player_t * player) {
+    player->level++;
+    player->base_attack++;
+    printf("\nLEVEL UP !");
+}
+
+void check_level_up(player_t * player){
+    if(compute_xp_needed(player->level) <= player->xp){
+        level_up(player);
+    }
+}
+
+void give_exp(player_t * player, unsigned int amount){
+    player->xp += amount;
+    check_level_up(player);
+}
+
+void heal_player(player_t * player, unsigned int amount){
+    if(player->hp_max < player->hp+amount){
+        player->hp = player->hp_max;
+    } else {
+        player->hp += amount;
+    }
+}
+
+player_t * create_player(char *name) {
+    player_t * player = malloc(sizeof(player_t));
+    player->name = malloc(sizeof(char)*strlen(name)+1);
     strcpy(player->name, name);
 
     array_node_t *spells = get_spells();
@@ -16,7 +69,7 @@ player_t *create_player(char *name) {
     player->base_attack = 5u;
     player->base_defense = 2u;
     player->gold = 100u;
-    player->action_points = (unsigned short) 3;
+    player->action_points = (unsigned short)30;
 
     // TODO : add one spell at least for the beginning, see with @TomBrd
     player->offensive_spell = find_noob_spell(spells, 3);
@@ -28,6 +81,10 @@ player_t *create_player(char *name) {
 
     player->inventory = create_inventory();
     player->stats = create_stats();
+
+    player->heal = heal_player;
+    player->attack = attackMonster;
+    player->give_exp = give_exp;
 
     return player;
 }
