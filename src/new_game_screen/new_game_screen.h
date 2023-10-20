@@ -13,6 +13,6 @@
  * @param player the player currently playing
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int new_game_screen(game_window_t *game_window, player_t *player);
+int new_game_screen(game_window_t *game_window, player_t **player, array_node_t *spells);
 
 #endif
