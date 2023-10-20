@@ -50,7 +50,7 @@ int main_loop(game_window_t * main_window) {
                 break;
 
             case NEW_GAME_SCREEN :
-                main_window->context->current_screen = new_game_screen(main_window, &player, spells);
+                main_window->context->current_screen = new_game_screen(main_window, &player);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

@@ -8,7 +8,7 @@
 
 void handle_name_input(SDL_Event e, char *name);
 
-int new_game_screen(game_window_t *game_window, player_t **player, array_node_t *spells) {
+int new_game_screen(game_window_t *game_window, player_t **player) {
     if (!game_window) {
         printf("Cannot display new game initialization : no game window\n");
         return EXIT_FAILURE;
@@ -26,7 +26,7 @@ int new_game_screen(game_window_t *game_window, player_t **player, array_node_t 
             if (e.type == SDL_KEYDOWN) {
                 if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_KP_ENTER) {
                     if (strlen(name)) {
-                        *player = create_player(name, spells);
+                        *player = create_player(name);
                         return MAP_SCREEN;
                     }
                 }
