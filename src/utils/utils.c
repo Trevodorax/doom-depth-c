@@ -21,6 +21,15 @@ char* custom_strupr(char* str) {
     return new_str;
 }
 
+bool custom_char_check(const char c) {
+    if ((c >= 'a' && c <= 'z') ||
+            (c >= 'A' && c <= 'Z') ||
+            (c >= '0' && c <= '9')) {
+        return true;
+    }
+    return false;
+}
+
 void delay(ui_type_t ui_type, int ms) {
     switch (ui_type) {
         case CLI:

@@ -6,10 +6,13 @@
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
 #include "array.h"
+#include "stdbool.h"
 
 char* custom_itoa(int value, char* str, int base);
 
 char* custom_strupr(char* str);
+
+bool custom_char_check(const char c);
 
 void delay(ui_type_t ui_type, int ms);
 
