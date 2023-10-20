@@ -8,6 +8,7 @@
 #include "../weapon/weapon.h"
 #include "../../utils/array.h"
 #include "../../storage/database/database.h"
+#include "../entities.h"
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +35,7 @@ typedef struct player_t {
     stats_t *stats;
 } player_t;
 
-player_t *create_player(char *name, array_node_t *spells);
+player_t *create_player(char *name);
 
 /**
  * @brief Creates a player from the database.
@@ -49,7 +50,7 @@ player_t *create_player(char *name, array_node_t *spells);
  * @dependencies Depends on the SQLite3 library.
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
  */
-void *create_player_from_db(sqlite3_stmt *stmt, array_node_t *spells);
+void *create_player_from_db(sqlite3_stmt *stmt);
 
 /**
  * @brief Saves the player's data to the database.

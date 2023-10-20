@@ -1,9 +1,11 @@
 #include "player.h"
 
-player_t *create_player(char *name, array_node_t *spells) {
+player_t *create_player(char *name) {
     player_t *player = malloc(sizeof(player_t));
     player->name = malloc(sizeof(char) * strlen(name) + 1);
     strcpy(player->name, name);
+
+    array_node_t *spells = get_spells();
 
     player->hp = 200u;
     player->hp_max = 200u;
@@ -30,9 +32,10 @@ player_t *create_player(char *name, array_node_t *spells) {
     return player;
 }
 
-void *create_player_from_db(sqlite3_stmt *stmt, array_node_t *spells) {
+void *create_player_from_db(sqlite3_stmt *stmt) {
 
     player_t *player = malloc(sizeof(player_t));
+    array_node_t *spells = get_spells();
 
     if (!player) {
         fprintf(stderr, "Failed to allocate memory for player.\n");
