@@ -11,11 +11,13 @@
 #include "cli_utils/cli_utils.h"
 #include "inventory_screen/inventory_screen.h"
 #include "utils/array.h"
+#include "entities/entities.h"
 #include "new_game_screen/new_game_screen.h"
 
 int main_loop(game_window_t * main_window) {
     // FIXME : remove later
     sqlite3 *db = db_connection();
+    init_entities(db);
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
     player_t *player = NULL;
 
