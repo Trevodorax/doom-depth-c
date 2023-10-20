@@ -13,3 +13,19 @@ void init_entities(sqlite3 *db) {
     monsters = create_struct_from_db(db, "SELECT * FROM MONSTER", create_monster_from_db, sizeof (monster_t));
 
 }
+
+array_node_t *get_weapons() {
+    return weapons;
+}
+
+array_node_t *get_spells() {
+    return spells;
+}
+
+array_node_t *get_armors() {
+    return armors;
+}
+
+array_node_t *get_monsters() {
+    return monsters;
+}
