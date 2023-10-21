@@ -1,6 +1,6 @@
 #include "ascii_art_test.h"
-#include "../minunit/minunit.h"
-#include "../cli_utils/cli_utils.h"
+#include "../../minunit/minunit.h"
+#include "../cli_utils.h"
 #include "ascii_art.h"
 
 static char * test_ascii_art_to_matrix() {

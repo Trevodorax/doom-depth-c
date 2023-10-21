@@ -72,8 +72,8 @@ set(cross_platform_targets
         src/inventory_screen/display/display.h
         src/inventory_screen/inventory_utils/inventory_utils.c
         src/inventory_screen/inventory_utils/inventory_utils.h
-        src/ascii_art/ascii_art.c
-        src/ascii_art/ascii_art.h
+        src/cli_utils/ascii_art/ascii_art.c
+        src/cli_utils/ascii_art/ascii_art.h
         src/start_menu/display/display.c
         src/start_menu/display/display.h
         src/game_over/display/display.c
@@ -110,8 +110,8 @@ set(test_targets
         src/storage/database/database_test.h
         src/map_screen/map/map_test.c
         src/map_screen/map/map_test.h
-        src/ascii_art/ascii_art_test.c
-        src/ascii_art/ascii_art_test.h
+        src/cli_utils/ascii_art/ascii_art_test.c
+        src/cli_utils/ascii_art/ascii_art_test.h
 )
 
 # unix tests

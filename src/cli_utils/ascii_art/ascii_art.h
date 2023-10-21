@@ -2,7 +2,7 @@
 #define DOOM_DEPTH_C_ASCII_ART_H
 
 #include <stddef.h>
-#include "../cli_utils/cli_utils.h"
+#include "../cli_utils.h"
 
 typedef struct {
     size_t nb_versions;
