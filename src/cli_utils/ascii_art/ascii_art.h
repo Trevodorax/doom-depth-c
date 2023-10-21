@@ -2,12 +2,7 @@
 #define DOOM_DEPTH_C_ASCII_ART_H
 
 #include <stddef.h>
-#include "../cli_utils/cli_utils.h"
-
-typedef struct {
-    size_t nb_versions;
-    cli_matrix_t ** versions;
-} ascii_art_t;
+#include "../types.h"
 
 /**
  * @brief Takes the biggest possible ascii that fits in the given dimensions.

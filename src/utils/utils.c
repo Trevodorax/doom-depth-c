@@ -30,6 +30,20 @@ bool custom_char_check(const char c) {
     return false;
 }
 
+char_type_t get_char_type(char c) {
+    if (isdigit(c)) {
+        return DIGIT;
+    } else if (islower(c)) {
+        return LOWERCASE;
+    } else if (isupper(c)) {
+        return UPPERCASE;
+    } else if (c == ' '){
+        return SPACE;
+    } else {
+            return INVALID;
+    }
+}
+
 void delay(ui_type_t ui_type, int ms) {
     switch (ui_type) {
         case CLI:

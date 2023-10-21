@@ -29,6 +29,12 @@ void cli_print_color(color_code_t color, const char *format, ...);
  */
 int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const char * text, color_code_t text_color);
 
-
+/**
+ * @brief Retrieves the ascii art of one letter or digit
+ *
+ * @param letter
+ * @return
+ */
+ascii_art_t * get_letter_ascii_art(char character);
 
 #endif //DOOM_DEPTH_C_CLI_TEXT_H
