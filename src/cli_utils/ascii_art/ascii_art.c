@@ -2,6 +2,8 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include "../cli_utils.h"
 
 cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width, size_t max_height) {
     if (ascii_art->nb_versions == 0) {

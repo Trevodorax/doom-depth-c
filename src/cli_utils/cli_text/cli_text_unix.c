@@ -4,7 +4,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../../utils/utils.h"
+#include "../ascii_art/ascii_art.h"
 
+/**
+ * @brief Gets the ascii arts stored in the files.
+ *
+ * @param lowercase_ascii_arts
+ * @param uppercase_ascii_arts
+ * @param digit_ascii_arts
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int get_letters_ascii_arts(
+    ascii_art_t *** lowercase_ascii_arts,
+    ascii_art_t *** uppercase_ascii_arts,
+    ascii_art_t *** digit_ascii_arts
+);
 
 void cli_print_color(color_code_t color, const char *format, ...) {
     // get unknown number of args
@@ -65,3 +80,85 @@ int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const ch
 
     return EXIT_SUCCESS;
 }
+
+int get_letters_ascii_arts(
+        ascii_art_t *** lowercase_ascii_arts,
+        ascii_art_t *** uppercase_ascii_arts,
+        ascii_art_t *** digit_ascii_arts
+) {
+    // make sure we're not opening all files each time
+    static ascii_art_t *static_lowercase_ascii_arts[26] = {NULL};
+    static ascii_art_t *static_uppercase_ascii_arts[26] = {NULL};
+    static ascii_art_t *static_digit_ascii_arts[10] = {NULL};
+    if (static_lowercase_ascii_arts[0]) {
+        *lowercase_ascii_arts = static_lowercase_ascii_arts;
+        *uppercase_ascii_arts = static_uppercase_ascii_arts;
+        *digit_ascii_arts = static_digit_ascii_arts;
+        return EXIT_SUCCESS;
+    }
+
+    char filepath[128] = {'\0'};
+
+    // get all ascii arts from files
+    for (int i = 0; i < 26; i++) {
+        snprintf(filepath, sizeof(filepath), "../assets/ascii_text/lowercase/%c.asciiart", 'a' + i);
+        static_lowercase_ascii_arts[i] = parse_ascii_art_file(filepath);
+        if (!static_lowercase_ascii_arts[i]) {
+            return EXIT_FAILURE;
+        }
+    }
+    for (int i = 0; i < 26; i++) {
+        snprintf(filepath, sizeof(filepath), "../assets/ascii_text/uppercase/%c.asciiart", 'A' + i);
+        static_uppercase_ascii_arts[i] = parse_ascii_art_file(filepath);
+        if (!static_uppercase_ascii_arts[i]) {
+            return EXIT_FAILURE;
+        }
+    }
+    for (int i = 0; i < 10; i++) {
+        snprintf(filepath, sizeof(filepath), "../assets/ascii_text/digit/%d.asciiart", i);
+        static_digit_ascii_arts[i] = parse_ascii_art_file(filepath);
+        if (!static_digit_ascii_arts[i]) {
+            return EXIT_FAILURE;
+        }
+    }
+
+    // return
+    *lowercase_ascii_arts = static_lowercase_ascii_arts;
+    *uppercase_ascii_arts = static_uppercase_ascii_arts;
+    *digit_ascii_arts = static_digit_ascii_arts;
+
+    return EXIT_SUCCESS;
+}
+
+ascii_art_t * get_letter_ascii_art(char letter) {
+    char_type_t char_type = get_char_type(letter);
+
+    if(char_type == INVALID) {
+        return NULL;
+    }
+
+    ascii_art_t ** lowercase_ascii_arts = NULL;
+    ascii_art_t ** uppercase_ascii_arts = NULL;
+    ascii_art_t ** digit_ascii_arts = NULL;
+
+    if (get_letters_ascii_arts(
+            &lowercase_ascii_arts,
+            &uppercase_ascii_arts,
+            &digit_ascii_arts
+    ) == EXIT_FAILURE) {
+        return NULL;
+    }
+
+    switch(char_type) {
+        case DIGIT:
+            return digit_ascii_arts[letter - '0'];
+        case LOWERCASE:
+            return lowercase_ascii_arts[letter - 'a'];
+        case UPPERCASE:
+            return uppercase_ascii_arts[letter - 'A'];
+        default:
+            return NULL;
+    }
+}
+
+

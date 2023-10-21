@@ -8,11 +8,32 @@
 #include "array.h"
 #include "stdbool.h"
 
+typedef enum {
+    DIGIT,
+    LOWERCASE,
+    UPPERCASE,
+    INVALID
+} char_type_t;
+
 char* custom_itoa(int value, char* str, int base);
 
 char* custom_strupr(char* str);
 
-bool custom_char_check(const char c);
+/**
+ * @brief Checks if a char is valid for our system
+ *
+ * @param c the tested char
+ * @return true if the char is valid
+ */
+bool custom_char_check(char c);
+
+/**
+ * @brief Processes the type of a given char
+ *
+ * @param c
+ * @return The char type
+ */
+char_type_t get_char_type(char c);
 
 void delay(ui_type_t ui_type, int ms);
 

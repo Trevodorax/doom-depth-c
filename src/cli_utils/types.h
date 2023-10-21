@@ -55,4 +55,9 @@ typedef struct {
     cli_char_t ** matrix;
 } cli_matrix_t;
 
+typedef struct {
+    size_t nb_versions;
+    cli_matrix_t ** versions;
+} ascii_art_t;
+
 #endif //DOOM_DEPTH_C_TYPES_H
