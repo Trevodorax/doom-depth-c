@@ -3,8 +3,6 @@
 
 void cli_get_window_size(int * width, int * height) {}
 
-void cli_print_color(color_code_t color, const char *format, ...) {}
-
 int cli_render_present(cli_matrix_t * current_matrix) {
     return EXIT_SUCCESS;
 }
@@ -26,10 +24,6 @@ int resize_cli_matrix(cli_matrix_t *matrix, size_t new_nb_rows, size_t new_nb_co
 void cli_delay(int time) {}
 
 int resize_cli_matrix_to_window(cli_matrix_t * matrix, cli_char_t default_cli_char) {
-    return EXIT_SUCCESS;
-}
-
-int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const char * text, color_code_t text_color) {
     return EXIT_SUCCESS;
 }
 
