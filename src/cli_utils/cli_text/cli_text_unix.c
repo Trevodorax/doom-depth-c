@@ -21,6 +21,27 @@ int get_letters_ascii_arts(
     ascii_art_t *** digit_ascii_arts
 );
 
+/**
+ * @brief returns true if there is enough space to print the letters in the given space
+ *
+ * @param text The text we want to print
+ * @param width
+ * @param height
+ *
+ * @return True if we can print text in there
+ */
+bool can_fit_ascii_art_text(const char * text, size_t width, size_t height);
+
+/**
+ * @brief Prints the ascii text if possible
+ *
+ * @param matrix The matrix to print it on
+ * @param container The rectangle to put the text in
+ * @param text The printed text
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int print_text_ascii_art(cli_matrix_t * matrix, cli_rect_t container, const char * text);
+
 void cli_print_color(color_code_t color, const char *format, ...) {
     // get unknown number of args
     va_list args;
@@ -41,6 +62,10 @@ void cli_print_color(color_code_t color, const char *format, ...) {
 int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const char * text, color_code_t text_color) {
     if (!matrix || !matrix->matrix || !text) {
         return EXIT_FAILURE;
+    }
+
+    if(print_text_ascii_art(matrix, rect, text) == EXIT_SUCCESS) {
+        return EXIT_SUCCESS;
     }
 
     size_t start_row = rect.y;
@@ -104,6 +129,7 @@ int get_letters_ascii_arts(
         snprintf(filepath, sizeof(filepath), "../assets/ascii_text/lowercase/%c.asciiart", 'a' + i);
         static_lowercase_ascii_arts[i] = parse_ascii_art_file(filepath);
         if (!static_lowercase_ascii_arts[i]) {
+
             return EXIT_FAILURE;
         }
     }
@@ -128,6 +154,32 @@ int get_letters_ascii_arts(
     *digit_ascii_arts = static_digit_ascii_arts;
 
     return EXIT_SUCCESS;
+}
+
+bool can_fit_ascii_art_text(const char * text, size_t width, size_t height) {
+    size_t total_width = 0;
+    size_t max_height = 0;
+
+    for (size_t i = 0; text[i] != '\0'; i++) {
+        if(text[i] == ' ') {
+            total_width += 5;
+            continue;
+        }
+        ascii_art_t *letter_ascii_art = get_letter_ascii_art(text[i]);
+
+        if (letter_ascii_art && letter_ascii_art->nb_versions > 0) {
+            total_width += letter_ascii_art->versions[0]->nb_cols;
+            if (letter_ascii_art->versions[0]->nb_rows > max_height) {
+                max_height = letter_ascii_art->versions[0]->nb_rows;
+            }
+
+            // space after letter
+            total_width += 1;
+        }
+    }
+
+    // Compare the total width and max height to the given dimensions
+    return total_width <= width && max_height <= height;
 }
 
 ascii_art_t * get_letter_ascii_art(char letter) {
@@ -161,4 +213,40 @@ ascii_art_t * get_letter_ascii_art(char letter) {
     }
 }
 
+int print_text_ascii_art(cli_matrix_t * matrix, cli_rect_t container, const char * text) {
+    if(!can_fit_ascii_art_text(text, container.width, container.height)) {
+        return EXIT_FAILURE;
+    }
 
+    size_t current_x = container.x;
+
+    for (size_t i = 0; text[i] != '\0'; i++) {
+        if(text[i] == ' ') {
+            current_x += 5;
+            continue;
+        }
+
+        ascii_art_t *art = get_letter_ascii_art(text[i]);
+
+        if(!art || art->nb_versions < 1) {
+            return EXIT_FAILURE;
+        }
+
+        cli_matrix_t *character_matrix = art->versions[0];
+
+        cli_rect_t dst_rect = {
+                .x = current_x,
+                .y = container.y,
+                .width = character_matrix->nb_cols,
+                .height = character_matrix->nb_rows
+        };
+
+        if (cli_copy_matrix(matrix, dst_rect, character_matrix) == EXIT_FAILURE) {
+            return EXIT_FAILURE;
+        }
+
+        current_x += character_matrix->nb_cols + 1;
+    }
+
+    return EXIT_SUCCESS;
+}
