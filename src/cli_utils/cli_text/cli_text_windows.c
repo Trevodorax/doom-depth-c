@@ -7,3 +7,7 @@ int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const ch
 }
 
 void cli_print_color(color_code_t color, const char *format, ...) {}
+
+ascii_art_t * get_letter_ascii_art(char character) {
+    return NULL;
+}

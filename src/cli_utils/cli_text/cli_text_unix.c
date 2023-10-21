@@ -182,8 +182,8 @@ bool can_fit_ascii_art_text(const char * text, size_t width, size_t height) {
     return total_width <= width && max_height <= height;
 }
 
-ascii_art_t * get_letter_ascii_art(char letter) {
-    char_type_t char_type = get_char_type(letter);
+ascii_art_t * get_letter_ascii_art(char character) {
+    char_type_t char_type = get_char_type(character);
 
     if(char_type == INVALID) {
         return NULL;
@@ -203,11 +203,11 @@ ascii_art_t * get_letter_ascii_art(char letter) {
 
     switch(char_type) {
         case DIGIT:
-            return digit_ascii_arts[letter - '0'];
+            return digit_ascii_arts[character - '0'];
         case LOWERCASE:
-            return lowercase_ascii_arts[letter - 'a'];
+            return lowercase_ascii_arts[character - 'a'];
         case UPPERCASE:
-            return uppercase_ascii_arts[letter - 'A'];
+            return uppercase_ascii_arts[character - 'A'];
         default:
             return NULL;
     }
