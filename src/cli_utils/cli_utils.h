@@ -2,60 +2,9 @@
 #define DOOM_DEPTH_C_CLI_UTILS_H
 
 #include <stdio.h>
-#include <stdarg.h>
 #include <stdbool.h>
-
-typedef enum {
-    BLACK = 30,
-    RED,
-    GREEN,
-    YELLOW,
-    BLUE,
-    MAGENTA,
-    CYAN,
-    WHITE,
-} color_code_t;
-
-typedef struct {
-    size_t x;
-    size_t y;
-    size_t width;
-    size_t height;
-} cli_rect_t;
-
-typedef enum {
-    FULL_BLOCK,
-    LEFT_HALF_BLOCK,
-    RIGHT_HALF_BLOCK,
-    LOWER_HALF_BLOCK,
-    UPPER_HALF_BLOCK,
-    QUARTER_BLOCK_UPPER_LEFT,
-    QUARTER_BLOCK_UPPER_RIGHT,
-    QUARTER_BLOCK_LOWER_LEFT,
-    QUARTER_BLOCK_LOWER_RIGHT,
-    LIGHT_SHADE,
-    MEDIUM_SHADE,
-    DARK_SHADE
-} special_char_t;
-
-typedef enum {
-    CURSOR_BEGINNING,
-    CURSOR_BACK,
-    CURSOR_FRONT,
-    CURSOR_UP,
-    CURSOR_DOWN
-} cursor_movement_t;
-
-typedef struct {
-    char character;
-    color_code_t color;
-} cli_char_t;
-
-typedef struct {
-    size_t nb_rows;
-    size_t nb_cols;
-    cli_char_t ** matrix;
-} cli_matrix_t;
+#include "./types.h"
+#include "./cli_text/cli_text.h"
 
 /**
  * @brief Rewrites the changed chars on the matrix
@@ -72,15 +21,6 @@ int cli_render_present(cli_matrix_t * current_matrix);
  * @param height Pointer to the int where the width will be stored
  */
 void cli_get_window_size(int * width, int * height);
-
-/**
- * @brief Like printf, but prints in the specified color
- *
- * @param color The color to print the text in
- * @param format The format string
- * @param ... All the other params, like in printf
- */
-void cli_print_color(color_code_t color, const char *format, ...);
 
 /**
  * @brief Moves the cursor in the CLI
@@ -152,22 +92,6 @@ int cli_draw_fill_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t fill);
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int cli_draw_stroke_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t stroke);
-
-/**
- * @brief prints the given text in the rectangle
- *
- * Will try to print the given text in one line, if it can't, it will print it on multiple lines, and if it still
- * doesn't fit, it will add an ellipse at the end of the text
- * And if there is no space for the ellipse, it will print nothing
- *
- * @param matrix The modified matrix
- * @param rect The rectangle to write the text in
- * @param text The text to be printed
- * @param text_color The color of the text
- *
- * @return EXIT_SUCCESS or EXIT_FAILURE
- */
-int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const char * text, color_code_t text_color);
 
 /**
  * @brief Resizes the matrix to the size of the terminal
