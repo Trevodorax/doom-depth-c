@@ -22,17 +22,6 @@ int get_letters_ascii_arts(
 );
 
 /**
- * @brief returns true if there is enough space to print the letters in the given space
- *
- * @param text The text we want to print
- * @param width
- * @param height
- *
- * @return True if we can print text in there
- */
-bool can_fit_ascii_art_text(const char * text, size_t width, size_t height);
-
-/**
  * @brief Prints the ascii text if possible
  *
  * @param matrix The matrix to print it on
@@ -41,7 +30,7 @@ bool can_fit_ascii_art_text(const char * text, size_t width, size_t height);
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char *text, alignment_t x_align,
-                         alignment_t y_align);
+                         alignment_t y_align, text_size_t text_size);
 
 /**
  * @brief Retrieves the ascii art's size
@@ -50,7 +39,7 @@ int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char 
  * @param height Will be set to the height
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int get_ascii_art_text_dimensions(const char * text, size_t * width, size_t * height);
+int get_ascii_art_text_dimensions(const char *text, size_t *width, size_t *height, text_size_t text_size);
 
 void cli_print_color(color_code_t color, const char *format, ...) {
     // get unknown number of args
@@ -70,13 +59,17 @@ void cli_print_color(color_code_t color, const char *format, ...) {
 }
 
 int cli_print_text_in_rectangle(cli_matrix_t *matrix, cli_rect_t rect, const char *text, color_code_t text_color,
-                                alignment_t x_align, alignment_t y_align) {
+                                alignment_t x_align, alignment_t y_align, text_size_t text_size) {
     if (!matrix || !matrix->matrix || !text) {
         return EXIT_FAILURE;
     }
 
-    if(print_text_ascii_art(matrix, rect, text, x_align, y_align) == EXIT_SUCCESS) {
-        return EXIT_SUCCESS;
+    bool isTest = text_size == MEDIUM_TEXT;
+
+    for(int i = text_size; i >= 0; i--) {
+        if (print_text_ascii_art(matrix, rect, text, x_align, y_align, i) == EXIT_SUCCESS) {
+            return EXIT_SUCCESS;
+        }
     }
 
     size_t start_row = rect.y;
@@ -201,15 +194,6 @@ int get_letters_ascii_arts(
     return EXIT_SUCCESS;
 }
 
-bool can_fit_ascii_art_text(const char * text, size_t width, size_t height) {
-    size_t total_width = 0;
-    size_t total_height = 0;
-
-    get_ascii_art_text_dimensions(text, &total_width, &total_height);
-
-    return total_width <= width && total_height <= height;
-}
-
 ascii_art_t * get_letter_ascii_art(char character) {
     char_type_t char_type = get_char_type(character);
 
@@ -242,11 +226,11 @@ ascii_art_t * get_letter_ascii_art(char character) {
 }
 
 int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char *text, alignment_t x_align,
-                         alignment_t y_align) {
+                         alignment_t y_align, text_size_t text_size) {
     size_t ascii_art_width;
     size_t ascii_art_height;
 
-    get_ascii_art_text_dimensions(text, &ascii_art_width, &ascii_art_height);
+    get_ascii_art_text_dimensions(text, &ascii_art_width, &ascii_art_height, text_size);
 
     if(ascii_art_width > container.width || ascii_art_height > container.height) {
         return EXIT_FAILURE;
@@ -295,7 +279,7 @@ int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char 
             return EXIT_FAILURE;
         }
 
-        cli_matrix_t *character_matrix = art->versions[0];
+        cli_matrix_t *character_matrix = art->versions[text_size];
 
         cli_rect_t dst_rect = {
                 .x = current_x,
@@ -314,7 +298,7 @@ int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char 
     return EXIT_SUCCESS;
 }
 
-int get_ascii_art_text_dimensions(const char * text, size_t * width, size_t * height) {
+int get_ascii_art_text_dimensions(const char *text, size_t *width, size_t *height, text_size_t text_size) {
     if (!text || !width || !height) {
         return EXIT_FAILURE;
     }
@@ -329,11 +313,11 @@ int get_ascii_art_text_dimensions(const char * text, size_t * width, size_t * he
         }
         ascii_art_t *art = get_letter_ascii_art(text[i]);
 
-        if(!art || art->nb_versions < 1) {
+        if(!art || !art->versions[text_size]) {
             return EXIT_FAILURE;
         }
 
-        cli_matrix_t *character_matrix = art->versions[0];
+        cli_matrix_t *character_matrix = art->versions[text_size];
 
         total_width += character_matrix->nb_cols;
         if (character_matrix->nb_rows > max_height) {
