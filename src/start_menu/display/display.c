@@ -168,20 +168,23 @@ int display_start_menu_cli(game_window_t *game_window, unsigned short active_opt
 
     // print title
     cli_rect_t title_rect = {0, 0, window_width, window_height / 2};
-    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Doom Depth C", BLACK, ALIGN_CENTER, ALIGN_START);
+    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Doom Depth C", BLACK, ALIGN_CENTER, ALIGN_START,
+                                MEDIUM_TEXT);
 
     // print options
     cli_rect_t option_1_rect = {2, window_height / 2, window_width, window_height / 4};
     cli_rect_t option_2_rect = {2, 3 * (window_height / 4), window_width, window_height / 4};
 
-    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, "Option 1", BLACK, ALIGN_START, ALIGN_START);
-    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, "Option 2", BLACK, ALIGN_START, ALIGN_START);
+    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, "Option 1", BLACK, ALIGN_START, ALIGN_START,
+                                SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, "Option 2", BLACK, ALIGN_START, ALIGN_START,
+                                SMALL_TEXT);
 
     // print cursor
     cli_rect_t cursor_rect = {0, 0, 1, 1};
     cursor_rect.y = active_option == 0 ? option_1_rect.y : option_2_rect.y;
 
-    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", RED, ALIGN_START, ALIGN_START);
+    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", RED, ALIGN_START, ALIGN_START, SMALL_TEXT);
 
     return EXIT_SUCCESS;
 }

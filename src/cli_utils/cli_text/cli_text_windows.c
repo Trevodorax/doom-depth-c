@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 int cli_print_text_in_rectangle(cli_matrix_t *matrix, cli_rect_t rect, const char *text, color_code_t text_color,
-                                alignment_t x_align, alignment_t y_align) {
+                                alignment_t x_align, alignment_t y_align, text_size_t text_size) {
     return EXIT_SUCCESS;
 }
 
