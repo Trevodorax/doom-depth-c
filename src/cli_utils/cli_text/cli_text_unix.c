@@ -40,7 +40,17 @@ bool can_fit_ascii_art_text(const char * text, size_t width, size_t height);
  * @param text The printed text
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_text_ascii_art(cli_matrix_t * matrix, cli_rect_t container, const char * text);
+int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char *text, alignment_t x_align,
+                         alignment_t y_align);
+
+/**
+ * @brief Retrieves the ascii art's size
+ *
+ * @param width Will be set to the width
+ * @param height Will be set to the height
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int get_ascii_art_text_dimensions(const char * text, size_t * width, size_t * height);
 
 void cli_print_color(color_code_t color, const char *format, ...) {
     // get unknown number of args
@@ -59,12 +69,13 @@ void cli_print_color(color_code_t color, const char *format, ...) {
     va_end(args);
 }
 
-int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const char * text, color_code_t text_color) {
+int cli_print_text_in_rectangle(cli_matrix_t *matrix, cli_rect_t rect, const char *text, color_code_t text_color,
+                                alignment_t x_align, alignment_t y_align) {
     if (!matrix || !matrix->matrix || !text) {
         return EXIT_FAILURE;
     }
 
-    if(print_text_ascii_art(matrix, rect, text) == EXIT_SUCCESS) {
+    if(print_text_ascii_art(matrix, rect, text, x_align, y_align) == EXIT_SUCCESS) {
         return EXIT_SUCCESS;
     }
 
@@ -90,8 +101,42 @@ int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const ch
     cli_char_t fill_char;
     size_t char_index = 0;
 
+    size_t total_rows_needed = (text_len + (end_col - start_col) - 1) / (end_col - start_col);
+    size_t available_rows = end_row - start_row;
+    switch (y_align) {
+        case ALIGN_END:
+            start_row = end_row - total_rows_needed;
+            break;
+        case ALIGN_CENTER:
+            start_row = start_row + (available_rows - total_rows_needed) / 2;
+            break;
+        case ALIGN_START:
+        default:
+            // no change needed
+            break;
+    }
+
     for (size_t i = start_row; i < end_row && char_index < text_len; i++) {
-        for (size_t j = start_col; j < end_col && char_index < text_len; j++) {
+        size_t row_text_len = end_col - start_col;
+        if (text_len - char_index < row_text_len) {
+            row_text_len = text_len - char_index;
+        }
+
+        size_t current_start_col = start_col;
+
+        switch (x_align) {
+            case ALIGN_END:
+                current_start_col = end_col - row_text_len;
+                break;
+            case ALIGN_CENTER:
+                current_start_col = start_col + ((end_col - start_col) - row_text_len) / 2;
+                break;
+            case ALIGN_START:
+            default:
+                break;
+        }
+
+        for (size_t j = current_start_col; j < end_col && char_index < text_len; j++) {
             fill_char.character = ready_text[char_index++];
             fill_char.color = text_color;
 
@@ -158,28 +203,11 @@ int get_letters_ascii_arts(
 
 bool can_fit_ascii_art_text(const char * text, size_t width, size_t height) {
     size_t total_width = 0;
-    size_t max_height = 0;
+    size_t total_height = 0;
 
-    for (size_t i = 0; text[i] != '\0'; i++) {
-        if(text[i] == ' ') {
-            total_width += 5;
-            continue;
-        }
-        ascii_art_t *letter_ascii_art = get_letter_ascii_art(text[i]);
+    get_ascii_art_text_dimensions(text, &total_width, &total_height);
 
-        if (letter_ascii_art && letter_ascii_art->nb_versions > 0) {
-            total_width += letter_ascii_art->versions[0]->nb_cols;
-            if (letter_ascii_art->versions[0]->nb_rows > max_height) {
-                max_height = letter_ascii_art->versions[0]->nb_rows;
-            }
-
-            // space after letter
-            total_width += 1;
-        }
-    }
-
-    // Compare the total width and max height to the given dimensions
-    return total_width <= width && max_height <= height;
+    return total_width <= width && total_height <= height;
 }
 
 ascii_art_t * get_letter_ascii_art(char character) {
@@ -213,12 +241,47 @@ ascii_art_t * get_letter_ascii_art(char character) {
     }
 }
 
-int print_text_ascii_art(cli_matrix_t * matrix, cli_rect_t container, const char * text) {
-    if(!can_fit_ascii_art_text(text, container.width, container.height)) {
+int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char *text, alignment_t x_align,
+                         alignment_t y_align) {
+    size_t ascii_art_width;
+    size_t ascii_art_height;
+
+    get_ascii_art_text_dimensions(text, &ascii_art_width, &ascii_art_height);
+
+    if(ascii_art_width > container.width || ascii_art_height > container.height) {
         return EXIT_FAILURE;
     }
 
-    size_t current_x = container.x;
+    // process x with alignment
+    size_t current_x;
+    switch(x_align) {
+        case ALIGN_START:
+            current_x = container.x;
+            break;
+        case ALIGN_END:
+            current_x = container.x + container.width - ascii_art_width;
+            break;
+        case ALIGN_CENTER:
+            current_x = container.x + container.width / 2 - ascii_art_width / 2;
+            break;
+        default:
+            current_x = container.x;
+    }
+
+    size_t current_y;
+    switch(y_align) {
+        case ALIGN_START:
+            current_y = container.y;
+            break;
+        case ALIGN_END:
+            current_y = container.y + container.height - ascii_art_height;
+            break;
+        case ALIGN_CENTER:
+            current_y = container.y + container.height / 2 - ascii_art_height / 2;
+            break;
+        default:
+            current_y = container.y;
+    }
 
     for (size_t i = 0; text[i] != '\0'; i++) {
         if(text[i] == ' ') {
@@ -236,7 +299,7 @@ int print_text_ascii_art(cli_matrix_t * matrix, cli_rect_t container, const char
 
         cli_rect_t dst_rect = {
                 .x = current_x,
-                .y = container.y,
+                .y = current_y,
                 .width = character_matrix->nb_cols,
                 .height = character_matrix->nb_rows
         };
@@ -247,6 +310,44 @@ int print_text_ascii_art(cli_matrix_t * matrix, cli_rect_t container, const char
 
         current_x += character_matrix->nb_cols + 1;
     }
+
+    return EXIT_SUCCESS;
+}
+
+int get_ascii_art_text_dimensions(const char * text, size_t * width, size_t * height) {
+    if (!text || !width || !height) {
+        return EXIT_FAILURE;
+    }
+
+    size_t total_width = 0;
+    size_t max_height = 0;
+
+    for (size_t i = 0; text[i] != '\0'; i++) {
+        if(text[i] == ' ') {
+            total_width += 5;
+            continue;
+        }
+        ascii_art_t *art = get_letter_ascii_art(text[i]);
+
+        if(!art || art->nb_versions < 1) {
+            return EXIT_FAILURE;
+        }
+
+        cli_matrix_t *character_matrix = art->versions[0];
+
+        total_width += character_matrix->nb_cols;
+        if (character_matrix->nb_rows > max_height) {
+            max_height = character_matrix->nb_rows;
+        }
+
+        // add width for the space after each letter, except for the last one
+        if (text[i + 1] != '\0') {
+            total_width += 1;
+        }
+    }
+
+    *width = total_width;
+    *height = max_height;
 
     return EXIT_SUCCESS;
 }
