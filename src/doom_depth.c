@@ -56,7 +56,7 @@ int main_loop(game_window_t * main_window) {
                 fight->min_nb_enemies = 1;
                 fight->max_nb_enemies = 5;
 
-                player_t * player = create_player("TEST_PLAYER", NULL);
+                player_t * player = create_player("TEST_PLAYER");
                 player->offensive_spell = malloc(sizeof(spell_t));
                 player->offensive_spell->name = malloc(sizeof(char)*10);
                 strcpy(player->offensive_spell->name,"Fire Ball");
@@ -171,7 +171,5 @@ doom_depth_main doom_depth_factory(ui_type_t ui_type) {
             return doom_depth_cli;
         case GUI:
             return doom_depth_gui;
-        default:
-            return doom_depth_cli;
     }
 }
