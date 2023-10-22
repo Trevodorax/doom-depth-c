@@ -47,7 +47,7 @@ int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char 
  * @brief Retrieves the ascii art's size
  *
  * @param width Will be set to the width
- * @param height Will be set to the width
+ * @param height Will be set to the height
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int get_ascii_art_text_dimensions(const char * text, size_t * width, size_t * height);
