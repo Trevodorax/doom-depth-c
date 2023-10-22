@@ -75,7 +75,7 @@ int cli_print_text_in_rectangle(cli_matrix_t *matrix, cli_rect_t rect, const cha
         return EXIT_FAILURE;
     }
 
-    if(print_text_ascii_art(matrix, rect, text, ALIGN_START, ALIGN_START) == EXIT_SUCCESS) {
+    if(print_text_ascii_art(matrix, rect, text, x_align, y_align) == EXIT_SUCCESS) {
         return EXIT_SUCCESS;
     }
 
@@ -173,7 +173,6 @@ bool can_fit_ascii_art_text(const char * text, size_t width, size_t height) {
 
     get_ascii_art_text_dimensions(text, &total_width, &total_height);
 
-    // Compare the total width and max height to the given dimensions
     return total_width <= width && total_height <= height;
 }
 
@@ -210,11 +209,45 @@ ascii_art_t * get_letter_ascii_art(char character) {
 
 int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char *text, alignment_t x_align,
                          alignment_t y_align) {
-    if(!can_fit_ascii_art_text(text, container.width, container.height)) {
+    size_t ascii_art_width;
+    size_t ascii_art_height;
+
+    get_ascii_art_text_dimensions(text, &ascii_art_width, &ascii_art_height);
+
+    if(ascii_art_width > container.width || ascii_art_height > container.height) {
         return EXIT_FAILURE;
     }
 
-    size_t current_x = container.x;
+    // process x with alignment
+    size_t current_x;
+    switch(x_align) {
+        case ALIGN_START:
+            current_x = container.x;
+            break;
+        case ALIGN_END:
+            current_x = container.x + container.width - ascii_art_width;
+            break;
+        case ALIGN_CENTER:
+            current_x = container.x + container.width / 2 - ascii_art_width / 2;
+            break;
+        default:
+            current_x = container.x;
+    }
+
+    size_t current_y;
+    switch(y_align) {
+        case ALIGN_START:
+            current_y = container.y;
+            break;
+        case ALIGN_END:
+            current_y = container.y + container.height - ascii_art_height;
+            break;
+        case ALIGN_CENTER:
+            current_y = container.y + container.height / 2 - ascii_art_height / 2;
+            break;
+        default:
+            current_y = container.y;
+    }
 
     for (size_t i = 0; text[i] != '\0'; i++) {
         if(text[i] == ' ') {
@@ -232,7 +265,7 @@ int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char 
 
         cli_rect_t dst_rect = {
                 .x = current_x,
-                .y = container.y,
+                .y = current_y,
                 .width = character_matrix->nb_cols,
                 .height = character_matrix->nb_rows
         };
@@ -256,6 +289,10 @@ int get_ascii_art_text_dimensions(const char * text, size_t * width, size_t * he
     size_t max_height = 0;
 
     for (size_t i = 0; text[i] != '\0'; i++) {
+        if(text[i] == ' ') {
+            total_width += 5;
+            continue;
+        }
         ascii_art_t *art = get_letter_ascii_art(text[i]);
 
         if(!art || art->nb_versions < 1) {

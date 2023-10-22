@@ -168,7 +168,7 @@ int display_start_menu_cli(game_window_t *game_window, unsigned short active_opt
 
     // print title
     cli_rect_t title_rect = {0, 0, window_width, window_height / 2};
-    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Doom Depth C", BLACK, ALIGN_START, ALIGN_START);
+    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Doom Depth C", BLACK, ALIGN_END, ALIGN_END);
 
     // print options
     cli_rect_t option_1_rect = {2, window_height / 2, window_width, window_height / 4};
