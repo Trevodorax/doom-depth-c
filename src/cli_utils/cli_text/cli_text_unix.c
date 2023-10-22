@@ -40,7 +40,17 @@ bool can_fit_ascii_art_text(const char * text, size_t width, size_t height);
  * @param text The printed text
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_text_ascii_art(cli_matrix_t * matrix, cli_rect_t container, const char * text);
+int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char *text, alignment_t x_align,
+                         alignment_t y_align);
+
+/**
+ * @brief Retrieves the ascii art's size
+ *
+ * @param width Will be set to the width
+ * @param height Will be set to the width
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int get_ascii_art_text_dimensions(const char * text, size_t * width, size_t * height);
 
 void cli_print_color(color_code_t color, const char *format, ...) {
     // get unknown number of args
@@ -59,12 +69,13 @@ void cli_print_color(color_code_t color, const char *format, ...) {
     va_end(args);
 }
 
-int cli_print_text_in_rectangle(cli_matrix_t * matrix, cli_rect_t rect, const char * text, color_code_t text_color) {
+int cli_print_text_in_rectangle(cli_matrix_t *matrix, cli_rect_t rect, const char *text, color_code_t text_color,
+                                alignment_t x_align, alignment_t y_align) {
     if (!matrix || !matrix->matrix || !text) {
         return EXIT_FAILURE;
     }
 
-    if(print_text_ascii_art(matrix, rect, text) == EXIT_SUCCESS) {
+    if(print_text_ascii_art(matrix, rect, text, ALIGN_START, ALIGN_START) == EXIT_SUCCESS) {
         return EXIT_SUCCESS;
     }
 
@@ -158,28 +169,12 @@ int get_letters_ascii_arts(
 
 bool can_fit_ascii_art_text(const char * text, size_t width, size_t height) {
     size_t total_width = 0;
-    size_t max_height = 0;
+    size_t total_height = 0;
 
-    for (size_t i = 0; text[i] != '\0'; i++) {
-        if(text[i] == ' ') {
-            total_width += 5;
-            continue;
-        }
-        ascii_art_t *letter_ascii_art = get_letter_ascii_art(text[i]);
-
-        if (letter_ascii_art && letter_ascii_art->nb_versions > 0) {
-            total_width += letter_ascii_art->versions[0]->nb_cols;
-            if (letter_ascii_art->versions[0]->nb_rows > max_height) {
-                max_height = letter_ascii_art->versions[0]->nb_rows;
-            }
-
-            // space after letter
-            total_width += 1;
-        }
-    }
+    get_ascii_art_text_dimensions(text, &total_width, &total_height);
 
     // Compare the total width and max height to the given dimensions
-    return total_width <= width && max_height <= height;
+    return total_width <= width && total_height <= height;
 }
 
 ascii_art_t * get_letter_ascii_art(char character) {
@@ -213,7 +208,8 @@ ascii_art_t * get_letter_ascii_art(char character) {
     }
 }
 
-int print_text_ascii_art(cli_matrix_t * matrix, cli_rect_t container, const char * text) {
+int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char *text, alignment_t x_align,
+                         alignment_t y_align) {
     if(!can_fit_ascii_art_text(text, container.width, container.height)) {
         return EXIT_FAILURE;
     }
@@ -247,6 +243,40 @@ int print_text_ascii_art(cli_matrix_t * matrix, cli_rect_t container, const char
 
         current_x += character_matrix->nb_cols + 1;
     }
+
+    return EXIT_SUCCESS;
+}
+
+int get_ascii_art_text_dimensions(const char * text, size_t * width, size_t * height) {
+    if (!text || !width || !height) {
+        return EXIT_FAILURE;
+    }
+
+    size_t total_width = 0;
+    size_t max_height = 0;
+
+    for (size_t i = 0; text[i] != '\0'; i++) {
+        ascii_art_t *art = get_letter_ascii_art(text[i]);
+
+        if(!art || art->nb_versions < 1) {
+            return EXIT_FAILURE;
+        }
+
+        cli_matrix_t *character_matrix = art->versions[0];
+
+        total_width += character_matrix->nb_cols;
+        if (character_matrix->nb_rows > max_height) {
+            max_height = character_matrix->nb_rows;
+        }
+
+        // add width for the space after each letter, except for the last one
+        if (text[i + 1] != '\0') {
+            total_width += 1;
+        }
+    }
+
+    *width = total_width;
+    *height = max_height;
 
     return EXIT_SUCCESS;
 }
