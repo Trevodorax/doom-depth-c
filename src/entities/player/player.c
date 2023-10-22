@@ -64,7 +64,7 @@ void heal_mana_player(player_t * player, unsigned int amount){
     }
 }
 
-player_t * create_player(char *name, array_node_t *spells) {
+player_t * create_player(char *name) {
     player_t * player = malloc(sizeof(player_t));
     player->name = malloc(sizeof(char)*strlen(name)+1);
     strcpy(player->name, name);
