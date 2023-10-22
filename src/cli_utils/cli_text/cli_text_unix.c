@@ -101,8 +101,42 @@ int cli_print_text_in_rectangle(cli_matrix_t *matrix, cli_rect_t rect, const cha
     cli_char_t fill_char;
     size_t char_index = 0;
 
+    size_t total_rows_needed = (text_len + (end_col - start_col) - 1) / (end_col - start_col);
+    size_t available_rows = end_row - start_row;
+    switch (y_align) {
+        case ALIGN_END:
+            start_row = end_row - total_rows_needed;
+            break;
+        case ALIGN_CENTER:
+            start_row = start_row + (available_rows - total_rows_needed) / 2;
+            break;
+        case ALIGN_START:
+        default:
+            // no change needed
+            break;
+    }
+
     for (size_t i = start_row; i < end_row && char_index < text_len; i++) {
-        for (size_t j = start_col; j < end_col && char_index < text_len; j++) {
+        size_t row_text_len = end_col - start_col;
+        if (text_len - char_index < row_text_len) {
+            row_text_len = text_len - char_index;
+        }
+
+        size_t current_start_col = start_col;
+
+        switch (x_align) {
+            case ALIGN_END:
+                current_start_col = end_col - row_text_len;
+                break;
+            case ALIGN_CENTER:
+                current_start_col = start_col + ((end_col - start_col) - row_text_len) / 2;
+                break;
+            case ALIGN_START:
+            default:
+                break;
+        }
+
+        for (size_t j = current_start_col; j < end_col && char_index < text_len; j++) {
             fill_char.character = ready_text[char_index++];
             fill_char.color = text_color;
 
