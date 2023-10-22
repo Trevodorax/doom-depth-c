@@ -40,15 +40,15 @@ menu_t* build_nested_menu(fight_context_t * fight_context) {
     sub_menu_spells->options[1] = create_menu(0, "Defend Spell", NULL, defend_spell, NULL);
     sub_menu_spells->options[2] = create_menu(0, "Heal Spell", NULL, heal_spell, NULL);
 
-    array_node_t * head = fight_context->monsters;
+    array_node_t * current_monster = fight_context->monsters;
     int i = 0;
-    while(head != NULL){
-        monster_t * monster = (monster_t*)head->value;
+    while(current_monster != NULL){
+        monster_t * monster = (monster_t*)current_monster->value;
         char * name_and_hp = malloc(sizeof(char)*(strlen(monster->name)+10));
         sprintf(name_and_hp,"%s (%d)",monster->name,monster->hp);
         sub_menu_weapon->options[i] = create_menu(0, name_and_hp, NULL, attack_weapon, monster);
         sub_menu_spells->options[0]->options[i++] = create_menu(0, name_and_hp, NULL, attack_spell, monster);
-        head = head->next;
+        current_monster = current_monster->next;
     }
 
     menu_t *sub_menu_others = create_menu(2, "Others", NULL, NULL, NULL);
