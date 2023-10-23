@@ -133,7 +133,7 @@ int heal_spell(fight_context_t *fight_context, void *custom_params) {
         return FA_NOTHING;
     }
 
-    int amount = heal_player(fight_context->player, fight_context->player->healing_spell->amount);
+    unsigned int amount = heal_player(fight_context->player, fight_context->player->healing_spell->amount);
     
     build_notification_formatted(fight_context, "Heal Spell casted ! Healed %d HP !", amount);
 
@@ -154,7 +154,7 @@ int attack_weapon(fight_context_t *fight_context, void *custom_params) {
 
     printf("\nAttack %s with weapon", target->name);
 
-    int dmg = player_attack(fight_context->player, target);
+    unsigned int dmg = player_attack(fight_context->player, target);
 
     printf("\nDamages on %s : -%dHP", target->name, dmg);
     printf("\nHP left : %d", target->hp);

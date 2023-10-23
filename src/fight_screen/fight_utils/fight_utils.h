@@ -65,4 +65,13 @@ void debug_action_points(player_t *player);
  */
 bool check_and_remove_action_points(player_t *player, unsigned int amount);
 
+/**
+ * @brief creates the fight context out of the fight info
+ *
+ * @param fight The infos for the fight
+ * @param player The player in the fight
+ * @return The built fight context
+ */
+fight_context_t * build_fight_context(fight_t * fight, player_t * player);
+
 #endif //DOOM_DEPTH_C_FIGHT_UTILS_H
