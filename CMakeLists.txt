@@ -84,6 +84,9 @@ set(cross_platform_targets
         src/new_game_screen/display/display.c
         src/cli_utils/cli_text/cli_text.h
         src/cli_utils/types.h
+        src/fight_screen/fight_utils/fight_utils.c
+        src/fight_screen/fight_utils/fight_utils.h
+        src/fight_screen/types.h
 )
 
 # for unix

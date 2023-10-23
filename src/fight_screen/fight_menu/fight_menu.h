@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include "../fight_screen.h"
+#include "../types.h"
 
 typedef struct menu_t menu_t;
 struct menu_t {

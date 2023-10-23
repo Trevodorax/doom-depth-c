@@ -2,70 +2,30 @@
 #include "fight_screen.h"
 #include "fight_menu/fight_menu.h"
 #include "fight_actions/fight_actions.h"
+#include "fight_utils/fight_utils.h"
 
 void update_section_dimensions(SDL_Window * window, SDL_Rect * fight_zone, SDL_Rect * menu_zone);
 
-void build_notification(fight_context_t * fight_context, char * message) {
-    fight_context->notification_message = malloc(sizeof(char) * strlen(message)+1);
-    strcpy(fight_context->notification_message, message);
-    printf("\n%s",fight_context->notification_message);
-}
+int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight) {
+    SDL_Rect fight_zone;
+    SDL_Rect menu_zone;
 
-void build_notification_formatted(fight_context_t * fight_context, char * message, ...) {
-    va_list args;
-    va_start(args, message);
-    fight_context->notification_message = malloc(sizeof(char) * strlen(message)+1001);
-    vsprintf(fight_context->notification_message, message, args);
-    va_end(args);
-    printf("\n%s",fight_context->notification_message);
-}
+    fight_context_t * fight_context = build_fight_context(fight,player);
 
-int find_index(int rand_num, const int probs[], int size) {
-    for (int i = 0; i < size; i++) {
-        if (rand_num < probs[i]) {
-            return i;
+    while (true) {
+        menu_t * menu = build_nested_menu(fight_context);
+        if(fight_context->player->is_defending){
+            fight_context->player->base_defense -= fight_context->player->defensive_spell->amount;
+            fight_context->player->is_defending = false;
         }
+        fight_action_t * selected_action = fight_menu(game_window, menu, fight_context, &fight_zone, &menu_zone, false);
+        switch (selected_action->callback(fight_context,selected_action->params)){
+            case FA_QUIT:
+                free(fight_context);
+                return MAP_SCREEN;
+        }
+        free(menu);
     }
-    return -1;  // This should never happen if input data is correct
-}
-
-// FIXME : to remove when we can search on monsters by name
-void * get_monster_with_name(char * name){
-    if(strcmp(name,"bat") == 0){
-        monster_t * bat = malloc(sizeof(monster_t));
-        bat->name = malloc(sizeof(char)*4);
-        strcpy(bat->name,"Bat");
-        bat->type = 0;
-        bat->attack = 2;
-        bat->defense = 1;
-        bat->hp = 40;
-        bat->hp_max = 40;
-        bat->id = 1;
-        return bat;
-    } else if(strcmp(name,"goblin") == 0){
-        monster_t * goblin = malloc(sizeof(monster_t));
-        goblin->name = malloc(sizeof(char)*7);
-        strcpy(goblin->name,"Goblin");
-        goblin->type = 0;
-        goblin->attack = 2;
-        goblin->defense = 1;
-        goblin->hp = 40;
-        goblin->hp_max = 40;
-        goblin->id = 1;
-        return goblin;
-    } else if(strcmp(name,"troll") == 0){
-        monster_t * troll = malloc(sizeof(monster_t));
-        troll->name = malloc(sizeof(char)*6);
-        strcpy(troll->name,"Troll");
-        troll->type = 0;
-        troll->attack = 2;
-        troll->defense = 1;
-        troll->hp = 40;
-        troll->hp_max = 40;
-        troll->id = 1;
-        return troll;
-    }
-
 }
 
 fight_context_t * build_fight_context(fight_t * fight, player_t * player){
@@ -103,26 +63,4 @@ void monsters_turn(fight_context_t * fight_context){
     // TODO
     //  implement monsters turn
     //  don't forget to set player_turn to true at the end
-}
-
-int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight) {
-    SDL_Rect fight_zone;
-    SDL_Rect menu_zone;
-
-    fight_context_t * fight_context = build_fight_context(fight,player);
-
-    while (true) {
-        menu_t * menu = build_nested_menu(fight_context);
-        if(fight_context->player->is_defending){
-            fight_context->player->base_defense -= fight_context->player->defensive_spell->amount;
-            fight_context->player->is_defending = false;
-        }
-        fight_action_t * selected_action = fight_menu(game_window, menu, fight_context, &fight_zone, &menu_zone, false);
-        switch (selected_action->callback(fight_context,selected_action->params)){
-            case FA_QUIT:
-                free(fight_context);
-                return MAP_SCREEN;
-        }
-        free(menu);
-    }
 }

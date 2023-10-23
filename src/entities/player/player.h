@@ -72,15 +72,16 @@ void *create_player_from_db(sqlite3_stmt *stmt);
 int save_player(sqlite3 *db, player_t *player);
 
 /**
+ * @brief Heals the player by the given amount.
  *
  * @param player
  * @param amount
- * @return
+ * @return The number of hp gained by the player
  */
 unsigned int heal_player(player_t * player, unsigned int amount);
 
 /**
- *
+ * @brief gives experience point to the player and levels up if necessary
  *
  * @param player
  * @param amount
@@ -88,18 +89,11 @@ unsigned int heal_player(player_t * player, unsigned int amount);
 void give_exp(player_t * player, unsigned int amount);
 
 /**
- *
- *
- * @param player
- * @param target
- * @return
- */
-unsigned int player_attack(player_t * player, monster_t * target);
-
-/**
+ * @brief Gives mana to the player in the given amount.
  *
  * @param player
  * @param amount
+ * @return The number of mana points gained by the player
  */
 void heal_mana(player_t * player, unsigned int amount);
 

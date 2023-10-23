@@ -1,25 +1,5 @@
 #include "player.h"
 
-unsigned int player_attack(player_t * player, monster_t * target) {
-    weapon_t * weapon = player->chosen_weapon;
-    unsigned int damages = 0;
-    if(weapon != NULL){
-        unsigned int random = weapon->min_attack + (rand() % (weapon->max_attack - weapon->min_attack + 1));
-        damages = (random + player->base_attack) - target->defense;
-    } else {
-        damages = player->base_attack - target->defense;
-    }
-
-    if(damages > target->hp){
-        damages = target->hp;
-    }
-    target->hp -= damages;
-
-    give_exp(player,damages);
-
-    return damages;
-}
-
 unsigned int compute_xp_needed(unsigned int level){
     unsigned int total_xp = 0;
     for (int i = 1; i <= level; ++i) {

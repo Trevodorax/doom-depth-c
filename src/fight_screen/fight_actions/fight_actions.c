@@ -1,20 +1,6 @@
 #include "fight_actions.h"
+#include "../fight_utils/fight_utils.h"
 #include <stdio.h>
-
-void debug_action_points(player_t *player){
-    printf("\nAction points : %d/%d", player->action_points, player->max_action_points);
-}
-
-bool check_and_remove_action_points(player_t *player, unsigned int amount) {
-    if (player->action_points < amount) {
-        debug_action_points(player);
-        return false;
-    } else {
-        player->action_points -= amount;
-        debug_action_points(player);
-        return true;
-    }
-}
 
 int heal_potion(fight_context_t *fight_context, void *custom_params) {
     if (fight_context->player->action_points < 1) {
