@@ -8,6 +8,7 @@
 #include "../weapon/weapon.h"
 #include "../../utils/array.h"
 #include "../../storage/database/database.h"
+#include "../../storage/database/database_queries.h"
 #include "../entities.h"
 #include <sqlite3.h>
 #include "../monster/monster.h"
