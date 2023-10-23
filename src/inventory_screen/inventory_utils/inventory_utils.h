@@ -3,6 +3,8 @@
 
 #include "../../entities/armor/armor.h"
 #include "../../entities/weapon/weapon.h"
+#include "stdbool.h"
+#include "../../entities/inventory/inventory.h"
 
 /**
  * @brief creates a string containing the details of an armor, in multiple lines :
@@ -52,5 +54,13 @@ char *health_potions_details_to_string(unsigned int quantity);
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 char *mana_potions_details_to_string(unsigned int quantity);
+
+/**
+ * @brief checks if the inventory is full
+ *
+ * @param inventory the inventory to check
+ * @return true or false
+ */
+bool is_full(inventory_t *inventory);
 
 #endif

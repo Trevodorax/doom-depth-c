@@ -13,6 +13,7 @@
 #include "utils/array.h"
 #include "entities/entities.h"
 #include "new_game_screen/new_game_screen.h"
+#include "shop_screen/shop_screen.h"
 
 int main_loop(game_window_t * main_window) {
     // FIXME : remove later
@@ -21,7 +22,7 @@ int main_loop(game_window_t * main_window) {
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
     player_t *player = NULL;
 
-    main_window->context->current_screen = START_MENU;
+    main_window->context->current_screen = INVENTORY_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
@@ -88,6 +89,13 @@ int main_loop(game_window_t * main_window) {
 
             case INVENTORY_SCREEN :
                 main_window->context->current_screen = inventory_screen(main_window, NULL);
+                if(main_window->context->current_screen == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                break;
+
+            case SHOP_SCREEN :
+                main_window->context->current_screen = shop_screen(main_window, NULL);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

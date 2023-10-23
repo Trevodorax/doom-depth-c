@@ -63,10 +63,10 @@ set(cross_platform_targets
         src/map_screen/map/display/display.h
         src/event/event.c
         src/event/event.h
-        src/inventory_screen/inventory_screen.c
-        src/inventory_screen/inventory_screen.h
         src/utils/utils.c
         src/utils/utils.h
+        src/inventory_screen/inventory_screen.c
+        src/inventory_screen/inventory_screen.h
         src/inventory_screen/display/display.c
         src/inventory_screen/display/display.h
         src/inventory_screen/inventory_utils/inventory_utils.c
@@ -92,6 +92,13 @@ set(cross_platform_targets
         src/fight_screen/fight_menu/display/display.h
         src/logs/log.c
         src/logs/log.h
+        src/shop_screen/shop_screen.h
+        src/shop_screen/shop_screen.c
+        src/shop_screen/display/display.c
+        src/shop_screen/display/display.h
+        src/utils/items_management/types.h
+        src/shop_screen/utils/shop_utils.h
+        src/shop_screen/utils/shop_utils.c
 )
 
 # for unix

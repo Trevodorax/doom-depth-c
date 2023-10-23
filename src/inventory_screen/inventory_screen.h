@@ -4,35 +4,6 @@
 #include "../sdl_utils/sdl_utils.h"
 #include "../entities/player/player.h"
 
-typedef enum {
-    CATEGORIES,
-    ITEMS,
-    ACTIONS
-} section_options;
-
-typedef enum {
-    GO_BACK,
-    WEAPONS,
-    ARMORS,
-    HEALTH_POTIONS,
-    MANA_POTIONS
-} category_options;
-
-typedef enum {
-    USE,
-    THROW_AWAY
-} action_options;
-
-typedef enum {
-    HEALTH,
-    MANA
-} potion_types;
-
-typedef enum {
-    ARMOR,
-    WEAPON
-} item_types;
-
 /**
  * @brief switches the window to inventory screen
  *

@@ -98,7 +98,7 @@ void handle_items_input(SDL_Keycode keycode, section_options *active_section, ca
 
     // moving in the items grid
     if (keycode == SDLK_RIGHT) {
-        if (*active_item % 3 != 2) {
+        if (*active_item % 3 != 2 && *active_item < category_items_count - 1) {
             (*active_item)++;
         }
     }

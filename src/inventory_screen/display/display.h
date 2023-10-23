@@ -4,6 +4,7 @@
 #include "../../game_window/game_window.h"
 #include "../../entities/inventory/inventory.h"
 #include "../inventory_screen.h"
+#include "../../utils/items_management/types.h"
 
 /**
  * @brief displays inventory depending on where the user is in the user experience, three sections are available :
