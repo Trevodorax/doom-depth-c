@@ -8,7 +8,6 @@
         "min_nb_enemies": 1,
         "max_nb_enemies": 3,
         "enemies_list": ["bat", "goblin", "skeleton"],
-        "enemies_size": 3,
         "enemies_chances_to_appear": [50, 30, 20],
         "done": 0
       },
@@ -17,14 +16,12 @@
         "max_nb_enemies": 2,
         "enemies_list": ["bat", "goblin"],
         "enemies_chances_to_appear": [50, 50],
-        "enemies_size": 2,
         "done": 0,
         "right": {
           "min_nb_enemies": 2,
           "max_nb_enemies": 4,
           "enemies_list": ["bat", "goblin", "skeleton", "troll"],
           "enemies_chances_to_appear": [30, 40, 20, 10],
-          "enemies_size": 4,
           "done": 0,
           "bottom": {
             "treasure": {}
@@ -43,7 +40,6 @@
             "max_nb_enemies": 1,
             "enemies_list": ["troll"],
             "enemies_chances_to_appear": [10],
-            "enemies_size": 1,
             "done": 0,
             "linked_map": "map_2.json"
           }
