@@ -33,7 +33,7 @@ char *weapon_details_to_string(weapon_t *weapon);
 
 /**
  * @brief creates a string containing the details on the health potions in an inventory :
- * name (health potion),
+ * name (health heal_potion),
  * healing value (20),
  * the number of health potions available
  *
@@ -44,7 +44,7 @@ char *health_potions_details_to_string(unsigned int quantity);
 
 /**
  * @brief creates a string containing the details on the mana potions in an inventory :
- * name (mana potion),
+ * name (mana heal_potion),
  * mana value (20),
  * the number of mana potions available
  *

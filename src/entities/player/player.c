@@ -1,8 +1,72 @@
 #include "player.h"
 
-player_t *create_player(char *name) {
-    player_t *player = malloc(sizeof(player_t));
-    player->name = malloc(sizeof(char) * strlen(name) + 1);
+unsigned int attack_monster(player_t * player, monster_t * target){
+    weapon_t * weapon = player->chosen_weapon;
+    unsigned int damages = 0;
+    if(weapon != NULL){
+        unsigned int random = weapon->min_attack + (rand() % (weapon->max_attack - weapon->min_attack + 1));
+        damages = (random + player->base_attack) - target->defense;
+    } else {
+        damages = player->base_attack - target->defense;
+    }
+
+    if(damages > target->hp){
+        damages = target->hp;
+    }
+    target->hp -= damages;
+
+    player->give_exp(player,damages);
+
+    return damages;
+}
+
+unsigned int compute_xp_needed(unsigned int level){
+    unsigned int total_xp = 0;
+    for (int i = 1; i <= level; ++i) {
+        total_xp += 50 * i;
+    }
+    return total_xp;
+}
+
+void level_up(player_t * player) {
+    player->level++;
+    player->base_attack++;
+    printf("\nLEVEL UP !");
+}
+
+void check_level_up(player_t * player){
+    if(compute_xp_needed(player->level) <= player->xp){
+        level_up(player);
+    }
+}
+
+void give_exp(player_t * player, unsigned int amount){
+    player->xp += amount;
+    check_level_up(player);
+}
+
+unsigned int heal_player(player_t * player, unsigned int amount){
+    if(player->hp_max < player->hp+amount){
+        unsigned int diff = player->hp_max - player->hp;
+        player->hp = player->hp_max;
+        return diff;
+    } else {
+        player->hp += amount;
+        return amount;
+    }
+}
+
+void heal_mana_player(player_t * player, unsigned int amount){
+    if(player->mana_max < player->mana+amount){
+        player->mana = player->mana_max;
+    } else {
+        player->mana += amount;
+    }
+}
+
+player_t * create_player(char *name) {
+    player_t * player = malloc(sizeof(player_t));
+    player->name = malloc(sizeof(char)*strlen(name)+1);
     strcpy(player->name, name);
 
     array_node_t *spells = get_spells();
@@ -16,7 +80,9 @@ player_t *create_player(char *name) {
     player->base_attack = 5u;
     player->base_defense = 2u;
     player->gold = 100u;
-    player->action_points = (unsigned short) 3;
+    player->action_points = (unsigned short)6;
+    player->max_action_points = (unsigned short)6;
+    player->is_defending = false;
 
     // TODO : add one spell at least for the beginning, see with @TomBrd
     player->offensive_spell = find_noob_spell(spells, 3);
@@ -28,6 +94,11 @@ player_t *create_player(char *name) {
 
     player->inventory = create_inventory();
     player->stats = create_stats();
+
+    player->heal = heal_player;
+    player->heal_mana = heal_mana_player;
+    player->attack = attack_monster;
+    player->give_exp = give_exp;
 
     return player;
 }
@@ -53,6 +124,8 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
     player->level = sqlite3_column_int(stmt, 8);
     player->base_attack = sqlite3_column_int(stmt, 9);
     player->base_defense = sqlite3_column_int(stmt, 10);
+    player->is_defending = false; // TODO ?
+    // TODO action_points and max_action_points
 
     player->offensive_spell = find_spell(spells, sqlite3_column_int(stmt, 11));
     player->defensive_spell = find_spell(spells, sqlite3_column_int(stmt, 12));
@@ -69,26 +142,12 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
     player->chosen_weapon = get_chosen_weapon(player->inventory);
     player->chosen_armor = get_chosen_armor(player->inventory);
 
+    player->heal = heal_player;
+    player->heal_mana = heal_mana_player;
+    player->attack = attack_monster;
+    player->give_exp = give_exp;
+
     return player;
-}
-
-
-unsigned int compute_xp_needed(unsigned int level) {
-    int total_xp = 0;
-    for (int i = 1; i <= level; ++i) {
-        total_xp += 100 * i;
-    }
-    return (unsigned int) total_xp;
-}
-
-void level_up(player_t *player) {
-
-}
-
-void check_level_up(player_t *player) {
-    if (compute_xp_needed(player->level + 1) <= player->xp) {
-        level_up(player);
-    }
 }
 
 int save_player(sqlite3 *db, player_t *player) {
@@ -171,9 +230,4 @@ int save_player(sqlite3 *db, player_t *player) {
     sqlite3_finalize(stmt);
     return SQLITE_OK;
 
-}
-
-void give_exp(player_t *player, unsigned int amount) {
-    player->xp += amount;
-    check_level_up(player);
 }

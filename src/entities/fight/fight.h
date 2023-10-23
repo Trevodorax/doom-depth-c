@@ -7,7 +7,8 @@ typedef struct {
     unsigned int min_nb_enemies;
     unsigned int max_nb_enemies;
     char ** enemies_list;
-    float * enemies_chances_to_appear;
+    int * enemies_chances_to_appear;
+    int enemies_size;
 } fight_t;
 
 /**

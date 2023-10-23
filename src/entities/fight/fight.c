@@ -30,6 +30,7 @@ fight_t * json_to_fight(Json * fight_json) {
         free(result);
         return NULL;
     }
+    result->enemies_size = enemies_list->nb_elements;
 
     result->enemies_list = malloc(enemies_list->nb_elements * sizeof(char *));
     for (unsigned int i = 0; i < enemies_list->nb_elements; i++) {
@@ -39,6 +40,7 @@ fight_t * json_to_fight(Json * fight_json) {
         }
         result->enemies_list[i] = strdup(enemies_list->values[i].string);
     }
+
 
     Json *chances = get_object_at_key(fight_json, "enemies_chances_to_appear");
     if (!chances || chances->type != 'a') {

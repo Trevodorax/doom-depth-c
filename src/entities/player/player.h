@@ -10,8 +10,10 @@
 #include "../../storage/database/database.h"
 #include "../entities.h"
 #include <sqlite3.h>
+#include "../monster/monster.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct player_t {
     int id;
@@ -26,6 +28,8 @@ typedef struct player_t {
     unsigned int base_defense;
     unsigned int gold;
     unsigned short action_points;
+    unsigned short max_action_points;
+    bool is_defending;
     spell_t *offensive_spell;
     spell_t *defensive_spell;
     spell_t *healing_spell;
@@ -33,6 +37,10 @@ typedef struct player_t {
     weapon_t *chosen_weapon;
     inventory_t *inventory;
     stats_t *stats;
+    unsigned int (*attack)(struct player_t * player, monster_t * target);
+    void (*give_exp)(struct player_t * player, unsigned int amount);
+    unsigned int (*heal)(struct player_t * player, unsigned int amount);
+    void (*heal_mana)(struct player_t * player, unsigned int amount);
 } player_t;
 
 player_t *create_player(char *name);

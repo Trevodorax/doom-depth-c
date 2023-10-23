@@ -11,8 +11,10 @@ typedef struct array_node_t {
 void push(array_node_t **head_ref, void *new_data, size_t data_size);
 void append(array_node_t **head_ref, void *new_data, size_t data_size);
 void delete_node(array_node_t **head_ref, int index);
+void remove_node(array_node_t **head_ref, void **data_to_remove);
 int find_node(array_node_t *head, void *data_to_find, size_t data_size);
 void * get_value_at_index(array_node_t *head, int index);
+int get_size(array_node_t *node);
 void free_list(array_node_t **head_ref);
 void print_list(array_node_t *node, void (*fptr)(void *));
 void print_string(void *str);
