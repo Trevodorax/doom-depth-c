@@ -15,7 +15,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-typedef struct player_t {
+typedef struct {
     int id;
     char *name;
     unsigned int hp;
@@ -37,10 +37,6 @@ typedef struct player_t {
     weapon_t *chosen_weapon;
     inventory_t *inventory;
     stats_t *stats;
-    unsigned int (*attack)(struct player_t * player, monster_t * target);
-    void (*give_exp)(struct player_t * player, unsigned int amount);
-    unsigned int (*heal)(struct player_t * player, unsigned int amount);
-    void (*heal_mana)(struct player_t * player, unsigned int amount);
 } player_t;
 
 player_t *create_player(char *name);
@@ -75,6 +71,36 @@ void *create_player_from_db(sqlite3_stmt *stmt);
  */
 int save_player(sqlite3 *db, player_t *player);
 
+/**
+ *
+ * @param player
+ * @param amount
+ * @return
+ */
+unsigned int heal_player(player_t * player, unsigned int amount);
+
+/**
+ *
+ *
+ * @param player
+ * @param amount
+ */
 void give_exp(player_t * player, unsigned int amount);
+
+/**
+ *
+ *
+ * @param player
+ * @param target
+ * @return
+ */
+unsigned int player_attack(player_t * player, monster_t * target);
+
+/**
+ *
+ * @param player
+ * @param amount
+ */
+void heal_mana(player_t * player, unsigned int amount);
 
 #endif

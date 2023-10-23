@@ -25,7 +25,7 @@ int heal_potion(fight_context_t *fight_context, void *custom_params) {
     printf("\nDrink heal_potion : Actual heal of player : %d - HP_MAX = %d", fight_context->player->hp,
            fight_context->player->hp_max);
 
-    unsigned int amount = fight_context->player->heal(fight_context->player, 20);
+    unsigned int amount = heal_player(fight_context->player, 20);
 
     printf("\nHealed by %d HP, actual health : %d/%d", amount, fight_context->player->hp, fight_context->player->hp_max);
 
@@ -43,7 +43,7 @@ int mana_potion(fight_context_t *fight_context, void *custom_params) {
     printf("\nDrink mana_potion : Actual mana of player : %d - MANA_MAX = %d", fight_context->player->mana,
            fight_context->player->mana_max);
 
-    fight_context->player->heal_mana(fight_context->player, 20);
+    heal_mana(fight_context->player, 20);
 
     printf("\nMana restored ! Actual mana : %d - MANA_MAX = %d", fight_context->player->mana,
            fight_context->player->mana_max);
@@ -96,7 +96,7 @@ int attack_spell(fight_context_t *fight_context, void *custom_params) {
     if (target->hp == 0) {
         printf("\n%s is DEAD !", target->name);
 
-        remove_node(&fight_context->monsters, &target);
+        remove_node(&fight_context->monsters, (void *)&target);
 
         printf("\n%d monster(s) left", get_size(fight_context->monsters));
 
@@ -154,7 +154,7 @@ int heal_spell(fight_context_t *fight_context, void *custom_params) {
         return FA_NOTHING;
     }
 
-    int amount = fight_context->player->heal(fight_context->player, fight_context->player->healing_spell->amount);
+    int amount = heal_player(fight_context->player, fight_context->player->healing_spell->amount);
 
     check_and_remove_action_points(fight_context->player, 2);
 
@@ -177,7 +177,7 @@ int attack_weapon(fight_context_t *fight_context, void *custom_params) {
 
     printf("\nAttack %s with weapon", target->name);
 
-    int dmg = fight_context->player->attack(fight_context->player, target);
+    int dmg = player_attack(fight_context->player, target);
 
     printf("\nDamages on %s : -%dHP", target->name, dmg);
     printf("\nHP left : %d", target->hp);
@@ -185,7 +185,7 @@ int attack_weapon(fight_context_t *fight_context, void *custom_params) {
     if (target->hp == 0) {
         printf("\n%s is DEAD !", target->name);
 
-        remove_node(&fight_context->monsters, &target);
+        remove_node(&fight_context->monsters, (void *)&target);
         printf("\n%d monster(s) left", get_size(fight_context->monsters));
 
         if (get_size(fight_context->monsters) == 0) {

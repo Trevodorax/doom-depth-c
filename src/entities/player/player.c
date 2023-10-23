@@ -1,6 +1,6 @@
 #include "player.h"
 
-unsigned int attack_monster(player_t * player, monster_t * target){
+unsigned int player_attack(player_t * player, monster_t * target) {
     weapon_t * weapon = player->chosen_weapon;
     unsigned int damages = 0;
     if(weapon != NULL){
@@ -15,7 +15,7 @@ unsigned int attack_monster(player_t * player, monster_t * target){
     }
     target->hp -= damages;
 
-    player->give_exp(player,damages);
+    give_exp(player,damages);
 
     return damages;
 }
@@ -56,7 +56,7 @@ unsigned int heal_player(player_t * player, unsigned int amount){
     }
 }
 
-void heal_mana_player(player_t * player, unsigned int amount){
+void heal_mana(player_t * player, unsigned int amount){
     if(player->mana_max < player->mana+amount){
         player->mana = player->mana_max;
     } else {
@@ -94,11 +94,6 @@ player_t * create_player(char *name) {
 
     player->inventory = create_inventory();
     player->stats = create_stats();
-
-    player->heal = heal_player;
-    player->heal_mana = heal_mana_player;
-    player->attack = attack_monster;
-    player->give_exp = give_exp;
 
     return player;
 }
@@ -141,11 +136,6 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
 
     player->chosen_weapon = get_chosen_weapon(player->inventory);
     player->chosen_armor = get_chosen_armor(player->inventory);
-
-    player->heal = heal_player;
-    player->heal_mana = heal_mana_player;
-    player->attack = attack_monster;
-    player->give_exp = give_exp;
 
     return player;
 }
