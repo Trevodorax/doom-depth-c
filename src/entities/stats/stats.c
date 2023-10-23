@@ -30,6 +30,27 @@ void *create_stats_from_db(sqlite3_stmt *stmt) {
 
 }
 
+int create_stats_in_db(sqlite3 *db, stats_t *stats) {
+
+    char *z_err_msg = NULL;
+    sqlite3_stmt *stmt;
+
+    char *sql = malloc(sizeof(char) * 150);
+    sprintf(sql, "INSERT INTO STATS (nb_monsters_killed, nb_deaths, damages_dealt, health_healed, max_level_reached) VALUES (%d, %d, %d, %d, %d)", stats->nb_monsters_killed, stats->nb_deaths, stats->damages_dealt, stats->health_healed, stats->max_level_reached);
+
+    int rc = sqlite3_exec(db, sql, NULL, 0, &z_err_msg);
+
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return -1;
+    }
+
+    free(sql);
+    return (int) sqlite3_last_insert_rowid(db);
+
+}
+
 int save_stats(sqlite3 *db, stats_t *stats, int player_id) {
 
     char *z_err_msg = NULL;
