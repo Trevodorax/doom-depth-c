@@ -43,6 +43,20 @@ typedef struct {
 player_t *create_player(char *name);
 
 /**
+ * @brief Creates a player in the database.
+ *
+ * This function creates a player in the database.
+ *
+ * @param player A pointer to the player to be created.
+ *
+ * @return None.
+ * @sideeffects May modify the SQLite database by inserting new data.
+ * @dependencies Depends on the SQLite3 library.
+ * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
+ */
+void create_player_in_db(player_t *player);
+
+/**
  * @brief Creates a player from the database.
  *
  * This function creates a player from the database.
