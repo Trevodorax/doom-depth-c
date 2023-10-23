@@ -21,7 +21,7 @@ int main_loop(game_window_t * main_window) {
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
     player_t *player = NULL;
 
-    main_window->context->current_screen = START_MENU;
+    main_window->context->current_screen = FIGHT_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
@@ -37,7 +37,7 @@ int main_loop(game_window_t * main_window) {
                 }
                 break;
 
-            case FIGHT_SCREEN :
+            case FIGHT_SCREEN : {
                 // FIXME : remove test struct
                 fight_t * fight = malloc(sizeof(fight_t));
                 fight->enemies_list = malloc(sizeof(char*)*3);
@@ -84,6 +84,7 @@ int main_loop(game_window_t * main_window) {
                     return EXIT_FAILURE;
                 }
                 break;
+            }
 
             case INVENTORY_SCREEN :
                 main_window->context->current_screen = inventory_screen(main_window, NULL);

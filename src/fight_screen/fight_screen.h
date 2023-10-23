@@ -6,19 +6,7 @@
 #include "../entities/fight/fight.h"
 #include "../sdl_utils/sdl_utils.h"
 #include "../game_window/game_window.h"
-
-
-typedef struct {
-    player_t * player;
-    array_node_t * monsters;
-    char * notification_message;
-    bool player_turn;
-} fight_context_t;
-
-typedef struct {
-    int (*callback)(fight_context_t *, void * custom_params);
-    void * params;
-} fight_action_t ;
+#include "./types.h"
 
 /**
  * @brief Screen for fights
