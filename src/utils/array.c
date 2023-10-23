@@ -351,4 +351,11 @@ void print_float(void *f) {
     printf(" %f", *(float *)f);
 }
 
-
+int get_count(array_node_t *head) {
+    int counter = 0;
+    while (head != NULL) {
+        counter++;
+        head = head->next;
+    }
+    return counter;
+}
