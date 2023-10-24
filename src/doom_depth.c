@@ -153,6 +153,10 @@ int doom_depth_gui() {
     free_game_window(main_window, GUI);
     SDL_Quit();
 
+    if (global_logger) {
+        logger_free();
+    }
+
     return result;
 };
 
@@ -163,10 +167,19 @@ int doom_depth_cli() {
 
     free_game_window(main_window, CLI);
 
+    if (global_logger) {
+        logger_free();
+    }
+
     return result;
 }
 
 doom_depth_main doom_depth_factory(ui_type_t ui_type) {
+    init_global_logger();
+
+    if (global_logger) {
+        global_logger->info("Application started");
+    }
     switch (ui_type) {
         case CLI:
             return doom_depth_cli;

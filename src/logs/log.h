@@ -5,7 +5,7 @@
 
 typedef struct logger_t logger_t;
 
-typedef void (*log_function)(logger_t *logger, const char *format, ...);
+typedef void (*log_function)(const char *format, ...);
 
 struct logger_t {
     FILE *error_stream;
@@ -16,12 +16,14 @@ struct logger_t {
     log_function info;
 };
 
-logger_t *new_logger();
-void logger_free(logger_t *logger);
-void logger_set_outputs(logger_t *logger, char *error_stream_path, char *warning_stream_path, char *info_stream_path);
+extern logger_t *global_logger;
 
-void logger_error(logger_t *logger, const char *format, ...);
-void logger_warn(logger_t *logger, const char *format, ...);
-void logger_info(logger_t *logger, const char *format, ...);
+void init_global_logger();
+void logger_free();
+void logger_set_outputs(char *error_stream_path, char *warning_stream_path, char *info_stream_path);
+
+void logger_error(const char *format, ...);
+void logger_warn(const char *format, ...);
+void logger_info(const char *format, ...);
 
 #endif

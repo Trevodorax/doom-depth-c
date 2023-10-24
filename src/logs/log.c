@@ -12,6 +12,8 @@
 
 #include "log.h"
 
+logger_t *global_logger = NULL;
+
 void create_log_directory() {
     struct stat st = {0};
     if (stat("../logs", &st) == -1) {
@@ -20,13 +22,13 @@ void create_log_directory() {
 }
 
 logger_t *new_logger() {
-    logger_t *logger = (logger_t *) malloc(sizeof(logger_t));
-    if (logger == NULL) {
+    global_logger = (logger_t *) malloc(sizeof(logger_t));
+    if (global_logger == NULL) {
         return NULL;
     }
-    logger->error_stream = NULL;
-    logger->warn_stream = NULL;
-    logger->info_stream = NULL;
+    global_logger->error_stream = NULL;
+    global_logger->warn_stream = NULL;
+    global_logger->info_stream = NULL;
 
     time_t t = time(NULL);
     struct tm *tm_info = localtime(&t);
@@ -38,39 +40,43 @@ logger_t *new_logger() {
     snprintf(log_filename, sizeof(log_filename), "%s.log", date_buffer);
 
     // By default, use the same file for all logs
-    logger_set_outputs(logger, log_filename, log_filename, log_filename);
+    logger_set_outputs(log_filename, log_filename, log_filename);
 
-    logger->error = logger_error;
-    logger->warn = logger_warn;
-    logger->info = logger_info;
-
-    return logger;
+    global_logger->error = logger_error;
+    global_logger->warn = logger_warn;
+    global_logger->info = logger_info;
 }
 
-void close_outputs(logger_t *logger) {
-    if (logger->error_stream != NULL && logger->error_stream != stderr && logger->error_stream != stdout) {
-        fclose(logger->error_stream);
-        logger->error_stream = NULL;
-    }
-    if (logger->warn_stream != NULL && logger->warn_stream != stderr && logger->warn_stream != stdout) {
-        fclose(logger->warn_stream);
-        logger->warn_stream = NULL;
-    }
-    if (logger->info_stream != NULL && logger->info_stream != stderr && logger->info_stream != stdout) {
-        fclose(logger->info_stream);
-        logger->info_stream = NULL;
+void init_global_logger() {
+    if (global_logger == NULL) {
+        global_logger = new_logger();
     }
 }
 
-void logger_free(logger_t *logger) {
-    if (logger != NULL) {
-        close_outputs(logger);
-        free(logger);
+void close_outputs() {
+    if (global_logger->error_stream != NULL && global_logger->error_stream != stderr && global_logger->error_stream != stdout) {
+        fclose(global_logger->error_stream);
+        global_logger->error_stream = NULL;
+    }
+    if (global_logger->warn_stream != NULL && global_logger->warn_stream != stderr && global_logger->warn_stream != stdout) {
+        fclose(global_logger->warn_stream);
+        global_logger->warn_stream = NULL;
+    }
+    if (global_logger->info_stream != NULL && global_logger->info_stream != stderr && global_logger->info_stream != stdout) {
+        fclose(global_logger->info_stream);
+        global_logger->info_stream = NULL;
     }
 }
 
-void logger_set_outputs(logger_t *logger, char *error_stream_path, char *warning_stream_path, char *info_stream_path) {
-    close_outputs(logger);
+void logger_free() {
+    if (global_logger != NULL) {
+        close_outputs();
+        free(global_logger);
+    }
+}
+
+void logger_set_outputs(char *error_stream_path, char *warning_stream_path, char *info_stream_path) {
+    close_outputs();
     create_log_directory();
 
     char error_full_path[512];
@@ -81,19 +87,19 @@ void logger_set_outputs(logger_t *logger, char *error_stream_path, char *warning
     sprintf(warning_full_path, "../logs/%s", warning_stream_path);
     sprintf(info_full_path, "../logs/%s", info_stream_path);
 
-    if (logger != NULL) {
-        logger->error_stream = fopen(error_full_path, "a");
-        if (logger->error_stream == NULL) {
+    if (global_logger != NULL) {
+        global_logger->error_stream = fopen(error_full_path, "a");
+        if (global_logger->error_stream == NULL) {
             perror("Couldn't open error log file");
         }
 
-        logger->warn_stream = fopen(warning_full_path, "a");
-        if (logger->warn_stream == NULL) {
+        global_logger->warn_stream = fopen(warning_full_path, "a");
+        if (global_logger->warn_stream == NULL) {
             perror("Couldn't open warn log file");
         }
 
-        logger->info_stream = fopen(info_full_path, "a");
-        if (logger->info_stream == NULL) {
+        global_logger->info_stream = fopen(info_full_path, "a");
+        if (global_logger->info_stream == NULL) {
             perror("Couldn't open info log file");
         }
     }
@@ -111,23 +117,23 @@ void logger_log(FILE *stream, const char *log_level, const char *format, va_list
     fflush(stream);
 }
 
-void logger_error(logger_t *logger, const char *format, ...) {
+void logger_error(const char *format, ...) {
     va_list args;
             va_start(args, format);
-    logger_log(logger->error_stream, "ERROR", format, args);
+    logger_log(global_logger->error_stream, "ERROR", format, args);
             va_end(args);
 }
 
-void logger_warn(logger_t *logger, const char *format, ...) {
+void logger_warn(const char *format, ...) {
     va_list args;
             va_start(args, format);
-    logger_log(logger->warn_stream, "WARNING", format, args);
+    logger_log(global_logger->warn_stream, "WARNING", format, args);
             va_end(args);
 }
 
-void logger_info(logger_t *logger, const char *format, ...) {
+void logger_info(const char *format, ...) {
     va_list args;
             va_start(args, format);
-    logger_log(logger->info_stream, "INFO", format, args);
+    logger_log(global_logger->info_stream, "INFO", format, args);
             va_end(args);
 }

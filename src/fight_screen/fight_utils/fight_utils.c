@@ -24,7 +24,7 @@ unsigned int player_attack(player_t * player, monster_t * target) {
 void build_notification(fight_context_t * fight_context, char * message) {
     fight_context->notification_message = malloc(sizeof(char) * strlen(message)+1);
     strcpy(fight_context->notification_message, message);
-    fight_context->logger->info(fight_context->logger, "%s", fight_context->notification_message);
+    global_logger->info("%s", fight_context->notification_message);
 }
 
 void build_notification_formatted(fight_context_t * fight_context, char * message, ...) {
@@ -33,7 +33,7 @@ void build_notification_formatted(fight_context_t * fight_context, char * messag
     fight_context->notification_message = malloc(sizeof(char) * strlen(message)+1001);
     vsprintf(fight_context->notification_message, message, args);
     va_end(args);
-    fight_context->logger->info(fight_context->logger, "%s", fight_context->notification_message);
+    global_logger->info( "%s", fight_context->notification_message);
 }
 
 int find_index(int rand_num, const int probs[], int size) {
@@ -48,7 +48,7 @@ int find_index(int rand_num, const int probs[], int size) {
 void free_fight_context(fight_context_t * fight_context) {
     free(fight_context->notification_message);
     free_list(&fight_context->monsters);
-    logger_free(fight_context->logger);
+    logger_free();
     free(fight_context);
 }
 
@@ -110,8 +110,7 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
     fight_context_t * fight_context = malloc(sizeof(fight_context_t));
     fight_context->player = player;
     fight_context->monsters = NULL;
-    fight_context->logger = new_logger();
-    fight_context->logger->info(fight_context->logger, "Building Fight Context");
+    global_logger->info("Building Fight Context");
 
     int enemies_size = fight->enemies_size;
 

@@ -9,7 +9,6 @@ typedef struct {
     array_node_t * monsters;
     char * notification_message;
     bool player_turn;
-    logger_t * logger;
 } fight_context_t;
 
 typedef struct {
