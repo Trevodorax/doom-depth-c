@@ -5,11 +5,11 @@
 #ifdef _WIN32
 
 #include <direct.h>
-#include <time.h>
 
 #define mkdir(path, mode) _mkdir(path)
 #endif
 
+#include <time.h>
 #include "log.h"
 
 logger_t *global_logger = NULL;
@@ -45,6 +45,8 @@ logger_t *new_logger() {
     global_logger->error = logger_error;
     global_logger->warn = logger_warn;
     global_logger->info = logger_info;
+
+    return global_logger;
 }
 
 void init_global_logger() {
