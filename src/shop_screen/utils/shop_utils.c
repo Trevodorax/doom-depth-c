@@ -1,5 +1,6 @@
 #include "shop_utils.h"
 #include "../../utils/array.h"
+#include "../../utils/utils.h"
 
 int get_items_count(category_options category) {
     switch (category) {
@@ -21,4 +22,11 @@ int get_items_count(category_options category) {
         default:
             return -1;
     }
+}
+
+char *player_gold_to_string(player_t *player) {
+    char *res = malloc(sizeof(char) * 10);
+    res[0] = '\0';
+    custom_itoa((int) player->gold, res, 10);
+    return res;
 }

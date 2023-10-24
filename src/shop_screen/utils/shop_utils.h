@@ -13,4 +13,11 @@
  */
 int get_items_count(category_options category);
 
+/**
+ * @brief Returns the quantity of gold a player has in a string
+ *
+ * @param player
+ */
+char *player_gold_to_string(player_t *player);
+
 #endif //DOOM_DEPTH_C_SHOP_UTILS_H
