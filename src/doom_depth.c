@@ -22,7 +22,7 @@ int main_loop(game_window_t * main_window) {
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
     player_t *player = NULL;
 
-    main_window->context->current_screen = INVENTORY_SCREEN;
+    main_window->context->current_screen = SHOP_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
@@ -94,12 +94,14 @@ int main_loop(game_window_t * main_window) {
                 }
                 break;
 
-            case SHOP_SCREEN :
-                main_window->context->current_screen = shop_screen(main_window, NULL);
+            case SHOP_SCREEN : {
+                player = create_player("aea");
+                main_window->context->current_screen = shop_screen(main_window, player);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
+            }
 
             case NEW_GAME_SCREEN :
                 main_window->context->current_screen = new_game_screen(main_window, &player);

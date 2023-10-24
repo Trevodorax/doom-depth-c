@@ -8,6 +8,7 @@ int display_shop_gui(game_window_t *game_window, player_t *player,
                      section_options active_section, category_options active_category,
                      confirm_options active_confirmation, unsigned short active_item);
 int display_go_back(SDL_Renderer *renderer, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size);
+int display_gold(SDL_Renderer *renderer, player_t *player, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size);
 
 int display_shop_cli(game_window_t *game_window, player_t *player);
 
@@ -66,7 +67,7 @@ int display_shop_gui(game_window_t *game_window,
     };
 
     SDL_Rect gold_rect = (SDL_Rect) {
-            0,
+            gold_icon_rect.x - unit_padding,
             unit_padding,
             0,
             0
@@ -96,6 +97,9 @@ int display_shop_gui(game_window_t *game_window,
     if (display_go_back(game_window->renderer, &go_back_icon_rect, &go_back_text_rect, font_size)) {
         return EXIT_FAILURE;
     }
+    if (display_gold(game_window->renderer, player, &gold_icon_rect, &gold_rect, font_size)) {
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
@@ -123,6 +127,34 @@ int display_go_back(SDL_Renderer *renderer, SDL_Rect *icon_container, SDL_Rect *
 
     SDL_RenderCopy(renderer, go_back_text_texture, NULL, text_container);
     SDL_DestroyTexture(go_back_text_texture);
+
+    return EXIT_SUCCESS;
+}
+
+int display_gold(SDL_Renderer *renderer, player_t *player, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size) {
+    draw_image_in_rectangle(
+            renderer,
+            *icon_container,
+            "../assets/items_mgmt/image/gold.png",
+            NORTH
+    );
+
+    SDL_Texture *gold_texture = get_string_texture(
+            renderer,
+            player_gold_to_string(player),
+            "../assets/PixelifySans-Regular.ttf",
+            font_size,
+            (SDL_Color) {255, 255, 255, 255}
+    );
+    if (!gold_texture) {
+        return EXIT_FAILURE;
+    }
+
+    SDL_QueryTexture(gold_texture, NULL, NULL, &(text_container->w), &(text_container->h));
+    text_container->x -= text_container->w;
+
+    SDL_RenderCopy(renderer, gold_texture, NULL, text_container);
+    SDL_DestroyTexture(gold_texture);
 
     return EXIT_SUCCESS;
 }
