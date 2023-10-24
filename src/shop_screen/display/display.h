@@ -3,6 +3,7 @@
 
 #include "../../game_window/game_window.h"
 #include "../../entities/player/player.h"
+#include "../../utils/items_management/types.h"
 
 /**
  * @brief Displays the shop screen instead of what was previously there.
@@ -11,6 +12,8 @@
  * @param player
  * @return EXIT_FAILURE or EXIT_SUCCESS
  */
-int display_shop(game_window_t *game_window, player_t *player);
+int display_shop(game_window_t *game_window, player_t *player,
+                 section_options active_section, category_options active_category,
+                 confirm_options active_confirmation, unsigned short active_item);
 
 #endif
