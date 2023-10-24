@@ -5,7 +5,6 @@ set(CMAKE_C_STANDARD 11)
 
 # cross-platform
 set(cross_platform_targets
-        main.c
         src/doom_depth.c
         src/doom_depth.h
         src/entities/armor/armor.h
@@ -123,17 +122,30 @@ set(test_targets
 
 # unix tests
 set(test_unix_targets
-        src/cli_utils/cli_utils_unix.c
 )
 
 # windows tests
 set(test_windows_targets
 )
 
-add_executable(doom_depth_c_unix ${cross_platform_targets} ${unix_targets})
-add_executable(doom_depth_c_windows ${cross_platform_targets} ${windows_targets})
-add_executable(doom_depth_tests_unix ${cross_platform_targets} ${test_targets} ${test_unix_targets})
-add_executable(doom_depth_tests_windows ${cross_platform_targets} ${test_targets} ${test_windows_targets})
+add_executable(doom_depth_c_unix
+        main.c
+        ${cross_platform_targets}
+        ${unix_targets})
+add_executable(doom_depth_c_windows
+        main.c
+        ${cross_platform_targets}
+        ${windows_targets})
+add_executable(doom_depth_tests_unix
+        ${cross_platform_targets}
+        ${test_targets}
+        ${test_unix_targets}
+        ${unix_targets})
+add_executable(doom_depth_tests_windows
+        ${cross_platform_targets}
+        ${test_targets}
+        ${test_windows_targets}
+        ${windows_targets})
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
