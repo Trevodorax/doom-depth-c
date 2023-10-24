@@ -4,7 +4,8 @@
 typedef enum {
     CATEGORIES,
     ITEMS,
-    ACTIONS
+    ACTIONS,
+    CONFIRM
 } section_options;
 
 typedef enum {

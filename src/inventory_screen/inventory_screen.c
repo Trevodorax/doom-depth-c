@@ -45,9 +45,12 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
                         }
                         break;
 
-                    case ACTIONS:
+                    case CONFIRM:
                         handle_actions_input(e.key.keysym.sym, player, &active_section, active_category, active_item, &active_action);
                         break;
+
+                    case ACTIONS:
+                        return EXIT_FAILURE;
                 }
             }
         }

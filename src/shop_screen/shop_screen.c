@@ -13,7 +13,8 @@
 void handle_category_input(event_t event, bool *quit,
                            section_options *active_section, category_options *active_category, unsigned short *active_item);
 void handle_shop_items_input(event_t event, unsigned short category_items_count,
-                        section_options *active_section, category_options active_category, unsigned short *active_item);
+                        section_options *active_section, category_options active_category,
+                        unsigned short *active_item, confirm_options *active_confirmation);
 void handle_confirm(event_t event, player_t *player, section_options *active_section, category_options active_category,
                     unsigned short active_item, confirm_options *active_option);
 void handle_actions(player_t *player, category_options active_category, unsigned short active_item);
@@ -22,7 +23,7 @@ int shop_screen(game_window_t *game_window, player_t *player) {
     bool quit = false;
     section_options active_section = CATEGORIES;
     category_options active_category = ARMORS;
-    confirm_options active_option = YES;
+    confirm_options active_confirmation = YES;
     unsigned short active_item = 0;
 
     event_t event;
@@ -34,6 +35,9 @@ int shop_screen(game_window_t *game_window, player_t *player) {
         }
 
         while (get_event(game_window->ui_type, &event)){
+            if (event == QUIT) {
+                return QUIT_GAME;
+            }
             switch (active_section) {
                 case CATEGORIES:
                     handle_category_input(event, &quit, &active_section, &active_category, &active_item);
@@ -41,12 +45,12 @@ int shop_screen(game_window_t *game_window, player_t *player) {
 
                 case ITEMS: {
                     int category_items_count = get_items_count(active_category);
-                    handle_shop_items_input(event, category_items_count, &active_section, active_category, &active_item);
+                    handle_shop_items_input(event, category_items_count, &active_section, active_category, &active_item, &active_confirmation);
                     break;
                 }
 
-                case ACTIONS:
-                    handle_confirm(event, player, &active_section, active_category, active_item, &active_option);
+                case CONFIRM:
+                    handle_confirm(event, player, &active_section, active_category, active_item, &active_confirmation);
 
                 default:
                     break;
@@ -55,7 +59,7 @@ int shop_screen(game_window_t *game_window, player_t *player) {
         if (game_window->ui_type == CLI) {
             set_cli_raw_mode(false);
         }
-        if(display_shop(game_window, player) == EXIT_FAILURE) {
+        if(display_shop(game_window, player, active_section, active_category, active_confirmation, active_item) == EXIT_FAILURE) {
             return QUIT_GAME;
         }
         render_present(game_window);
@@ -109,7 +113,8 @@ void handle_category_input(
 }
 
 void handle_shop_items_input(event_t event, unsigned short category_items_count,
-                        section_options *active_section, category_options active_category, unsigned short *active_item) {
+                        section_options *active_section, category_options active_category,
+                        unsigned short *active_item, confirm_options *active_confirmation) {
     switch (event) {
         case Z_KEY:
             if (active_category == HEALTH_POTIONS || active_category == MANA_POTIONS || *active_item < 3) {
@@ -135,6 +140,11 @@ void handle_shop_items_input(event_t event, unsigned short category_items_count,
             if (*active_item % 3 != 0) {
                 (*active_item)--;
             }
+            break;
+
+        case ENTER_KEY:
+            *active_section = CONFIRM;
+            *active_confirmation = YES;
             break;
 
         default:
