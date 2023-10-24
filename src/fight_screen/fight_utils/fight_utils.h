@@ -74,4 +74,12 @@ bool check_and_remove_action_points(player_t *player, unsigned int amount);
  */
 fight_context_t * build_fight_context(fight_t * fight, player_t * player);
 
+/**
+ * @brief Frees the fight context
+ *
+ * @param fight_context The fight context to free
+ * @return void
+ */
+void free_fight_context(fight_context_t * fight_context);
+
 #endif //DOOM_DEPTH_C_FIGHT_UTILS_H

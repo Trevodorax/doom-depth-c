@@ -2,12 +2,14 @@
 #define DOOM_DEPTH_C_FIGHT_SCREEN_TYPES_H
 
 #include "../entities/player/player.h"
+#include "../logs/log.h"
 
 typedef struct {
     player_t * player;
     array_node_t * monsters;
     char * notification_message;
     bool player_turn;
+    logger_t * logger;
 } fight_context_t;
 
 typedef struct {
