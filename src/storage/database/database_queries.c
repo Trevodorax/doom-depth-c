@@ -217,8 +217,8 @@ const char update_player_sql[] =
         "WHERE id = ?;";
 
 const char create_new_player_sql[] =
-        "INSERT INTO PLAYER (name, hp, hp_max, mana, mana_max, xp, level, base_attack, base_defense, gold, offensive_spell_id, defensive_spell_id, healing_spell_id, stats_id, inventory_capacity, nb_weapons, nb_armors, nb_mana_potions, nb_health_potions) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        "INSERT INTO PLAYER (name, hp, hp_max, mana, mana_max, xp, level, base_attack, base_defense, gold, offensive_spell_id, defensive_spell_id, healing_spell_id, stats_id, inventory_capacity, nb_weapons, nb_armors, nb_mana_potions, nb_health_potions, action_points, max_action_points) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 const char create_player_from_db_sql[] =
         "SELECT (id, name, hp, hp_max, mana, mana_max, gold, xp, level, base_attack, "
