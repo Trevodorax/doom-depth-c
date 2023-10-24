@@ -2,6 +2,7 @@
 #define DOOM_DEPTH_C_FIGHT_SCREEN_TYPES_H
 
 #include "../entities/player/player.h"
+#include "../logs/log.h"
 
 typedef struct {
     player_t * player;
