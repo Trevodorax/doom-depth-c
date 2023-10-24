@@ -237,7 +237,9 @@ int save_player(sqlite3 *db, player_t *player) {
     sqlite3_bind_int64(stmt, 15, player->inventory->nb_armors);
     sqlite3_bind_int64(stmt, 16, player->inventory->nb_mana_potions);
     sqlite3_bind_int64(stmt, 17, player->inventory->nb_health_potions);
-    sqlite3_bind_int64(stmt, 18, player->id);
+    sqlite3_bind_int64(stmt, 18, player->action_points);
+    sqlite3_bind_int64(stmt, 19, player->max_action_points);
+    sqlite3_bind_int64(stmt, 20, player->id);
 
     rc = sqlite3_step(stmt);
 

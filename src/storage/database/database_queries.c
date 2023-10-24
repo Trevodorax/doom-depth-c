@@ -212,6 +212,8 @@ const char update_player_sql[] =
         "nb_armors = ?, "
         "nb_mana_potions = ?, "
         "nb_health_potions = ? "
+        "action_points = ?, "
+        "max_action_points = ? "
         "WHERE id = ?;";
 
 const char create_new_player_sql[] =
@@ -220,4 +222,4 @@ const char create_new_player_sql[] =
 
 const char create_player_from_db_sql[] =
         "SELECT (id, name, hp, hp_max, mana, mana_max, gold, xp, level, base_attack, "
-        "base_defense, action_points, max_action_points, offensive_spell_id, defensive_spell_id, healing_spell_id) ";
+        "base_defense, action_points, max_action_points, offensive_spell_id, defensive_spell_id, healing_spell_id) FROM PLAYER WHERE id = ?;";
