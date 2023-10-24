@@ -110,8 +110,8 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
     fight_context_t * fight_context = malloc(sizeof(fight_context_t));
     fight_context->player = player;
     fight_context->monsters = NULL;
-    logger_t *logger = new_logger();
-    fight_context->logger = logger;
+    fight_context->logger = new_logger();
+    fight_context->logger->info(fight_context->logger, "Building Fight Context");
 
     int enemies_size = fight->enemies_size;
 
