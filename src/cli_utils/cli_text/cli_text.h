@@ -40,7 +40,7 @@ void cli_print_color(color_code_t color, const char *format, ...);
  *
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int cli_print_text_in_rectangle(cli_matrix_t *matrix, cli_rect_t rect, const char *text, color_code_t text_color,
+int cli_print_text_in_rectangle(cli_matrix_t *matrix, rect_t rect, const char *text, color_code_t text_color,
                                 alignment_t x_align, alignment_t y_align, text_size_t text_size);
 
 /**

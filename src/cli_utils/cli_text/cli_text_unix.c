@@ -29,7 +29,7 @@ int get_letters_ascii_arts(
  * @param text The printed text
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char *text, alignment_t x_align,
+int print_text_ascii_art(cli_matrix_t *matrix, rect_t container, const char *text, alignment_t x_align,
                          alignment_t y_align, text_size_t text_size);
 
 /**
@@ -58,7 +58,7 @@ void cli_print_color(color_code_t color, const char *format, ...) {
     va_end(args);
 }
 
-int cli_print_text_in_rectangle(cli_matrix_t *matrix, cli_rect_t rect, const char *text, color_code_t text_color,
+int cli_print_text_in_rectangle(cli_matrix_t *matrix, rect_t rect, const char *text, color_code_t text_color,
                                 alignment_t x_align, alignment_t y_align, text_size_t text_size) {
     if (!matrix || !matrix->matrix || !text) {
         return EXIT_FAILURE;
@@ -71,9 +71,9 @@ int cli_print_text_in_rectangle(cli_matrix_t *matrix, cli_rect_t rect, const cha
     }
 
     size_t start_row = rect.y;
-    size_t end_row = (rect.y + rect.height <= matrix->nb_rows) ? rect.y + rect.height : matrix->nb_rows;
+    size_t end_row = (rect.y + rect.h <= matrix->nb_rows) ? rect.y + rect.h : matrix->nb_rows;
     size_t start_col = rect.x;
-    size_t end_col = (rect.x + rect.width <= matrix->nb_cols) ? rect.x + rect.width : matrix->nb_cols;
+    size_t end_col = (rect.x + rect.w <= matrix->nb_cols) ? rect.x + rect.w : matrix->nb_cols;
 
     size_t max_chars_in_rect = (end_row - start_row) * (end_col - start_col);
     size_t text_len = strlen(text);
@@ -223,14 +223,14 @@ ascii_art_t * get_letter_ascii_art(char character) {
     }
 }
 
-int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char *text, alignment_t x_align,
+int print_text_ascii_art(cli_matrix_t *matrix, rect_t container, const char *text, alignment_t x_align,
                          alignment_t y_align, text_size_t text_size) {
     size_t ascii_art_width;
     size_t ascii_art_height;
 
     get_ascii_art_text_dimensions(text, &ascii_art_width, &ascii_art_height, text_size);
 
-    if(ascii_art_width > container.width || ascii_art_height > container.height) {
+    if(ascii_art_width > container.w || ascii_art_height > container.h) {
         return EXIT_FAILURE;
     }
 
@@ -241,10 +241,10 @@ int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char 
             current_x = container.x;
             break;
         case ALIGN_END:
-            current_x = container.x + container.width - ascii_art_width;
+            current_x = container.x + container.w - ascii_art_width;
             break;
         case ALIGN_CENTER:
-            current_x = container.x + container.width / 2 - ascii_art_width / 2;
+            current_x = container.x + container.w / 2 - ascii_art_width / 2;
             break;
         default:
             current_x = container.x;
@@ -256,10 +256,10 @@ int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char 
             current_y = container.y;
             break;
         case ALIGN_END:
-            current_y = container.y + container.height - ascii_art_height;
+            current_y = container.y + container.h - ascii_art_height;
             break;
         case ALIGN_CENTER:
-            current_y = container.y + container.height / 2 - ascii_art_height / 2;
+            current_y = container.y + container.h / 2 - ascii_art_height / 2;
             break;
         default:
             current_y = container.y;
@@ -279,11 +279,11 @@ int print_text_ascii_art(cli_matrix_t *matrix, cli_rect_t container, const char 
 
         cli_matrix_t *character_matrix = art->versions[text_size];
 
-        cli_rect_t dst_rect = {
+        rect_t dst_rect = {
                 .x = current_x,
                 .y = current_y,
-                .width = character_matrix->nb_cols,
-                .height = character_matrix->nb_rows
+                .w = character_matrix->nb_cols,
+                .h = character_matrix->nb_rows
         };
 
         if (cli_copy_matrix(matrix, dst_rect, character_matrix) == EXIT_FAILURE) {

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <SDL_rect.h>
 #include "./types.h"
 #include "./cli_text/cli_text.h"
 
@@ -78,7 +79,7 @@ int resize_cli_matrix(cli_matrix_t *matrix, size_t new_nb_rows, size_t new_nb_co
  *
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int cli_draw_fill_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t fill);
+int cli_draw_fill_rect(cli_matrix_t * matrix, rect_t rect, cli_char_t fill);
 
 /**
  * @brief Draws a fill rectangle on the matrix
@@ -91,7 +92,7 @@ int cli_draw_fill_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t fill);
  *
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int cli_draw_stroke_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t stroke);
+int cli_draw_stroke_rect(cli_matrix_t * matrix, rect_t rect, cli_char_t stroke);
 
 /**
  * @brief Resizes the matrix to the size of the terminal
@@ -142,6 +143,14 @@ int cli_poll_char(char * value);
  * @param src_matrix The matrix to copy.
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int cli_copy_matrix(cli_matrix_t * dst_matrix, cli_rect_t dst_rect, cli_matrix_t * src_matrix);
+int cli_copy_matrix(cli_matrix_t * dst_matrix, rect_t dst_rect, cli_matrix_t * src_matrix);
+
+/**
+ * @brief Casts a rect into an SDL_Rect
+ *
+ * @param rect The casted rect
+ * @return The resulting SDL_Rect
+ */
+SDL_Rect rect_to_SDL_Rect(rect_t rect);
 
 #endif //DOOM_DEPTH_C_CLI_UTILS_H

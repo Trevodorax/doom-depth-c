@@ -35,40 +35,7 @@ struct menu_t {
  * @sideeffects modifies the fight and menu zone if window is resized
  * @return The action selected in the menu
  */
-fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, SDL_Rect * fight_zone, SDL_Rect * menu_zone, bool is_nested);
-
-/**
- * @brief Prints one level of menu
- *
- * @param renderer
- * @param menu The printed menu
- * @param container The rectangle in which to print the menu
- * @param selected_item_index The index of the selected item
- * @return EXIT_SUCCESS or EXIT_FAILURE
- */
-int display_menu(SDL_Renderer * renderer, menu_t * menu, SDL_Rect * container, int selected_item_index, bool player_turn);
-
-/**
- * @brief Prints one item of one level of menu
- *
- * @param renderer
- * @param title Optional title (only need title or image or both)
- * @param image_path Optional image (only need title or image or both)
- * @param container The rectangle in which to print the menu item
- * @param is_selected If the user is currently selecting this menu item
- * @return EXIT_SUCCESS or EXIT_FAILURE
- */
-int display_menu_item(SDL_Renderer * renderer, const char * title, const char * image_path, SDL_Rect * container, bool is_selected);
-
-/**
- * @brief Prints the fight
- *
- * @param renderer
- * @param fight_context Pointer to the data bout the fight
- * @param fight_zone Pointer to the rectangle where the fight is displayed
- * @return EXIT_SUCCESS or EXIT_FAILURE
- */
-int display_fight(SDL_Renderer * renderer, fight_context_t * fight_context, SDL_Rect * fight_zone);
+fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, rect_t *fight_zone, rect_t *menu_zone, bool is_nested);
 
 /**
  * @brief Recursively frees a menu
