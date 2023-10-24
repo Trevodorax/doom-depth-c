@@ -27,6 +27,7 @@ int new_game_screen(game_window_t *game_window, player_t **player) {
                 if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_KP_ENTER) {
                     if (strlen(name)) {
                         *player = create_player(name);
+                        create_player_in_db(*player);
                         return MAP_SCREEN;
                     }
                 }

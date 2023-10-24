@@ -29,6 +29,21 @@ typedef struct {
 stats_t *create_stats();
 
 /**
+ * @brief Creates a stats struct in the database.
+ *
+ * This function creates a stats struct in the database.
+ *
+ * @param db
+ * @param stats
+ * @return
+ *
+ * @sideeffects May modify the SQLite database by inserting new data.
+ * @dependencies Depends on the SQLite3 library.
+ * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
+ */
+int create_stats_in_db(sqlite3 *db, stats_t *stats);
+
+/**
  * @brief Creates a stats struct from the database.
  *
  * This function allocates memory for a new stats struct and initializes its fields with the values from the database.
