@@ -112,6 +112,8 @@ void create_player_in_db(player_t *player) {
     sqlite3_bind_int64(stmt, 17, player->inventory->nb_armors);
     sqlite3_bind_int64(stmt, 18, player->inventory->nb_mana_potions);
     sqlite3_bind_int64(stmt, 19, player->inventory->nb_health_potions);
+    sqlite3_bind_int64(stmt, 20, player->action_points);
+    sqlite3_bind_int64(stmt, 21, player->max_action_points);
 
     int rc = sqlite3_step(stmt);
 
@@ -146,12 +148,13 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
     player->level = sqlite3_column_int(stmt, 8);
     player->base_attack = sqlite3_column_int(stmt, 9);
     player->base_defense = sqlite3_column_int(stmt, 10);
+    player->action_points = sqlite3_column_int(stmt, 11);
+    player->max_action_points = sqlite3_column_int(stmt, 12);
     player->is_defending = false; // TODO ?
-    // TODO action_points and max_action_points
 
-    player->offensive_spell = find_spell(spells, sqlite3_column_int(stmt, 11));
-    player->defensive_spell = find_spell(spells, sqlite3_column_int(stmt, 12));
-    player->healing_spell = find_spell(spells, sqlite3_column_int(stmt, 13));
+    player->offensive_spell = find_spell(spells, sqlite3_column_int(stmt, 13));
+    player->defensive_spell = find_spell(spells, sqlite3_column_int(stmt, 14));
+    player->healing_spell = find_spell(spells, sqlite3_column_int(stmt, 15));
 
     array_node_t *inventory = create_full_inventory_from_db(db_connection(), player->id);
     player->inventory = (inventory_t *)inventory->value;
