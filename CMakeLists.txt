@@ -87,6 +87,8 @@ set(cross_platform_targets
         src/fight_screen/fight_utils/fight_utils.c
         src/fight_screen/fight_utils/fight_utils.h
         src/fight_screen/types.h
+        src/logs/log.c
+        src/logs/log.h
 )
 
 # for unix
@@ -115,6 +117,8 @@ set(test_targets
         src/map_screen/map/map_test.h
         src/cli_utils/ascii_art/ascii_art_test.c
         src/cli_utils/ascii_art/ascii_art_test.h
+        src/logs/log.c
+        src/logs/log.h
 )
 
 # unix tests
