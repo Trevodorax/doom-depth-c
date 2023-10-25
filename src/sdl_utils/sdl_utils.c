@@ -467,3 +467,26 @@ SDL_Rect *get_rectangle_grid(size_t nb_rectangles, SDL_Rect *container) {
     return rect_grid;
 }
 
+int draw_string_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *string, int font_size, SDL_Color color) {
+    SDL_Rect string_rect = (SDL_Rect) {container.x + container.w / 2, container.y + container.h / 2, 0, 0};
+
+    SDL_Texture *string_texture = get_string_texture(
+            renderer,
+            string,
+            "../assets/PixelifySans-Regular.ttf",
+            font_size,
+            color
+    );
+    if (!string_texture) {
+        return EXIT_FAILURE;
+    }
+
+    SDL_QueryTexture(string_texture, NULL, NULL, &(string_rect.w), (&string_rect.h));
+    string_rect.x -= string_rect.w / 2;
+    string_rect.y -= string_rect.h / 2;
+
+    SDL_RenderCopy(renderer, string_texture, NULL, &string_rect);
+    SDL_DestroyTexture(string_texture);
+
+    return EXIT_SUCCESS;
+}
