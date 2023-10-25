@@ -90,7 +90,7 @@ void handle_category_input(
 
         case S_KEY:
             if (*active_category == GO_BACK) {
-                (*active_category)++;
+                *active_category = WEAPONS;
             }
             break;
 
