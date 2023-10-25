@@ -380,7 +380,7 @@ int display_scroll_indicator(SDL_Renderer *renderer,
 
         if (first_item_to_print > 0) {
             SDL_Rect up_container = (SDL_Rect) {
-                    container->x + container->w - arrow_width,
+                    container->x + container->w + 2,
                     container->y,
                     arrow_width,
                     arrow_height
@@ -393,7 +393,7 @@ int display_scroll_indicator(SDL_Renderer *renderer,
 
         if (first_item_to_print < quantity - items_count){
             SDL_Rect down_container = (SDL_Rect) {
-                    container->x + container->w - arrow_width,
+                    container->x + container->w + 2,
                     container->y + container->h - arrow_height,
                     arrow_width,
                     arrow_height

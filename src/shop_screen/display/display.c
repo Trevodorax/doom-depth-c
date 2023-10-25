@@ -17,6 +17,9 @@ int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_contain
                             category_options active_category, int font_size);
 int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_Rect *message_container,
                      const char *message, int font_size);
+int display_shop_items(SDL_Renderer *renderer, SDL_Rect *items_container,
+                       category_options active_category, unsigned short active_item,
+                       int font_size);
 
 int display_shop_cli(game_window_t *game_window, player_t *player);
 
@@ -83,14 +86,15 @@ int display_shop_gui(game_window_t *game_window,
 
     SDL_Rect items_container = (SDL_Rect) {
         0,
-        window_height - 3 * unit - 2 * unit_padding,
+        window_height - 3 * unit + unit_padding,
         3 * unit - 2 * unit_padding,
         3 * unit - 2 * unit_padding
     };
+    items_container.x = (window_width - items_container.w) / 2;
 
     SDL_Rect categories_container = (SDL_Rect) {
         unit_padding,
-        items_container.y - unit_padding / 2 - font_size,
+        items_container.y - unit_padding - font_size,
         window_width - 2 * unit_padding,
         font_size
     };
@@ -116,6 +120,9 @@ int display_shop_gui(game_window_t *game_window,
         return EXIT_FAILURE;
     }
     if (display_merchant(game_window->renderer, &merchant_image_rect, &dialog_rect, "Hello there", font_size)) {
+        return EXIT_FAILURE;
+    }
+    if (active_section == ITEMS && display_shop_items(game_window->renderer, &items_container,active_category, active_item, font_size)) {
         return EXIT_FAILURE;
     }
 
@@ -264,6 +271,94 @@ int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_R
     draw_fill_rect(*message_container, white, renderer);
     if (draw_string_in_rectangle(renderer, *message_container, message, font_size, black)) {
         return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+int display_shop_items(SDL_Renderer *renderer,
+                       SDL_Rect *items_container,
+                       category_options active_category,
+                       unsigned short active_item,
+                       int font_size) {
+    SDL_Color white = (SDL_Color) {255, 255, 255, 255};
+
+    int quantity = -1;
+    switch (active_category) {
+        case GO_BACK:
+            quantity = -1;
+            break;
+
+        case WEAPONS: {
+            array_node_t *weapons = get_weapons();
+            quantity = get_count(weapons);
+            break;
+        }
+
+        case ARMORS: {
+            array_node_t *armors = get_armors();
+            quantity = get_count(armors);
+            break;
+        }
+
+        case HEALTH_POTIONS:
+        case MANA_POTIONS:
+            quantity = 2;
+    }
+
+    SDL_Rect *items = get_rectangle_grid(ITEMS_PER_PAGE, items_container);
+
+    int first_item_to_print = (active_item / ITEMS_PER_PAGE) * ITEMS_PER_PAGE;
+
+    display_scroll_indicator(renderer, items_container, font_size, ITEMS_PER_PAGE, quantity, first_item_to_print);
+
+    switch (active_category) {
+        case ARMORS:
+            for (int i = 0; i < ITEMS_PER_PAGE; i++) {
+                array_node_t *armors = get_armors();
+                armor_t *armor_to_print = get_value_at_index(armors, first_item_to_print + i);
+                if (!armor_to_print) {
+                    break;
+                }
+                if (active_item % ITEMS_PER_PAGE == i) {
+                    draw_thick_rect(items[i], 2, white, renderer);
+                }
+                if (draw_image_in_rectangle(renderer, items[i], armor_to_print->image_path, NORTH)){
+                    return EXIT_FAILURE;
+                }
+            }
+            break;
+
+        case WEAPONS:
+            for (int i = 0; i < ITEMS_PER_PAGE; i++) {
+                array_node_t *weapons = get_weapons();
+                weapon_t *weapon_to_print = get_value_at_index(weapons, first_item_to_print + i);
+                if (!weapon_to_print) {
+                    break;
+                }
+                if (active_item % ITEMS_PER_PAGE == i) {
+                    draw_thick_rect(items[i], 2, white, renderer);
+                }
+                if (draw_image_in_rectangle(renderer, items[i], weapon_to_print->image_path, NORTH)){
+                    return EXIT_FAILURE;
+                }
+            }
+            break;
+
+        case HEALTH_POTIONS:
+        case MANA_POTIONS:
+            if (active_category == HEALTH_POTIONS) {
+                draw_thick_rect(items[0], 2, white, renderer);
+            } else if (active_category == MANA_POTIONS) {
+                draw_thick_rect(items[1], 2, white, renderer);
+            }
+            if (draw_image_in_rectangle(renderer, items[0], "../assets/items_mgmt/image/health_potions.png", NORTH)){
+                return EXIT_FAILURE;
+            }
+            if (draw_image_in_rectangle(renderer, items[1], "../assets/items_mgmt/image/mana_potions.png", NORTH)){
+                return EXIT_FAILURE;
+            }
+            break;
     }
 
     return EXIT_SUCCESS;
