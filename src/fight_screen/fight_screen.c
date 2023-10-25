@@ -25,7 +25,7 @@ int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight
         fight_action_t * selected_action = fight_menu(game_window, menu, fight_context, &fight_zone, &menu_zone, false);
         switch (selected_action->callback(fight_context, selected_action->params)){
             case FA_QUIT:
-                free(fight_context);
+                free_fight_context(fight_context);
                 return MAP_SCREEN;
         }
         free_menu(menu);

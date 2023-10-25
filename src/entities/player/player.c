@@ -78,6 +78,55 @@ player_t * create_player(char *name) {
     return player;
 }
 
+void create_player_in_db(player_t *player) {
+
+    sqlite3 *db = db_connect();
+    char *z_err_msg = NULL;
+    sqlite3_stmt *stmt;
+
+    int stats_id = create_stats_in_db(db, player->stats);
+    if (stats_id == -1) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+        return;
+    }
+
+    sqlite3_prepare_v2(db, create_new_player_sql, -1, &stmt, NULL);
+
+    sqlite3_bind_text(stmt, 1, player->name, -1, SQLITE_STATIC);
+    sqlite3_bind_int64(stmt, 2, player->hp);
+    sqlite3_bind_int64(stmt, 3, player->hp_max);
+    sqlite3_bind_int64(stmt, 4, player->mana);
+    sqlite3_bind_int64(stmt, 5, player->mana_max);
+    sqlite3_bind_int64(stmt, 6, player->xp);
+    sqlite3_bind_int64(stmt, 7, player->level);
+    sqlite3_bind_int64(stmt, 8, player->base_attack);
+    sqlite3_bind_int64(stmt, 9, player->base_defense);
+    sqlite3_bind_int64(stmt, 10, player->gold);
+    sqlite3_bind_int64(stmt, 11, player->offensive_spell->id);
+    sqlite3_bind_int64(stmt, 12, player->defensive_spell->id);
+    sqlite3_bind_int64(stmt, 13, player->healing_spell->id);
+    sqlite3_bind_int64(stmt, 14, stats_id);
+    sqlite3_bind_int64(stmt, 15, player->inventory->capacity);
+    sqlite3_bind_int64(stmt, 16, player->inventory->nb_weapons);
+    sqlite3_bind_int64(stmt, 17, player->inventory->nb_armors);
+    sqlite3_bind_int64(stmt, 18, player->inventory->nb_mana_potions);
+    sqlite3_bind_int64(stmt, 19, player->inventory->nb_health_potions);
+    sqlite3_bind_int64(stmt, 20, player->action_points);
+    sqlite3_bind_int64(stmt, 21, player->max_action_points);
+
+    int rc = sqlite3_step(stmt);
+
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "SQL error: %s\n", z_err_msg);
+        sqlite3_free(z_err_msg);
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+}
+
 void *create_player_from_db(sqlite3_stmt *stmt) {
 
     player_t *player = malloc(sizeof(player_t));
@@ -99,12 +148,13 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
     player->level = sqlite3_column_int(stmt, 8);
     player->base_attack = sqlite3_column_int(stmt, 9);
     player->base_defense = sqlite3_column_int(stmt, 10);
+    player->action_points = sqlite3_column_int(stmt, 11);
+    player->max_action_points = sqlite3_column_int(stmt, 12);
     player->is_defending = false; // TODO ?
-    // TODO action_points and max_action_points
 
-    player->offensive_spell = find_spell(spells, sqlite3_column_int(stmt, 11));
-    player->defensive_spell = find_spell(spells, sqlite3_column_int(stmt, 12));
-    player->healing_spell = find_spell(spells, sqlite3_column_int(stmt, 13));
+    player->offensive_spell = find_spell(spells, sqlite3_column_int(stmt, 13));
+    player->defensive_spell = find_spell(spells, sqlite3_column_int(stmt, 14));
+    player->healing_spell = find_spell(spells, sqlite3_column_int(stmt, 15));
 
     array_node_t *inventory = create_full_inventory_from_db(db_connection(), player->id);
     player->inventory = (inventory_t *)inventory->value;
@@ -187,7 +237,9 @@ int save_player(sqlite3 *db, player_t *player) {
     sqlite3_bind_int64(stmt, 15, player->inventory->nb_armors);
     sqlite3_bind_int64(stmt, 16, player->inventory->nb_mana_potions);
     sqlite3_bind_int64(stmt, 17, player->inventory->nb_health_potions);
-    sqlite3_bind_int64(stmt, 18, player->id);
+    sqlite3_bind_int64(stmt, 18, player->action_points);
+    sqlite3_bind_int64(stmt, 19, player->max_action_points);
+    sqlite3_bind_int64(stmt, 20, player->id);
 
     rc = sqlite3_step(stmt);
 

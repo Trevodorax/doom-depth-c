@@ -27,6 +27,8 @@ extern const char insert_spell_sql[];
 extern const char insert_monster_sql[];
 
 extern const char update_player_sql[];
+extern const char create_new_player_sql[];
+extern const char create_player_from_db_sql[];
 
 extern Table_Info all_tables_info[];
 
