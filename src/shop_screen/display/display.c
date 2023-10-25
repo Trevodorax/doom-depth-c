@@ -12,6 +12,8 @@ int display_gold(SDL_Renderer *renderer, player_t *player, SDL_Rect *icon_contai
 int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_container,
                             SDL_Rect *go_back_icon_container, SDL_Rect *go_back_text_container,
                             category_options active_category, int font_size);
+int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_Rect *message_container,
+                     const char *message, int font_size);
 
 int display_shop_cli(game_window_t *game_window, player_t *player);
 
@@ -93,8 +95,8 @@ int display_shop_gui(game_window_t *game_window,
     SDL_Rect merchant_image_rect = (SDL_Rect) {
         unit_padding,
         go_back_icon_rect.y + go_back_icon_rect.h + unit_padding,
-        unit - unit_padding,
-        items_container.x - (go_back_icon_rect.y + go_back_icon_rect.h + 2 * unit_padding)
+        window_width / 4,
+        categories_container.y - (go_back_icon_rect.y + go_back_icon_rect.h + 2 * unit_padding)
     };
 
     SDL_Rect dialog_rect = (SDL_Rect) {
@@ -108,6 +110,9 @@ int display_shop_gui(game_window_t *game_window,
         return EXIT_FAILURE;
     }
     if (display_shop_categories(game_window->renderer, &categories_container, &go_back_icon_rect, &go_back_text_rect, active_category, font_size)) {
+        return EXIT_FAILURE;
+    }
+    if (display_merchant(game_window->renderer, &merchant_image_rect, &dialog_rect, "Hello there", font_size)) {
         return EXIT_FAILURE;
     }
 
@@ -225,6 +230,18 @@ int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_contain
                     1, white, renderer);
             break;
     }
+
+    return EXIT_SUCCESS;
+}
+
+int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_Rect *message_container,
+                     const char *message, int font_size) {
+    SDL_Color white = (SDL_Color) {255, 255, 255, 255};
+    SDL_Color black = (SDL_Color) {0, 0, 0, 255};
+    draw_image_in_rectangle(renderer, *merchant_container, "../assets/items_mgmt/image/shop_owner.png", NORTH);
+
+    draw_fill_rect(*message_container, white, renderer);
+    draw_string_in_rectangle(renderer, *message_container, message, font_size, black);
 
     return EXIT_SUCCESS;
 }
