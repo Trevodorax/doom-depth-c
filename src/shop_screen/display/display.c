@@ -9,6 +9,9 @@ int display_shop_gui(game_window_t *game_window, player_t *player,
                      confirm_options active_confirmation, unsigned short active_item);
 int display_go_back(SDL_Renderer *renderer, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size);
 int display_gold(SDL_Renderer *renderer, player_t *player, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size);
+int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_container,
+                            SDL_Rect *go_back_icon_container, SDL_Rect *go_back_text_container,
+                            category_options active_category, int font_size);
 
 int display_shop_cli(game_window_t *game_window, player_t *player);
 
@@ -33,7 +36,7 @@ int display_shop_gui(game_window_t *game_window,
     int window_height = 0;
     SDL_GetWindowSize(game_window->window, &window_width, &window_height);
 
-    int unit = (min(window_width, window_height) == window_width) ? window_width / 3 : window_height / 4;
+    int unit = (min(window_width, window_height) == window_width) ? window_width / 4 : window_height / 5;
     int unit_padding = unit / 10;
     int icon_size = 2 * unit_padding;
     int font_size = icon_size;
@@ -80,6 +83,13 @@ int display_shop_gui(game_window_t *game_window,
         3 * unit - 2 * unit_padding
     };
 
+    SDL_Rect categories_container = (SDL_Rect) {
+        unit_padding,
+        items_container.y - unit_padding / 2 - font_size,
+        window_width - 2 * unit_padding,
+        font_size
+    };
+
     SDL_Rect merchant_image_rect = (SDL_Rect) {
         unit_padding,
         go_back_icon_rect.y + go_back_icon_rect.h + unit_padding,
@@ -94,10 +104,10 @@ int display_shop_gui(game_window_t *game_window,
         merchant_image_rect.h
     };
 
-    if (display_go_back(game_window->renderer, &go_back_icon_rect, &go_back_text_rect, font_size)) {
+    if (display_gold(game_window->renderer, player, &gold_icon_rect, &gold_rect, font_size)) {
         return EXIT_FAILURE;
     }
-    if (display_gold(game_window->renderer, player, &gold_icon_rect, &gold_rect, font_size)) {
+    if (display_shop_categories(game_window->renderer, &categories_container, &go_back_icon_rect, &go_back_text_rect, active_category, font_size)) {
         return EXIT_FAILURE;
     }
 
@@ -155,6 +165,66 @@ int display_gold(SDL_Renderer *renderer, player_t *player, SDL_Rect *icon_contai
 
     SDL_RenderCopy(renderer, gold_texture, NULL, text_container);
     SDL_DestroyTexture(gold_texture);
+
+    return EXIT_SUCCESS;
+}
+
+int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_container,
+                       SDL_Rect *go_back_icon_container, SDL_Rect *go_back_text_container,
+                       category_options active_category, int font_size) {
+    SDL_Color white = (SDL_Color) {255, 255, 255, 255};
+    if (display_go_back(renderer, go_back_icon_container, go_back_text_container, font_size)) {
+        return EXIT_FAILURE;
+    }
+
+    SDL_Rect weapons_container = (SDL_Rect) {
+            categories_container->x,
+            categories_container->y,
+            categories_container->w / 3,
+            categories_container->h
+    };
+    draw_string_in_rectangle(renderer, weapons_container, "WEAPONS", font_size, white);
+
+    SDL_Rect armors_container = (SDL_Rect) {
+            weapons_container.x + weapons_container.w,
+            categories_container->y,
+            categories_container->w / 3,
+            categories_container->h
+    };
+    draw_string_in_rectangle(renderer, armors_container, "ARMORS", font_size, white);
+
+    SDL_Rect potions_container = (SDL_Rect) {
+            armors_container.x + armors_container.w,
+            categories_container->y,
+            categories_container->w / 3,
+            categories_container->h
+    };
+    draw_string_in_rectangle(renderer, potions_container, "POTIONS", font_size, white);
+
+    switch (active_category) {
+        case GO_BACK:
+            draw_thick_rect(*go_back_icon_container, 2, white, renderer);
+            break;
+
+        case ARMORS:
+            draw_thick_rect(
+                    (SDL_Rect) {armors_container.x, armors_container.y + armors_container.h + font_size / 2 - 4, armors_container.w, 2},
+                    1, white, renderer);
+            break;
+
+        case WEAPONS:
+            draw_thick_rect(
+                    (SDL_Rect) {weapons_container.x, weapons_container.y + weapons_container.h + font_size / 2 - 4, weapons_container.w, 2},
+                    1, white, renderer);
+            break;
+
+        case HEALTH_POTIONS:
+        case MANA_POTIONS:
+            draw_thick_rect(
+                    (SDL_Rect) {potions_container.x, potions_container.y + potions_container.h + font_size / 2 - 4, potions_container.w, 2},
+                    1, white, renderer);
+            break;
+    }
 
     return EXIT_SUCCESS;
 }
