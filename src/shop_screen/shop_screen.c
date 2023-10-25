@@ -13,7 +13,7 @@
 void handle_category_input(event_t event, bool *quit,
                            section_options *active_section, category_options *active_category, unsigned short *active_item);
 void handle_shop_items_input(event_t event, unsigned short category_items_count,
-                        section_options *active_section, category_options active_category,
+                        section_options *active_section, category_options *active_category,
                         unsigned short *active_item, confirm_options *active_confirmation);
 void handle_confirm(event_t event, player_t *player, section_options *active_section, category_options active_category,
                     unsigned short active_item, confirm_options *active_option);
@@ -48,7 +48,7 @@ int shop_screen(game_window_t *game_window, player_t *player) {
 
                 case ITEMS: {
                     int category_items_count = get_items_count(active_category);
-                    handle_shop_items_input(event, category_items_count, &active_section, active_category, &active_item, &active_confirmation);
+                    handle_shop_items_input(event, category_items_count, &active_section, &active_category, &active_item, &active_confirmation);
                     break;
                 }
 
@@ -116,11 +116,11 @@ void handle_category_input(
 }
 
 void handle_shop_items_input(event_t event, unsigned short category_items_count,
-                        section_options *active_section, category_options active_category,
+                        section_options *active_section, category_options *active_category,
                         unsigned short *active_item, confirm_options *active_confirmation) {
     switch (event) {
         case Z_KEY:
-            if (active_category == HEALTH_POTIONS || active_category == MANA_POTIONS || *active_item < 3) {
+            if (*active_category == HEALTH_POTIONS || *active_category == MANA_POTIONS || *active_item < 3) {
                 *active_section = CATEGORIES;
             } else {
                 *active_item -= 3;
@@ -128,19 +128,24 @@ void handle_shop_items_input(event_t event, unsigned short category_items_count,
             break;
 
         case D_KEY:
-            if (*active_item % 3 != 2 && *active_item < category_items_count - 1) {
+            if (*active_category == HEALTH_POTIONS) {
+                *active_category = MANA_POTIONS;
+                break;
+            } else if (*active_item % 3 != 2 && *active_item < category_items_count - 1) {
                 (*active_item)++;
             }
             break;
 
         case S_KEY:
-            if ((active_category == WEAPONS || active_category == ARMORS) && *active_item + 3 < category_items_count) {
+            if ((*active_category == WEAPONS || *active_category == ARMORS) && *active_item + 3 < category_items_count) {
                 (*active_item) += 3;
             }
             break;
 
         case Q_KEY:
-            if (*active_item % 3 != 0) {
+            if (*active_category == MANA_POTIONS) {
+                *active_category = HEALTH_POTIONS;
+            } else if (*active_item % 3 != 0) {
                 (*active_item)--;
             }
             break;
