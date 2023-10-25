@@ -3,6 +3,9 @@
 #include "../../utils/items_management/types.h"
 #include "../../sdl_utils/sdl_utils.h"
 #include "../utils/shop_utils.h"
+#include "../../inventory_screen/display/display.h"
+
+#define ITEMS_PER_PAGE 9
 
 int display_shop_gui(game_window_t *game_window, player_t *player,
                      section_options active_section, category_options active_category,
@@ -120,12 +123,14 @@ int display_shop_gui(game_window_t *game_window,
 }
 
 int display_go_back(SDL_Renderer *renderer, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size) {
-    draw_image_in_rectangle(
+    if (draw_image_in_rectangle(
             renderer,
             *icon_container,
             "../assets/items_mgmt/image/go_back.png",
             NORTH
-    );
+    )) {
+        return EXIT_FAILURE;
+    }
 
     SDL_Texture *go_back_text_texture = get_string_texture(
             renderer,
@@ -188,7 +193,9 @@ int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_contain
             categories_container->w / 3,
             categories_container->h
     };
-    draw_string_in_rectangle(renderer, weapons_container, "WEAPONS", font_size, white);
+    if (draw_string_in_rectangle(renderer, weapons_container, "WEAPONS", font_size, white)) {
+        return EXIT_FAILURE;
+    }
 
     SDL_Rect armors_container = (SDL_Rect) {
             weapons_container.x + weapons_container.w,
@@ -196,7 +203,9 @@ int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_contain
             categories_container->w / 3,
             categories_container->h
     };
-    draw_string_in_rectangle(renderer, armors_container, "ARMORS", font_size, white);
+    if (draw_string_in_rectangle(renderer, armors_container, "ARMORS", font_size, white)) {
+        return EXIT_FAILURE;
+    }
 
     SDL_Rect potions_container = (SDL_Rect) {
             armors_container.x + armors_container.w,
@@ -204,30 +213,40 @@ int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_contain
             categories_container->w / 3,
             categories_container->h
     };
-    draw_string_in_rectangle(renderer, potions_container, "POTIONS", font_size, white);
+    if (draw_string_in_rectangle(renderer, potions_container, "POTIONS", font_size, white)) {
+        return EXIT_FAILURE;
+    }
 
     switch (active_category) {
         case GO_BACK:
-            draw_thick_rect(*go_back_icon_container, 2, white, renderer);
+            if (draw_thick_rect(*go_back_icon_container, 2, white, renderer)) {
+                return EXIT_FAILURE;
+            }
             break;
 
         case ARMORS:
-            draw_thick_rect(
+            if (draw_thick_rect(
                     (SDL_Rect) {armors_container.x, armors_container.y + armors_container.h + font_size / 2 - 4, armors_container.w, 2},
-                    1, white, renderer);
+                    1, white, renderer)) {
+                return EXIT_FAILURE;
+            }
             break;
 
         case WEAPONS:
-            draw_thick_rect(
+            if (draw_thick_rect(
                     (SDL_Rect) {weapons_container.x, weapons_container.y + weapons_container.h + font_size / 2 - 4, weapons_container.w, 2},
-                    1, white, renderer);
+                    1, white, renderer)) {
+                return EXIT_FAILURE;
+            }
             break;
 
         case HEALTH_POTIONS:
         case MANA_POTIONS:
-            draw_thick_rect(
+            if (draw_thick_rect(
                     (SDL_Rect) {potions_container.x, potions_container.y + potions_container.h + font_size / 2 - 4, potions_container.w, 2},
-                    1, white, renderer);
+                    1, white, renderer)) {
+                return EXIT_FAILURE;
+            }
             break;
     }
 
@@ -238,10 +257,14 @@ int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_R
                      const char *message, int font_size) {
     SDL_Color white = (SDL_Color) {255, 255, 255, 255};
     SDL_Color black = (SDL_Color) {0, 0, 0, 255};
-    draw_image_in_rectangle(renderer, *merchant_container, "../assets/items_mgmt/image/shop_owner.png", NORTH);
+    if (draw_image_in_rectangle(renderer, *merchant_container, "../assets/items_mgmt/image/shop_owner.png", NORTH)) {
+        return EXIT_FAILURE;
+    }
 
     draw_fill_rect(*message_container, white, renderer);
-    draw_string_in_rectangle(renderer, *message_container, message, font_size, black);
+    if (draw_string_in_rectangle(renderer, *message_container, message, font_size, black)) {
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
