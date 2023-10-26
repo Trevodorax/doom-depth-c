@@ -20,4 +20,13 @@ void print_list(array_node_t *node, void (*fptr)(void *));
 void print_string(void *str);
 void print_int(void *n);
 void print_float(void *f);
+
+/**
+ * @brief Returns the number of elements in a linked list
+ *
+ * @param head Pointer to the first element of the linked list
+ *
+ */
+int get_count(array_node_t *head);
+
 #endif //DOOM_DEPTH_C_ARRAY_H

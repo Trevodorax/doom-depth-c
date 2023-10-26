@@ -100,6 +100,30 @@ int print_texture_in_rectangle(SDL_Renderer *renderer, SDL_Texture *texture, SDL
                                SDL_Point center, bool keep_aspect_ratio, alignment_t x_align, alignment_t y_align);
 
 /**
+ * @brief Draws text centered in a specified container, font size and color
+ *
+ * @param renderer   Pointer to the SDL renderer
+ * @param container  Rectangle in which to draw the text
+ * @param string  Text to render
+ * @param font_size Font size to use
+ * @param color Color to use
+ * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure
+ */
+int draw_string_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *string, int font_size, SDL_Color color);
+
+/**
+ * @brief Draws text centered in a specified container, font size and color
+ *
+ * @param renderer   Pointer to the SDL renderer
+ * @param container  Rectangle in which to draw the text
+ * @param string  Text to render
+ * @param font_size Font size to use
+ * @param color Color to use
+ * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure
+ */
+int draw_string_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *string, int font_size, SDL_Color color);
+
+/**
  * @brief Returns string as a texture with the specified font, font size and color.
  *
  * Creates a texture from the given string, accepts new line caracters.

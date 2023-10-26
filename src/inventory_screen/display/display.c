@@ -1,14 +1,14 @@
 #include "display.h"
-#include "../inventory_utils/inventory_utils.h"
+#include "../utils/inventory_utils.h"
 #include "../../utils/utils.h"
 
 #define ACTIONS_COUNT 2
 
 int display_inventory(game_window_t *game_window,
                       inventory_t *inventory,
-                      section_options active_section,
-                      category_options active_category,
-                      action_options active_action,
+                      section_options_t active_section,
+                      category_options_t active_category,
+                      action_options_t active_action,
                       unsigned short active_item) {
     int window_width = 0;
     int window_height = 0;
@@ -105,8 +105,8 @@ int display_inventory(game_window_t *game_window,
 int display_categories(SDL_Renderer *renderer,
                         int icon_size,
                         int padding,
-                        section_options active_section,
-                        category_options active_category) {
+                        section_options_t active_section,
+                        category_options_t active_category) {
     const int categories_count = 5;
     SDL_Rect categories[5];
 
@@ -119,25 +119,25 @@ int display_categories(SDL_Renderer *renderer,
         };
     }
 
-    if (draw_image_in_rectangle(renderer, categories[GO_BACK], "../assets/inventory_categories/image/go_back.png",
+    if (draw_image_in_rectangle(renderer, categories[GO_BACK], "../assets/items_mgmt/image/go_back.png",
                                 NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_image_in_rectangle(renderer, categories[WEAPONS], "../assets/inventory_categories/image/weapons.png",
+    if (draw_image_in_rectangle(renderer, categories[WEAPONS], "../assets/items_mgmt/image/weapons.png",
                                 NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_image_in_rectangle(renderer, categories[ARMORS], "../assets/inventory_categories/image/armors.png", NORTH,
+    if (draw_image_in_rectangle(renderer, categories[ARMORS], "../assets/items_mgmt/image/armors.png", NORTH,
                                 false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
     if (draw_image_in_rectangle(renderer, categories[HEALTH_POTIONS],
-                                "../assets/inventory_categories/image/health_potions.png", NORTH, false, ALIGN_START,
+                                "../assets/items_mgmt/image/health_potions.png", NORTH, false, ALIGN_START,
                                 ALIGN_START)) {
         return EXIT_FAILURE;
     }
     if (draw_image_in_rectangle(renderer, categories[MANA_POTIONS],
-                                "../assets/inventory_categories/image/mana_potions.png", NORTH, false, ALIGN_START,
+                                "../assets/items_mgmt/image/mana_potions.png", NORTH, false, ALIGN_START,
                                 ALIGN_START)) {
         return EXIT_FAILURE;
     }
@@ -154,10 +154,10 @@ int display_categories(SDL_Renderer *renderer,
 int display_items(SDL_Renderer *renderer,
                    SDL_Rect *items_container,
                    SDL_Rect *details_container,
-                   item_types type, inventory_t *inventory,
+                   item_types_t type, inventory_t *inventory,
                    int details_font_size,
                    unsigned short active_item,
-                   section_options active_section) {
+                   section_options_t active_section) {
     unsigned int quantity = (type == ARMOR) ? inventory->nb_armors : (type == WEAPON) ? inventory->nb_weapons : 0;
     if (quantity == 0) {
         return EXIT_FAILURE;
@@ -193,7 +193,7 @@ int display_items(SDL_Renderer *renderer,
                 }
             }
 
-            details = armor_details_to_string(get_value_at_index(inventory->weapons_head, active_item));
+            details = inventory_armor_details_to_string(get_value_at_index(inventory->weapons_head, active_item));
             break;
 
         case WEAPON:
@@ -215,7 +215,7 @@ int display_items(SDL_Renderer *renderer,
                 }
             }
 
-            details = weapon_details_to_string(get_value_at_index(inventory->weapons_head, active_item));
+            details = inventory_weapon_details_to_string(get_value_at_index(inventory->weapons_head, active_item));
             break;
     }
 
@@ -239,18 +239,18 @@ int display_items(SDL_Renderer *renderer,
 }
 
 int display_potions(SDL_Renderer *renderer,
-                     potion_types type,
+                     potion_types_t type,
                      SDL_Rect *details_container,
                      unsigned int quantity,
                      int details_font_size) {
     char *details;
     switch (type) {
         case HEALTH:
-            details = health_potions_details_to_string(quantity);
+            details = inventory_health_potions_details_to_string(quantity);
             break;
 
         case MANA:
-            details = mana_potions_details_to_string(quantity);
+            details = inventory_mana_potions_details_to_string(quantity);
             break;
     }
 
@@ -276,7 +276,7 @@ int display_potions(SDL_Renderer *renderer,
 int display_actions(SDL_Renderer *renderer,
                     SDL_Rect *actions_container,
                     int font_size,
-                    action_options active_action) {
+                    action_options_t active_action) {
     SDL_Color white = (SDL_Color) {255, 255, 255, 255};
 
     char *actions[ACTIONS_COUNT] = {"Use", "Throw away"};
@@ -380,7 +380,7 @@ int display_scroll_indicator(SDL_Renderer *renderer,
 
         if (first_item_to_print > 0) {
             SDL_Rect up_container = (SDL_Rect) {
-                    container->x + container->w - arrow_width,
+                    container->x + container->w + 2,
                     container->y,
                     arrow_width,
                     arrow_height
@@ -393,7 +393,7 @@ int display_scroll_indicator(SDL_Renderer *renderer,
 
         if (first_item_to_print < quantity - items_count){
             SDL_Rect down_container = (SDL_Rect) {
-                    container->x + container->w - arrow_width,
+                    container->x + container->w + 2,
                     container->y + container->h - arrow_height,
                     arrow_width,
                     arrow_height

@@ -10,7 +10,8 @@ typedef enum {
     GAME_OVER,
     FIGHT_SCREEN,
     INVENTORY_SCREEN,
-    NEW_GAME_SCREEN
+    NEW_GAME_SCREEN,
+    SHOP_SCREEN
 } Router;
 
 #endif

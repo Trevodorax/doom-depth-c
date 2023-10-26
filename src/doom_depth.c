@@ -13,6 +13,7 @@
 #include "utils/array.h"
 #include "entities/entities.h"
 #include "new_game_screen/new_game_screen.h"
+#include "shop_screen/shop_screen.h"
 
 int main_loop(game_window_t * main_window) {
     // FIXME : remove later
@@ -87,11 +88,20 @@ int main_loop(game_window_t * main_window) {
             }
 
             case INVENTORY_SCREEN :
-                main_window->context->current_screen = inventory_screen(main_window, NULL);
+                main_window->context->current_screen = inventory_screen(main_window, player);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
+
+            case SHOP_SCREEN : {
+                player = create_player("aea");
+                main_window->context->current_screen = shop_screen(main_window, &player);
+                if(main_window->context->current_screen == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                break;
+            }
 
             case NEW_GAME_SCREEN :
                 main_window->context->current_screen = new_game_screen(main_window, &player);

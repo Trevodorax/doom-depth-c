@@ -3,9 +3,9 @@
 #include "SDL_keycode.h"
 #include "display/display.h"
 
-void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *active_section, category_options *active_category, unsigned short *active_item);
-void handle_items_input(SDL_Keycode keycode, section_options *active_section, category_options active_category, unsigned short *active_item, unsigned short category_items_count);
-void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options *active_section, category_options active_category, unsigned short active_item, action_options *active_action);
+void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item);
+void handle_items_input(SDL_Keycode keycode, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count);
+void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options_t *active_section, category_options_t active_category, unsigned short active_item, action_options_t *active_action);
 
 int inventory_screen(game_window_t *game_window, player_t *player) {
     if (!game_window) {
@@ -19,9 +19,9 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
 
     SDL_Event e;
     bool quit = false;
-    section_options active_section = CATEGORIES;
-    category_options active_category = WEAPONS;
-    action_options active_action = USE;
+    section_options_t active_section = CATEGORIES;
+    category_options_t active_category = WEAPONS;
+    action_options_t active_action = USE;
     unsigned short active_item = 0;
     while (!quit){
         while (SDL_PollEvent(&e)){
@@ -45,9 +45,12 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
                         }
                         break;
 
-                    case ACTIONS:
+                    case CONFIRM:
                         handle_actions_input(e.key.keysym.sym, player, &active_section, active_category, active_item, &active_action);
                         break;
+
+                    case ACTIONS:
+                        return EXIT_FAILURE;
                 }
             }
         }
@@ -56,7 +59,7 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
     return EXIT_SUCCESS;
 }
 
-void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *active_section, category_options *active_category, unsigned short *active_item) {
+void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item) {
     // navigating through the categories
     if (keycode == SDLK_DOWN && *active_category != MANA_POTIONS) {
     (*active_category)++;
@@ -86,7 +89,7 @@ void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options *a
     }
 }
 
-void handle_items_input(SDL_Keycode keycode, section_options *active_section, category_options active_category, unsigned short *active_item, unsigned short category_items_count) {
+void handle_items_input(SDL_Keycode keycode, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count) {
     // going back to categories when pressing the left arrow on the left column
     if (keycode == SDLK_LEFT) {
         if (*active_item % 3 == 0) {
@@ -98,7 +101,7 @@ void handle_items_input(SDL_Keycode keycode, section_options *active_section, ca
 
     // moving in the items grid
     if (keycode == SDLK_RIGHT) {
-        if (*active_item % 3 != 2) {
+        if (*active_item % 3 != 2 && *active_item < category_items_count - 1) {
             (*active_item)++;
         }
     }
@@ -120,7 +123,7 @@ void handle_items_input(SDL_Keycode keycode, section_options *active_section, ca
     }
 }
 
-void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options *active_section, category_options active_category, unsigned short active_item, action_options *active_action) {
+void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options_t *active_section, category_options_t active_category, unsigned short active_item, action_options_t *active_action) {
     // going back to previous section when pressing the left arrow on the left column
     if (keycode == SDLK_LEFT) {
         if (active_category == MANA_POTIONS || active_category == HEALTH_POTIONS) {
