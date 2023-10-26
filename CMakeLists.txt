@@ -69,8 +69,8 @@ set(cross_platform_targets
         src/inventory_screen/inventory_screen.h
         src/inventory_screen/display/display.c
         src/inventory_screen/display/display.h
-        src/inventory_screen/inventory_utils/inventory_utils.c
-        src/inventory_screen/inventory_utils/inventory_utils.h
+        src/inventory_screen/utils/inventory_utils.c
+        src/inventory_screen/utils/inventory_utils.h
         src/cli_utils/ascii_art/ascii_art.c
         src/cli_utils/ascii_art/ascii_art.h
         src/start_menu/display/display.c
