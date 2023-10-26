@@ -109,20 +109,20 @@ const char create_stage_table_sql[] =
 
 const char insert_armor_sql[] =
         "INSERT INTO ARMOR (name, amount, rarity, max_uses, cost, image)"
-        "VALUES ('Leather Armor', 1, 1, 10, 10, '../../../assets/armors/image/leather.png'),"
-        "       ('Chainmail', 1, 1, 20, 20, '../../../assets/armors/image/chain_mail.png'),"
-        "       ('Plate Armor', 1, 2, 30, 30, '../../../assets/armors/image/plate.png'),"
-        "       ('Dragon Armor', 1, 2, 40, 40, '../../../assets/armors/image/dragon.png'),"
-        "       ('God Armor', 1, 3, 50, 50, '../../../assets/armors/image/god.png');";
+        "VALUES ('Leather Armor', 1, 1, 10, 10, '../assets/armors/image/leather.png'),"
+        "       ('Chainmail', 1, 1, 20, 20, '../assets/armors/image/chain_mail.png'),"
+        "       ('Plate Armor', 1, 2, 30, 30, '../assets/armors/image/plate.png'),"
+        "       ('Dragon Armor', 1, 2, 40, 40, '../assets/armors/image/dragon.png'),"
+        "       ('God Armor', 1, 3, 50, 50, '../assets/armors/image/god.png');";
 
 const char insert_weapon_sql[] =
         "INSERT INTO WEAPON (name, min_attack, max_attack, attacks_per_turn, rarity, max_uses, cost, image)"
-        "VALUES ('Butter Knife', 1, 2, 1, 1, 10, 3, '../../../assets/weapons/image/butter_knife.png'),"
-        "       ('Compass', 2, 4, 1, 1, 10, 5, '../../../assets/weapons/image/compass.png'),"
-        "       ('Wooden Sword', 3, 6, 1, 2, 10, 10, '../../../assets/weapons/image/wooden_sword.png'),"
-        "       ('Lightsaber', 4, 8, 1, 2, 10, 15, '../../../assets/weapons/image/lightsaber.png'),"
-        "       ('Flip-Flops', 5, 10, 1, 3, 10, 20, '../../../assets/weapons/image/flip_flop.png'),"
-        "       ('Wand', 6, 12, 1, 3, 10, 25, '../../../assets/weapons/image/elder_wand.png');";
+        "VALUES ('Butter Knife', 1, 2, 1, 1, 10, 3, '../assets/weapons/image/butter_knife.png'),"
+        "       ('Compass', 2, 4, 1, 1, 10, 5, '../assets/weapons/image/compass.png'),"
+        "       ('Wooden Sword', 3, 6, 1, 2, 10, 10, '../assets/weapons/image/wooden_sword.png'),"
+        "       ('Lightsaber', 4, 8, 1, 2, 10, 15, '../assets/weapons/image/lightsaber.png'),"
+        "       ('Flip-Flops', 5, 10, 1, 3, 10, 20, '../assets/weapons/image/flip_flop.png'),"
+        "       ('Wand', 6, 12, 1, 3, 10, 25, '../assets/weapons/image/elder_wand.png');";
 
 const char insert_spell_sql[] =
         "INSERT INTO SPELL (type, name, amount, cost) VALUES (1, 'Heal', 10, 10),"
@@ -131,19 +131,19 @@ const char insert_spell_sql[] =
 
 const char insert_monster_sql[] =
         "INSERT INTO MONSTER (type, name, hp_max, hp, attack, defense, image)"
-        "VALUES (0, 'bat', 10, 10, 2, 1, '../../../assets/monsters/image/bat.png'),"
-        "(0, 'goblin', 15, 15, 3, 2, '../../../assets/monsters/image/gobelin.png'),"
-        "(0, 'zombie', 20, 20, 4, 3, '../../../assets/monsters/image/zombie.png'),"
-        "(0, 'skeleton', 25, 25, 5, 4, '../../../assets/monsters/image/skeleton.png'),"
-        "(0, 'troll', 30, 30, 6, 5, '../../../assets/monsters/image/troll.png'),"
-        "(0, 'ghost', 35, 35, 7, 6, '../../../assets/monsters/image/ghost.png'),"
-        "(0, 'ghoul', 40, 40, 8, 7, '../../../assets/monsters/image/ghoul.png'),"
-        "(0, 'demon', 45, 45, 9, 8, '../../../assets/monsters/image/demon.png'),"
-        "(0, 'flowey', 50, 50, 10, 9, '../../../assets/monsters/image/flowey.png'),"
-        "(2, 'sananes', 100, 100, 10, 10, '../../../assets/monsters/image/sananes.png'),"
-        "(2, 'delon', 100, 100, 10, 10, '../../../assets/monsters/image/delon.png'),"
-        "(2, 'demacon', 100, 100, 10, 10, '../../../assets/monsters/image/demacon.png'),"
-        "(2, 'machavoine', 100, 100, 10, 10, '../../../assets/monsters/image/machavoine.png');";
+        "VALUES (0, 'bat', 10, 10, 2, 1, '../assets/monsters/image/bat.png'),"
+        "(0, 'goblin', 15, 15, 3, 2, '../assets/monsters/image/gobelin.png'),"
+        "(0, 'zombie', 20, 20, 4, 3, '../assets/monsters/image/zombie.png'),"
+        "(0, 'skeleton', 25, 25, 5, 4, '../assets/monsters/image/skeleton.png'),"
+        "(0, 'troll', 30, 30, 6, 5, '../assets/monsters/image/troll.png'),"
+        "(0, 'ghost', 35, 35, 7, 6, '../assets/monsters/image/ghost.png'),"
+        "(0, 'ghoul', 40, 40, 8, 7, '../assets/monsters/image/ghoul.png'),"
+        "(0, 'demon', 45, 45, 9, 8, '../assets/monsters/image/demon.png'),"
+        "(0, 'flowey', 50, 50, 10, 9, '../assets/monsters/image/flowey.png'),"
+        "(2, 'sananes', 100, 100, 10, 10, '../assets/monsters/image/sananes.png'),"
+        "(2, 'delon', 100, 100, 10, 10, '../assets/monsters/image/delon.png'),"
+        "(2, 'demacon', 100, 100, 10, 10, '../assets/monsters/image/demacon.png'),"
+        "(2, 'machavoine', 100, 100, 10, 10, '../assets/monsters/image/machavoine.png');";
 
 Table_Info all_tables_info[] = {
         {
