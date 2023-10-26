@@ -119,5 +119,5 @@ char *inventory_mana_potions_details_to_string(unsigned int quantity) {
 
 bool is_full(inventory_t *inventory) {
     int items_count = inventory->nb_armors + inventory->nb_weapons + inventory->nb_health_potions + inventory->nb_mana_potions;
-    return inventory->capacity > items_count;
+    return inventory->capacity < items_count;
 }
