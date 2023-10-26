@@ -10,7 +10,7 @@
  */
 int display_monsters_gui(game_window_t * game_window, array_node_t * monsters, SDL_Rect container);
 
-int display_monster_gui(game_window_t * game_window, monster_t monster, SDL_Rect container);
+int display_monster_gui(game_window_t * game_window, monster_t *monster, SDL_Rect container);
 
 int display_fight_cli(game_window_t *game_window, fight_context_t * fight_context, rect_t fight_zone);
 int display_fight_gui(game_window_t *game_window, fight_context_t * fight_context, SDL_Rect fight_zone);
@@ -63,16 +63,23 @@ int display_monsters_gui(game_window_t * game_window, array_node_t * monsters, S
 
     size_t i = 0;
     array_node_t * current_monster = monsters;
-    while(monsters != NULL) {
-        monster_t * checked_current_monster = void_to_monster(current_monster);
+    while(current_monster != NULL) {
+        monster_t * checked_current_monster = void_to_monster(current_monster->value);
         if(!checked_current_monster) {
             return EXIT_FAILURE;
         }
-        display_monster_gui(game_window, *checked_current_monster, monster_containers[i]);
+        display_monster_gui(game_window, checked_current_monster, monster_containers[i++]);
         current_monster = current_monster->next;
     }
+
+    return EXIT_SUCCESS;
 }
 
-int display_monster_gui(game_window_t * game_window, monster_t monster, SDL_Rect container) {
-    draw_image_in_rectangle(game_window->renderer, container, monster.image_path, SOUTH);
+int display_monster_gui(game_window_t * game_window, monster_t *monster, SDL_Rect container) {
+    if (!monster->image_path) {
+        return EXIT_FAILURE;
+    }
+    draw_image_in_rectangle(game_window->renderer, container, monster->image_path, NORTH);
+
+    return EXIT_SUCCESS;
 }

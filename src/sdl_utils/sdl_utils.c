@@ -192,7 +192,8 @@ int draw_image_in_rectangle_multiple_sprites(SDL_Renderer *renderer, SDL_Rect co
         return EXIT_FAILURE;
     }
 
-    SDL_RenderCopy(renderer, image_texture, NULL, &container);
+    print_texture_in_rectangle(renderer, image_texture, container, 0, (SDL_Point){0, 0}, false);
+    SDL_DestroyTexture(image_texture);
 
     return EXIT_SUCCESS;
 }
@@ -230,8 +231,38 @@ int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect conta
 
     SDL_Point center = {container.w / 2, container.h / 2};
 
-    SDL_RenderCopyEx(renderer, image_texture, NULL, &container, angle, &center, flip);
+    print_texture_in_rectangle(renderer, image_texture, container, angle, center, true);
     SDL_DestroyTexture(image_texture);
+
+    return EXIT_SUCCESS;
+}
+
+int print_texture_in_rectangle(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect container, double angle, SDL_Point center, bool keep_aspect_ratio) {
+    if (!renderer || !texture) {
+        return EXIT_FAILURE;
+    }
+
+    if (keep_aspect_ratio) {
+        int texW, texH;
+        SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+
+        float containerAspectRatio = (float)container.w / container.h;
+        float textureAspectRatio = (float)texW / texH;
+
+        if (textureAspectRatio > containerAspectRatio) {
+            int newHeight = container.w / textureAspectRatio;
+            container.y += (container.h - newHeight) / 2;  // Center vertically
+            container.h = newHeight;
+        } else {
+            int newWidth = container.h * textureAspectRatio;
+            container.x += (container.w - newWidth) / 2;  // Center horizontally
+            container.w = newWidth;
+        }
+    }
+
+    if (SDL_RenderCopyEx(renderer, texture, NULL, &container, angle, &center, SDL_FLIP_NONE) != 0) {
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }

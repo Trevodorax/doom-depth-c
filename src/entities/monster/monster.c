@@ -25,7 +25,7 @@ void *create_monster_from_db(sqlite3_stmt *stmt) {
 monster_t * void_to_monster(void * void_monster) {
     monster_t * monster = (monster_t *)void_monster;
 
-    if(!monster || !monster->id || !monster->name || !monster->hp || !monster->hp_max || !monster->attack || !monster->defense || !monster->image_path) {
+    if(!monster || !monster->name || !monster->image_path) {
         return NULL;
     }
 

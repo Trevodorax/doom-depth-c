@@ -83,6 +83,18 @@ int draw_thick_rect(SDL_Rect rect, unsigned int thickness, SDL_Color color, SDL_
 int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation);
 
 /**
+ * @brief Prints a texture in a rectangle
+ * @param renderer
+ * @param texture The texture to print
+ * @param container The container to print the texture in
+ * @param angle The angle of rotation
+ * @param center The center of rotation
+ * @param keep_aspect_ratio If the aspect ratio of the texture should be preserved
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int print_texture_in_rectangle(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect container, double angle, SDL_Point center, bool keep_aspect_ratio);
+
+/**
  * @brief Returns string as a texture with the specified font, font size and color.
  *
  * Creates a texture from the given string, accepts new line caracters.

@@ -132,7 +132,7 @@ const char insert_spell_sql[] =
 const char insert_monster_sql[] =
         "INSERT INTO MONSTER (type, name, hp_max, hp, attack, defense, image)"
         "VALUES (0, 'bat', 10, 10, 2, 1, '../assets/monsters/image/bat.png'),"
-        "(0, 'goblin', 15, 15, 3, 2, '../assets/monsters/image/gobelin.png'),"
+        "(0, 'goblin', 15, 15, 3, 2, '../assets/monsters/image/goblin.png'),"
         "(0, 'zombie', 20, 20, 4, 3, '../assets/monsters/image/zombie.png'),"
         "(0, 'skeleton', 25, 25, 5, 4, '../assets/monsters/image/skeleton.png'),"
         "(0, 'troll', 30, 30, 6, 5, '../assets/monsters/image/troll.png'),"
