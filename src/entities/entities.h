@@ -81,7 +81,7 @@ array_node_t * get_monsters();
  * @param name The name of the searched monster
  * @return A copy of the right monster
  */
-monster_t * get_monster_by_name(char* name);
+monster_t * get_monster_by_name(char * name);
 
 
 #endif //DOOM_DEPTH_C_ENTITIES_H

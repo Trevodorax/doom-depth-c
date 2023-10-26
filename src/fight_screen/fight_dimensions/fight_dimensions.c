@@ -1,6 +1,6 @@
 #include "fight_dimensions.h"
 
-void update_fight_section_dimensions(game_window_t * game_window, rect_t *fight_zone, rect_t *menu_zone) {
+void update_fight_section_dimensions(game_window_t * game_window, rect_t * fight_zone, rect_t *menu_zone) {
     // get the dimensions of window
     int window_height = 0;
     int window_width = 0;

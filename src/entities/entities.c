@@ -30,7 +30,7 @@ array_node_t *get_monsters() {
     return monsters;
 }
 
-monster_t* get_monster_by_name(char* name) {
+monster_t* get_monster_by_name(char * name) {
     if (!name || !monsters) {
         return NULL;
     }
