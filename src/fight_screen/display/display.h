@@ -13,6 +13,6 @@
  * @param fight_zone Pointer to the rectangle where the fight is displayed
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_fight(game_window_t *game_window, fight_context_t * fight_context, rect_t fight_zone);
+int display_fight(game_window_t * game_window, fight_context_t * fight_context, rect_t fight_zone);
 
 #endif //DOOM_DEPTH_C_FIGHT_DISPLAY_H
