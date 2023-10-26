@@ -20,6 +20,9 @@ int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_R
 int display_shop_items(SDL_Renderer *renderer, SDL_Rect *items_container,
                        category_options active_category, unsigned short active_item,
                        int font_size);
+int display_item_confirm(SDL_Renderer *renderer, SDL_Rect *window_rect, SDL_Rect *container,
+                         confirm_options active_confirmation, category_options active_category,
+                         unsigned int active_item, int font_size);
 
 int display_shop_cli(game_window_t *game_window, player_t *player);
 
@@ -52,6 +55,13 @@ int display_shop_gui(game_window_t *game_window,
     SDL_RenderClear(game_window->renderer);
 
     SDL_Rect window_rect = (SDL_Rect) {0, 0, window_width, window_height};
+
+    SDL_Rect confirm_rect = (SDL_Rect) {
+        window_width / 6,
+        window_height / 6,
+        2 * window_width / 3,
+        2 * window_height / 3
+    };
 
     // draw black background
     draw_fill_rect(window_rect, (SDL_Color) {0, 0, 0, 0}, game_window->renderer);
@@ -125,6 +135,9 @@ int display_shop_gui(game_window_t *game_window,
     if (active_section == ITEMS && display_shop_items(game_window->renderer, &items_container,active_category, active_item, font_size)) {
         return EXIT_FAILURE;
     }
+    if (active_section == CONFIRM && display_item_confirm(game_window->renderer, &window_rect, &confirm_rect, active_confirmation, active_category, active_item, font_size)) {
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
@@ -134,7 +147,7 @@ int display_go_back(SDL_Renderer *renderer, SDL_Rect *icon_container, SDL_Rect *
             renderer,
             *icon_container,
             "../assets/items_mgmt/image/go_back.png",
-            NORTH
+            NORTH, true, ALIGN_CENTER, ALIGN_END
     )) {
         return EXIT_FAILURE;
     }
@@ -163,7 +176,7 @@ int display_gold(SDL_Renderer *renderer, player_t *player, SDL_Rect *icon_contai
             renderer,
             *icon_container,
             "../assets/items_mgmt/image/gold.png",
-            NORTH
+            NORTH, true, ALIGN_CENTER, ALIGN_END
     );
 
     SDL_Texture *gold_texture = get_string_texture(
@@ -264,7 +277,7 @@ int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_R
                      const char *message, int font_size) {
     SDL_Color white = (SDL_Color) {255, 255, 255, 255};
     SDL_Color black = (SDL_Color) {0, 0, 0, 255};
-    if (draw_image_in_rectangle(renderer, *merchant_container, "../assets/items_mgmt/image/shop_owner.png", NORTH)) {
+    if (draw_image_in_rectangle(renderer, *merchant_container, "../assets/items_mgmt/image/shop_owner.png", NORTH, true, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
 
@@ -323,7 +336,7 @@ int display_shop_items(SDL_Renderer *renderer,
                 if (active_item % ITEMS_PER_PAGE == i) {
                     draw_thick_rect(items[i], 2, white, renderer);
                 }
-                if (draw_image_in_rectangle(renderer, items[i], armor_to_print->image_path, NORTH)){
+                if (draw_image_in_rectangle(renderer, items[i], armor_to_print->image_path, NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
                     return EXIT_FAILURE;
                 }
             }
@@ -339,7 +352,7 @@ int display_shop_items(SDL_Renderer *renderer,
                 if (active_item % ITEMS_PER_PAGE == i) {
                     draw_thick_rect(items[i], 2, white, renderer);
                 }
-                if (draw_image_in_rectangle(renderer, items[i], weapon_to_print->image_path, NORTH)){
+                if (draw_image_in_rectangle(renderer, items[i], weapon_to_print->image_path, NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
                     return EXIT_FAILURE;
                 }
             }
@@ -352,14 +365,60 @@ int display_shop_items(SDL_Renderer *renderer,
             } else if (active_category == MANA_POTIONS) {
                 draw_thick_rect(items[1], 2, white, renderer);
             }
-            if (draw_image_in_rectangle(renderer, items[0], "../assets/items_mgmt/image/health_potions.png", NORTH)){
+            if (draw_image_in_rectangle(renderer, items[0], "../assets/items_mgmt/image/health_potions.png", NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
                 return EXIT_FAILURE;
             }
-            if (draw_image_in_rectangle(renderer, items[1], "../assets/items_mgmt/image/mana_potions.png", NORTH)){
+            if (draw_image_in_rectangle(renderer, items[1], "../assets/items_mgmt/image/mana_potions.png", NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
                 return EXIT_FAILURE;
             }
             break;
     }
+
+    return EXIT_SUCCESS;
+}
+
+int display_item_confirm(SDL_Renderer *renderer, SDL_Rect *window_rect, SDL_Rect *container,
+                         confirm_options active_confirmation, category_options active_category,
+                         unsigned int active_item, int font_size) {
+    if (draw_image_in_rectangle(renderer, *window_rect, "../assets/backgrounds/white_semi_transparent.png", NORTH, false, ALIGN_START, ALIGN_START)) {
+        return EXIT_FAILURE;
+    }
+    if (draw_fill_rect(*container, (SDL_Color) {0, 0, 0, 255}, renderer)) {
+        return EXIT_FAILURE;
+    }
+
+    char *details;
+    switch (active_category) {
+        case ARMORS: {
+            array_node_t * armors = get_armors();
+            details = shop_armor_details_to_string(get_value_at_index(armors, (int) active_item));
+            break;
+        }
+
+        case WEAPONS: {
+            array_node_t * weapons = get_weapons();
+            details = shop_weapon_details_to_string(get_value_at_index(weapons, (int) active_item));
+            break;
+        }
+
+        case HEALTH_POTIONS:
+            details = shop_health_potions_details_to_string();
+            break;
+
+        case MANA_POTIONS:
+            details = shop_mana_potions_details_to_string();
+            break;
+
+        case GO_BACK:
+        default:
+            break;
+    }
+
+    char * confirmation_string = (active_confirmation == YES) ? ">YES\n\n   NO" : "   YES\n\n>NO";
+    details = realloc(details, sizeof(char) * (strlen(details) + strlen(confirmation_string) + 1));
+    strcat(details, confirmation_string);
+
+    draw_string_in_rectangle(renderer, *container, details, font_size, (SDL_Color) {255, 255, 255, 255});
 
     return EXIT_SUCCESS;
 }
