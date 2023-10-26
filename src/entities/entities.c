@@ -29,3 +29,21 @@ array_node_t *get_armors() {
 array_node_t *get_monsters() {
     return monsters;
 }
+
+monster_t* get_monster_by_name(char* name) {
+    if (!name || !monsters) {
+        return NULL;
+    }
+
+    printf("\nMonsters size: %d\n", get_size(monsters));
+    array_node_t* current = monsters;
+    while (current) {
+        monster_t* monster = void_to_monster(current->value);
+        if (strcmp(monster->name, name) == 0) {
+            return copy_monster(monster);
+        }
+        current = current->next;
+    }
+
+    return NULL;
+}

@@ -75,5 +75,7 @@ array_node_t *get_armors();
  */
 array_node_t *get_monsters();
 
+monster_t* get_monster_by_name(char* name);
+
 
 #endif //DOOM_DEPTH_C_ENTITIES_H

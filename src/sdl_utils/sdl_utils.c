@@ -304,13 +304,61 @@ SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_path
     return image_texture;
 }
 
-SDL_Rect *get_rectangle_grid(int nb_rectangles, SDL_Rect *container) {
+SDL_Rect *get_rectangle_line(size_t nb_rectangles, SDL_Rect *container, bool vertical) {
     if (nb_rectangles <= 0 || container == NULL) {
         return NULL;
     }
 
-    int rows = (int)sqrt(nb_rectangles);
-    int cols = (nb_rectangles + rows - 1) / rows; // calculate columns based on rows
+    int rows, cols;
+
+    if (vertical) {
+        rows = (int)nb_rectangles;
+        cols = 1;
+    } else {
+        rows = 1;
+        cols = (int)nb_rectangles;
+    }
+
+    int cell_width = (container->w / cols) - 2;
+    int cell_height = (container->h / rows) - 2;
+
+    SDL_Rect *rect_display = malloc(rows * cols * sizeof(SDL_Rect));
+    if (!rect_display) {
+        fprintf(stderr, "\nget_rectangle_display error: couldn't allocate memory");
+        return NULL;
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            int index = i * cols + j;
+            rect_display[index].x = container->x + j * (cell_width + 2);
+            rect_display[index].y = container->y + i * (cell_height + 2);
+            rect_display[index].w = cell_width;
+            rect_display[index].h = cell_height;
+        }
+    }
+
+    return rect_display;
+}
+
+SDL_Rect * get_rectangle_layout(size_t nb_rectangles, SDL_Rect * container, layout_t layout) {
+    switch(layout) {
+        case GRID:
+            return get_rectangle_grid(nb_rectangles, container);
+        case HORIZONTAL:
+            return get_rectangle_line(nb_rectangles, container, false);
+        case VERTICAL:
+            return get_rectangle_line(nb_rectangles, container, true);
+    }
+}
+
+SDL_Rect *get_rectangle_grid(size_t nb_rectangles, SDL_Rect *container) {
+    if (nb_rectangles <= 0 || container == NULL) {
+        return NULL;
+    }
+
+    int rows = (int)sqrt((int)nb_rectangles);
+    int cols = ((int)nb_rectangles + rows - 1) / rows; // calculate columns based on rows
 
     // Calculate width and height for each cell with a small margin
     int cell_width = (container->w / cols) - 2;

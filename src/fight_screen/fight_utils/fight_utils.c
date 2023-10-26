@@ -1,5 +1,6 @@
 #include <time.h>
 #include "fight_utils.h"
+#include "../../entities/entities.h"
 
 unsigned int player_attack(player_t * player, monster_t * target) {
     weapon_t * weapon = player->chosen_weapon;
@@ -52,44 +53,6 @@ void free_fight_context(fight_context_t * fight_context) {
     free(fight_context);
 }
 
-// FIXME : to remove when we can search on monsters by name
-void * get_monster_with_name(char * name){
-    if(strcmp(name,"bat") == 0){
-        monster_t * bat = malloc(sizeof(monster_t));
-        bat->name = malloc(sizeof(char)*4);
-        strcpy(bat->name,"Bat");
-        bat->type = 0;
-        bat->attack = 2;
-        bat->defense = 1;
-        bat->hp = 40;
-        bat->hp_max = 40;
-        bat->id = 1;
-        return bat;
-    } else if(strcmp(name,"goblin") == 0){
-        monster_t * goblin = malloc(sizeof(monster_t));
-        goblin->name = malloc(sizeof(char)*7);
-        strcpy(goblin->name,"Goblin");
-        goblin->type = 0;
-        goblin->attack = 2;
-        goblin->defense = 1;
-        goblin->hp = 40;
-        goblin->hp_max = 40;
-        goblin->id = 1;
-        return goblin;
-    } else if(strcmp(name,"troll") == 0){
-        monster_t * troll = malloc(sizeof(monster_t));
-        troll->name = malloc(sizeof(char)*6);
-        strcpy(troll->name,"Troll");
-        troll->type = 0;
-        troll->attack = 2;
-        troll->defense = 1;
-        troll->hp = 40;
-        troll->hp_max = 40;
-        troll->id = 1;
-        return troll;
-    }
-}
-
 void debug_action_points(player_t *player){
     printf("\nAction points : %d/%d", player->action_points, player->max_action_points);
 }
@@ -129,7 +92,7 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
         int random_number = rand() % 100;
         int index = find_index(random_number,probs,fight->enemies_size);
         // FIXME : add monster chosen on fight context, waiting so we can search on monsters by name
-        append(&fight_context->monsters,get_monster_with_name(fight->enemies_list[index]),sizeof(monster_t));
+        append(&fight_context->monsters,get_monster_by_name(fight->enemies_list[index]),sizeof(monster_t));
     }
 
     fight_context->notification_message = NULL;

@@ -6,6 +6,7 @@
 #include "../../event/event.h"
 #include "display/display.h"
 #include "../../utils/utils.h"
+#include "../display/display.h"
 
 menu_t* create_menu(int nb_options, const char * title, const char * image_path, int (*callback)(fight_context_t *, void * custom_params), void * custom_params) {
     menu_t *new_menu = malloc(sizeof(menu_t));
@@ -82,11 +83,9 @@ void free_menu(menu_t * menu) {
 
 fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, rect_t * fight_zone, rect_t * menu_zone, bool is_nested) {
     int selected_item_index = 0;
-
     event_t event;
     while (true){
         set_cli_raw_mode(true);
-        delay(game_window->ui_type, 50);
         while (get_event(game_window->ui_type, &event)){
             switch(event) {
                 case Z_KEY:
@@ -131,7 +130,9 @@ fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_co
         set_cli_raw_mode(false);
         update_fight_section_dimensions(game_window, fight_zone, menu_zone);
         display_menu(game_window, menu, *menu_zone, selected_item_index, fight_context->player_turn);
+        display_fight(game_window, fight_context, *fight_zone);
         render_present(game_window);
+        delay(game_window->ui_type, 50);
     }
 }
 

@@ -45,6 +45,10 @@ int init_game_window_cli(game_window_t * game_window) {
         return EXIT_FAILURE;
     }
 
+    if(cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE}) == EXIT_FAILURE) {
+        return EXIT_FAILURE;
+    }
+
     return EXIT_SUCCESS;
 }
 
@@ -86,6 +90,12 @@ void free_game_window(game_window_t *game_window, ui_type_t ui_type) {
             free_game_window_gui(game_window);
             break;
     }
+
+
+    if(game_window->context) {
+        free(game_window->context);
+    }
+    free(game_window);
 }
 
 void free_game_window_cli(game_window_t * game_window) {
@@ -101,9 +111,6 @@ void free_game_window_gui(game_window_t *game_window) {
     if (game_window->renderer)
     {
         SDL_DestroyRenderer(game_window->renderer);
-    }
-    if (game_window->context) {
-        free(game_window->context);
     }
 
     TTF_Quit();

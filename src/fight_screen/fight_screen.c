@@ -4,6 +4,7 @@
 #include "fight_utils/fight_utils.h"
 #include "display/display.h"
 #include "fight_dimensions/fight_dimensions.h"
+#include "../utils/utils.h"
 
 int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight) {
     if(game_window->ui_type == CLI) {
@@ -16,20 +17,18 @@ int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight
 
     while (true) {
         update_fight_section_dimensions(game_window, &fight_zone, &menu_zone);
-        display_fight(game_window, fight_context, fight_zone);
         menu_t * menu = build_nested_menu(fight_context);
         if (fight_context->player->is_defending) {
             fight_context->player->base_defense -= fight_context->player->defensive_spell->amount;
             fight_context->player->is_defending = false;
         }
         fight_action_t * selected_action = fight_menu(game_window, menu, fight_context, &fight_zone, &menu_zone, false);
-        switch (selected_action->callback(fight_context, selected_action->params)){
+        switch (selected_action->callback(fight_context, selected_action->params)) {
             case FA_QUIT:
                 free_fight_context(fight_context);
                 return MAP_SCREEN;
         }
         free_menu(menu);
-        render_present(game_window);
     }
 }
 

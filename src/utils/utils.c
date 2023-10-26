@@ -47,10 +47,10 @@ char_type_t get_char_type(char c) {
 void delay(ui_type_t ui_type, int ms) {
     switch (ui_type) {
         case CLI:
-            cli_delay(50);
+            cli_delay(ms);
             break;
         case GUI:
-            SDL_Delay(50);
+            SDL_Delay(ms);
             break;
     }
 }
