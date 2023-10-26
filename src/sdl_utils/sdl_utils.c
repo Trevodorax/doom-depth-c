@@ -444,7 +444,7 @@ SDL_Rect *get_rectangle_grid(size_t nb_rectangles, SDL_Rect *container) {
     int rows = (int)sqrt((int)nb_rectangles);
     int cols = ((int)nb_rectangles + rows - 1) / rows; // calculate columns based on rows
 
-    // Calculate width and height for each cell with a small margin
+    // calculate width and height for each cell with a small margin
     int cell_width = (container->w / cols) - 2;
     int cell_height = (container->h / rows) - 2;
 
