@@ -1,5 +1,5 @@
 #include "display.h"
-#include "../inventory_utils/inventory_utils.h"
+#include "../utils/inventory_utils.h"
 #include "../../utils/utils.h"
 
 #define ACTIONS_COUNT 2
@@ -119,25 +119,25 @@ int display_categories(SDL_Renderer *renderer,
         };
     }
 
-    if (draw_image_in_rectangle(renderer, categories[GO_BACK], "../assets/inventory_categories/image/go_back.png",
+    if (draw_image_in_rectangle(renderer, categories[GO_BACK], "../assets/items_mgmt/image/go_back.png",
                                 NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_image_in_rectangle(renderer, categories[WEAPONS], "../assets/inventory_categories/image/weapons.png",
+    if (draw_image_in_rectangle(renderer, categories[WEAPONS], "../assets/items_mgmt/image/weapons.png",
                                 NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_image_in_rectangle(renderer, categories[ARMORS], "../assets/inventory_categories/image/armors.png", NORTH,
+    if (draw_image_in_rectangle(renderer, categories[ARMORS], "../assets/items_mgmt/image/armors.png", NORTH,
                                 false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
     if (draw_image_in_rectangle(renderer, categories[HEALTH_POTIONS],
-                                "../assets/inventory_categories/image/health_potions.png", NORTH, false, ALIGN_START,
+                                "../assets/items_mgmt/image/health_potions.png", NORTH, false, ALIGN_START,
                                 ALIGN_START)) {
         return EXIT_FAILURE;
     }
     if (draw_image_in_rectangle(renderer, categories[MANA_POTIONS],
-                                "../assets/inventory_categories/image/mana_potions.png", NORTH, false, ALIGN_START,
+                                "../assets/items_mgmt/image/mana_potions.png", NORTH, false, ALIGN_START,
                                 ALIGN_START)) {
         return EXIT_FAILURE;
     }
