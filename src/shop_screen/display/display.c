@@ -7,28 +7,28 @@
 
 #define ITEMS_PER_PAGE 9
 
-int display_shop_gui(game_window_t *game_window, player_t *player,
-                     section_options active_section, category_options active_category,
-                     confirm_options active_confirmation, unsigned short active_item);
-int display_go_back(SDL_Renderer *renderer, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size);
-int display_gold(SDL_Renderer *renderer, player_t *player, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size);
-int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_container,
-                            SDL_Rect *go_back_icon_container, SDL_Rect *go_back_text_container,
-                            category_options active_category, int font_size);
-int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_Rect *message_container,
-                     const char *message, int font_size);
-int display_shop_items(SDL_Renderer *renderer, SDL_Rect *items_container,
-                       category_options active_category, unsigned short active_item,
+int display_shop_gui(game_window_t * game_window, player_t * player,
+                     section_options_t active_section, category_options_t active_category,
+                     bool active_confirmation, unsigned short active_item);
+int display_go_back(SDL_Renderer * renderer, SDL_Rect * icon_container, SDL_Rect * text_container, int font_size);
+int display_gold(SDL_Renderer * renderer, player_t * player, SDL_Rect * icon_container, SDL_Rect * text_container, int font_size);
+int display_shop_categories(SDL_Renderer * renderer, SDL_Rect * categories_container,
+                            SDL_Rect * go_back_icon_container, SDL_Rect * go_back_text_container,
+                            category_options_t active_category, int font_size);
+int display_merchant(SDL_Renderer * renderer, SDL_Rect * merchant_container, SDL_Rect * message_container,
+                     const char * message, int font_size);
+int display_shop_items(SDL_Renderer * renderer, SDL_Rect * items_container,
+                       category_options_t active_category, unsigned short active_item,
                        int font_size);
-int display_item_confirm(SDL_Renderer *renderer, SDL_Rect *window_rect, SDL_Rect *container,
-                         confirm_options active_confirmation, category_options active_category,
+int display_item_confirm(SDL_Renderer * renderer, SDL_Rect * window_rect, SDL_Rect * container,
+                         bool active_confirmation, category_options_t active_category,
                          unsigned int active_item, int font_size);
 
 int display_shop_cli(game_window_t *game_window, player_t *player);
 
-int display_shop(game_window_t *game_window, player_t *player,
-                 section_options active_section, category_options active_category,
-                 confirm_options active_confirmation, unsigned short active_item) {
+int display_shop(game_window_t * game_window, player_t * player,
+                 section_options_t active_section, category_options_t active_category,
+                 bool active_confirmation, unsigned short active_item) {
     switch (game_window->ui_type) {
         case GUI:
             return display_shop_gui(game_window, player, active_section, active_category, active_confirmation, active_item);
@@ -37,11 +37,11 @@ int display_shop(game_window_t *game_window, player_t *player,
     }
 }
 
-int display_shop_gui(game_window_t *game_window,
-                     player_t *player,
-                     section_options active_section,
-                     category_options active_category,
-                     confirm_options active_confirmation,
+int display_shop_gui(game_window_t * game_window,
+                     player_t * player,
+                     section_options_t active_section,
+                     category_options_t active_category,
+                     bool active_confirmation,
                      unsigned short active_item) {
     int window_width = 0;
     int window_height = 0;
@@ -142,7 +142,7 @@ int display_shop_gui(game_window_t *game_window,
     return EXIT_SUCCESS;
 }
 
-int display_go_back(SDL_Renderer *renderer, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size) {
+int display_go_back(SDL_Renderer * renderer, SDL_Rect * icon_container, SDL_Rect * text_container, int font_size) {
     if (draw_image_in_rectangle(
             renderer,
             *icon_container,
@@ -171,7 +171,7 @@ int display_go_back(SDL_Renderer *renderer, SDL_Rect *icon_container, SDL_Rect *
     return EXIT_SUCCESS;
 }
 
-int display_gold(SDL_Renderer *renderer, player_t *player, SDL_Rect *icon_container, SDL_Rect *text_container, int font_size) {
+int display_gold(SDL_Renderer * renderer, player_t * player, SDL_Rect * icon_container, SDL_Rect * text_container, int font_size) {
     draw_image_in_rectangle(
             renderer,
             *icon_container,
@@ -199,9 +199,9 @@ int display_gold(SDL_Renderer *renderer, player_t *player, SDL_Rect *icon_contai
     return EXIT_SUCCESS;
 }
 
-int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_container,
-                       SDL_Rect *go_back_icon_container, SDL_Rect *go_back_text_container,
-                       category_options active_category, int font_size) {
+int display_shop_categories(SDL_Renderer * renderer, SDL_Rect * categories_container,
+                       SDL_Rect * go_back_icon_container, SDL_Rect * go_back_text_container,
+                       category_options_t active_category, int font_size) {
     SDL_Color white = (SDL_Color) {255, 255, 255, 255};
     if (display_go_back(renderer, go_back_icon_container, go_back_text_container, font_size)) {
         return EXIT_FAILURE;
@@ -273,7 +273,7 @@ int display_shop_categories(SDL_Renderer *renderer, SDL_Rect *categories_contain
     return EXIT_SUCCESS;
 }
 
-int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_Rect *message_container,
+int display_merchant(SDL_Renderer * renderer, SDL_Rect * merchant_container, SDL_Rect * message_container,
                      const char *message, int font_size) {
     SDL_Color white = (SDL_Color) {255, 255, 255, 255};
     SDL_Color black = (SDL_Color) {0, 0, 0, 255};
@@ -289,9 +289,9 @@ int display_merchant(SDL_Renderer *renderer, SDL_Rect *merchant_container, SDL_R
     return EXIT_SUCCESS;
 }
 
-int display_shop_items(SDL_Renderer *renderer,
-                       SDL_Rect *items_container,
-                       category_options active_category,
+int display_shop_items(SDL_Renderer * renderer,
+                       SDL_Rect * items_container,
+                       category_options_t active_category,
                        unsigned short active_item,
                        int font_size) {
     SDL_Color white = (SDL_Color) {255, 255, 255, 255};
@@ -303,13 +303,13 @@ int display_shop_items(SDL_Renderer *renderer,
             break;
 
         case WEAPONS: {
-            array_node_t *weapons = get_weapons();
+            array_node_t * weapons = get_weapons();
             quantity = get_count(weapons);
             break;
         }
 
         case ARMORS: {
-            array_node_t *armors = get_armors();
+            array_node_t * armors = get_armors();
             quantity = get_count(armors);
             break;
         }
@@ -328,8 +328,8 @@ int display_shop_items(SDL_Renderer *renderer,
     switch (active_category) {
         case ARMORS:
             for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-                array_node_t *armors = get_armors();
-                armor_t *armor_to_print = get_value_at_index(armors, first_item_to_print + i);
+                array_node_t * armors = get_armors();
+                armor_t * armor_to_print = get_value_at_index(armors, first_item_to_print + i);
                 if (!armor_to_print) {
                     break;
                 }
@@ -344,8 +344,8 @@ int display_shop_items(SDL_Renderer *renderer,
 
         case WEAPONS:
             for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-                array_node_t *weapons = get_weapons();
-                weapon_t *weapon_to_print = get_value_at_index(weapons, first_item_to_print + i);
+                array_node_t * weapons = get_weapons();
+                weapon_t * weapon_to_print = get_value_at_index(weapons, first_item_to_print + i);
                 if (!weapon_to_print) {
                     break;
                 }
@@ -377,8 +377,8 @@ int display_shop_items(SDL_Renderer *renderer,
     return EXIT_SUCCESS;
 }
 
-int display_item_confirm(SDL_Renderer *renderer, SDL_Rect *window_rect, SDL_Rect *container,
-                         confirm_options active_confirmation, category_options active_category,
+int display_item_confirm(SDL_Renderer *renderer, SDL_Rect * window_rect, SDL_Rect * container,
+                         bool active_confirmation, category_options_t active_category,
                          unsigned int active_item, int font_size) {
     if (draw_image_in_rectangle(renderer, *window_rect, "../assets/backgrounds/white_semi_transparent.png", NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
@@ -414,7 +414,7 @@ int display_item_confirm(SDL_Renderer *renderer, SDL_Rect *window_rect, SDL_Rect
             break;
     }
 
-    char * confirmation_string = (active_confirmation == YES) ? ">YES\n\n   NO" : "   YES\n\n>NO";
+    char * confirmation_string = active_confirmation ? ">YES\n\n   NO" : "   YES\n\n>NO";
     details = realloc(details, sizeof(char) * (strlen(details) + strlen(confirmation_string) + 1));
     strcat(details, confirmation_string);
 
@@ -423,6 +423,6 @@ int display_item_confirm(SDL_Renderer *renderer, SDL_Rect *window_rect, SDL_Rect
     return EXIT_SUCCESS;
 }
 
-int display_shop_cli(game_window_t *game_window, player_t *player){
+int display_shop_cli(game_window_t * game_window, player_t * player){
 
 }

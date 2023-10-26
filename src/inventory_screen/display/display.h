@@ -18,7 +18,7 @@
  * @param active_item the current action the user has chosen or has their cursor on
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options active_section, category_options active_category, action_options active_action, unsigned short active_item);
+int display_inventory(game_window_t *game_window, inventory_t *inventory, section_options_t active_section, category_options_t active_category, action_options_t active_action, unsigned short active_item);
 
 /**
  * @brief displays a go back button and a button for each of the inventory items categories :
@@ -31,7 +31,7 @@ int display_inventory(game_window_t *game_window, inventory_t *inventory, sectio
  * @param active_category the current category the user has chosen or has their cursor on
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_categories(SDL_Renderer *renderer, int icon_size, int padding, section_options active_section, category_options active_category);
+int display_categories(SDL_Renderer *renderer, int icon_size, int padding, section_options_t active_section, category_options_t active_category);
 
 /**
  * @brief displays a grid of 9 items in the current category, and details on the item the cursor is currently on
@@ -46,7 +46,7 @@ int display_categories(SDL_Renderer *renderer, int icon_size, int padding, secti
  * @param active_section the section of the user experience the user is in
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_items(SDL_Renderer *renderer, SDL_Rect *items_container, SDL_Rect *details_container, item_types type, inventory_t *inventory, int details_font_size, unsigned short active_item, section_options active_section);
+int display_items(SDL_Renderer *renderer, SDL_Rect *items_container, SDL_Rect *details_container, item_types_t type, inventory_t *inventory, int details_font_size, unsigned short active_item, section_options_t active_section);
 
 /**
  * @brief displays details on the selected heal_potion
@@ -58,7 +58,7 @@ int display_items(SDL_Renderer *renderer, SDL_Rect *items_container, SDL_Rect *d
  * @param details_font_size the font size for the heal_potion details
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_potions(SDL_Renderer *renderer, potion_types type, SDL_Rect *details_container, unsigned int quantity, int details_font_size);
+int display_potions(SDL_Renderer *renderer, potion_types_t type, SDL_Rect *details_container, unsigned int quantity, int details_font_size);
 
 /**
  * @brief displays the possible actions from which to choose: use or throw away
@@ -69,7 +69,7 @@ int display_potions(SDL_Renderer *renderer, potion_types type, SDL_Rect *details
  * @param active_action the action the cursor is currently on
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_actions(SDL_Renderer *renderer, SDL_Rect *actions_container, int font_size, action_options active_action);
+int display_actions(SDL_Renderer *renderer, SDL_Rect *actions_container, int font_size, action_options_t active_action);
 
 /**
  * @brief displays "Nothing to see" in a given container

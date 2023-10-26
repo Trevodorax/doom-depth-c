@@ -8,20 +8,24 @@
 #include "../utils/items_management/types.h"
 #include "utils/shop_utils.h"
 
-void handle_category_input(event_t event, bool *quit,
-                           section_options *active_section, category_options *active_category, unsigned short *active_item);
+// handle navigating through the shop categories depending on the user input
+void handle_category_input(event_t event, bool * quit,
+                           section_options_t * active_section, category_options_t * active_category, unsigned short * active_item);
+// handle navigating through the displayed items depending on the user input
 void handle_shop_items_input(event_t event, unsigned short category_items_count,
-                        section_options *active_section, category_options *active_category,
-                        unsigned short *active_item, confirm_options *active_confirmation);
-void handle_confirm(event_t event, player_t ** player, section_options *active_section, category_options active_category,
-                    unsigned short active_item, confirm_options *active_option);
-void handle_actions(player_t ** player, category_options active_category, unsigned short active_item);
+                        section_options_t * active_section, category_options_t * active_category,
+                        unsigned short * active_item, bool * active_confirmation);
+// handle user input when confirming buying an item
+void handle_confirm(event_t event, player_t ** player, section_options_t * active_section, category_options_t active_category,
+                    unsigned short active_item, bool * active_confirmation);
+// actions launched after sale confirmation
+void handle_actions(player_t ** player, category_options_t active_category, unsigned short active_item);
 
-int shop_screen(game_window_t *game_window, player_t **player) {
+int shop_screen(game_window_t * game_window, player_t ** player) {
     bool quit = false;
-    section_options active_section = CATEGORIES;
-    category_options active_category = ARMORS;
-    confirm_options active_confirmation = YES;
+    section_options_t active_section = CATEGORIES;
+    category_options_t active_category = ARMORS;
+    bool active_confirmation = true;
     unsigned short active_item = 0;
 
     event_t event;
@@ -70,15 +74,13 @@ int shop_screen(game_window_t *game_window, player_t **player) {
 
 void handle_category_input(
         event_t event,
-        bool *quit,
-        section_options *active_section,
-        category_options *active_category,
-        unsigned short *active_item) {
+        bool * quit,
+        section_options_t * active_section,
+        category_options_t * active_category,
+        unsigned short * active_item) {
     switch (event) {
         case Z_KEY:
-            if(*active_category != GO_BACK) {
-                *active_category = GO_BACK;
-            }
+            *active_category = GO_BACK;
             break;
 
         case D_KEY:
@@ -115,8 +117,8 @@ void handle_category_input(
 }
 
 void handle_shop_items_input(event_t event, unsigned short category_items_count,
-                        section_options *active_section, category_options *active_category,
-                        unsigned short *active_item, confirm_options *active_confirmation) {
+                        section_options_t * active_section, category_options_t * active_category,
+                        unsigned short * active_item, bool * active_confirmation) {
     switch (event) {
         case Z_KEY:
             if (*active_category == HEALTH_POTIONS || *active_category == MANA_POTIONS || *active_item < 3) {
@@ -151,7 +153,7 @@ void handle_shop_items_input(event_t event, unsigned short category_items_count,
 
         case ENTER_KEY:
             *active_section = CONFIRM;
-            *active_confirmation = YES;
+            *active_confirmation = true;
             break;
 
         default:
@@ -160,23 +162,23 @@ void handle_shop_items_input(event_t event, unsigned short category_items_count,
     }
 }
 
-void handle_confirm(event_t event, player_t ** player, section_options *active_section, category_options active_category,
-                    unsigned short active_item, confirm_options *active_option) {
+void handle_confirm(event_t event, player_t ** player, section_options_t * active_section, category_options_t active_category,
+                    unsigned short active_item, bool * active_confirmation) {
     switch (event) {
         case Z_KEY:
-            if (*active_option == NO) {
-                *active_option = YES;
+            if (*active_confirmation == false) {
+                *active_confirmation = true;
             }
             break;
 
         case S_KEY:
-            if (*active_option == YES) {
-                *active_option = NO;
+            if (*active_confirmation) {
+                *active_confirmation = false;
             }
             break;
 
         case ENTER_KEY:
-            if (*active_option == YES) {
+            if (*active_confirmation) {
                 handle_actions(player, active_category, active_item);
             }
             *active_section = ITEMS;
@@ -189,15 +191,15 @@ void handle_confirm(event_t event, player_t ** player, section_options *active_s
     }
 }
 
-void handle_actions(player_t ** player, category_options active_category, unsigned short active_item) {
+void handle_actions(player_t ** player, category_options_t active_category, unsigned short active_item) {
     switch (active_category) {
         case WEAPONS: {
-            array_node_t *weapons = get_weapons();
+            array_node_t * weapons = get_weapons();
             if (!weapons) {
                 printf("could not get armors\n");
                 return;
             }
-            weapon_t *weapon_to_buy = get_value_at_index(weapons, active_item);
+            weapon_t * weapon_to_buy = get_value_at_index(weapons, active_item);
             if (!weapon_to_buy) {
                 printf("could not get armor to buy\n");
                 return;
@@ -211,12 +213,12 @@ void handle_actions(player_t ** player, category_options active_category, unsign
         }
 
         case ARMORS: {
-            array_node_t *armors = get_armors();
+            array_node_t * armors = get_armors();
             if (!armors) {
                 printf("could not get armors\n");
                 return;
             }
-            armor_t *armor_to_buy = get_value_at_index(armors, active_item);
+            armor_t * armor_to_buy = get_value_at_index(armors, active_item);
             if (!armor_to_buy) {
                 printf("could not get armor to buy\n");
                 return;

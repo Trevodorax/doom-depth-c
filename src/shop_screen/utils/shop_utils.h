@@ -14,7 +14,7 @@
  * @param category
  * @returns number of items in category or -1
  */
-int get_items_count(category_options category);
+int get_items_count(category_options_t category);
 
 /**
  * @brief Converts the quantity of gold a player has into a string

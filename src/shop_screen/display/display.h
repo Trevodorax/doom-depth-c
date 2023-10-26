@@ -13,7 +13,7 @@
  * @return EXIT_FAILURE or EXIT_SUCCESS
  */
 int display_shop(game_window_t *game_window, player_t *player,
-                 section_options active_section, category_options active_category,
-                 confirm_options active_confirmation, unsigned short active_item);
+                 section_options_t active_section, category_options_t active_category,
+                 bool active_confirmation, unsigned short active_item);
 
 #endif

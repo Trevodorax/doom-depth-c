@@ -6,7 +6,7 @@ typedef enum {
     ITEMS,
     ACTIONS,
     CONFIRM
-} section_options;
+} section_options_t;
 
 typedef enum {
     GO_BACK,
@@ -14,26 +14,21 @@ typedef enum {
     ARMORS,
     HEALTH_POTIONS,
     MANA_POTIONS
-} category_options;
+} category_options_t;
 
 typedef enum {
     HEALTH,
     MANA
-} potion_types;
+} potion_types_t;
 
 typedef enum {
     ARMOR,
     WEAPON
-} item_types;
+} item_types_t;
 
 typedef enum {
     USE,
     THROW_AWAY
-} action_options;
-
-typedef enum {
-    YES,
-    NO
-} confirm_options;
+} action_options_t;
 
 #endif //DOOM_DEPTH_C_ITEMS_MGMT_TYPES_H

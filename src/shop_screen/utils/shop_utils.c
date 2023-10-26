@@ -3,7 +3,7 @@
 #include "../../utils/utils.h"
 #include <stdlib.h>
 
-int get_items_count(category_options category) {
+int get_items_count(category_options_t category) {
     switch (category) {
         case ARMORS: {
             array_node_t *armors = get_armors();
