@@ -62,8 +62,10 @@ event_t sdl_get_event() {
                 }
             case SDLK_RETURN:
                 return ENTER_KEY;
+            case SDLK_ESCAPE:
+                return ESCAPE_KEY;
             default:
-                return Z_KEY;
+                return UNKNOWN_EVENT;
         }
     }
 

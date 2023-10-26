@@ -36,7 +36,7 @@ To add monsters, you must add them to the database init script, and add the corr
 
 The current monsters list is:
 - bat (lvl 1)
-- gobelin (lvl 2)
+- goblin (lvl 2)
 - zombie (lvl 3)
 - skeleton (lvl 4)
 - troll (lvl 5)

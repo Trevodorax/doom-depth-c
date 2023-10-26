@@ -3,8 +3,11 @@
 #include <SDL_image.h>
 #include "sdl_utils.h"
 
-int draw_image_in_rectangle_multiple_sprites(SDL_Renderer *renderer, SDL_Rect container, const char *file_path);
-int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation);
+int draw_image_in_rectangle_multiple_sprites(SDL_Renderer *renderer, SDL_Rect container, const char *file_path,
+                                             bool keep_aspect_ratio, alignment_t x_align, alignment_t y_align);
+int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect container, const char *file_path,
+                                          orientation_t orientation, bool keep_aspect_ratio, alignment_t x_align,
+                                          alignment_t y_align);
 
 int set_draw_color(SDL_Renderer * renderer, SDL_Color color) {
     if (SDL_SetRenderDrawColor(
@@ -129,7 +132,8 @@ int draw_thick_rect(
     return EXIT_SUCCESS;
 }
 
-int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation) {
+int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation,
+                        bool keep_aspect_ratio, alignment_t x_align, alignment_t y_align) {
     char * orientated_file_path = malloc(strlen(file_path) + 10);
     if (!orientated_file_path) {
         return EXIT_FAILURE;
@@ -153,7 +157,6 @@ int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const ch
             direction = "_west.png";
             break;
         default:
-            // Handle invalid orientation
             free(orientated_file_path);
             return EXIT_FAILURE;
     }
@@ -176,9 +179,11 @@ int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const ch
     }
 
     if (has_directions) {
-        draw_image_in_rectangle_multiple_sprites(renderer, container, orientated_file_path);
+        draw_image_in_rectangle_multiple_sprites(renderer, container, orientated_file_path, keep_aspect_ratio, x_align,
+                                                 y_align);
     } else {
-        draw_image_in_rectangle_single_sprite(renderer, container, file_path, orientation);
+        draw_image_in_rectangle_single_sprite(renderer, container, file_path, orientation, keep_aspect_ratio, x_align,
+                                              y_align);
     }
 
     free(orientated_file_path);
@@ -186,42 +191,42 @@ int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const ch
     return EXIT_SUCCESS;
 }
 
-int draw_image_in_rectangle_multiple_sprites(SDL_Renderer *renderer, SDL_Rect container, const char *file_path) {
+int draw_image_in_rectangle_multiple_sprites(SDL_Renderer *renderer, SDL_Rect container, const char *file_path,
+                                             bool keep_aspect_ratio, alignment_t x_align, alignment_t y_align) {
     SDL_Texture *image_texture = get_image_texture(renderer, file_path);
     if (!image_texture) {
         return EXIT_FAILURE;
     }
 
-    SDL_RenderCopy(renderer, image_texture, NULL, &container);
+    print_texture_in_rectangle(renderer, image_texture, container, 0, (SDL_Point) {0, 0}, keep_aspect_ratio, x_align,
+                               y_align);
+    SDL_DestroyTexture(image_texture);
 
     return EXIT_SUCCESS;
 }
 
-int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation) {
+int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect container, const char *file_path,
+                                          orientation_t orientation, bool keep_aspect_ratio, alignment_t x_align,
+                                          alignment_t y_align) {
     SDL_Texture *image_texture = get_image_texture(renderer, file_path);
     if (!image_texture) {
         return EXIT_FAILURE;
     }
 
     double angle = 0.0;
-    SDL_RendererFlip flip = SDL_FLIP_NONE;
 
     switch (orientation) {
         case NORTH:
             angle = 0.0;
-            flip = SDL_FLIP_NONE;
             break;
         case EAST:
             angle = 270.0;
-            flip = SDL_FLIP_NONE;
             break;
         case SOUTH:
             angle = 180.0;
-            flip = SDL_FLIP_NONE;
             break;
         case WEST:
             angle = 90.0;
-            flip = SDL_FLIP_NONE;
             break;
         default:
             SDL_DestroyTexture(image_texture);
@@ -230,8 +235,87 @@ int draw_image_in_rectangle_single_sprite(SDL_Renderer *renderer, SDL_Rect conta
 
     SDL_Point center = {container.w / 2, container.h / 2};
 
-    SDL_RenderCopyEx(renderer, image_texture, NULL, &container, angle, &center, flip);
+    print_texture_in_rectangle(renderer, image_texture, container, angle, center, keep_aspect_ratio, x_align, y_align);
     SDL_DestroyTexture(image_texture);
+
+    return EXIT_SUCCESS;
+}
+
+int print_texture_in_rectangle(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect container, double angle,
+                               SDL_Point center, bool keep_aspect_ratio, alignment_t x_align, alignment_t y_align) {
+    if (!renderer || !texture) {
+        return EXIT_FAILURE;
+    }
+
+    int texW, texH;
+    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+
+    if (keep_aspect_ratio) {
+        float containerAspectRatio = (float)container.w / container.h;
+        float textureAspectRatio = (float)texW / texH;
+
+        if (textureAspectRatio > containerAspectRatio) {
+            int newHeight = container.w / textureAspectRatio;
+            switch (y_align) {
+                case ALIGN_START:
+                    break;
+                case ALIGN_CENTER:
+                    container.y += (container.h - newHeight) / 2;
+                    break;
+                case ALIGN_END:
+                    container.y += container.h - newHeight;
+                    break;
+            }
+            container.h = newHeight;
+        } else {
+            int newWidth = container.h * textureAspectRatio;
+            switch (x_align) {
+                case ALIGN_START:
+                    break;
+                case ALIGN_CENTER:
+                    container.x += (container.w - newWidth) / 2;
+                    break;
+                case ALIGN_END:
+                    container.x += container.w - newWidth;
+                    break;
+            }
+            container.w = newWidth;
+        }
+    }
+
+    // Apply horizontal alignment if not preserving aspect ratio
+    if (!keep_aspect_ratio || texW == container.w) {
+        switch (x_align) {
+            case ALIGN_CENTER:
+                container.x += (container.w - texW) / 2;
+                break;
+            case ALIGN_END:
+                container.x += container.w - texW;
+                break;
+            case ALIGN_START:
+            default:
+                break;
+        }
+    }
+
+    // Apply vertical alignment if not preserving aspect ratio
+    if (!keep_aspect_ratio || texH == container.h) {
+        switch (y_align) {
+            case ALIGN_CENTER:
+                container.y += (container.h - texH) / 2;
+                break;
+            case ALIGN_END:
+                container.y += container.h - texH;
+                break;
+            case ALIGN_START:
+            default:
+                break;
+        }
+    }
+
+    if (SDL_RenderCopyEx(renderer, texture, NULL, &container, angle, &center, SDL_FLIP_NONE) != 0) {
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
@@ -304,13 +388,61 @@ SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_path
     return image_texture;
 }
 
-SDL_Rect *get_rectangle_grid(int nb_rectangles, SDL_Rect *container) {
+SDL_Rect *get_rectangle_line(size_t nb_rectangles, SDL_Rect *container, bool vertical) {
     if (nb_rectangles <= 0 || container == NULL) {
         return NULL;
     }
 
-    int rows = (int)sqrt(nb_rectangles);
-    int cols = (nb_rectangles + rows - 1) / rows; // calculate columns based on rows
+    int rows, cols;
+
+    if (vertical) {
+        rows = (int)nb_rectangles;
+        cols = 1;
+    } else {
+        rows = 1;
+        cols = (int)nb_rectangles;
+    }
+
+    int cell_width = (container->w / cols) - 2;
+    int cell_height = (container->h / rows) - 2;
+
+    SDL_Rect *rect_display = malloc(rows * cols * sizeof(SDL_Rect));
+    if (!rect_display) {
+        fprintf(stderr, "\nget_rectangle_display error: couldn't allocate memory");
+        return NULL;
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            int index = i * cols + j;
+            rect_display[index].x = container->x + j * (cell_width + 2);
+            rect_display[index].y = container->y + i * (cell_height + 2);
+            rect_display[index].w = cell_width;
+            rect_display[index].h = cell_height;
+        }
+    }
+
+    return rect_display;
+}
+
+SDL_Rect * get_rectangle_layout(size_t nb_rectangles, SDL_Rect * container, layout_t layout) {
+    switch(layout) {
+        case GRID:
+            return get_rectangle_grid(nb_rectangles, container);
+        case HORIZONTAL:
+            return get_rectangle_line(nb_rectangles, container, false);
+        case VERTICAL:
+            return get_rectangle_line(nb_rectangles, container, true);
+    }
+}
+
+SDL_Rect *get_rectangle_grid(size_t nb_rectangles, SDL_Rect *container) {
+    if (nb_rectangles <= 0 || container == NULL) {
+        return NULL;
+    }
+
+    int rows = (int)sqrt((int)nb_rectangles);
+    int cols = ((int)nb_rectangles + rows - 1) / rows; // calculate columns based on rows
 
     // Calculate width and height for each cell with a small margin
     int cell_width = (container->w / cols) - 2;

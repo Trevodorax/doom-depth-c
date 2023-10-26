@@ -86,6 +86,10 @@ set(cross_platform_targets
         src/fight_screen/fight_utils/fight_utils.c
         src/fight_screen/fight_utils/fight_utils.h
         src/fight_screen/types.h
+        src/fight_screen/display/display.c
+        src/fight_screen/display/display.h
+        src/fight_screen/fight_menu/display/display.c
+        src/fight_screen/fight_menu/display/display.h
         src/logs/log.c
         src/logs/log.h
 )

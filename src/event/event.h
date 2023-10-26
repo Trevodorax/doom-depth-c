@@ -11,7 +11,8 @@ typedef enum {
     S_KEY,
     D_KEY,
     Y_KEY,
-    ENTER_KEY
+    ENTER_KEY,
+    ESCAPE_KEY
 } event_t;
 
 static char event_to_char_map[] = {
@@ -22,7 +23,8 @@ static char event_to_char_map[] = {
         's',
         'd',
         'y',
-        '\n'
+        '\n',
+        (char)27 // escape
 };
 
 /**

@@ -7,6 +7,12 @@
 #include "../utils/router.h"
 #include "../cli_utils/cli_utils.h"
 
+typedef enum {
+    GRID,
+    HORIZONTAL,
+    VERTICAL
+} layout_t;
+
 /**
  * @brief Sets the drawing color for a renderer
  *
@@ -74,7 +80,24 @@ int draw_thick_rect(SDL_Rect rect, unsigned int thickness, SDL_Color color, SDL_
  * @param orientation Desired orientation of the image
  * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
-int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation);
+int
+draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *file_path, orientation_t orientation,
+                        bool keep_aspect_ratio, alignment_t x_align, alignment_t y_align);
+
+/**
+ * @brief Prints a texture in a rectangle
+ * @param renderer
+ * @param texture The texture to print
+ * @param container The container to print the texture in
+ * @param angle The angle of rotation
+ * @param center The center of rotation
+ * @param keep_aspect_ratio If the aspect ratio of the texture should be preserved
+ * @param x_align Horizontal alignment
+ * @param y_align Vertical alignment
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int print_texture_in_rectangle(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect container, double angle,
+                               SDL_Point center, bool keep_aspect_ratio, alignment_t x_align, alignment_t y_align);
 
 /**
  * @brief Returns string as a texture with the specified font, font size and color.
@@ -121,6 +144,16 @@ SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_path
  * @param container Rectangle in which all the rectangles of the grid should be
  * @return The array of rectangles that form the grid
  */
-SDL_Rect *get_rectangle_grid(int nb_rectangles, SDL_Rect *container);
+SDL_Rect *get_rectangle_grid(size_t nb_rectangles, SDL_Rect *container);
+
+/**
+ * @brief Get a list of rectangles that form a specified layout
+ *
+ * @param nb_rectangles The number of rectangles in the grid
+ * @param container Rectangle in which all the rectangles of the grid should be
+ * @param layout The specified layout
+ * @return The array of rectangles forming the layout
+ */
+SDL_Rect * get_rectangle_layout(size_t nb_rectangles, SDL_Rect * container, layout_t layout);
 
 #endif //DOOM_DEPTH_C_SDL_UTILS_H

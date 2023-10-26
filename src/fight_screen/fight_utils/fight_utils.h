@@ -42,14 +42,6 @@ void build_notification_formatted(fight_context_t * fight_context, char * messag
 int find_index(int rand_num, const int probs[], int size);
 
 /**
- * @brief Fetches a monster based on its name. (Temporary function)
- *
- * @param name The name of the monster.
- * @return A pointer to the monster struct or NULL if no match is found.
- */
-void * get_monster_with_name(char * name);
-
-/**
  * @brief Displays the current and maximum action points of a player.
  *
  * @param player The player whose action points are to be displayed.

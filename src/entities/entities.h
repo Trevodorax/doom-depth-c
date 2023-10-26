@@ -34,7 +34,7 @@ void init_entities(sqlite3 *db);
  * @dependencies None.
  * @errors None.
  */
-array_node_t *get_weapons();
+array_node_t * get_weapons();
 
 /**
  * @brief Gets the spells.
@@ -47,7 +47,7 @@ array_node_t *get_weapons();
  * @dependencies None.
  * @errors None.
  */
-array_node_t *get_spells();
+array_node_t * get_spells();
 
 /**
  * @brief Gets the armors.
@@ -60,7 +60,7 @@ array_node_t *get_spells();
  * @dependencies None.
  * @errors None.
  */
-array_node_t *get_armors();
+array_node_t * get_armors();
 
 /**
  * @brief Gets the monsters.
@@ -73,7 +73,15 @@ array_node_t *get_armors();
  * @dependencies None.
  * @errors None.
  */
-array_node_t *get_monsters();
+array_node_t * get_monsters();
+
+/**
+ * @brief Retrieves a monster by its name
+ *
+ * @param name The name of the searched monster
+ * @return A copy of the right monster
+ */
+monster_t * get_monster_by_name(char * name);
 
 
 #endif //DOOM_DEPTH_C_ENTITIES_H

@@ -34,4 +34,20 @@ typedef struct {
  */
 void *create_monster_from_db(sqlite3_stmt *stmt);
 
+/**
+ * @brief Safely casts a void * into a monster_t *
+ *
+ * @param void_monster The pointer to cast
+ * @return The casted pointer
+ */
+monster_t * void_to_monster(void * void_monster);
+
+/**
+ * @brief Copies a monster deeply
+ *
+ * @param monster The copied monster
+ * @return A deep copy of the monster
+ */
+monster_t * copy_monster(const monster_t * monster);
+
 #endif

@@ -16,7 +16,7 @@ int print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int print_player_on_stage_gui(game_window_t * game_window, orientation_t player_orientation, SDL_Rect stage_rect);
-int print_player_on_stage_cli(game_window_t * game_window, orientation_t player_orientation, cli_rect_t stage_rect);
+int print_player_on_stage_cli(game_window_t * game_window, orientation_t player_orientation, rect_t stage_rect);
 
 SDL_Texture ** get_stage_textures(SDL_Renderer * renderer) {
     SDL_Texture ** stage_textures = malloc(sizeof(SDL_Texture*) * STAGE_TYPE_COUNT);
@@ -86,7 +86,7 @@ int print_stage_gui(game_window_t *game_window, stage_t *stage, SDL_Texture **st
 }
 
 int print_stage_cli(game_window_t *game_window, stage_t *stage, int x_coord, int y_coord, int stage_size, bool with_players) {
-    cli_rect_t stage_rect = {x_coord, y_coord, stage_size, stage_size};
+    rect_t stage_rect = {x_coord, y_coord, stage_size, stage_size};
     color_code_t stage_color = get_stage_color(stage);
 
     cli_draw_fill_rect(game_window->matrix, stage_rect, (cli_char_t){'#', stage_color});
@@ -101,16 +101,17 @@ int print_stage_cli(game_window_t *game_window, stage_t *stage, int x_coord, int
 int print_player_on_stage_gui(game_window_t * game_window, orientation_t player_orientation, SDL_Rect stage_rect) {
     int stage_padding = stage_rect.h / 10;
     SDL_Rect player_rect = {stage_rect.x + stage_padding, stage_rect.y + stage_padding, stage_rect.w - 2 * stage_padding, stage_rect.h - 2 * stage_padding};
-    if (!draw_image_in_rectangle(game_window->renderer, player_rect, "../assets/player/image/player.png", player_orientation)) {
+    if (!draw_image_in_rectangle(game_window->renderer, player_rect, "../assets/player/image/player.png",
+                                 player_orientation, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
 }
 
-int print_player_on_stage_cli(game_window_t * game_window, orientation_t player_orientation, cli_rect_t stage_rect) {
-    int stage_padding = (int)stage_rect.height / 5;
-    cli_rect_t player_rect = {stage_rect.x + stage_padding, stage_rect.y + stage_padding, stage_rect.width - 2 * stage_padding, stage_rect.height - 2 * stage_padding};
+int print_player_on_stage_cli(game_window_t * game_window, orientation_t player_orientation, rect_t stage_rect) {
+    int stage_padding = (int)stage_rect.h / 5;
+    rect_t player_rect = {stage_rect.x + stage_padding, stage_rect.y + stage_padding, stage_rect.w - 2 * stage_padding, stage_rect.h - 2 * stage_padding};
     cli_draw_fill_rect(game_window->matrix, player_rect, (cli_char_t){'O', BLACK});
 
     return EXIT_SUCCESS;

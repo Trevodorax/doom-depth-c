@@ -31,7 +31,7 @@ int cli_render_present(cli_matrix_t * current_matrix) {
     }
 
     bool is_full_rewrite = window_width != previous_window_width || window_height != previous_window_height;
-
+    
     if (is_full_rewrite) {
         previous_window_width = window_width;
         previous_window_height = window_height;
@@ -270,15 +270,15 @@ int resize_cli_matrix(cli_matrix_t *matrix, size_t new_nb_rows, size_t new_nb_co
     return EXIT_SUCCESS;
 }
 
-int cli_draw_fill_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t fill) {
+int cli_draw_fill_rect(cli_matrix_t * matrix, rect_t rect, cli_char_t fill) {
     if (!matrix || !matrix->matrix) {
         return EXIT_FAILURE;
     }
 
     size_t start_row = rect.y;
-    size_t end_row = (rect.y + rect.height < matrix->nb_rows) ? rect.y + rect.height : matrix->nb_rows;
+    size_t end_row = (rect.y + rect.h < matrix->nb_rows) ? rect.y + rect.h : matrix->nb_rows;
     size_t start_col = rect.x;
-    size_t end_col = (rect.x + rect.width < matrix->nb_cols) ? rect.x + rect.width : matrix->nb_cols;
+    size_t end_col = (rect.x + rect.w < matrix->nb_cols) ? rect.x + rect.w : matrix->nb_cols;
 
     for (size_t i = start_row; i < end_row; i++) {
         for (size_t j = start_col; j < end_col; j++) {
@@ -289,15 +289,15 @@ int cli_draw_fill_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t fill) 
     return EXIT_SUCCESS;
 }
 
-int cli_draw_stroke_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t stroke) {
+int cli_draw_stroke_rect(cli_matrix_t * matrix, rect_t rect, cli_char_t stroke) {
     if (!matrix || !matrix->matrix) {
         return EXIT_FAILURE;
     }
 
     size_t start_row = rect.y;
-    size_t end_row = (rect.y + rect.height <= matrix->nb_rows) ? rect.y + rect.height : matrix->nb_rows;
+    size_t end_row = (rect.y + rect.h <= matrix->nb_rows) ? rect.y + rect.h : matrix->nb_rows;
     size_t start_col = rect.x;
-    size_t end_col = (rect.x + rect.width <= matrix->nb_cols) ? rect.x + rect.width : matrix->nb_cols;
+    size_t end_col = (rect.x + rect.w <= matrix->nb_cols) ? rect.x + rect.w : matrix->nb_cols;
 
     // top border
     if (start_row < matrix->nb_rows && rect.y >= 0) {
@@ -307,7 +307,7 @@ int cli_draw_stroke_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t stro
     }
 
     // bottom border
-    if (end_row - 1 < matrix->nb_rows && end_row > 0 && rect.y + rect.height <= matrix->nb_rows) {
+    if (end_row - 1 < matrix->nb_rows && end_row > 0 && rect.y + rect.h <= matrix->nb_rows) {
         for (size_t j = start_col; j < end_col; j++) {
             matrix->matrix[end_row - 1][j] = stroke;
         }
@@ -321,7 +321,7 @@ int cli_draw_stroke_rect(cli_matrix_t * matrix, cli_rect_t rect, cli_char_t stro
     }
 
     // right border
-    if (end_col - 1 < matrix->nb_cols && end_col > 0 && rect.x + rect.width <= matrix->nb_cols) {
+    if (end_col - 1 < matrix->nb_cols && end_col > 0 && rect.x + rect.w <= matrix->nb_cols) {
         for (size_t i = start_row + 1; i < end_row - 1; i++) {
             matrix->matrix[i][end_col - 1] = stroke;
         }
@@ -412,22 +412,22 @@ int cli_poll_char(char * value) {
     return *value != 0;
 }
 
-int cli_copy_matrix(cli_matrix_t * dst_matrix, cli_rect_t dst_rect, cli_matrix_t * src_matrix) {
+int cli_copy_matrix(cli_matrix_t * dst_matrix, rect_t dst_rect, cli_matrix_t * src_matrix) {
     if (!dst_matrix || !src_matrix) {
         return EXIT_FAILURE;
     }
 
     // get copy bounds that fits in both matrix
-    size_t max_dst_row = dst_rect.y + dst_rect.height;
-    size_t max_dst_col = dst_rect.x + dst_rect.width;
+    size_t max_dst_row = dst_rect.y + dst_rect.h;
+    size_t max_dst_col = dst_rect.x + dst_rect.w;
 
     if (max_dst_row > dst_matrix->nb_rows || max_dst_col > dst_matrix->nb_cols) {
         max_dst_row = (max_dst_row > dst_matrix->nb_rows) ? dst_matrix->nb_rows : max_dst_row;
         max_dst_col = (max_dst_col > dst_matrix->nb_cols) ? dst_matrix->nb_cols : max_dst_col;
     }
 
-    for (size_t i = 0; i < dst_rect.height; i++) {
-        for (size_t j = 0; j < dst_rect.width; j++) {
+    for (size_t i = 0; i < dst_rect.h; i++) {
+        for (size_t j = 0; j < dst_rect.w; j++) {
             size_t dst_x = dst_rect.x + j;
             size_t dst_y = dst_rect.y + i;
 
@@ -438,4 +438,13 @@ int cli_copy_matrix(cli_matrix_t * dst_matrix, cli_rect_t dst_rect, cli_matrix_t
     }
 
     return EXIT_SUCCESS;
+}
+
+SDL_Rect rect_to_SDL_Rect(rect_t rect) {
+    return (SDL_Rect) {
+            (int)rect.x,
+            (int)rect.y,
+            (int)rect.w,
+            (int)rect.h
+    };
 }

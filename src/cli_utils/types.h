@@ -17,9 +17,9 @@ typedef enum {
 typedef struct {
     size_t x;
     size_t y;
-    size_t width;
-    size_t height;
-} cli_rect_t;
+    size_t w;
+    size_t h;
+} rect_t;
 
 typedef enum {
     FULL_BLOCK,
