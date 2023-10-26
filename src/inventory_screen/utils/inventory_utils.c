@@ -3,7 +3,7 @@
 #include "inventory_utils.h"
 #include "../../utils/utils.h"
 
-char *armor_details_to_string(armor_t *armor) {
+char *inventory_armor_details_to_string(armor_t *armor) {
     char buffer[4];
 
     char *res = malloc(sizeof(char) * 1000);
@@ -38,7 +38,7 @@ char *armor_details_to_string(armor_t *armor) {
     return res;
 }
 
-char *weapon_details_to_string(weapon_t *weapon) {
+char *inventory_weapon_details_to_string(weapon_t *weapon) {
     char buffer[4];
 
     char *res = malloc(sizeof(char) * 1000);
@@ -79,7 +79,7 @@ char *weapon_details_to_string(weapon_t *weapon) {
     return res;
 }
 
-char *health_potions_details_to_string(unsigned int quantity) {
+char *inventory_health_potions_details_to_string(unsigned int quantity) {
     char buffer[4];
 
     char *res = malloc(sizeof(char) * 1000);
@@ -98,7 +98,7 @@ char *health_potions_details_to_string(unsigned int quantity) {
     return res;
 }
 
-char *mana_potions_details_to_string(unsigned int quantity) {
+char *inventory_mana_potions_details_to_string(unsigned int quantity) {
     char buffer[4];
 
     char *res = malloc(sizeof(char) * 1000);
