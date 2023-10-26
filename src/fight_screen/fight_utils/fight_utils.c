@@ -31,7 +31,7 @@ void build_notification(fight_context_t * fight_context, char * message) {
 void build_notification_formatted(fight_context_t * fight_context, char * message, ...) {
     va_list args;
     va_start(args, message);
-    fight_context->notification_message = malloc(sizeof(char) * strlen(message)+1001);
+    fight_context->notification_message = malloc(sizeof(char) * strlen(message) + 1001);
     vsprintf(fight_context->notification_message, message, args);
     va_end(args);
     global_logger->info( "%s", fight_context->notification_message);

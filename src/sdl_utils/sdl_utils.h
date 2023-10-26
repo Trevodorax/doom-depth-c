@@ -78,6 +78,9 @@ int draw_thick_rect(SDL_Rect rect, unsigned int thickness, SDL_Color color, SDL_
  * @param container  Rectangle in which to draw the image
  * @param file_path  Path to the image file
  * @param orientation Desired orientation of the image
+ * @param keep_aspect_ratio If the aspect ratio of the texture should be preserved
+ * @param x_align Horizontal alignment
+ * @param y_align Vertical alignment
  * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 int
