@@ -79,7 +79,8 @@ int display_monster_gui(game_window_t * game_window, monster_t *monster, SDL_Rec
     if (!monster->image_path) {
         return EXIT_FAILURE;
     }
-    draw_image_in_rectangle(game_window->renderer, container, monster->image_path, NORTH);
+    draw_image_in_rectangle(game_window->renderer, container, monster->image_path, NORTH, true, ALIGN_START,
+                            ALIGN_END);
 
     return EXIT_SUCCESS;
 }

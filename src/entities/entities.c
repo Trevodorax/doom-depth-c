@@ -35,11 +35,9 @@ monster_t* get_monster_by_name(char* name) {
         return NULL;
     }
 
-    printf("\nMonsters size: %d\n", get_size(monsters));
     array_node_t* current = monsters;
     while (current) {
         monster_t* monster = void_to_monster(current->value);
-        printf("\n%s: %s", monster->name, monster->image_path);
         if (strcmp(monster->name, name) == 0) {
             return copy_monster(monster);
         }

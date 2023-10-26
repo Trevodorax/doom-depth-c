@@ -119,19 +119,26 @@ int display_categories(SDL_Renderer *renderer,
         };
     }
 
-    if (draw_image_in_rectangle(renderer, categories[GO_BACK], "../assets/inventory_categories/image/go_back.png", NORTH)) {
+    if (draw_image_in_rectangle(renderer, categories[GO_BACK], "../assets/inventory_categories/image/go_back.png",
+                                NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_image_in_rectangle(renderer, categories[WEAPONS], "../assets/inventory_categories/image/weapons.png", NORTH)) {
+    if (draw_image_in_rectangle(renderer, categories[WEAPONS], "../assets/inventory_categories/image/weapons.png",
+                                NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_image_in_rectangle(renderer, categories[ARMORS], "../assets/inventory_categories/image/armors.png", NORTH)) {
+    if (draw_image_in_rectangle(renderer, categories[ARMORS], "../assets/inventory_categories/image/armors.png", NORTH,
+                                false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_image_in_rectangle(renderer, categories[HEALTH_POTIONS], "../assets/inventory_categories/image/health_potions.png", NORTH)) {
+    if (draw_image_in_rectangle(renderer, categories[HEALTH_POTIONS],
+                                "../assets/inventory_categories/image/health_potions.png", NORTH, false, ALIGN_START,
+                                ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_image_in_rectangle(renderer, categories[MANA_POTIONS], "../assets/inventory_categories/image/mana_potions.png", NORTH)) {
+    if (draw_image_in_rectangle(renderer, categories[MANA_POTIONS],
+                                "../assets/inventory_categories/image/mana_potions.png", NORTH, false, ALIGN_START,
+                                ALIGN_START)) {
         return EXIT_FAILURE;
     }
 
@@ -180,7 +187,8 @@ int display_items(SDL_Renderer *renderer,
                         draw_thick_rect(items[i], 2, red, renderer);
                     }
                 }
-                if (draw_image_in_rectangle(renderer, items[i], armor_to_print->image_path, NORTH)){
+                if (draw_image_in_rectangle(renderer, items[i], armor_to_print->image_path, NORTH, false, ALIGN_START,
+                                            ALIGN_START)){
                     return EXIT_FAILURE;
                 }
             }
@@ -201,7 +209,8 @@ int display_items(SDL_Renderer *renderer,
                         draw_thick_rect(items[i], 2, red, renderer);
                     }
                 }
-                if (draw_image_in_rectangle(renderer, items[i], weapon_to_print->image_path, NORTH)){
+                if (draw_image_in_rectangle(renderer, items[i], weapon_to_print->image_path, NORTH, false, ALIGN_START,
+                                            ALIGN_START)){
                     return EXIT_FAILURE;
                 }
             }

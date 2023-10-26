@@ -28,7 +28,8 @@ int display_start_menu_gui(game_window_t *game_window, unsigned short active_opt
             window_height + 20
     };
 
-    draw_image_in_rectangle(game_window->renderer, background_rect, "../assets/backgrounds/flames_around.png",  NORTH);
+    draw_image_in_rectangle(game_window->renderer, background_rect, "../assets/backgrounds/flames_around.png", NORTH,
+                            false, ALIGN_START, ALIGN_START);
 
     // create texture for title
     SDL_Texture *title_texture = get_string_texture(
