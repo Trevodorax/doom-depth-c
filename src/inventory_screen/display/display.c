@@ -187,13 +187,13 @@ int display_items(SDL_Renderer *renderer,
                         draw_thick_rect(items[i], 2, red, renderer);
                     }
                 }
-                if (draw_image_in_rectangle(renderer, items[i], armor_to_print->image_path, NORTH, false, ALIGN_START,
+                if (draw_image_in_rectangle(renderer, items[i], armor_to_print->image_path, NORTH, true, ALIGN_START,
                                             ALIGN_START)){
                     return EXIT_FAILURE;
                 }
             }
 
-            details = inventory_armor_details_to_string(get_value_at_index(inventory->weapons_head, active_item));
+            details = inventory_armor_details_to_string(get_value_at_index(inventory->armors_head, active_item));
             break;
 
         case WEAPON:
@@ -209,7 +209,7 @@ int display_items(SDL_Renderer *renderer,
                         draw_thick_rect(items[i], 2, red, renderer);
                     }
                 }
-                if (draw_image_in_rectangle(renderer, items[i], weapon_to_print->image_path, NORTH, false, ALIGN_START,
+                if (draw_image_in_rectangle(renderer, items[i], weapon_to_print->image_path, NORTH, true, ALIGN_START,
                                             ALIGN_START)){
                     return EXIT_FAILURE;
                 }
