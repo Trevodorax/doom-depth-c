@@ -191,15 +191,32 @@ char * test_create_inventory_from_db() {
     return 0;
 }
 
+char *test_get_players_from_db() {
+    sqlite3 *db = db_connection();
+    array_node_t *players = players_from_db(db);
+    array_node_t *head = players;
+
+    while (players != NULL) {
+        player_t *player = (player_t *)players->value;
+        printf("id: %d\n", player->id);
+        printf("name: %s\n", player->name);
+        players = players->next;
+    }
+
+    mu_assert("Error in test_get_players_from_db: players is null", head != NULL);
+    return 0;
+}
+
 char * all_tests() {
     // mu_run_test(test_db_connection);
-    mu_run_test(test_save_player);
+    // mu_run_test(test_save_player);
     // mu_run_test(test_create_monsters_from_db);
     // mu_run_test(test_create_armors_from_db);
     // mu_run_test(test_create_weapons_from_db);
     // mu_run_test(test_create_spells_from_db);
     // mu_run_test(test_create_stats_from_db);
     // mu_run_test(test_create_inventory_from_db);
+    mu_run_test(test_get_players_from_db);
     return 0;
 }
 

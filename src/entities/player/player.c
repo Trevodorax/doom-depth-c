@@ -267,3 +267,30 @@ void free_player(player_t *player) {
         free(player);
     }
 }
+
+array_node_t *players_from_db(sqlite3 *db) {
+
+    // Objectif is to get the 3 first players in DB and get only the name and the id for now
+    // So we can give those 3 players to the player selection screen and display them to then load the game with the player saved
+
+    char sql[100] = "SELECT id, name FROM PLAYER LIMIT 3";
+
+    sqlite3_stmt *stmt;
+    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    array_node_t *players = NULL;
+
+while (sqlite3_step(stmt) == SQLITE_ROW) {
+        player_t *player = malloc(sizeof(player_t));
+        player->id = sqlite3_column_int(stmt, 0);
+        player->name = strdup((char *) sqlite3_column_text(stmt, 1));
+        if (players == NULL) {
+            players = malloc(sizeof(array_node_t));
+            players->value = player;
+            players->next = NULL;
+        } else {
+            append(&players, player, sizeof(player_t));
+        }
+    }
+
+    return players;
+}

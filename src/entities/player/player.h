@@ -118,4 +118,6 @@ void heal_mana(player_t * player, unsigned int amount);
  */
 void free_player(player_t *player);
 
+array_node_t *players_from_db(sqlite3 *db);
+
 #endif
