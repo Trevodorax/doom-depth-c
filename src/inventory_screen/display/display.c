@@ -42,7 +42,7 @@ int display_inventory(game_window_t *game_window,
     SDL_Rect item_details_container = (SDL_Rect) {
             category_size + 3 * unit + 2 * unit_padding,
             unit_padding,
-            window_width - (items_container.x + + 3 * unit),
+            window_width - (items_container.x + 3 * unit),
             2 * unit +unit_padding
     };
     SDL_Rect actions_container = (SDL_Rect) {
