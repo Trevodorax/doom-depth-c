@@ -17,7 +17,7 @@ void handle_shop_items_input(event_t event, unsigned short category_items_count,
                         unsigned short * active_item, bool * active_confirmation);
 // handle user input when confirming buying an item
 void handle_confirm(event_t event, player_t ** player, section_options_t * active_section, category_options_t active_category,
-                    unsigned short active_item, bool * active_confirmation, bool * quit);
+                    unsigned short active_item, bool * active_confirmation);
 // actions launched after sale confirmation
 void handle_actions(player_t ** player, category_options_t active_category, unsigned short active_item);
 
@@ -55,10 +55,7 @@ int shop_screen(game_window_t * game_window, player_t ** player) {
                 }
 
                 case CONFIRM:
-                    handle_confirm(event, player, &active_section, active_category, active_item, &active_confirmation, &quit);
-                    if (quit) {
-                        return MAP_SCREEN;
-                    }
+                    handle_confirm(event, player, &active_section, active_category, active_item, &active_confirmation);
                     break;
 
                 default:
@@ -166,7 +163,7 @@ void handle_shop_items_input(event_t event, unsigned short category_items_count,
 }
 
 void handle_confirm(event_t event, player_t ** player, section_options_t * active_section, category_options_t active_category,
-                    unsigned short active_item, bool * active_confirmation, bool * quit) {
+                    unsigned short active_item, bool * active_confirmation) {
     switch (event) {
         case Z_KEY:
             if (*active_confirmation == false) {
@@ -183,7 +180,6 @@ void handle_confirm(event_t event, player_t ** player, section_options_t * activ
         case ENTER_KEY:
             if (*active_confirmation) {
                 handle_actions(player, active_category, active_item);
-                *quit = true;
             }
             *active_section = ITEMS;
             break;

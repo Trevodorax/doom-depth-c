@@ -173,22 +173,7 @@ int display_notification_zone_gui(game_window_t * game_window, char * notificati
         container.h - padding_y * 2
     };
 
-    SDL_Texture  * notification_texture = get_string_texture(game_window->renderer, notification_text, "../assets/PixelifySans-Bold.ttf", 32, (SDL_Color){0, 0, 0, 255});
-
-    if(print_texture_in_rectangle(
-            game_window->renderer,
-            notification_texture,
-            text_container,
-            0,
-            (SDL_Point){0, 0},
-            true,
-            ALIGN_CENTER,
-            ALIGN_CENTER) == EXIT_FAILURE) {
-        return EXIT_FAILURE;
-    }
-
-
-    SDL_DestroyTexture(notification_texture);
+    print_text_in_rectangle(game_window->renderer, text_container, notification_text, (SDL_Color){0, 0, 0, 255}, ALIGN_CENTER, ALIGN_CENTER);
 
     return EXIT_SUCCESS;
 }

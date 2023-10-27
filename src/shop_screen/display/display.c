@@ -213,7 +213,7 @@ int display_shop_categories(SDL_Renderer * renderer, SDL_Rect * categories_conta
             categories_container->w / 3,
             categories_container->h
     };
-    if (draw_string_in_rectangle(renderer, weapons_container, "WEAPONS", font_size, white)) {
+    if (print_text_in_rectangle(renderer, weapons_container, "WEAPONS", white, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
 
@@ -223,7 +223,7 @@ int display_shop_categories(SDL_Renderer * renderer, SDL_Rect * categories_conta
             categories_container->w / 3,
             categories_container->h
     };
-    if (draw_string_in_rectangle(renderer, armors_container, "ARMORS", font_size, white)) {
+    if (print_text_in_rectangle(renderer, armors_container, "ARMORS", white, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
 
@@ -233,7 +233,7 @@ int display_shop_categories(SDL_Renderer * renderer, SDL_Rect * categories_conta
             categories_container->w / 3,
             categories_container->h
     };
-    if (draw_string_in_rectangle(renderer, potions_container, "POTIONS", font_size, white)) {
+    if (print_text_in_rectangle(renderer, potions_container, "POTIONS", white, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
 
@@ -282,7 +282,7 @@ int display_merchant(SDL_Renderer * renderer, SDL_Rect * merchant_container, SDL
     }
 
     draw_fill_rect(*message_container, white, renderer);
-    if (draw_string_in_rectangle(renderer, *message_container, message, font_size, black)) {
+    if (print_text_in_rectangle(renderer, *message_container, message, black, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
 
@@ -372,6 +372,10 @@ int display_shop_items(SDL_Renderer * renderer,
                 return EXIT_FAILURE;
             }
             break;
+
+        case GO_BACK:
+        default:
+            break;
     }
 
     return EXIT_SUCCESS;
@@ -418,7 +422,7 @@ int display_item_confirm(SDL_Renderer *renderer, SDL_Rect * window_rect, SDL_Rec
     details = realloc(details, sizeof(char) * (strlen(details) + strlen(confirmation_string) + 1));
     strcat(details, confirmation_string);
 
-    draw_string_in_rectangle(renderer, *container, details, font_size, (SDL_Color) {255, 255, 255, 255});
+    print_text_in_rectangle(renderer, *container, details, (SDL_Color) {255, 255, 255, 255}, ALIGN_CENTER, ALIGN_CENTER);
 
     return EXIT_SUCCESS;
 }
