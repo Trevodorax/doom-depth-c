@@ -253,7 +253,6 @@ int display_player_stats_zone_gui(game_window_t * game_window, player_t * player
             ) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
-
     print_text_in_rectangle(game_window->renderer, hp_rect, "HP", (SDL_Color){0, 0, 0, 255}, ALIGN_CENTER, ALIGN_CENTER);
 
     if(display_stat_bar_gui(
@@ -261,13 +260,12 @@ int display_player_stats_zone_gui(game_window_t * game_window, player_t * player
             (int)player->mana,
             (int)player->mana_max,
             mana_rect,
-            (SDL_Color) {50, 200, 50, 255},
-            (SDL_Color) {200, 50, 50, 255}
+            (SDL_Color) {100, 100, 200, 255},
+            (SDL_Color) {50, 50, 50, 255}
     ) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
-
-    print_text_in_rectangle(game_window->renderer, mana_rect, "MANA", (SDL_Color){0, 0, 0, 255}, ALIGN_CENTER, ALIGN_CENTER);
+    print_text_in_rectangle(game_window->renderer, mana_rect, "MANA", (SDL_Color){255, 255, 255, 255}, ALIGN_CENTER, ALIGN_CENTER);
 
 
     if(display_stat_bar_gui(
@@ -275,12 +273,11 @@ int display_player_stats_zone_gui(game_window_t * game_window, player_t * player
             (int)player->action_points,
             (int)player->max_action_points,
             actions_points_rect,
-            (SDL_Color) {50, 200, 50, 255},
-            (SDL_Color) {200, 50, 50, 255}
+            (SDL_Color) {200, 200, 50, 255},
+            (SDL_Color) {50, 50, 50, 255}
     ) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
-
     print_text_in_rectangle(game_window->renderer, actions_points_rect, "PA", (SDL_Color){0, 0, 0, 255}, ALIGN_CENTER, ALIGN_CENTER);
 
 
