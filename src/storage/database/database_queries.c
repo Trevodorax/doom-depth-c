@@ -41,7 +41,9 @@ const char create_player_table_sql[] =
         "    nb_weapons         INTEGER not null,"
         "    nb_armors          INTEGER not null,"
         "    nb_mana_potions    INTEGER not null,"
-        "    nb_health_potions  INTEGER not null"
+        "    nb_health_potions  INTEGER not null,"
+        "    action_points      INTEGER not null,"
+        "    max_action_points  INTEGER not null"
         ");";
 
 const char create_armor_table_sql[] =
