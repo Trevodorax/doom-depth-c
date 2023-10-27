@@ -103,30 +103,6 @@ int print_texture_in_rectangle(SDL_Renderer *renderer, SDL_Texture *texture, SDL
                                SDL_Point center, bool keep_aspect_ratio, alignment_t x_align, alignment_t y_align);
 
 /**
- * @brief Draws text centered in a specified container, font size and color
- *
- * @param renderer   Pointer to the SDL renderer
- * @param container  Rectangle in which to draw the text
- * @param string  Text to render
- * @param font_size Font size to use
- * @param color Color to use
- * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure
- */
-int draw_string_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *string, int font_size, SDL_Color color);
-
-/**
- * @brief Draws text centered in a specified container, font size and color
- *
- * @param renderer   Pointer to the SDL renderer
- * @param container  Rectangle in which to draw the text
- * @param string  Text to render
- * @param font_size Font size to use
- * @param color Color to use
- * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure
- */
-int draw_string_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char *string, int font_size, SDL_Color color);
-
-/**
  * @brief Returns string as a texture with the specified font, font size and color.
  *
  * Creates a texture from the given string, accepts new line caracters.
@@ -182,5 +158,16 @@ SDL_Rect *get_rectangle_grid(size_t nb_rectangles, SDL_Rect *container);
  * @return The array of rectangles forming the layout
  */
 SDL_Rect * get_rectangle_layout(size_t nb_rectangles, SDL_Rect * container, layout_t layout);
+
+/**
+ * @brief Draws text centered in a rectangle responsively
+ *
+ * @param renderer The renderer to use
+ * @param container Rectangle in which the text should be
+ * @param text The text to draw
+ * @param color The color to use
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int print_text_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char * text, SDL_Color color, alignment_t x_align, alignment_t y_align) ;
 
 #endif //DOOM_DEPTH_C_SDL_UTILS_H

@@ -42,14 +42,14 @@ int display_inventory(game_window_t *game_window,
     SDL_Rect item_details_container = (SDL_Rect) {
             category_size + 3 * unit + 2 * unit_padding,
             unit_padding,
-            window_width - (category_size + 3 * (unit - unit_padding)),
-            0
+            window_width - (items_container.x + + 3 * unit),
+            2 * unit +unit_padding
     };
     SDL_Rect actions_container = (SDL_Rect) {
             category_size + 3 * unit + 2 * unit_padding,
             unit_padding + 2 * unit,
             window_width - (category_size + 3 * unit) - unit_padding,
-            0
+            unit
     };
 
     switch (active_category) {
@@ -219,21 +219,7 @@ int display_items(SDL_Renderer *renderer,
             break;
     }
 
-    SDL_Texture *details_texture = get_string_texture(
-            renderer,
-            details,
-            "../assets/PixelifySans-Regular.ttf",
-            details_font_size,
-            (SDL_Color) {255, 255, 255, 255}
-    );
-    if (!details_texture) {
-        return EXIT_FAILURE;
-    }
-
-    SDL_QueryTexture(details_texture, NULL, NULL, &(details_container->w), &(details_container->h));
-
-    SDL_RenderCopy(renderer, details_texture, NULL, details_container);
-    SDL_DestroyTexture(details_texture);
+    print_text_in_rectangle(renderer, *details_container, details, white, ALIGN_START, ALIGN_START);
 
     return EXIT_SUCCESS;
 }
@@ -254,21 +240,7 @@ int display_potions(SDL_Renderer *renderer,
             break;
     }
 
-    SDL_Texture *details_texture = get_string_texture(
-            renderer,
-            details,
-            "../assets/PixelifySans-Regular.ttf",
-            details_font_size,
-            (SDL_Color) {255, 255, 255, 255}
-    );
-    if (!details_texture) {
-        return EXIT_FAILURE;
-    }
-
-    SDL_QueryTexture(details_texture, NULL, NULL, &(details_container->w), &(details_container->h));
-
-    SDL_RenderCopy(renderer, details_texture, NULL, details_container);
-    SDL_DestroyTexture(details_texture);
+    print_text_in_rectangle(renderer, *details_container, details, (SDL_Color) {255, 255, 255, 255}, ALIGN_START, ALIGN_START);
 
     return EXIT_SUCCESS;
 }
@@ -337,22 +309,7 @@ int display_actions(SDL_Renderer *renderer,
 }
 
 int display_nothing_to_see(SDL_Renderer *renderer, SDL_Rect *container) {
-    SDL_Texture *nothing_to_see_texture = get_string_texture(
-            renderer,
-            "Nothing to see here",
-            "../assets/PixelifySans-Regular.ttf",
-            24,
-            (SDL_Color) {255, 255, 255, 255}
-    );
-    if (!nothing_to_see_texture) {
-        return EXIT_FAILURE;
-    }
-
-    SDL_QueryTexture(nothing_to_see_texture, NULL, NULL, &(container->w), &(container->h));
-
-    SDL_RenderCopy(renderer, nothing_to_see_texture, NULL, container);
-    SDL_DestroyTexture(nothing_to_see_texture);
-
+    print_text_in_rectangle(renderer, *container, "Nothing to see", (SDL_Color) {255, 255, 255, 255}, ALIGN_CENTER, ALIGN_CENTER);
     return EXIT_SUCCESS;
 }
 

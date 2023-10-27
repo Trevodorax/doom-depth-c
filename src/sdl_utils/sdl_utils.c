@@ -490,3 +490,32 @@ int draw_string_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const c
 
     return EXIT_SUCCESS;
 }
+
+int print_text_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char * text, SDL_Color color, alignment_t x_align, alignment_t y_align) {
+    SDL_Texture  * texture = get_string_texture(
+            renderer,
+            text,
+            "../assets/PixelifySans-Bold.ttf",
+            24,
+            color);
+    if (!texture) {
+        return EXIT_FAILURE;
+    }
+
+    if(print_texture_in_rectangle(
+            renderer,
+            texture,
+            container,
+            0,
+            (SDL_Point){0, 0},
+            true,
+            x_align,
+            y_align) == EXIT_FAILURE) {
+        SDL_DestroyTexture(texture);
+        return EXIT_FAILURE;
+    }
+
+    SDL_DestroyTexture(texture);
+
+    return EXIT_SUCCESS;
+}
