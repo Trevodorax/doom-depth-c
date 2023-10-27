@@ -112,6 +112,13 @@ int main_loop(game_window_t * main_window) {
                 }
                 break;
 
+            case LOAD_GAME_SCREEN :
+                main_window->context->current_screen = load_game_screen(main_window, &player);
+                if(main_window->context->current_screen == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                break;
+
             case GAME_OVER :
                 main_window->context->current_screen = game_over_screen(main_window);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
