@@ -11,8 +11,9 @@
  *
  * @param game_window the window to display the map on
  * @param player the player currently playing
+ * @param db the database connection
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int load_game_screen(game_window_t *game_window, player_t **player);
+int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db);
 
 #endif

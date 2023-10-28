@@ -1,6 +1,6 @@
 #include "display/display.h"
 
-int load_game_screen(game_window_t *game_window, player_t **player) {
+int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db) {
 
     if (!game_window) {
         printf("Cannot display new game initialization : no game window\n");
@@ -9,6 +9,7 @@ int load_game_screen(game_window_t *game_window, player_t **player) {
 
     SDL_Event e;
     bool quit = false;
+    array_node_t *players = players_from_db(db);
 
     while (!quit) {
         while (SDL_PollEvent(&e)) {
@@ -16,7 +17,7 @@ int load_game_screen(game_window_t *game_window, player_t **player) {
                 return QUIT_GAME;
             }
         }
-        display_load_game(game_window, NULL);
+        display_load_game(game_window, players);
     }
 
     return EXIT_SUCCESS;
