@@ -15,6 +15,15 @@
 unsigned int player_attack(player_t * player, monster_t * target);
 
 /**
+ * @brief Makes the monster attack the given player
+ *
+ * @param monster
+ * @param target
+ * @return The damages inflicted to the player
+ */
+unsigned int monster_attack(monster_t * monster, player_t * target);
+
+/**
  * @brief Sets a notification message for a fight and prints it.
  *
  * @param fight_context The fight context in which the notification is displayed.
