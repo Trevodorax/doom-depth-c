@@ -1,5 +1,5 @@
 #include "map.h"
-#include "../../sdl_utils/sdl_utils.h"
+#include "../../ui_utils/sdl_utils/sdl_utils.h"
 #include "../stage/display/display.h"
 
 map_t * json_to_map(Json * json_map) {

@@ -1,4 +1,5 @@
 #include "display.h"
+#include "../../../ui_utils/ui_utils.h"
 
 /**
  * @brief Prints one item of one level of menu
@@ -10,15 +11,15 @@
  * @param is_selected If the user is currently selecting this menu item
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_menu_item(game_window_t *game_window, const char *title, const char *image_path, rect_t container,
+int display_menu_item(game_window_t * game_window, const char * title, const char * image_path, rect_t container,
                       bool is_selected);
 
-int display_menu_item_cli(game_window_t *game_window, const char *title, const char *image_path, rect_t container,
+int display_menu_item_cli(game_window_t * game_window, const char * title, const char * image_path, rect_t container,
                           bool is_selected);
-int display_menu_item_gui(game_window_t *game_window, const char *title, const char *image_path, SDL_Rect container,
+int display_menu_item_gui(game_window_t * game_window, const char * title, const char * image_path, SDL_Rect container,
                           bool is_selected);
 
-int display_menu_item(game_window_t *game_window, const char *title, const char *image_path, rect_t container,
+int display_menu_item(game_window_t * game_window, const char * title, const char * image_path, rect_t container,
                       bool is_selected) {
     switch(game_window->ui_type) {
         case CLI:
@@ -28,12 +29,12 @@ int display_menu_item(game_window_t *game_window, const char *title, const char 
     }
 }
 
-int display_menu_item_cli(game_window_t *game_window, const char *title, const char *image_path, rect_t container,
+int display_menu_item_cli(game_window_t * game_window, const char *title, const char *image_path, rect_t container,
                       bool is_selected) {
     return EXIT_SUCCESS;
 }
 
-int display_menu_item_gui(game_window_t *game_window, const char *title, const char *image_path, SDL_Rect container,
+int display_menu_item_gui(game_window_t *game_window, const char * title, const char * image_path, SDL_Rect container,
                       bool is_selected) {
     // safeguards
     if (!game_window || !game_window->renderer || (!title && !image_path)) {
@@ -113,13 +114,13 @@ int display_menu_item_gui(game_window_t *game_window, const char *title, const c
 
 
 int display_menu_cli(game_window_t *game_window, menu_t * menu, rect_t container, int selected_item_index, bool player_turn);
-int display_menu_gui(game_window_t *game_window, menu_t * menu, SDL_Rect container, int selected_item_index, bool player_turn);
+int display_menu_gui(game_window_t *game_window, menu_t * menu, rect_t container, int selected_item_index, bool player_turn);
 int display_menu(game_window_t *game_window, menu_t * menu, rect_t container, int selected_item_index, bool player_turn) {
     switch (game_window->ui_type) {
         case CLI:
             return display_menu_cli(game_window, menu, container, selected_item_index, player_turn);
         case GUI:
-            return display_menu_gui(game_window, menu, rect_to_SDL_Rect(container), selected_item_index, player_turn);
+            return display_menu_gui(game_window, menu, container, selected_item_index, player_turn);
     }
 }
 
@@ -129,18 +130,18 @@ int display_menu_cli(game_window_t *game_window, menu_t * menu, rect_t container
     return EXIT_SUCCESS;
 }
 
-int display_menu_gui(game_window_t *game_window, menu_t * menu, SDL_Rect container, int selected_item_index, bool player_turn) {
+int display_menu_gui(game_window_t *game_window, menu_t * menu, rect_t container, int selected_item_index, bool player_turn) {
     if (!game_window || !menu || selected_item_index >= menu->nb_options || selected_item_index < 0) {
         fprintf(stderr, "\ndisplay_menu error: Please provide all necessary arguments.");
         return EXIT_FAILURE;
     }
 
     int a_value = player_turn ? 255 : 80;
-    draw_fill_rect(container, (SDL_Color){0, 0, 0, a_value}, game_window->renderer);
+    draw_fill_rect(rect_to_SDL_Rect(container), (SDL_Color){0, 0, 0, a_value}, game_window->renderer);
 
-    SDL_Rect * menu_items_grid = get_rectangle_grid(menu->nb_options, &container);
+    rect_t * menu_items_grid = get_rectangle_grid(menu->nb_options, &container);
     for (int i = 0; i < menu->nb_options; i++) {
-        if (display_menu_item_gui(game_window, menu->options[i]->title, menu->options[i]->image_path, menu_items_grid[i],
+        if (display_menu_item_gui(game_window, menu->options[i]->title, menu->options[i]->image_path, rect_to_SDL_Rect(menu_items_grid[i]),
                               i == selected_item_index) == EXIT_FAILURE) {
             return EXIT_FAILURE;
         }

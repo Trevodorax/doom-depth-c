@@ -25,8 +25,8 @@ set(cross_platform_targets
         src/utils/array.h
         src/map_screen/map_screen.c
         src/map_screen/map_screen.h
-        src/sdl_utils/sdl_utils.c
-        src/sdl_utils/sdl_utils.h
+        src/ui_utils/sdl_utils/sdl_utils.c
+        src/ui_utils/sdl_utils/sdl_utils.h
         src/storage/database/database.h
         src/storage/database/database.c
         src/storage/database/database_queries.h
@@ -52,7 +52,7 @@ set(cross_platform_targets
         src/utils/router.h
         src/fight_screen/fight_dimensions/fight_dimensions.c
         src/fight_screen/fight_dimensions/fight_dimensions.h
-        src/cli_utils/cli_utils.h
+        src/ui_utils/cli_utils/cli_utils.h
         src/game_window/game_window.c
         src/game_window/game_window.h
         src/map_screen/map/map.c
@@ -71,8 +71,8 @@ set(cross_platform_targets
         src/inventory_screen/display/display.h
         src/inventory_screen/utils/inventory_utils.c
         src/inventory_screen/utils/inventory_utils.h
-        src/cli_utils/ascii_art/ascii_art.c
-        src/cli_utils/ascii_art/ascii_art.h
+        src/ui_utils/cli_utils/ascii_art/ascii_art.c
+        src/ui_utils/cli_utils/ascii_art/ascii_art.h
         src/start_menu/display/display.c
         src/start_menu/display/display.h
         src/game_over/display/display.c
@@ -81,8 +81,8 @@ set(cross_platform_targets
         src/new_game_screen/new_game_screen.c
         src/new_game_screen/display/display.h
         src/new_game_screen/display/display.c
-        src/cli_utils/cli_text/cli_text.h
-        src/cli_utils/types.h
+        src/ui_utils/cli_utils/cli_text/cli_text.h
+        src/ui_utils/cli_utils/types.h
         src/fight_screen/fight_utils/fight_utils.c
         src/fight_screen/fight_utils/fight_utils.h
         src/fight_screen/types.h
@@ -99,18 +99,20 @@ set(cross_platform_targets
         src/utils/items_management/types.h
         src/shop_screen/utils/shop_utils.h
         src/shop_screen/utils/shop_utils.c
+        src/ui_utils/ui_utils.h
+        src/ui_utils/ui_utils.c
 )
 
 # for unix
 set(unix_targets
-        src/cli_utils/cli_utils_unix.c
-        src/cli_utils/cli_text/cli_text_unix.c
+        src/ui_utils/cli_utils/cli_utils_unix.c
+        src/ui_utils/cli_utils/cli_text/cli_text_unix.c
 )
 
 # for windows
 set(windows_targets
-        src/cli_utils/cli_utils_windows.c
-        src/cli_utils/cli_text/cli_text_windows.c
+        src/ui_utils/cli_utils/cli_utils_windows.c
+        src/ui_utils/cli_utils/cli_text/cli_text_windows.c
 )
 
 # cross-platform tests
@@ -125,8 +127,8 @@ set(test_targets
         src/storage/database/database_test.h
         src/map_screen/map/map_test.c
         src/map_screen/map/map_test.h
-        src/cli_utils/ascii_art/ascii_art_test.c
-        src/cli_utils/ascii_art/ascii_art_test.h
+        src/ui_utils/cli_utils/ascii_art/ascii_art_test.c
+        src/ui_utils/cli_utils/ascii_art/ascii_art_test.h
         src/logs/log.c
         src/logs/log.h
 )

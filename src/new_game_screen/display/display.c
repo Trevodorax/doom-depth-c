@@ -1,6 +1,6 @@
 #include "string.h"
 #include "display.h"
-#include "../../sdl_utils/sdl_utils.h"
+#include "../../ui_utils/sdl_utils/sdl_utils.h"
 
 int display_new_game(game_window_t *game_window, char *name) {
 

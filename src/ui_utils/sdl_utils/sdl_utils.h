@@ -2,9 +2,9 @@
 #define DOOM_DEPTH_C_SDL_UTILS_H
 
 #include <SDL2/SDL.h>
-#include "../entities/player/player.h"
-#include "../map_screen//stage/stage.h"
-#include "../utils/router.h"
+#include "../../entities/player/player.h"
+#include "../../map_screen/stage/stage.h"
+#include "../../utils/router.h"
 #include "../cli_utils/cli_utils.h"
 
 typedef enum {
@@ -136,28 +136,6 @@ SDL_Texture * get_string_texture(SDL_Renderer * renderer, const char * string, c
  * @return Pointer to the created texture, or NULL on failure
  */
 SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_path);
-
-/**
- * @brief Get a list of rectangles that form a grid
- *
- * The grid is made of an equal number of rows and columns (or almost equal) with a bit of margin between each
- * All these rectangles are contained within the container rectangle.
- *
- * @param nb_rectangles The number of rectangles in the grid
- * @param container Rectangle in which all the rectangles of the grid should be
- * @return The array of rectangles that form the grid
- */
-SDL_Rect *get_rectangle_grid(size_t nb_rectangles, SDL_Rect *container);
-
-/**
- * @brief Get a list of rectangles that form a specified layout
- *
- * @param nb_rectangles The number of rectangles in the grid
- * @param container Rectangle in which all the rectangles of the grid should be
- * @param layout The specified layout
- * @return The array of rectangles forming the layout
- */
-SDL_Rect * get_rectangle_layout(size_t nb_rectangles, SDL_Rect * container, layout_t layout);
 
 /**
  * @brief Draws text centered in a rectangle responsively

@@ -1,7 +1,7 @@
 #ifndef DOOM_DEPTH_C_INVENTORY_SCREEN
 #define DOOM_DEPTH_C_INVENTORY_SCREEN
 
-#include "../sdl_utils/sdl_utils.h"
+#include "../ui_utils/sdl_utils/sdl_utils.h"
 #include "../entities/player/player.h"
 
 /**

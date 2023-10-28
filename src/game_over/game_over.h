@@ -1,7 +1,7 @@
 #ifndef DOOM_DEPTH_C_GAME_OVER_H
 #define DOOM_DEPTH_C_GAME_OVER_H
 
-#include "../sdl_utils/sdl_utils.h"
+#include "../ui_utils/sdl_utils/sdl_utils.h"
 #include "../game_window/game_window.h"
 
 /**

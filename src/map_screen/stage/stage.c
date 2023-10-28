@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "../../sdl_utils/sdl_utils.h"
+#include "../../ui_utils/sdl_utils/sdl_utils.h"
 
 // internal functions, must be used only by the functions exposed in the header file (or the stages must be uncounted before)
 void get_stage_dimensions_rec(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);

@@ -1,5 +1,5 @@
 #include "display.h"
-#include "../../../sdl_utils/sdl_utils.h"
+#include "../../../ui_utils/sdl_utils/sdl_utils.h"
 #include "../../stage/display/display.h"
 
 int display_map_gui(game_window_t *game_window, map_t *map, SDL_Texture **stage_textures);

@@ -1,7 +1,7 @@
 #ifndef DOOM_DEPTH_C_NEW_GAME_SCREEN_H
 #define DOOM_DEPTH_C_NEW_GAME_SCREEN_H
 
-#include "../sdl_utils/sdl_utils.h"
+#include "../ui_utils/sdl_utils/sdl_utils.h"
 #include "../entities/player/player.h"
 
 /**

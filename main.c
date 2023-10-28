@@ -1,5 +1,4 @@
 #include "src/doom_depth.h"
-#include "src/cli_utils/cli_utils.h"
 
 #include <stdio.h>
 
