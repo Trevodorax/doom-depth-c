@@ -78,8 +78,8 @@ int display_shop_gui(game_window_t * game_window,
     rect_t go_back_text_rect = {
             unit_padding + go_back_icon_rect.w + unit_padding,
             unit_padding,
-            0,
-            0
+            window_width / 2 - (go_back_icon_rect.x + go_back_icon_rect.w),
+            go_back_icon_rect.h
     };
 
     rect_t gold_icon_rect = {
@@ -90,10 +90,10 @@ int display_shop_gui(game_window_t * game_window,
     };
 
     rect_t gold_rect = {
-            gold_icon_rect.x - unit_padding,
+            window_width / 2,
             unit_padding,
-            0,
-            0
+            window_width / 2 - (go_back_icon_rect.x + go_back_icon_rect.w),
+            gold_icon_rect.h
     };
 
     rect_t items_container = {
@@ -154,49 +154,31 @@ int display_go_back(SDL_Renderer * renderer, SDL_Rect icon_container, SDL_Rect t
         return EXIT_FAILURE;
     }
 
-    SDL_Texture *go_back_text_texture = get_string_texture(
-            renderer,
-            "Go back",
-            "../assets/PixelifySans-Regular.ttf",
-            font_size,
-            (SDL_Color) {255, 255, 255, 255}
-    );
-    if (!go_back_text_texture) {
+    if (print_text_in_rectangle(renderer, text_container,
+                                "Go back", (SDL_Color) {255, 255, 255, 255},
+                                ALIGN_START, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
-
-    SDL_QueryTexture(go_back_text_texture, NULL, NULL, &(text_container.w), &(text_container.h));
-
-    SDL_RenderCopy(renderer, go_back_text_texture, NULL, &text_container);
-    SDL_DestroyTexture(go_back_text_texture);
 
     return EXIT_SUCCESS;
 }
 
 int display_gold(SDL_Renderer * renderer, player_t * player, SDL_Rect icon_container, SDL_Rect text_container, int font_size) {
-    draw_image_in_rectangle(
+    if (draw_image_in_rectangle(
             renderer,
             icon_container,
             "../assets/items_mgmt/image/gold.png",
-            NORTH, true, ALIGN_CENTER, ALIGN_END
-    );
-
-    SDL_Texture *gold_texture = get_string_texture(
-            renderer,
-            player_gold_to_string(player),
-            "../assets/PixelifySans-Regular.ttf",
-            font_size,
-            (SDL_Color) {255, 255, 255, 255}
-    );
-    if (!gold_texture) {
+            NORTH, true, ALIGN_CENTER, ALIGN_END)
+    ) {
         return EXIT_FAILURE;
     }
 
-    SDL_QueryTexture(gold_texture, NULL, NULL, &(text_container.w), &(text_container.h));
-    text_container.x -= text_container.w;
-
-    SDL_RenderCopy(renderer, gold_texture, NULL, &text_container);
-    SDL_DestroyTexture(gold_texture);
+    if (print_text_in_rectangle(renderer, text_container,
+                                player_gold_to_string(player), (SDL_Color) {255, 255, 255, 255},
+                                ALIGN_END, ALIGN_CENTER)
+    ) {
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
@@ -321,7 +303,7 @@ int display_shop_items(SDL_Renderer * renderer,
             quantity = 2;
     }
 
-    rect_t *items = get_rectangle_grid(ITEMS_PER_PAGE, items_container);
+    rect_t *items = get_rectangle_layout(ITEMS_PER_PAGE, items_container, GRID);
 
     int first_item_to_print = (active_item / ITEMS_PER_PAGE) * ITEMS_PER_PAGE;
 
@@ -430,5 +412,44 @@ int display_item_confirm(SDL_Renderer *renderer, SDL_Rect window_rect, SDL_Rect 
 }
 
 int display_shop_cli(game_window_t * game_window, player_t * player){
+    int window_width = 0;
+    int window_height = 0;
+    cli_get_window_size(&window_width, &window_height);
 
+    int unit = (min(window_width, window_height) == window_width) ? window_width / 4 : window_height / 5;
+    int unit_padding = (unit / 10 < 1) ? 1 : unit / 10;
+
+    cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
+
+    rect_t go_back_rect = {0, 0, window_width / 2, 1};
+    cli_print_text_in_rectangle(game_window->matrix, go_back_rect, "Go back", BLACK, ALIGN_START, ALIGN_START,
+                                SMALL_TEXT);
+    // TODO : display go back ascii art
+
+    rect_t gold_rect = {window_width - (go_back_rect.x + go_back_rect.w), 0, window_width / 2, 1};
+    cli_print_text_in_rectangle(game_window->matrix, gold_rect, player_gold_to_string(player), BLACK, ALIGN_END, ALIGN_START,
+                                SMALL_TEXT);
+    // TODO : display gold ascii art
+
+
+    rect_t items_container = {0, window_height - (3 * unit + 4 * unit_padding), 3 * unit + 4 * unit_padding, 3 * unit + 4 * unit_padding};
+    rect_t *items_rect = get_rectangle_layout(ITEMS_PER_PAGE, &items_container, GRID);
+    // TODO : display items ascii arts
+
+    rect_t categories_container = {0, items_container.y - 1, window_width, 3};
+    rect_t *categories_rect = get_rectangle_layout(3, &categories_container, HORIZONTAL);
+    cli_print_text_in_rectangle(game_window->matrix, categories_rect[0], "WEAPONS", BLACK, ALIGN_CENTER, ALIGN_START,
+                                SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, categories_rect[1], "ARMORS", BLACK, ALIGN_CENTER, ALIGN_START,
+                                SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, categories_rect[2], "POTIONS", BLACK, ALIGN_CENTER, ALIGN_START,
+                                SMALL_TEXT);
+
+    rect_t merchant_rect = {0, go_back_rect.y + go_back_rect.h, window_width / 4, window_height - (go_back_rect.h + items_container.h + categories_container.h)};
+    // TODO : display merchant ascii art
+
+    rect_t message_rect = {merchant_rect.x + merchant_rect.w, merchant_rect.y, window_width - merchant_rect.w, merchant_rect.h};
+    cli_print_text_in_rectangle(game_window->matrix, message_rect, "Hello there", BLACK, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
+
+    return EXIT_SUCCESS;
 }
