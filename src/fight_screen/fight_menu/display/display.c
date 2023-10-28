@@ -38,7 +38,7 @@ int display_menu_item_gui(game_window_t *game_window, const char * title, const 
                       bool is_selected) {
     // safeguards
     if (!game_window || !game_window->renderer || (!title && !image_path)) {
-        fprintf(stderr, "\ndisplay_menu_item error: please provide all necessary arguments.");
+        global_logger->error("\ndisplay_menu_item error: please provide all necessary arguments.");
         return EXIT_FAILURE;
     }
 
@@ -77,7 +77,7 @@ int display_menu_item_gui(game_window_t *game_window, const char * title, const 
     if (strlen(image_path) > 0) {
         SDL_Texture * image_texture = get_image_texture(game_window->renderer, image_path);
         if (!image_texture) {
-            fprintf(stderr, "\ndisplay_menu_item error: could not retrieve image texture.");
+            global_logger->error("\ndisplay_menu_item error: could not retrieve image texture.");
             return EXIT_FAILURE;
         }
 
@@ -95,7 +95,7 @@ int display_menu_item_gui(game_window_t *game_window, const char * title, const 
                 (SDL_Color) {255, 255, 255, a_value >= 235 ? 255 : a_value+20}
         );
         if (!title_texture) {
-            fprintf(stderr, "\ndisplay_menu_item error: could not retrieve title texture.");
+            global_logger->error("\ndisplay_menu_item error: could not retrieve title texture.");
             return EXIT_FAILURE;
         }
 
@@ -132,7 +132,7 @@ int display_menu_cli(game_window_t *game_window, menu_t * menu, rect_t container
 
 int display_menu_gui(game_window_t *game_window, menu_t * menu, rect_t container, int selected_item_index, bool player_turn) {
     if (!game_window || !menu || selected_item_index >= menu->nb_options || selected_item_index < 0) {
-        fprintf(stderr, "\ndisplay_menu error: Please provide all necessary arguments.");
+        global_logger->error("\ndisplay_menu error: Please provide all necessary arguments.");
         return EXIT_FAILURE;
     }
 

@@ -1,9 +1,17 @@
 #include "gui.h"
 #include "../../../ui_utils/ui_utils.h"
 
+int display_monsters_gui(game_window_t * game_window, array_node_t * monsters, rect_t container);
+int display_monster_gui(game_window_t * game_window, monster_t *monster, SDL_Rect container);
+int display_player_in_fight_gui(game_window_t * game_window, player_t * player, SDL_Rect container);
+int display_notification_zone_gui(game_window_t * game_window, char * notification_text, SDL_Rect container);
+int display_stat_bar_gui(game_window_t *game_window, int current_stat, int max_stat, SDL_Rect container,
+                         SDL_Color filled_color, SDL_Color empty_color);
+int display_player_stats_zone_gui(game_window_t * game_window, player_t * player, SDL_Rect container);
+
 int display_fight_gui(game_window_t * game_window, fight_context_t * fight_context, SDL_Rect fight_zone) {
     if (!game_window) {
-        fprintf(stderr, "\ndisplay_menu error: Please provide all necessary arguments.");
+        global_logger->error("\ndisplay_menu error: Please provide all necessary arguments.");
         return EXIT_FAILURE;
     }
 
@@ -112,7 +120,7 @@ int display_monster_gui(game_window_t * game_window, monster_t *monster, SDL_Rec
 }
 
 int display_player_in_fight_gui(game_window_t * game_window, player_t * player, SDL_Rect container) {
-    int container_padding = 16;
+    int container_padding = (int)container.w / 10;
 
     container.x += container_padding;
     container.y += container_padding;
