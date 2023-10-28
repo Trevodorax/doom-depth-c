@@ -22,8 +22,23 @@ unsigned int player_attack(player_t * player, monster_t * target) {
     return damages;
 }
 
+unsigned int monster_attack(monster_t * monster, player_t * target) {
+    double armor_ratio = target->chosen_armor ?  (double)target->chosen_armor->amount / 10 : 1;
+    unsigned int damages = (unsigned int)((monster->attack - target->base_defense) * armor_ratio);
+
+    if(damages > target->hp){
+        damages = target->hp;
+    }
+    target->hp -= damages;
+
+    return damages;
+}
+
 void build_notification(fight_context_t * fight_context, char * message) {
-    fight_context->notification_message = malloc(sizeof(char) * strlen(message)+1);
+    if(fight_context->notification_message == NULL) {
+        fight_context->notification_message = malloc(sizeof(char) * strlen(message) + 1001);
+    }
+
     strcpy(fight_context->notification_message, message);
     global_logger->info("%s", fight_context->notification_message);
 }
@@ -31,7 +46,10 @@ void build_notification(fight_context_t * fight_context, char * message) {
 void build_notification_formatted(fight_context_t * fight_context, char * message, ...) {
     va_list args;
     va_start(args, message);
-    fight_context->notification_message = malloc(sizeof(char) * strlen(message) + 1001);
+    if(fight_context->notification_message == NULL) {
+        fight_context->notification_message = malloc(sizeof(char) * strlen(message) + 1001);
+    }
+
     vsprintf(fight_context->notification_message, message, args);
     va_end(args);
     global_logger->info( "%s", fight_context->notification_message);

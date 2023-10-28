@@ -56,6 +56,7 @@ void init_global_logger() {
 }
 
 void close_outputs() {
+    /*
     if (global_logger->error_stream != NULL && global_logger->error_stream != stderr && global_logger->error_stream != stdout) {
         fclose(global_logger->error_stream);
         global_logger->error_stream = NULL;
@@ -68,6 +69,7 @@ void close_outputs() {
         fclose(global_logger->info_stream);
         global_logger->info_stream = NULL;
     }
+     */
 }
 
 void logger_free() {

@@ -112,10 +112,10 @@ const char create_stage_table_sql[] =
 const char insert_armor_sql[] =
         "INSERT INTO ARMOR (name, amount, rarity, max_uses, cost, image)"
         "VALUES ('Leather Armor', 1, 1, 10, 10, '../assets/armors/image/leather.png'),"
-        "       ('Chainmail', 1, 1, 20, 20, '../assets/armors/image/chain_mail.png'),"
-        "       ('Plate Armor', 1, 2, 30, 30, '../assets/armors/image/plate.png'),"
-        "       ('Dragon Armor', 1, 2, 40, 40, '../assets/armors/image/dragon.png'),"
-        "       ('God Armor', 1, 3, 50, 50, '../assets/armors/image/god.png');";
+        "       ('Chainmail', 2, 1, 20, 20, '../assets/armors/image/chain_mail.png'),"
+        "       ('Plate Armor', 3, 2, 30, 30, '../assets/armors/image/plate.png'),"
+        "       ('Dragon Armor', 5, 2, 40, 40, '../assets/armors/image/dragon.png'),"
+        "       ('God Armor', 7, 5, 50, 50, '../assets/armors/image/god.png');";
 
 const char insert_weapon_sql[] =
         "INSERT INTO WEAPON (name, min_attack, max_attack, attacks_per_turn, rarity, max_uses, cost, image)"

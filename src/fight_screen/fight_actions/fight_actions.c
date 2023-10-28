@@ -37,8 +37,6 @@ int mana_potion(fight_context_t *fight_context, void *custom_params) {
 
 int end_turn(fight_context_t *fight_context, void *custom_params) {
     printf("\nEnd turn");
-    fight_context->player_turn = false;
-    fight_context->player->action_points = fight_context->player->max_action_points;
     return FA_END_TURN;
 }
 
