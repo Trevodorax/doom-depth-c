@@ -2,7 +2,7 @@
 #define DOOM_DEPTH_C_GAME_WINDOW_H
 
 #include <SDL2/SDL.h>
-#include "../cli_utils/cli_utils.h"
+#include "../ui_utils/cli_utils/cli_utils.h"
 #include "../utils/router.h"
 
 typedef enum {

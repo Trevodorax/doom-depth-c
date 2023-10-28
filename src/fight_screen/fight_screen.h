@@ -4,7 +4,7 @@
 #include "../entities/player/player.h"
 #include "../entities/monster/monster.h"
 #include "../entities/fight/fight.h"
-#include "../sdl_utils/sdl_utils.h"
+#include "../ui_utils/sdl_utils/sdl_utils.h"
 #include "../game_window/game_window.h"
 #include "./types.h"
 

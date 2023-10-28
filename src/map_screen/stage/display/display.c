@@ -1,6 +1,6 @@
 #include "display.h"
 
-#include "../../../sdl_utils/sdl_utils.h"
+#include "../../../ui_utils/sdl_utils/sdl_utils.h"
 
 int print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players);
 

@@ -1,5 +1,5 @@
 #include "ascii_art_test.h"
-#include "../../minunit/minunit.h"
+#include "../../../minunit/minunit.h"
 #include "../cli_utils.h"
 #include "ascii_art.h"
 

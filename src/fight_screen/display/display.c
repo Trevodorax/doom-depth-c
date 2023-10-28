@@ -1,7 +1,8 @@
 #include "display.h"
+#include "../../ui_utils/ui_utils.h"
 
 // GUI functions to display the fight elements
-int display_monsters_gui(game_window_t * game_window, array_node_t * monsters, SDL_Rect container);
+int display_monsters_gui(game_window_t * game_window, array_node_t * monsters, rect_t container);
 int display_monster_gui(game_window_t * game_window, monster_t *monster, SDL_Rect container);
 int display_player_in_fight_gui(game_window_t * game_window, player_t * player, SDL_Rect container);
 int display_notification_zone_gui(game_window_t * game_window, char * notification_text, SDL_Rect container);
@@ -38,48 +39,48 @@ int display_fight_gui(game_window_t * game_window, fight_context_t * fight_conte
     int player_stats_zone_height = 32;
     int notification_zone_height = has_notification_message ? 32 : 0;
 
-    SDL_Rect player_stats_zone = {
+    rect_t player_stats_zone = {
             fight_zone.x,
             fight_zone.y,
             fight_zone.w,
             player_stats_zone_height
     };
 
-    SDL_Rect player_zone = {
+    rect_t player_zone = {
             fight_zone.x,
             fight_zone.y + player_stats_zone_height,
             fight_zone.w / 3,
             fight_zone.h - player_stats_zone_height - notification_zone_height
     };
 
-    SDL_Rect monsters_zone = {
+    rect_t monsters_zone = {
             fight_zone.x + player_zone.w,
             fight_zone.y + player_stats_zone_height,
             fight_zone.w - player_zone.w,
             fight_zone.h - notification_zone_height - player_stats_zone_height
     };
 
-    SDL_Rect notification_zone = {
+    rect_t notification_zone = {
             fight_zone.x,
             fight_zone.h - notification_zone_height,
             fight_zone.w,
             notification_zone_height
     };
 
-    display_player_stats_zone_gui(game_window, fight_context->player, player_stats_zone);
-    display_player_in_fight_gui(game_window, fight_context->player, player_zone);
+    display_player_stats_zone_gui(game_window, fight_context->player, rect_to_SDL_Rect(player_stats_zone));
+    display_player_in_fight_gui(game_window, fight_context->player, rect_to_SDL_Rect(player_zone));
     if (has_notification_message) {
-        display_notification_zone_gui(game_window, fight_context->notification_message, notification_zone);
+        display_notification_zone_gui(game_window, fight_context->notification_message, rect_to_SDL_Rect(notification_zone));
     }
     display_monsters_gui(game_window, fight_context->monsters, monsters_zone);
 
     return EXIT_SUCCESS;
 }
 
-int display_monsters_gui(game_window_t * game_window, array_node_t * monsters, SDL_Rect container) {
+int display_monsters_gui(game_window_t * game_window, array_node_t * monsters, rect_t container) {
     size_t nb_monsters = get_size(monsters);
 
-    SDL_Rect * monster_containers = get_rectangle_layout(nb_monsters, &container, HORIZONTAL);
+    rect_t * monster_containers = get_rectangle_layout(nb_monsters, &container, HORIZONTAL);
     if(!monster_containers) {
         return EXIT_FAILURE;
     }
@@ -91,7 +92,7 @@ int display_monsters_gui(game_window_t * game_window, array_node_t * monsters, S
         if(!checked_current_monster) {
             return EXIT_FAILURE;
         }
-        display_monster_gui(game_window, checked_current_monster, monster_containers[i++]);
+        display_monster_gui(game_window, checked_current_monster, rect_to_SDL_Rect(monster_containers[i++]));
 
         current_monster = current_monster->next;
     }

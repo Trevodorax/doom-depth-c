@@ -1,5 +1,5 @@
 #include "display.h"
-#include "../../sdl_utils/sdl_utils.h"
+#include "../../ui_utils/sdl_utils/sdl_utils.h"
 
 int display_start_menu_gui(game_window_t *game_window, unsigned short active_option);
 int display_start_menu_cli(game_window_t *game_window, unsigned short active_option);

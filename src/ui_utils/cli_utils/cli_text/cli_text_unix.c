@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../../utils/utils.h"
+#include "../../../utils/utils.h"
 #include "../ascii_art/ascii_art.h"
 
 /**

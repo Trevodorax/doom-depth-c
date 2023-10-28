@@ -3,12 +3,12 @@
 #include <string.h>
 #include <ctype.h>
 #include "doom_depth.h"
-#include "sdl_utils/sdl_utils.h"
+#include "ui_utils/sdl_utils/sdl_utils.h"
 #include "start_menu/start_menu.h"
 #include "map_screen/map_screen.h"
 #include "game_over/game_over.h"
 #include "fight_screen/fight_screen.h"
-#include "cli_utils/cli_utils.h"
+#include "ui_utils/cli_utils//cli_utils.h"
 #include "inventory_screen/inventory_screen.h"
 #include "utils/array.h"
 #include "entities/entities.h"
@@ -22,7 +22,7 @@ int main_loop(game_window_t * main_window) {
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
     player_t *player = NULL;
 
-    main_window->context->current_screen = FIGHT_SCREEN;
+    main_window->context->current_screen = SHOP_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
