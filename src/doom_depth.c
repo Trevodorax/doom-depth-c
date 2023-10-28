@@ -22,7 +22,7 @@ int main_loop(game_window_t * main_window) {
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
     player_t *player = NULL;
 
-    main_window->context->current_screen = SHOP_SCREEN;
+    main_window->context->current_screen = FIGHT_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
