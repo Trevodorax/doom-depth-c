@@ -6,6 +6,6 @@
 #include "../../ui_utils/ui_utils.h"
 #include "../../utils/array.h"
 
-int display_load_game(game_window_t *game_window, array_node_t *players);
+int display_load_game(game_window_t *game_window, array_node_t *players, unsigned short active_option);
 
 #endif
