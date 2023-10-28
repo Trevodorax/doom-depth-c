@@ -25,8 +25,7 @@ int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db)
         while (get_event(game_window->ui_type, &e)) {
             switch (e) {
                 case QUIT:
-                    quit = true;
-                    break;
+                    return QUIT_GAME;
                 case D_KEY:
                 case S_KEY:
                     if (active_option == 0) {
