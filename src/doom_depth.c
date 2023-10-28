@@ -14,6 +14,7 @@
 #include "entities/entities.h"
 #include "new_game_screen/new_game_screen.h"
 #include "shop_screen/shop_screen.h"
+#include "load_game_screen/load_game_screen.h"
 
 int main_loop(game_window_t * main_window) {
     // FIXME : remove later
