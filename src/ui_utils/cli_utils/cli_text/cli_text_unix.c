@@ -286,7 +286,7 @@ int print_text_ascii_art(cli_matrix_t *matrix, rect_t container, const char *tex
                 .h = character_matrix->nb_rows
         };
 
-        if (cli_copy_matrix(matrix, dst_rect, character_matrix) == EXIT_FAILURE) {
+        if (cli_copy_matrix(matrix, dst_rect, character_matrix, ALIGN_START, ALIGN_START) == EXIT_FAILURE) {
             return EXIT_FAILURE;
         }
 
