@@ -20,8 +20,12 @@ int display_fight_cli(game_window_t * game_window, fight_context_t * fight_conte
 
     bool has_notification_message = fight_context->notification_message && strlen(fight_context->notification_message) > 0;
 
-    int player_stats_zone_height = 5;
-    int notification_zone_height = has_notification_message ? 5 : 0;
+    int player_stats_zone_height = (int)fight_zone.h / 10;
+    if (player_stats_zone_height > 3) {
+        player_stats_zone_height = 3;
+    }
+
+    int notification_zone_height = has_notification_message ? 3 : 0;
 
     rect_t player_stats_zone = {
             fight_zone.x,
@@ -90,8 +94,8 @@ int display_monster_cli(game_window_t * game_window, monster_t *monster, rect_t 
     }
 
     int hp_rect_height = (int)container.h / 10;
-    if (hp_rect_height > 16) {
-        hp_rect_height = 16;
+    if (hp_rect_height > 3) {
+        hp_rect_height = 3;
     }
 
     rect_t monster_rect = {
@@ -197,7 +201,7 @@ int display_player_stats_zone_cli(game_window_t * game_window, player_t * player
     container.h -= container_padding_y * 2;
 
     // set and process dimensions
-    int space_between_stats = 4;
+    int space_between_stats = container.w / 10 > 3 ? 3 : (int)container.w / 10;
     int nb_stats = 3;
     int stat_width = (int)container.w / nb_stats - space_between_stats;
 

@@ -125,7 +125,7 @@ int display_menu(game_window_t *game_window, menu_t * menu, rect_t container, in
 }
 
 int display_menu_cli(game_window_t *game_window, menu_t * menu, rect_t container, int selected_item_index, bool player_turn) {
-    cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){'#', RED});
+    cli_draw_stroke_rect(game_window->matrix, container, (cli_char_t){'#', RED});
 
     return EXIT_SUCCESS;
 }
