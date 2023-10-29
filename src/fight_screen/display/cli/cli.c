@@ -108,8 +108,7 @@ int display_monster_cli(game_window_t * game_window, monster_t *monster, rect_t 
             hp_rect_height
     };
 
-    // TODO: replace the rectangle with the monster's ascii art
-    cli_draw_fill_rect(game_window->matrix, monster_rect, (cli_char_t){'#', RED});
+    print_ascii_art_in_rectangle(game_window->matrix, monster->ascii_path, monster_rect);
 
     if(display_stat_bar_cli(game_window, (int) monster->hp, (int) monster->hp_max, hp_rect, GREEN, RED) == EXIT_FAILURE) {
         return EXIT_FAILURE;
@@ -118,7 +117,7 @@ int display_monster_cli(game_window_t * game_window, monster_t *monster, rect_t 
 }
 
 int display_player_in_fight_cli(game_window_t * game_window, player_t * player, rect_t container) {
-    int container_padding = (int)container.w / 10;
+    int container_padding = (int)container.w / 20;
 
     container.x += container_padding;
     container.y += container_padding;
@@ -151,7 +150,7 @@ int display_notification_zone_cli(game_window_t * game_window, char * notificati
             container.h - padding_y * 2
     };
 
-    cli_print_text_in_rectangle(game_window->matrix, text_container, notification_text, (color_code_t ){0, 0, 0, 255}, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, text_container, notification_text, BLACK, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
 
     return EXIT_SUCCESS;
 }

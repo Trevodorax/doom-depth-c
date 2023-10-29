@@ -15,7 +15,8 @@ typedef struct {
     unsigned int hp_max;
     unsigned int attack;
     unsigned int defense;
-    char *image_path;
+    char * image_path;
+    char * ascii_path;
 } monster_t;
 
 /**
