@@ -1,5 +1,6 @@
 #include "cli.h"
 #include "../../../ui_utils/ui_utils.h"
+#include "../../../ui_utils/cli_utils/ascii_art/ascii_art.h"
 
 int display_monsters_cli(game_window_t * game_window, array_node_t * monsters, rect_t container);
 int display_monster_cli(game_window_t * game_window, monster_t *monster, rect_t container);
@@ -126,8 +127,7 @@ int display_player_in_fight_cli(game_window_t * game_window, player_t * player, 
 
     rect_t player_rect = container;
 
-    // TODO: replace the rectangle by the actual payer ascii art
-    cli_draw_fill_rect(game_window->matrix, player_rect, (cli_char_t){'#', RED});
+    print_ascii_art_in_rectangle(game_window->matrix, "../assets/player/ascii/player.asciiart", player_rect);
 
     return EXIT_SUCCESS;
 }

@@ -4,6 +4,29 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../cli_utils.h"
+#include "../../../logs/log.h"
+
+int print_ascii_art_in_rectangle(cli_matrix_t * matrix, const char * ascii_file_path, rect_t container) {
+    if (!matrix || !ascii_file_path) {
+        global_logger->error("\nprint_ascii_art_in_rectangle error: please provide all necessary arguments");
+    }
+
+    ascii_art_t * ascii_art = parse_ascii_art_file(ascii_file_path);
+    if (!ascii_art) {
+        return EXIT_FAILURE;
+    }
+
+    cli_matrix_t * ascii_art_matrix = pick_ascii_art_version(ascii_art, container.w, container.h);
+    if (!ascii_art_matrix) {
+        return EXIT_FAILURE;
+    }
+
+    if (cli_copy_matrix(matrix, container, ascii_art_matrix) == EXIT_FAILURE) {
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
 
 cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width, size_t max_height) {
     if (ascii_art->nb_versions == 0) {
@@ -21,10 +44,15 @@ cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width,
         }
     }
 
+    if (ascii_art->versions[picked_ascii_art_index]->nb_cols > max_width ||
+        ascii_art->versions[picked_ascii_art_index]->nb_rows > max_height) {
+        return create_cli_matrix(max_height / 2, max_width / 2, '#', MAGENTA);
+    }
+
     return ascii_art->versions[picked_ascii_art_index];
 }
 
-ascii_art_t * parse_ascii_art_file(char * file_path) {
+ascii_art_t * parse_ascii_art_file(const char *file_path) {
     // get file content
     FILE *file = fopen(file_path, "r");
     if (!file) {
