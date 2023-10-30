@@ -1,11 +1,13 @@
 #include "display/display.h"
 #include "../utils/utils.h"
 #include "../event/event.h"
+#include "../logs/log.h"
 
 int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db) {
 
     if (!game_window) {
         printf("Cannot display new game initialization : no game window\n");
+        global_logger->error("Cannot display new game initialization : no game window");
         return EXIT_FAILURE;
     }
 
