@@ -101,6 +101,10 @@ set(cross_platform_targets
         src/shop_screen/utils/shop_utils.c
         src/ui_utils/ui_utils.h
         src/ui_utils/ui_utils.c
+        src/fight_screen/display/gui/gui.c
+        src/fight_screen/display/gui/gui.h
+        src/fight_screen/display/cli/cli.c
+        src/fight_screen/display/cli/cli.h
 )
 
 # for unix

@@ -38,7 +38,6 @@ int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight
                     }
                 }
             }
-
         } else {
             monsters_turn(game_window, fight_context, fight_zone);
             fight_context->player_turn = true;

@@ -45,6 +45,7 @@ int cli_poll_char(char * value) {
     return EXIT_SUCCESS;
 }
 
-int cli_copy_matrix(cli_matrix_t * dst_matrix, rect_t dst_rect, cli_matrix_t * src_matrix) {
+int cli_copy_matrix(cli_matrix_t *dst_matrix, rect_t dst_rect, cli_matrix_t *src_matrix, alignment_t x_align,
+                    alignment_t y_align) {
     return EXIT_SUCCESS;
 }

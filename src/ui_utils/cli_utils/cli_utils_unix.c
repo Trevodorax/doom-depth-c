@@ -412,12 +412,13 @@ int cli_poll_char(char * value) {
     return *value != 0;
 }
 
-int cli_copy_matrix(cli_matrix_t * dst_matrix, rect_t dst_rect, cli_matrix_t * src_matrix) {
+int cli_copy_matrix(cli_matrix_t *dst_matrix, rect_t dst_rect, cli_matrix_t *src_matrix, alignment_t x_align,
+                    alignment_t y_align) {
     if (!dst_matrix || !src_matrix) {
         return EXIT_FAILURE;
     }
 
-    // get copy bounds that fits in both matrix
+    // get copy bounds that fit in both matrices
     size_t max_dst_row = dst_rect.y + dst_rect.h;
     size_t max_dst_col = dst_rect.x + dst_rect.w;
 
@@ -426,13 +427,43 @@ int cli_copy_matrix(cli_matrix_t * dst_matrix, rect_t dst_rect, cli_matrix_t * s
         max_dst_col = (max_dst_col > dst_matrix->nb_cols) ? dst_matrix->nb_cols : max_dst_col;
     }
 
+    int src_offset_x = 0;
+    int src_offset_y = 0;
+
+    switch (x_align) {
+        case ALIGN_START:
+            src_offset_x = 0;
+            break;
+        case ALIGN_CENTER:
+            src_offset_x = (int)(- dst_rect.w / 2 + src_matrix->nb_cols / 2);
+            break;
+        case ALIGN_END:
+            src_offset_x = (int)(src_matrix->nb_cols - dst_rect.w);
+            break;
+    }
+
+    switch (y_align) {
+        case ALIGN_START:
+            src_offset_y = 0;
+            break;
+        case ALIGN_CENTER:
+            src_offset_y = (int)(- dst_rect.h / 2 + src_matrix->nb_rows / 2);
+            break;
+        case ALIGN_END:
+            src_offset_y = (int)(src_matrix->nb_rows - dst_rect.h);
+            break;
+    }
+
     for (size_t i = 0; i < dst_rect.h; i++) {
         for (size_t j = 0; j < dst_rect.w; j++) {
             size_t dst_x = dst_rect.x + j;
             size_t dst_y = dst_rect.y + i;
 
-            if (i < src_matrix->nb_rows && j < src_matrix->nb_cols && dst_x < max_dst_col && dst_y < max_dst_row) {
-                dst_matrix->matrix[dst_y][dst_x] = src_matrix->matrix[i][j];
+            size_t src_x = j + src_offset_x;
+            size_t src_y = i + src_offset_y;
+
+            if (src_x < src_matrix->nb_cols && src_y < src_matrix->nb_rows && dst_x < max_dst_col && dst_y < max_dst_row) {
+                dst_matrix->matrix[dst_y][dst_x] = src_matrix->matrix[src_y][src_x];
             }
         }
     }

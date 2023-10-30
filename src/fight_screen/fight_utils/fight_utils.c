@@ -72,7 +72,7 @@ void free_fight_context(fight_context_t * fight_context) {
 }
 
 void debug_action_points(player_t *player){
-    printf("\nAction points : %d/%d", player->action_points, player->max_action_points);
+    global_logger->info("\nAction points : %d/%d", player->action_points, player->max_action_points);
 }
 
 bool check_and_remove_action_points(player_t *player, unsigned int amount) {

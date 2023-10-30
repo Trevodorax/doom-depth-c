@@ -3,6 +3,18 @@
 
 #include <stddef.h>
 #include "../types.h"
+#include "../cli_text/cli_text.h"
+
+/**
+ * @brief Prints the ascii art of the file in the rectangle (biggest version that fits there)
+ *
+ * @param matrix The matrix on which to print the ascii art
+ * @param ascii_file_path The path of the ascii art file
+ * @param container The container in which to print the ascii art
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int print_ascii_art_in_rectangle(cli_matrix_t *matrix, const char *ascii_file_path, rect_t container, alignment_t x_align,
+                                 alignment_t y_align);
 
 /**
  * @brief Takes the biggest possible ascii that fits in the given dimensions.
@@ -20,7 +32,7 @@ cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width,
  * @param file_path The file path of the ascii art
  * @return The ascii_art object
  */
-ascii_art_t * parse_ascii_art_file(char * file_path);
+ascii_art_t * parse_ascii_art_file(const char *file_path);
 
 /**
  * @brief Get a cli_matrix from the string of an ascii art version

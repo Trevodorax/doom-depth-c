@@ -99,7 +99,8 @@ const char create_monster_table_sql[] =
         "hp INTEGER NOT NULL,"
         "attack INTEGER NOT NULL,"
         "defense INTEGER NOT NULL,"
-        "image TEXT NOT NULL"
+        "image TEXT NOT NULL,"
+        "asciiart TEXT NOT NULL"
         ");";
 
 const char create_stage_table_sql[] =
@@ -132,20 +133,20 @@ const char insert_spell_sql[] =
         "(3, 'Attack', 10, 10);";
 
 const char insert_monster_sql[] =
-        "INSERT INTO MONSTER (type, name, hp_max, hp, attack, defense, image)"
-        "VALUES (0, 'bat', 10, 10, 2, 1, '../assets/monsters/image/bat.png'),"
-        "(0, 'goblin', 15, 15, 3, 2, '../assets/monsters/image/goblin.png'),"
-        "(0, 'zombie', 20, 20, 4, 3, '../assets/monsters/image/zombie.png'),"
-        "(0, 'skeleton', 25, 25, 5, 4, '../assets/monsters/image/skeleton.png'),"
-        "(0, 'troll', 30, 30, 6, 5, '../assets/monsters/image/troll.png'),"
-        "(0, 'ghost', 35, 35, 7, 6, '../assets/monsters/image/ghost.png'),"
-        "(0, 'ghoul', 40, 40, 8, 7, '../assets/monsters/image/ghoul.png'),"
-        "(0, 'demon', 45, 45, 9, 8, '../assets/monsters/image/demon.png'),"
-        "(0, 'flowey', 50, 50, 10, 9, '../assets/monsters/image/flowey.png'),"
-        "(2, 'sananes', 100, 100, 10, 10, '../assets/monsters/image/sananes.png'),"
-        "(2, 'delon', 100, 100, 10, 10, '../assets/monsters/image/delon.png'),"
-        "(2, 'demacon', 100, 100, 10, 10, '../assets/monsters/image/demacon.png'),"
-        "(2, 'machavoine', 100, 100, 10, 10, '../assets/monsters/image/machavoine.png');";
+        "INSERT INTO MONSTER (type, name, hp_max, hp, attack, defense, image, asciiart)"
+        "VALUES (0, 'bat', 10, 10, 2, 1, '../assets/monsters/image/bat.png', '../assets/monsters/ascii/bat.asciiart'),"
+        "(0, 'goblin', 15, 15, 3, 2, '../assets/monsters/image/goblin.png', '../assets/monsters/ascii/goblin.asciiart'),"
+        "(0, 'zombie', 20, 20, 4, 3, '../assets/monsters/image/zombie.png', '../assets/monsters/ascii/zombie.asciiart'),"
+        "(0, 'skeleton', 25, 25, 5, 4, '../assets/monsters/image/skeleton.png', '../assets/monsters/ascii/skeleton.asciiart'),"
+        "(0, 'troll', 30, 30, 6, 5, '../assets/monsters/image/troll.png', '../assets/monsters/ascii/troll.asciiart'),"
+        "(0, 'ghost', 35, 35, 7, 6, '../assets/monsters/image/ghost.png', '../assets/monsters/ascii/ghost.asciiart'),"
+        "(0, 'ghoul', 40, 40, 8, 7, '../assets/monsters/image/ghoul.png', '../assets/monsters/ascii/ghoul.asciiart'),"
+        "(0, 'demon', 45, 45, 9, 8, '../assets/monsters/image/demon.png', '../assets/monsters/ascii/demon.asciiart'),"
+        "(0, 'flowey', 50, 50, 10, 9, '../assets/monsters/image/flowey.png', '../assets/monsters/ascii/flowey.asciiart'),"
+        "(2, 'sananes', 100, 100, 10, 10, '../assets/monsters/image/sananes.png', '../assets/monsters/ascii/sananes.asciiart'),"
+        "(2, 'delon', 100, 100, 10, 10, '../assets/monsters/image/delon.png', '../assets/monsters/ascii/delon.asciiart'),"
+        "(2, 'demacon', 100, 100, 10, 10, '../assets/monsters/image/demacon.png', '../assets/monsters/ascii/demacon.asciiart'),"
+        "(2, 'machavoine', 100, 100, 10, 10, '../assets/monsters/image/machavoine.png', '../assets/monsters/ascii/machavoine.asciiart');";
 
 Table_Info all_tables_info[] = {
         {
