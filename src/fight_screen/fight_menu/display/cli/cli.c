@@ -2,9 +2,9 @@
 #include "../../../../ui_utils/ui_utils.h"
 #include "../../../../ui_utils/cli_utils/ascii_art/ascii_art.h"
 
-int display_menu_item_cli(game_window_t *game_window, const char *title, const char *ascii_art_path, rect_t container, bool is_selected);
+int display_menu_item_cli(game_window_t * game_window, const char * title, const char * ascii_art_path, rect_t container, bool is_selected);
 
-int display_menu_cli(game_window_t *game_window, menu_t *menu, rect_t container, int selected_item_index, bool player_turn) {
+int display_menu_cli(game_window_t * game_window, menu_t *menu, rect_t container, int selected_item_index, bool player_turn) {
     if (!game_window || !menu || selected_item_index >= menu->nb_options || selected_item_index < 0) {
         global_logger->error("\ndisplay_menu error: Please provide all necessary arguments.");
         return EXIT_FAILURE;
@@ -25,7 +25,7 @@ int display_menu_cli(game_window_t *game_window, menu_t *menu, rect_t container,
     return EXIT_SUCCESS;
 }
 
-int display_menu_item_cli(game_window_t *game_window, const char *title, const char *ascii_art_path, rect_t container, bool is_selected) {
+int display_menu_item_cli(game_window_t * game_window, const char * title, const char * ascii_art_path, rect_t container, bool is_selected) {
     // safeguards
     if (!game_window || (!title && !ascii_art_path)) {
         global_logger->error("\ndisplay_menu_item error: please provide all necessary arguments.");

@@ -33,6 +33,8 @@ int cli_render_present(cli_matrix_t * current_matrix) {
     bool is_full_rewrite = window_width != previous_window_width || window_height != previous_window_height;
     
     if (is_full_rewrite) {
+        // replaced by system("clear"), but has to be kept in case we need it for other platforms
+        /*
         previous_window_width = window_width;
         previous_window_height = window_height;
 
@@ -40,6 +42,8 @@ int cli_render_present(cli_matrix_t * current_matrix) {
             printf("\033[2K");
             cli_move_cursor(1, CURSOR_UP);
         }
+         */
+        system("clear");
     }
 
     if (!previous_matrix) {
@@ -51,6 +55,8 @@ int cli_render_present(cli_matrix_t * current_matrix) {
         printf("\n");
     }
 
+    // replaced by system("clear"), but has to be kept in case we need it for other platforms
+    /*
     int excess_rows = (int)previous_matrix->nb_rows - (int)current_matrix->nb_rows;
     if (excess_rows > 0) {
         for (int i = 0; i < excess_rows; i++) {
@@ -58,6 +64,7 @@ int cli_render_present(cli_matrix_t * current_matrix) {
             cli_move_cursor(1, CURSOR_UP);
         }
     }
+     */
 
     cli_move_cursor((int) current_matrix->nb_rows, CURSOR_UP);
     cli_move_cursor(0, CURSOR_BEGINNING);
