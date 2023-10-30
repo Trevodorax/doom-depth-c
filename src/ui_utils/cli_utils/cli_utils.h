@@ -143,7 +143,7 @@ int cli_poll_char(char * value);
  * @param src_matrix The matrix to copy.
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int cli_copy_matrix(cli_matrix_t *dst_matrix, rect_t dst_rect, cli_matrix_t *src_matrix, alignment_t x_align,
+int cli_copy_matrix(cli_matrix_t * dst_matrix, rect_t dst_rect, cli_matrix_t * src_matrix, alignment_t x_align,
                     alignment_t y_align);
 
 /**
