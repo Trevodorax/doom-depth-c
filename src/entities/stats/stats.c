@@ -71,3 +71,9 @@ int save_stats(sqlite3 *db, stats_t *stats, int player_id) {
     return 0;
 
 }
+
+void free_stats(stats_t *stats) {
+    if (stats) {
+        free(stats);
+    }
+}

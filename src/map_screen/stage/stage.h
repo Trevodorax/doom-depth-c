@@ -41,7 +41,7 @@ struct stage_t {
 
     bool counted; // for the get_map_dimensions function
 
-    fight_t *fight; // only if type == FIGHT
+    fight_t * fight; // only if type is FIGHT
 
     // player on the stage (if there is one)
     player_t * player;
@@ -61,7 +61,7 @@ struct stage_t {
  * @error If the json is not a correct stage, will return NULL
  * @return The parsed stage or NULL
  */
-stage_t * json_to_stage(Json * json_stage);
+stage_t *json_to_stage(json_t *json_stage, bool first_stage);
 
 /**
  * @brief Computes and updates the dimensions of the given stage.
@@ -100,6 +100,12 @@ void uncount_stages(stage_t * stage);
  * @param stages The stages to search for the player
  * @return A stage with a player on it or NULL if no player is found
  */
-stage_t *get_player_stage(stage_t *stages);
+stage_t *get_player_stage(stage_t * stages);
+
+/**
+ * @brief Frees the given stages recursively
+ * @param stages The stages to free
+ */
+void free_stages(stage_t * stages);
 
 #endif //DOOM_DEPTH_C_STAGE_H

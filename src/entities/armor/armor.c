@@ -38,3 +38,11 @@ void *create_armor_from_db(sqlite3_stmt *stmt) {
     return armor;
 
 }
+
+void free_armor(armor_t *armor) {
+    if (armor) {
+        free(armor->name);
+        free(armor->image_path);
+        free(armor);
+    }
+}

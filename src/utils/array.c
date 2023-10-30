@@ -256,12 +256,20 @@ void free_list(array_node_t **head_ref) {
 
     while (current != NULL) {
         next = current->next;
+        // TODO: add an enum with the type of entity to free accordingly
         free(current->value);
         free(current);
         current = next;
     }
 
     *head_ref = NULL;
+}
+
+void free_array_node(array_node_t *node) {
+    if (node) {
+        free(node->value);
+        free(node);
+    }
 }
 
 /**

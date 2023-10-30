@@ -20,7 +20,50 @@ int main_loop(game_window_t * main_window) {
     sqlite3 *db = db_connection();
     init_entities(db);
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
+
+    map_t * map = get_map_from_file("../assets/maps/map_1.json");
+
+    // FIXME : remove test struct
     player_t *player = NULL;
+    fight_t * fight = malloc(sizeof(fight_t));
+    fight->enemies_list = malloc(sizeof(char*) * 3);
+    fight->enemies_list[0] = malloc(sizeof(char) * 4);
+    strcpy(fight->enemies_list[0],"zombie");
+    fight->enemies_list[1] = malloc(sizeof(char) * 7);
+    strcpy(fight->enemies_list[1],"goblin");
+    fight->enemies_list[2] = malloc(sizeof(char) * 6);
+    strcpy(fight->enemies_list[2],"troll");
+
+    fight->enemies_chances_to_appear = malloc(sizeof(int) * 3);
+    fight->enemies_chances_to_appear[0] = 50;
+    fight->enemies_chances_to_appear[1] = 25;
+    fight->enemies_chances_to_appear[2] = 25;
+    fight->enemies_size = 3;
+    fight->min_nb_enemies = 1;
+    fight->max_nb_enemies = 5;
+
+    player = create_player("TEST_PLAYER");
+    player->offensive_spell = malloc(sizeof(spell_t));
+    player->offensive_spell->name = malloc(sizeof(char) * 10);
+    strcpy(player->offensive_spell->name, "Fire Ball");
+    player->offensive_spell->cost = 10;
+    player->offensive_spell->id = 0;
+    player->offensive_spell->type = ATTACK;
+    player->offensive_spell->amount = 15;
+    player->healing_spell = malloc(sizeof(spell_t));
+    player->healing_spell->name = malloc(sizeof(char) * 13);
+    strcpy(player->healing_spell->name,"Fire Healing");
+    player->healing_spell->cost = 40;
+    player->healing_spell->id = 1;
+    player->healing_spell->type = HEALING;
+    player->healing_spell->amount = 80;
+    player->defensive_spell = malloc(sizeof(spell_t));
+    player->defensive_spell->name = malloc(sizeof(char) * 16);
+    strcpy(player->defensive_spell->name,"Fire Protection");
+    player->defensive_spell->cost = 20;
+    player->defensive_spell->id = 2;
+    player->defensive_spell->type = DEFENSE;
+    player->defensive_spell->amount = 10;
 
     main_window->context->current_screen = MAP_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
@@ -32,54 +75,13 @@ int main_loop(game_window_t * main_window) {
                 }
                 break;
             case MAP_SCREEN :
-                main_window->context->current_screen = map_screen(main_window, "../assets/maps/map_1.json");
+                main_window->context->current_screen = map_screen(main_window, map, player);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
 
             case FIGHT_SCREEN : {
-                // FIXME : remove test struct
-                fight_t * fight = malloc(sizeof(fight_t));
-                fight->enemies_list = malloc(sizeof(char*) * 3);
-                fight->enemies_list[0] = malloc(sizeof(char) * 4);
-                strcpy(fight->enemies_list[0],"zombie");
-                fight->enemies_list[1] = malloc(sizeof(char) * 7);
-                strcpy(fight->enemies_list[1],"goblin");
-                fight->enemies_list[2] = malloc(sizeof(char) * 6);
-                strcpy(fight->enemies_list[2],"troll");
-
-                fight->enemies_chances_to_appear = malloc(sizeof(int) * 3);
-                fight->enemies_chances_to_appear[0] = 50;
-                fight->enemies_chances_to_appear[1] = 25;
-                fight->enemies_chances_to_appear[2] = 25;
-                fight->enemies_size = 3;
-                fight->min_nb_enemies = 1;
-                fight->max_nb_enemies = 5;
-
-                player = create_player("TEST_PLAYER");
-                player->offensive_spell = malloc(sizeof(spell_t));
-                player->offensive_spell->name = malloc(sizeof(char) * 10);
-                strcpy(player->offensive_spell->name, "Fire Ball");
-                player->offensive_spell->cost = 10;
-                player->offensive_spell->id = 0;
-                player->offensive_spell->type = ATTACK;
-                player->offensive_spell->amount = 15;
-                player->healing_spell = malloc(sizeof(spell_t));
-                player->healing_spell->name = malloc(sizeof(char) * 13);
-                strcpy(player->healing_spell->name,"Fire Healing");
-                player->healing_spell->cost = 40;
-                player->healing_spell->id = 1;
-                player->healing_spell->type = HEALING;
-                player->healing_spell->amount = 80;
-                player->defensive_spell = malloc(sizeof(spell_t));
-                player->defensive_spell->name = malloc(sizeof(char) * 16);
-                strcpy(player->defensive_spell->name,"Fire Protection");
-                player->defensive_spell->cost = 20;
-                player->defensive_spell->id = 2;
-                player->defensive_spell->type = DEFENSE;
-                player->defensive_spell->amount = 10;
-
                 main_window->context->current_screen = fight_screen(main_window, player, fight);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
@@ -122,11 +124,14 @@ int main_loop(game_window_t * main_window) {
         }
     }
 
+    // free_map(map);
+    // free_player(player);
+
     return EXIT_SUCCESS;
 }
 
 ui_type_t get_ui_type(char * ui_argument) {
-    ui_type_t default_type = CLI;
+    ui_type_t default_type = GUI;
 
     if (ui_argument == NULL) {
         char * env_ui_type = getenv("DOOM_DEPTH_UI_TYPE");

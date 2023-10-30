@@ -98,5 +98,10 @@ weapon_t *get_chosen_weapon(inventory_t *inventory);
  */
 armor_t *get_chosen_armor(inventory_t *inventory);
 
+/**
+ * @brief Frees the inventory
+ * @param inventory The inventory to free
+ */
+void free_inventory(inventory_t * inventory);
 
 #endif

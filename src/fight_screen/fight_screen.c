@@ -9,7 +9,7 @@
 void monsters_turn(game_window_t * game_window, fight_context_t * fight_context, rect_t fight_zone);
 void monster_turn(game_window_t * game_window, player_t * player, monster_t * monster, fight_context_t * fight_context, rect_t fight_zone);
 
-int fight_screen(game_window_t * game_window, player_t * player, fight_t * fight) {
+router_t fight_screen(game_window_t * game_window, player_t * player, fight_t * fight) {
     if(game_window->ui_type == CLI) {
         cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
     }

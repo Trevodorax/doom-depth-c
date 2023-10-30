@@ -48,3 +48,10 @@ spell_t *find_spell(array_node_t * spells, int id) {
     return NULL;
 
 }
+
+void free_spell(spell_t *spell) {
+    if (spell) {
+        free(spell->name);
+        free(spell);
+    }
+}

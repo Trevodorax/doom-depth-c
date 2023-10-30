@@ -6,10 +6,10 @@
 #include "../../ui_utils/sdl_utils/sdl_utils.h"
 
 // internal functions, must be used only by the functions exposed in the header file (or the stages must be uncounted before)
-void get_stage_dimensions_rec(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
-stage_t *get_player_stage_rec(stage_t *stages);
+void get_stage_dimensions_rec(stage_t * stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
+stage_t * get_player_stage_rec(stage_t *stages);
 
-stage_t * json_to_stage(Json * json_stage) {
+stage_t * json_to_stage(json_t * json_stage, bool first_stage) {
     if (!json_stage || json_stage->type != 'o') {
         fprintf(stderr, "json_to_stage error: invalid input json\n");
         return NULL;
@@ -28,7 +28,12 @@ stage_t * json_to_stage(Json * json_stage) {
     result->top = result->right = result->bottom = result->left = NULL;
     result->counted = false;
 
-    Json *done = get_object_at_key(json_stage, "done");
+    if (first_stage) {
+        result->player = malloc(sizeof(player_t));
+        result->player_orientation = SOUTH;
+    }
+
+    json_t *done = get_object_at_key(json_stage, "done");
     if (done && done->type == 'n')
         result->is_done = done->number;
 
@@ -38,7 +43,7 @@ stage_t * json_to_stage(Json * json_stage) {
     }
 
     // linked map stuff
-    Json *linked_map = get_object_at_key(json_stage, "linked_map");
+    json_t *linked_map = get_object_at_key(json_stage, "linked_map");
     if (linked_map && linked_map->type == 's') {
         result->has_linked_map = true;
         result->linked_map_file_path = malloc(strlen(linked_map->string) + 1);
@@ -52,37 +57,37 @@ stage_t * json_to_stage(Json * json_stage) {
         result->type = EMPTY;
     }
 
-    Json * treasure = get_object_at_key(json_stage, "treasure");
+    json_t * treasure = get_object_at_key(json_stage, "treasure");
     if (treasure && treasure->type == 'o') {
         result->type = TREASURE;
         // TODO: set treasure
     }
 
-    Json * shop = get_object_at_key(json_stage, "shop");
+    json_t * shop = get_object_at_key(json_stage, "shop");
     if (shop && shop->type == 'o') {
         result->type = SHOP;
         // TODO: set shop
     }
 
     // recursive calls for next stages
-    Json *top = get_object_at_key(json_stage, "top");
+    json_t *top = get_object_at_key(json_stage, "top");
     if (top) {
-        result->top = json_to_stage(top);
+        result->top = json_to_stage(top, false);
     }
 
-    Json *right = get_object_at_key(json_stage, "right");
+    json_t *right = get_object_at_key(json_stage, "right");
     if (right) {
-        result->right = json_to_stage(right);
+        result->right = json_to_stage(right, false);
     }
 
-    Json *bottom = get_object_at_key(json_stage, "bottom");
+    json_t *bottom = get_object_at_key(json_stage, "bottom");
     if (bottom) {
-        result->bottom = json_to_stage(bottom);
+        result->bottom = json_to_stage(bottom, false);
     }
 
-    Json *left = get_object_at_key(json_stage, "left");
+    json_t *left = get_object_at_key(json_stage, "left");
     if (left) {
-        result->left = json_to_stage(left);
+        result->left = json_to_stage(left, false);
     }
 
     return result;
@@ -185,4 +190,35 @@ stage_t *get_player_stage_rec(stage_t *stages) {
     if (result != NULL) return result;
 
     return NULL;
+}
+
+void free_stage(stage_t * stage) {
+    if (stage == NULL || stage->counted) {
+        return;
+    }
+
+    if (stage->linked_map_file_path) {
+        free(stage->linked_map_file_path);
+    }
+    if (stage->fight) {
+        free_fight(stage->fight);
+    }
+    if (stage->player) {
+        // TODO: free the player
+    }
+
+    free(stage);
+}
+
+void free_stages(stage_t * stages) {
+    if (stages == NULL) {
+        return;
+    }
+
+    stages->counted = true;
+
+    free_stage(stages->top);
+    free_stage(stages->right);
+    free_stage(stages->bottom);
+    free_stage(stages->left);
 }

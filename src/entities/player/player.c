@@ -253,3 +253,17 @@ int save_player(sqlite3 *db, player_t *player) {
     return SQLITE_OK;
 
 }
+
+void free_player(player_t *player) {
+    if (player) {
+        free(player->name);
+        free_spell(player->offensive_spell);
+        free_spell(player->defensive_spell);
+        free_spell(player->healing_spell);
+        free_armor(player->chosen_armor);
+        free_weapon(player->chosen_weapon);
+        free_inventory(player->inventory);
+        free_stats(player->stats);
+        free(player);
+    }
+}

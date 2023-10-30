@@ -11,7 +11,7 @@ typedef enum {
 } ui_type_t;
 
 typedef struct {
-    Router current_screen;
+    router_t current_screen;
 } window_context_t;
 
 typedef struct {
