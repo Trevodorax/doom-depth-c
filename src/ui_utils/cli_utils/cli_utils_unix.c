@@ -470,12 +470,3 @@ int cli_copy_matrix(cli_matrix_t *dst_matrix, rect_t dst_rect, cli_matrix_t *src
 
     return EXIT_SUCCESS;
 }
-
-SDL_Rect rect_to_SDL_Rect(rect_t rect) {
-    return (SDL_Rect) {
-            (int)rect.x,
-            (int)rect.y,
-            (int)rect.w,
-            (int)rect.h
-    };
-}

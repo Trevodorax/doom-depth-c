@@ -7,7 +7,7 @@
 #include "../../../logs/log.h"
 
 int
-print_ascii_art_in_rectangle(cli_matrix_t *matrix, const char *ascii_file_path, rect_t container, alignment_t x_align,
+print_ascii_art_in_rectangle(cli_matrix_t * matrix, const char * ascii_file_path, rect_t container, alignment_t x_align,
                              alignment_t y_align) {
     if (!matrix || !ascii_file_path) {
         global_logger->error("\nprint_ascii_art_in_rectangle error: please provide all necessary arguments");
