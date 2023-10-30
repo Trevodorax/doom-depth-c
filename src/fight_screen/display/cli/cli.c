@@ -24,8 +24,17 @@ int display_fight_cli(game_window_t * game_window, fight_context_t * fight_conte
     if (player_stats_zone_height > 3) {
         player_stats_zone_height = 3;
     }
+    if (player_stats_zone_height < 1) {
+        player_stats_zone_height = 1;
+    }
 
-    int notification_zone_height = has_notification_message ? 3 : 0;
+    int notification_zone_height = (int)fight_zone.h / 10;
+    if (notification_zone_height > 3) {
+        notification_zone_height = 3;
+    }
+    if (notification_zone_height < 1) {
+        notification_zone_height = 1;
+    }
 
     rect_t player_stats_zone = {
             fight_zone.x,
@@ -96,6 +105,9 @@ int display_monster_cli(game_window_t * game_window, monster_t *monster, rect_t 
     int hp_rect_height = (int)container.h / 10;
     if (hp_rect_height > 3) {
         hp_rect_height = 3;
+    }
+    if (hp_rect_height < 1) {
+        hp_rect_height = 1;
     }
 
     rect_t monster_rect = {

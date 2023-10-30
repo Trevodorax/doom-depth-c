@@ -179,6 +179,12 @@ cli_matrix_t* create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_cha
         return NULL;
     }
 
+    // probably only when overflow under 0
+    if (nb_rows > 500) {
+        free(matrix);
+        return NULL;
+    }
+
     matrix->nb_rows = nb_rows;
     matrix->nb_cols = nb_cols;
 
