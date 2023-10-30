@@ -36,4 +36,10 @@ typedef struct {
  */
 void *create_armor_from_db(sqlite3_stmt *stmt);
 
+/**
+ * @brief Frees the armor
+ * @param armor The armor to free
+ */
+void free_armor(armor_t *armor);
+
 #endif

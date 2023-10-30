@@ -13,6 +13,7 @@ typedef enum {
     FIGHT,
     SHOP,
     TREASURE,
+    FIGHT_DONE,
     STAGE_TYPE_COUNT
 } stage_type_t;
 
@@ -20,7 +21,8 @@ static const char * stage_texture_files[STAGE_TYPE_COUNT] = {
         "../assets/stages/image/empty_stage.png",
         "../assets/stages/image/fight_stage.png",
         "../assets/stages/image/shop_stage.png",
-        "../assets/stages/image/treasure_stage.png"
+        "../assets/stages/image/treasure_stage.png",
+        "../assets/stages/image/fight_done_stage.png"
 };
 
 typedef enum {
@@ -34,7 +36,6 @@ typedef struct stage_t stage_t;
 struct stage_t {
     stage_type_t type;
 
-    bool is_start; // true if the stage is where the player is placed when entering the map
     bool is_done; // true if the stage is not a fight or if the fight is done
 
     bool has_linked_map; // true if the user goes to a linked map when stepping on this stage
@@ -42,7 +43,7 @@ struct stage_t {
 
     bool counted; // for the get_map_dimensions function
 
-    fight_t *fight; // only if type == FIGHT
+    fight_t * fight; // only if type is FIGHT
 
     // player on the stage (if there is one)
     player_t * player;
@@ -62,7 +63,7 @@ struct stage_t {
  * @error If the json is not a correct stage, will return NULL
  * @return The parsed stage or NULL
  */
-stage_t * json_to_stage(Json * json_stage);
+stage_t *json_to_stage(json_t *json_stage, bool first_stage);
 
 /**
  * @brief Computes and updates the dimensions of the given stage.
@@ -101,6 +102,12 @@ void uncount_stages(stage_t * stage);
  * @param stages The stages to search for the player
  * @return A stage with a player on it or NULL if no player is found
  */
-stage_t *get_player_stage(stage_t *stages);
+stage_t *get_player_stage(stage_t * stages);
+
+/**
+ * @brief Frees the given stages recursively
+ * @param stages The stages to free
+ */
+void free_stages(stage_t * stages);
 
 #endif //DOOM_DEPTH_C_STAGE_H

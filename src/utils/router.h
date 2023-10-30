@@ -12,6 +12,6 @@ typedef enum {
     INVENTORY_SCREEN,
     NEW_GAME_SCREEN,
     SHOP_SCREEN
-} Router;
+} router_t;
 
 #endif

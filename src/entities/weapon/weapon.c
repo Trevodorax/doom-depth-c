@@ -38,3 +38,11 @@ void *create_weapon_from_db(sqlite3_stmt *stmt) {
 
     return weapon;
 }
+
+void free_weapon(weapon_t *weapon) {
+    if (weapon) {
+        free(weapon->name);
+        free(weapon->image_path);
+        free(weapon);
+    }
+}

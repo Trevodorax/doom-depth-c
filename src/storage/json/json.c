@@ -13,7 +13,7 @@
  * @author Paul Gaudeaux
  * @date 27/09/23
  */
-Json *parse_json_object(char **json_string_ptr);
+json_t *parse_json_object(char **json_string_ptr);
 
 /**
  * @brief parses a json array
@@ -24,7 +24,7 @@ Json *parse_json_object(char **json_string_ptr);
  * @author Paul Gaudeaux
  * @date 27/09/23
  */
-Json *parse_json_array(char **json_string_ptr);
+json_t *parse_json_array(char **json_string_ptr);
 
 /**
  * @brief parses a json string
@@ -48,7 +48,7 @@ char *parse_json_string(char **json_string_ptr);
  */
 int parse_json_number(char **json_string_ptr);
 
-Json *get_json_from_file(const char *file_path) {
+json_t *get_json_from_file(const char *file_path) {
     FILE *file = fopen(file_path, "r");
     if (!file) {
         return NULL;
@@ -70,18 +70,18 @@ Json *get_json_from_file(const char *file_path) {
     fclose(file);
 
     // turn it into a Json struct
-    Json *json = parse_json(&file_content);
+    json_t *json = parse_json(&file_content);
 
     return json;
 }
 
-Json *parse_json(char **json_string) {
+json_t *parse_json(char **json_string) {
     // check it's not a prank
     if (!**json_string) {
         return NULL;
     }
 
-    Json *result = NULL;
+    json_t *result = NULL;
 
     // redirection according to object type
     switch (**json_string) {
@@ -92,13 +92,13 @@ Json *parse_json(char **json_string) {
             result = parse_json_array(json_string);
             break;
         case '"':
-            result = malloc(sizeof(Json));
+            result = malloc(sizeof(json_t));
             result->type = 's';
             result->string = parse_json_string(json_string);
             break;
         default:
             if (isdigit(**json_string)) {
-                result = malloc(sizeof(Json));
+                result = malloc(sizeof(json_t));
                 if (result) {
                     result->type = 'n';
                     result->number = parse_json_number(json_string);
@@ -120,7 +120,7 @@ Json *parse_json(char **json_string) {
     return result;
 }
 
-void free_json(Json *json) {
+void free_json(json_t *json) {
     // no jokes
     if (!json) {
         return;
@@ -151,10 +151,10 @@ void free_json(Json *json) {
     }
 }
 
-Json *parse_json_object(char **json_string_ptr) {
+json_t * parse_json_object(char **json_string_ptr) {
     (*json_string_ptr)++; // '{'
 
-    Json *obj = malloc(sizeof(Json));
+    json_t *obj = malloc(sizeof(json_t));
     if (!obj) {
         return NULL;
     }
@@ -199,7 +199,7 @@ Json *parse_json_object(char **json_string_ptr) {
         }
 
         // Parse the value
-        Json *value = parse_json(json_string_ptr);
+        json_t *value = parse_json(json_string_ptr);
         if (!value) {
             free_json(obj);
             free(key);
@@ -207,7 +207,7 @@ Json *parse_json_object(char **json_string_ptr) {
         }
 
         obj->keys = realloc(obj->keys, (obj->nb_elements + 1) * sizeof(char *));
-        obj->values = realloc(obj->values, (obj->nb_elements + 1) * sizeof(Json));
+        obj->values = realloc(obj->values, (obj->nb_elements + 1) * sizeof(json_t));
 
         if (!obj->keys || !obj->values) {
             free(key);
@@ -240,10 +240,10 @@ Json *parse_json_object(char **json_string_ptr) {
     return obj;
 }
 
-Json *parse_json_array(char **json_string_ptr) {
+json_t *parse_json_array(char **json_string_ptr) {
     (*json_string_ptr)++; // '['
 
-    Json *arr = malloc(sizeof(Json));
+    json_t *arr = malloc(sizeof(json_t));
     if (!arr) {
         return NULL;
     }
@@ -264,7 +264,7 @@ Json *parse_json_array(char **json_string_ptr) {
 
     while (1) {
         // get value of element
-        Json *value = parse_json(json_string_ptr);
+        json_t *value = parse_json(json_string_ptr);
         if (!value) {
             for (size_t i = 0; i < arr->nb_elements; i++) {
                 free_json(&arr->values[i]);
@@ -275,7 +275,7 @@ Json *parse_json_array(char **json_string_ptr) {
         }
 
         // add it to the array
-        arr->values = realloc(arr->values, (arr->nb_elements + 1) * sizeof(Json));
+        arr->values = realloc(arr->values, (arr->nb_elements + 1) * sizeof(json_t));
         if (!arr->values) {
             return NULL;
         }
@@ -329,7 +329,7 @@ int parse_json_number(char **json_string_ptr) {
     return num;
 }
 
-int get_index_of_key(Json * json, char * key) {
+int get_index_of_key(json_t * json, char * key) {
     // Check if the json pointer is NULL
     if (json == NULL || key == NULL || json->type != 'o') {
         return -1;
@@ -344,7 +344,7 @@ int get_index_of_key(Json * json, char * key) {
     return -1;
 }
 
-Json * get_object_at_key(Json * json, char * key) {
+json_t * get_object_at_key(json_t * json, char * key) {
     if (json == NULL || key == NULL || json->type != 'o') {
         return NULL;
     }

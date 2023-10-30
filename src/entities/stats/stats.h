@@ -73,4 +73,10 @@ void *create_stats_from_db(sqlite3_stmt *stmt);
  */
 int save_stats(sqlite3 *db, stats_t *stats, int player_id);
 
+/**
+ * @brief Frees the stats
+ * @param stats The stats to free
+ */
+void free_stats(stats_t *stats);
+
 #endif

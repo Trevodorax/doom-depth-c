@@ -18,6 +18,12 @@ typedef struct {
  * @error If the json is not a correct fight, will return NULL
  * @return The parsed fight or NULL
  */
-fight_t * json_to_fight(Json * fight_json);
+fight_t * json_to_fight(json_t * fight_json);
+
+/**
+ * @brief Frees the given fight
+ * @param fight The fight to free
+ */
+void free_fight(fight_t * fight);
 
 #endif

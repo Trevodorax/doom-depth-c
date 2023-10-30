@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-fight_t * json_to_fight(Json * fight_json) {
+fight_t * json_to_fight(json_t * fight_json) {
     if (!fight_json || fight_json->type != 'o') {
         fprintf(stderr, "\njson_to_fight error: invalid input json\n");
         return NULL;
@@ -15,8 +15,8 @@ fight_t * json_to_fight(Json * fight_json) {
         return NULL;
     }
 
-    Json *min_nb_enemies = get_object_at_key(fight_json, "min_nb_enemies");
-    Json *max_nb_enemies = get_object_at_key(fight_json, "max_nb_enemies");
+    json_t *min_nb_enemies = get_object_at_key(fight_json, "min_nb_enemies");
+    json_t *max_nb_enemies = get_object_at_key(fight_json, "max_nb_enemies");
     if (!min_nb_enemies || min_nb_enemies->type != 'n' || min_nb_enemies->number == 0 || !max_nb_enemies || max_nb_enemies->type != 'n' || max_nb_enemies->number == 0) {
         free(result);
         return NULL;
@@ -24,7 +24,7 @@ fight_t * json_to_fight(Json * fight_json) {
     result->min_nb_enemies = min_nb_enemies->number;
     result->max_nb_enemies = max_nb_enemies->number;
 
-    Json *enemies_list = get_object_at_key(fight_json, "enemies_list");
+    json_t *enemies_list = get_object_at_key(fight_json, "enemies_list");
     if (!enemies_list || enemies_list->type != 'a') {
         fprintf(stderr, "\njson_to_fight error: enemies_list not found or invalid\n");
         free(result);
@@ -42,7 +42,7 @@ fight_t * json_to_fight(Json * fight_json) {
     }
 
 
-    Json *chances = get_object_at_key(fight_json, "enemies_chances_to_appear");
+    json_t *chances = get_object_at_key(fight_json, "enemies_chances_to_appear");
     if (!chances || chances->type != 'a') {
         fprintf(stderr, "\njson_to_fight error: enemies_chances_to_appear not found or invalid\n");
         free(result->enemies_list);
@@ -56,8 +56,17 @@ fight_t * json_to_fight(Json * fight_json) {
             fprintf(stderr, "\njson_to_fight error: enemy chances to appear is not a number.");
             return NULL;
         }
-        result->enemies_chances_to_appear[i] = ((float)chances->values[i].number) / 100;
+        result->enemies_chances_to_appear[i] = chances->values[i].number;
     }
 
     return result;
+}
+
+void free_fight(fight_t * fight) {
+    for(int i = 0; i < fight->enemies_size; i++) {
+        free(fight->enemies_list[i]);
+    }
+    free(fight->enemies_list);
+
+    free(fight);
 }

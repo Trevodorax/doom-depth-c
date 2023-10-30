@@ -37,4 +37,10 @@ typedef struct {
  */
 void *create_weapon_from_db(sqlite3_stmt *stmt);
 
+/**
+ * @brief Frees the weapon
+ * @param weapon The weapon to free
+ */
+void free_weapon(weapon_t *weapon);
+
 #endif

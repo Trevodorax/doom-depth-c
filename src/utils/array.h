@@ -22,6 +22,12 @@ void print_int(void *n);
 void print_float(void *f);
 
 /**
+ * @brief Frees the array node NOT recursively and WITHOUT the value
+ * @param node The array node to free
+ */
+void free_array_node(array_node_t *node);
+
+/**
  * @brief Returns the number of elements in a linked list
  *
  * @param head Pointer to the first element of the linked list

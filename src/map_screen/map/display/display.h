@@ -12,6 +12,6 @@
  * @sideeffects Displays the map on the window, removing any previously printed content
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_map(game_window_t *game_window, map_t *map, SDL_Texture **stage_textures);
+int display_map(game_window_t *game_window, map_t *map);
 
 #endif //DOOM_DEPTH_C_MAP_DISPLAY_H

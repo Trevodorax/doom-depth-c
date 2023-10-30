@@ -178,3 +178,25 @@ int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id) {
 
     return SQLITE_OK;
 }
+
+void free_inventory(inventory_t * inventory) {
+    if (inventory) {
+        array_node_t *current = inventory->armors_head;
+        while (current) {
+            array_node_t *temp = current;
+            current = current->next;
+            free_armor((armor_t *)temp->value);
+            free_array_node(temp);
+        }
+
+        current = inventory->weapons_head;
+        while (current) {
+            array_node_t *temp = current;
+            current = current->next;
+            free_weapon((weapon_t *)temp->value);
+            free_array_node(temp);
+        }
+
+        free(inventory);
+    }
+}

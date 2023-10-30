@@ -15,7 +15,7 @@ typedef struct {
  * @error If the json is not a correct map, will return NULL
  * @return The parsed map or NULL
  */
-map_t * json_to_map(Json * json_map);
+map_t * json_to_map(json_t * json_map);
 
 /**
  * @brief Gets the height and width of a map
@@ -30,5 +30,19 @@ map_t * json_to_map(Json * json_map);
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, int * initial_y);
+
+/**
+ * @brief Retrieves the map from the given file
+ *
+ * @param file_path The path of the map file
+ * @return The map, or NULL in case of error
+ */
+map_t * get_map_from_file(char * file_path);
+
+/**
+ * @brief Frees the map
+ * @param map The map to free
+ */
+void free_map(map_t * map);
 
 #endif //DOOM_DEPTH_C_MAP_H

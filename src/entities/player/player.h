@@ -112,4 +112,10 @@ void give_exp(player_t * player, unsigned int amount);
  */
 void heal_mana(player_t * player, unsigned int amount);
 
+/**
+ * @brief Frees the player
+ * @param player The player to free
+ */
+void free_player(player_t *player);
+
 #endif

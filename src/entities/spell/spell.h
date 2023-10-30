@@ -64,5 +64,11 @@ spell_t *find_noob_spell(array_node_t * spells, int type);
  */
 spell_t *find_spell(array_node_t * spells, int id);
 
+/**
+ * @brief Frees the spell
+ * @param spell The spell to free
+ */
+void free_spell(spell_t *spell);
+
 
 #endif

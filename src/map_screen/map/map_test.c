@@ -3,7 +3,7 @@
 #include "map_test.h"
 #include "map.h"
 
-map_t * json_to_map(Json * json_map);
+map_t * json_to_map(json_t * json_map);
 int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, int * initial_y);
 
 static char * test_json_to_map() {
@@ -17,7 +17,7 @@ static char * test_json_to_map() {
             "}]"
             "}";
 
-    Json *json_obj = parse_json(&json_str);
+    json_t *json_obj = parse_json(&json_str);
 
     map_t *map = json_to_map(json_obj);
     mu_assert("error, map is NULL", map != NULL);
@@ -30,7 +30,7 @@ static char * test_json_to_map() {
     map_t *null_map = json_to_map(NULL);
     mu_assert("error, null_map is not NULL", null_map == NULL);
 
-    Json invalid_json_obj;
+    json_t invalid_json_obj;
     invalid_json_obj.type = 'n';
     invalid_json_obj.number = 42;
 
@@ -42,7 +42,7 @@ static char * test_json_to_map() {
             "{"
             "\"name\":\"TestMap\""
             "}";
-    Json *missing_fields_json_obj = parse_json(&json_str_missing_fields);
+    json_t *missing_fields_json_obj = parse_json(&json_str_missing_fields);
 
     mu_assert("error, missing_fields_json_obj is NULL", missing_fields_json_obj != NULL); // Asserting that parsing didn't fail outright
     map_t *missing_fields_map = json_to_map(missing_fields_json_obj);
@@ -117,7 +117,7 @@ static char * test_get_map_dimensions() {
                       "]"
                       "}";
 
-    Json *json_map = parse_json(&string_map);
+    json_t *json_map = parse_json(&string_map);
 
     map_t *map = json_to_map(json_map);
     mu_assert("\ntest_get_map_dimensions error, map is NULL", map != NULL);

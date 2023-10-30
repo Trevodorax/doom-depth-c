@@ -4,6 +4,7 @@
 #include "stage/display/display.h"
 #include "../event/event.h"
 #include "../utils/utils.h"
+#include "../fight_screen/fight_screen.h"
 
 /**
  * @brief Moves the player and returns the stage he is on
@@ -15,24 +16,7 @@
  */
 stage_t * move_player(stage_t * player_stage, orientation_t direction);
 
-int map_screen(game_window_t *game_window, char *map_file) {
-    // safeguards
-    Json * json_map = get_json_from_file(map_file);
-    if (!json_map) {
-        fprintf(stderr, "\nmap_screen error: could not retrieve map from file.");
-        return EXIT_FAILURE;
-    }
-    map_t * map = json_to_map(json_map);
-    if (!map) {
-        fprintf(stderr, "\nmap_screen error: could not convert json to map.");
-        return EXIT_FAILURE;
-    }
-
-    SDL_Texture ** stage_textures = NULL;
-    if (game_window->ui_type == GUI) {
-        stage_textures = get_stage_textures(game_window->renderer);
-    }
-
+int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
     stage_t * player_stage = get_player_stage(map->first_stage);
 
     event_t event;
@@ -60,6 +44,37 @@ int map_screen(game_window_t *game_window, char *map_file) {
                 case Q_KEY:
                     player_stage = move_player(player_stage, WEST);
                     break;
+                case ENTER_KEY:
+                    switch(player_stage->type) {
+                        case FIGHT: {
+                            if (player_stage->is_done) {
+                                break;
+                            }
+
+                            delay(game_window->ui_type, 1000);
+                            router_t fight_result = fight_screen(game_window, player, player_stage->fight);
+
+                            switch (fight_result) {
+                                case MAP_SCREEN:
+                                    player_stage->is_done = true;
+                                    break;
+                                case QUIT_GAME:
+                                    // TODO: save and quit
+                                case GAME_OVER:
+                                default:
+                                    break;
+                            }
+
+                            return fight_result;
+                        }
+                        case SHOP:
+                            // TODO: open shop
+                        case TREASURE:
+                            // TODO: give the treasure to the player
+                        case EMPTY:
+                        default:
+                            break;
+                    }
                 default:
                     break;
             }
@@ -69,8 +84,9 @@ int map_screen(game_window_t *game_window, char *map_file) {
             set_cli_raw_mode(false);
         }
 
-        display_map(game_window, map, stage_textures);
+        display_map(game_window, map);
         render_present(game_window);
+
     }
 
     return QUIT_GAME;
@@ -103,6 +119,11 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction) {
         return player_stage;
     }
 
+    // prevent going to the next fight if
+    if(player_stage->fight && !player_stage->is_done && !next_stage->is_done) {
+        return player_stage;
+    }
+
     // switch player to next stage
     next_stage->player = player_stage->player;
     player_stage->player = NULL;
@@ -126,6 +147,10 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction) {
             next_stage->right = player_stage;
             player_stage->left = NULL;
             break;
+    }
+
+    if(player_stage->type != FIGHT) {
+        player_stage->is_done = true;
     }
 
     return next_stage;
