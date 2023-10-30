@@ -44,6 +44,7 @@ void free_weapon(weapon_t *weapon) {
     if (weapon) {
         free(weapon->name);
         free(weapon->image_path);
+        free(weapon->ascii_path);
         free(weapon);
     }
 }

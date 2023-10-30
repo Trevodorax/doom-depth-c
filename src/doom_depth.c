@@ -71,7 +71,7 @@ int main_loop(game_window_t * main_window) {
     player->inventory->nb_weapons = get_size(player_weapons);
     player->inventory->weapons_head = player_weapons;
 
-    main_window->context->current_screen = INVENTORY_SCREEN;
+    main_window->context->current_screen = SHOP_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :

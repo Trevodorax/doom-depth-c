@@ -56,7 +56,8 @@ const char create_armor_table_sql[] =
         "    rarity   INTEGER not null,"
         "    max_uses INTEGER not null,"
         "    cost     INTEGER not null,"
-        "    image    TEXT    not null"
+        "    image    TEXT    not null,"
+        "    asciiart TEXT    not null"
         ");";
 
 const char create_weapon_table_sql[] =
