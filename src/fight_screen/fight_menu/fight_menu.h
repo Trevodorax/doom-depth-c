@@ -15,6 +15,7 @@ struct menu_t {
     // displayed elements (can be either 1 or 2 of those, but not none)
     char * title;
     char * image_path;
+    char * ascii_art_path;
 
     // callback
     fight_action_t * action;
