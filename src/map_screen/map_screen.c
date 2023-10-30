@@ -17,11 +17,6 @@
 stage_t * move_player(stage_t * player_stage, orientation_t direction);
 
 int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
-    SDL_Texture ** stage_textures = NULL;
-    if (game_window->ui_type == GUI) {
-        stage_textures = get_stage_textures(game_window->renderer);
-    }
-
     stage_t * player_stage = get_player_stage(map->first_stage);
 
     event_t event;
@@ -89,7 +84,7 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
             set_cli_raw_mode(false);
         }
 
-        display_map(game_window, map, stage_textures);
+        display_map(game_window, map);
         render_present(game_window);
 
     }
@@ -124,6 +119,11 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction) {
         return player_stage;
     }
 
+    // prevent going to the next fight if
+    if(player_stage->fight && !player_stage->is_done && !next_stage->is_done) {
+        return player_stage;
+    }
+
     // switch player to next stage
     next_stage->player = player_stage->player;
     player_stage->player = NULL;
@@ -147,6 +147,10 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction) {
             next_stage->right = player_stage;
             player_stage->left = NULL;
             break;
+    }
+
+    if(player_stage->type != FIGHT) {
+        player_stage->is_done = true;
     }
 
     return next_stage;

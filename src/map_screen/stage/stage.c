@@ -35,7 +35,7 @@ stage_t * json_to_stage(json_t * json_stage, bool first_stage) {
 
     json_t *done = get_object_at_key(json_stage, "done");
     if (done && done->type == 'n')
-        result->is_done = done->number;
+        result->is_done = done->number == 1;
 
     fight_t * fight = json_to_fight(json_stage);
     if (fight) {

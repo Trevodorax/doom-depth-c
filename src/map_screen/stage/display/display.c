@@ -2,7 +2,7 @@
 
 #include "../../../ui_utils/sdl_utils/sdl_utils.h"
 
-int print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players);
+int print_stages_rec(game_window_t *game_window, stage_t *stages, int x_coord, int y_coord, int stage_size, bool with_players);
 
 /**
  * @brief Prints a player somewhere on the map
@@ -19,7 +19,12 @@ int print_player_on_stage_gui(game_window_t * game_window, orientation_t player_
 int print_player_on_stage_cli(game_window_t * game_window, orientation_t player_orientation, rect_t stage_rect);
 
 SDL_Texture ** get_stage_textures(SDL_Renderer * renderer) {
-    SDL_Texture ** stage_textures = malloc(sizeof(SDL_Texture*) * STAGE_TYPE_COUNT);
+    static SDL_Texture ** stage_textures = NULL;
+    if (stage_textures) {
+        return stage_textures;
+    }
+
+    stage_textures = malloc(sizeof(SDL_Texture*) * STAGE_TYPE_COUNT);
     for (int i = 0; i < STAGE_TYPE_COUNT; i++) {
         stage_textures[i] = get_image_texture(renderer, stage_texture_files[i]);
         if (!stage_textures[i]) {
@@ -35,46 +40,54 @@ SDL_Texture ** get_stage_textures(SDL_Renderer * renderer) {
     return stage_textures;
 }
 
-int print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players) {
+int print_stages(game_window_t *game_window, stage_t *stages, int x_coord, int y_coord, int stage_size, bool with_players) {
     uncount_stages(stages);
-    print_stages_rec(game_window, stages, stage_textures, x_coord, y_coord, stage_size, with_players);
+    print_stages_rec(game_window, stages, x_coord, y_coord, stage_size, with_players);
 
     return EXIT_SUCCESS;
 }
 
-int print_stages_rec(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players) {
+int print_stages_rec(game_window_t *game_window, stage_t *stages, int x_coord, int y_coord, int stage_size, bool with_players) {
     if (!stages || stages->counted) {
         return EXIT_SUCCESS;
     }
 
     stages->counted = true;
 
-    print_stage(game_window, stages, stage_textures, x_coord * stage_size, y_coord * stage_size, stage_size, with_players);
+    print_stage(game_window, stages, x_coord * stage_size, y_coord * stage_size, stage_size, with_players);
 
-    print_stages_rec(game_window, stages->top, stage_textures, x_coord, y_coord - 1, stage_size, with_players);
-    print_stages_rec(game_window, stages->right, stage_textures, x_coord + 1, y_coord, stage_size, with_players);
-    print_stages_rec(game_window, stages->bottom, stage_textures, x_coord, y_coord + 1, stage_size, with_players);
-    print_stages_rec(game_window, stages->left, stage_textures, x_coord - 1, y_coord, stage_size, with_players);
+    print_stages_rec(game_window, stages->top, x_coord, y_coord - 1, stage_size, with_players);
+    print_stages_rec(game_window, stages->right, x_coord + 1, y_coord, stage_size, with_players);
+    print_stages_rec(game_window, stages->bottom, x_coord, y_coord + 1, stage_size, with_players);
+    print_stages_rec(game_window, stages->left, x_coord - 1, y_coord, stage_size, with_players);
 
     return EXIT_SUCCESS;
 }
 
 int print_stage_cli(game_window_t *game_window, stage_t *stage, int x_coord, int y_coord, int stage_size, bool with_players);
-int print_stage_gui(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players);
+int print_stage_gui(game_window_t *game_window, stage_t *stage, int x_coord, int y_coord, int stage_size, bool with_players);
 
-int print_stage(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players) {
+int print_stage(game_window_t *game_window, stage_t *stage, int x_coord, int y_coord, int stage_size, bool with_players) {
     switch (game_window->ui_type) {
         case CLI:
             return print_stage_cli(game_window, stage, x_coord, y_coord, stage_size, with_players);
         case GUI:
-            return print_stage_gui(game_window, stage, stage_textures, x_coord, y_coord, stage_size, with_players);
+            return print_stage_gui(game_window, stage, x_coord, y_coord, stage_size, with_players);
     }
 }
 
-int print_stage_gui(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players) {
+int print_stage_gui(game_window_t *game_window, stage_t *stage, int x_coord, int y_coord, int stage_size, bool with_players) {
     SDL_Rect stage_rect =  {x_coord, y_coord, stage_size, stage_size};
 
-    if (SDL_RenderCopy(game_window->renderer, stage_textures[stage->type], NULL, &stage_rect) != 0) {
+    SDL_Texture ** stage_textures = get_stage_textures(game_window->renderer);
+    SDL_Texture * stage_texture = NULL;
+    if(stage->type == FIGHT && stage->is_done) {
+        stage_texture = stage_textures[FIGHT_DONE];
+    } else {
+        stage_texture = stage_textures[stage->type];
+    }
+
+    if (SDL_RenderCopy(game_window->renderer, stage_texture, NULL, &stage_rect) != 0) {
         return EXIT_FAILURE;
     }
 

@@ -22,7 +22,7 @@ SDL_Texture ** get_stage_textures(SDL_Renderer * renderer);
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stage_textures, int x_coord, int y_coord,
+int print_stages(game_window_t *game_window, stage_t *stages, int x_coord, int y_coord,
                  int stage_size, bool with_players);
 
 
@@ -36,6 +36,6 @@ int print_stages(game_window_t *game_window, stage_t *stages, SDL_Texture **stag
  * @param stage_size The size of the stage
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int print_stage(game_window_t *game_window, stage_t *stage, SDL_Texture **stage_textures, int x_coord, int y_coord, int stage_size, bool with_players);
+int print_stage(game_window_t *game_window, stage_t *stage, int x_coord, int y_coord, int stage_size, bool with_players);
 
 #endif //DOOM_DEPTH_C_STAGE_DISPLAY_H

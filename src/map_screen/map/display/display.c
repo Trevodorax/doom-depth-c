@@ -2,15 +2,15 @@
 #include "../../../ui_utils/sdl_utils/sdl_utils.h"
 #include "../../stage/display/display.h"
 
-int display_map_gui(game_window_t *game_window, map_t *map, SDL_Texture **stage_textures);
+int display_map_gui(game_window_t *game_window, map_t *map);
 int display_map_cli(game_window_t *game_window, map_t *map);
 
-int display_map(game_window_t *game_window, map_t *map, SDL_Texture **stage_textures) {
+int display_map(game_window_t *game_window, map_t * map) {
     switch (game_window->ui_type) {
         case CLI:
             return display_map_cli(game_window, map);
         case GUI:
-            return display_map_gui(game_window, map, stage_textures);
+            return display_map_gui(game_window, map);
     }
 }
 
@@ -41,12 +41,12 @@ int display_map_cli(game_window_t *game_window, map_t *map) {
         return EXIT_FAILURE;
     }
 
-    print_stages(game_window, map->first_stage, NULL, initial_x, initial_y, stage_size, true);
+    print_stages(game_window, map->first_stage, initial_x, initial_y, stage_size, true);
 
     return EXIT_SUCCESS;
 }
 
-int display_map_gui(game_window_t *game_window, map_t *map, SDL_Texture **stage_textures) {
+int display_map_gui(game_window_t *game_window, map_t *map) {
     if (!game_window || !map) {
         fprintf(stderr, "\ndisplay_map_gui error: please provide all necessary arguments");
         return EXIT_FAILURE;
@@ -56,8 +56,6 @@ int display_map_gui(game_window_t *game_window, map_t *map, SDL_Texture **stage_
     int window_width = 0;
     int window_height = 0;
     SDL_GetWindowSize(game_window->window, &window_width, &window_height);
-
-    stage_t * test = map->first_stage;
 
     int map_width;
     int map_height;
@@ -75,7 +73,7 @@ int display_map_gui(game_window_t *game_window, map_t *map, SDL_Texture **stage_
         return EXIT_FAILURE;
     }
 
-    print_stages(game_window, map->first_stage, stage_textures, initial_x, initial_y, stage_size, true);
+    print_stages(game_window, map->first_stage, initial_x, initial_y, stage_size, true);
 
     return EXIT_SUCCESS;
 }

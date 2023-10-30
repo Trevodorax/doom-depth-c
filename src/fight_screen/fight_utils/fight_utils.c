@@ -67,7 +67,6 @@ int find_index(int rand_num, const int probs[], int size) {
 void free_fight_context(fight_context_t * fight_context) {
     free(fight_context->notification_message);
     free_list(&fight_context->monsters);
-    logger_free();
     free(fight_context);
 }
 
