@@ -270,7 +270,7 @@ void free_player(player_t *player) {
 
 array_node_t *get_players_from_db(sqlite3 *db) {
 
-    char sql[100] = "SELECT id, name FROM PLAYER LIMIT 3";
+    char sql_request[100] = "SELECT id, name FROM PLAYER LIMIT 3";
 
     sqlite3_stmt *stmt;
     sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
