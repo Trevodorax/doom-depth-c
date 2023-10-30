@@ -9,7 +9,7 @@ int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db)
         return EXIT_FAILURE;
     }
 
-    event_t e;
+    event_t event;
     bool quit = false;
     array_node_t *players = get_players_from_db(db);
     unsigned short active_option = 0;
@@ -22,8 +22,8 @@ int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db)
             set_cli_raw_mode(true);
         }
 
-        while (get_event(game_window->ui_type, &e)) {
-            switch (e) {
+        while (get_event(game_window->ui_type, &event)) {
+            switch (event) {
                 case QUIT:
                     return QUIT_GAME;
                 case D_KEY:
