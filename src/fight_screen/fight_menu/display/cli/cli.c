@@ -42,7 +42,7 @@ int display_menu_item_cli(game_window_t *game_window, const char *title, const c
 
     // print the title if there is one
     if (title) {
-        cli_print_text_in_rectangle(game_window->matrix, container, title, WHITE, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
+        cli_print_text_in_rectangle(game_window->matrix, container, title, BLACK, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
     }
 
     return EXIT_SUCCESS;
