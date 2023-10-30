@@ -37,8 +37,8 @@ char_type_t get_char_type(char c) {
         return LOWERCASE;
     } else if (isupper(c)) {
         return UPPERCASE;
-    } else if (c == ' '){
-        return SPACE;
+    } else if (c == ' ' || c == '(' || c == ')'){
+        return SPECIAL;
     } else {
             return INVALID;
     }

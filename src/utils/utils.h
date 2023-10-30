@@ -12,7 +12,7 @@ typedef enum {
     DIGIT,
     LOWERCASE,
     UPPERCASE,
-    SPACE,
+    SPECIAL,
     INVALID
 } char_type_t;
 

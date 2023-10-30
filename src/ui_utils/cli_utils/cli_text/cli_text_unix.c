@@ -41,6 +41,8 @@ int print_text_ascii_art(cli_matrix_t *matrix, rect_t container, const char *tex
  */
 int get_ascii_art_text_dimensions(const char *text, size_t *width, size_t *height, text_size_t text_size);
 
+ascii_art_t *get_special_char_ascii_art(char character);
+
 void cli_print_color(color_code_t color, const char *format, ...) {
     // get unknown number of args
     va_list args;
@@ -195,10 +197,6 @@ int get_letters_ascii_arts(
 ascii_art_t * get_letter_ascii_art(char character) {
     char_type_t char_type = get_char_type(character);
 
-    if(char_type == INVALID) {
-        return NULL;
-    }
-
     ascii_art_t ** lowercase_ascii_arts = NULL;
     ascii_art_t ** uppercase_ascii_arts = NULL;
     ascii_art_t ** digit_ascii_arts = NULL;
@@ -218,9 +216,18 @@ ascii_art_t * get_letter_ascii_art(char character) {
             return lowercase_ascii_arts[character - 'a'];
         case UPPERCASE:
             return uppercase_ascii_arts[character - 'A'];
+        case SPECIAL:
+            return get_special_char_ascii_art(character);
+        case INVALID:
+            return parse_ascii_art_file("../assets/ascii_text/special/unknown.asciiart");
         default:
             return NULL;
     }
+}
+
+ascii_art_t *get_special_char_ascii_art(char character) {
+    // TODO: create special char ascii arts for all special chars, and use them
+    return parse_ascii_art_file("../assets/ascii_text/special/unknown.asciiart");
 }
 
 int print_text_ascii_art(cli_matrix_t *matrix, rect_t container, const char *text, alignment_t x_align,
@@ -228,7 +235,9 @@ int print_text_ascii_art(cli_matrix_t *matrix, rect_t container, const char *tex
     size_t ascii_art_width;
     size_t ascii_art_height;
 
-    get_ascii_art_text_dimensions(text, &ascii_art_width, &ascii_art_height, text_size);
+    if(get_ascii_art_text_dimensions(text, &ascii_art_width, &ascii_art_height, text_size) == EXIT_FAILURE) {
+        return EXIT_FAILURE;
+    }
 
     if(ascii_art_width > container.w || ascii_art_height > container.h) {
         return EXIT_FAILURE;
