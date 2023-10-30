@@ -191,7 +191,7 @@ char * test_create_inventory_from_db() {
     return 0;
 }
 
-char *test_get_get_players_from_db() {
+char *test_get_players_from_db() {
     sqlite3 *db = db_connection();
     array_node_t *players = get_players_from_db(db);
     array_node_t *head = players;
@@ -203,7 +203,7 @@ char *test_get_get_players_from_db() {
         players = players->next;
     }
 
-    mu_assert("Error in test_get_get_players_from_db: players is null", head != NULL);
+    mu_assert("Error in test_get_players_from_db: players is null", head != NULL);
     return 0;
 }
 
@@ -216,7 +216,7 @@ char * all_tests() {
     // mu_run_test(test_create_spells_from_db);
     // mu_run_test(test_create_stats_from_db);
     // mu_run_test(test_create_inventory_from_db);
-    mu_run_test(test_get_get_players_from_db);
+    mu_run_test(test_get_players_from_db);
     return 0;
 }
 
