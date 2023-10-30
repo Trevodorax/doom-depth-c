@@ -124,8 +124,8 @@ int main_loop(game_window_t * main_window) {
         }
     }
 
-    // free_map(map);
-    // free_player(player);
+    free_map(map);
+    free_player(player);
 
     return EXIT_SUCCESS;
 }
