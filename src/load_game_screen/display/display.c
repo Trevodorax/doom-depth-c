@@ -46,8 +46,6 @@ int display_load_game(game_window_t *game_window, array_node_t *players, unsigne
             ALIGN_CENTER,
             ALIGN_CENTER);
 
-    SDL_RenderPresent(game_window->renderer);
-
     return EXIT_SUCCESS;
 }
 
