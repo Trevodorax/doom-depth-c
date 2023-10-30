@@ -273,7 +273,7 @@ array_node_t *get_players_from_db(sqlite3 *db) {
     char sql_request[100] = "SELECT id, name FROM PLAYER LIMIT 3";
 
     sqlite3_stmt *stmt;
-    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    sqlite3_prepare_v2(db, sql_request, -1, &stmt, NULL);
     array_node_t *players = NULL;
 
 while (sqlite3_step(stmt) == SQLITE_ROW) {

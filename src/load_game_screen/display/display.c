@@ -13,10 +13,10 @@ int display_load_game(game_window_t *game_window, array_node_t *players, unsigne
     display_title(game_window, window_width, window_height, text_color);
 
     rect_t container_saves = {
-            window_width / 4,
-            window_height / 4,
-            window_width / 2,
-            window_height / 2
+            (size_t)(window_width - window_width * 0.3)/ 2,
+            (size_t)(window_height - window_height * 0.3) / 2,
+            (size_t)(window_width * 0.3),
+            (size_t)(window_height * 0.3)
     };
 
     rect_t *rects = get_rectangle_layout(3, &container_saves, VERTICAL);
@@ -32,10 +32,10 @@ int display_load_game(game_window_t *game_window, array_node_t *players, unsigne
     }
 
     rect_t container_cursor = {
-            container_saves.x - 20,
-            rects[active_option].y + rects[active_option].h / 2,
-            40,
-            20
+            rects[active_option].x - (rects[active_option].w / 10),
+            rects[active_option].y + (rects[active_option].h / 2),
+            rects[active_option].w / 10,
+            rects[active_option].h / 2
     };
 
     print_text_in_rectangle(
