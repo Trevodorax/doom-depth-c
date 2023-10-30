@@ -33,6 +33,8 @@ int start_menu_screen(game_window_t *game_window) {
                     // TODO : link to load game option
                     if(active_option == 1) {
                         return NEW_GAME_SCREEN;
+                    } else {
+                        return LOAD_GAME_SCREEN;
                     }
                 default:
                     break;

@@ -81,6 +81,10 @@ set(cross_platform_targets
         src/new_game_screen/new_game_screen.c
         src/new_game_screen/display/display.h
         src/new_game_screen/display/display.c
+        src/load_game_screen/load_game_screen.h
+        src/load_game_screen/load_game_screen.c
+        src/load_game_screen/display/display.h
+        src/load_game_screen/display/display.c
         src/ui_utils/cli_utils/cli_text/cli_text.h
         src/ui_utils/cli_utils/types.h
         src/fight_screen/fight_utils/fight_utils.c

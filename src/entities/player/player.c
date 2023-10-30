@@ -267,3 +267,27 @@ void free_player(player_t *player) {
         free(player);
     }
 }
+
+array_node_t *get_players_from_db(sqlite3 *db) {
+
+    char sql_request[100] = "SELECT id, name FROM PLAYER LIMIT 3";
+
+    sqlite3_stmt *stmt;
+    sqlite3_prepare_v2(db, sql_request, -1, &stmt, NULL);
+    array_node_t *players = NULL;
+
+while (sqlite3_step(stmt) == SQLITE_ROW) {
+        player_t *player = malloc(sizeof(player_t));
+        player->id = sqlite3_column_int(stmt, 0);
+        player->name = strdup((char *) sqlite3_column_text(stmt, 1));
+        if (players == NULL) {
+            players = malloc(sizeof(array_node_t));
+            players->value = player;
+            players->next = NULL;
+        } else {
+            append(&players, player, sizeof(player_t));
+        }
+    }
+
+    return players;
+}
