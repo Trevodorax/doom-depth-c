@@ -268,10 +268,7 @@ void free_player(player_t *player) {
     }
 }
 
-array_node_t *players_from_db(sqlite3 *db) {
-
-    // Objectif is to get the 3 first players in DB and get only the name and the id for now
-    // So we can give those 3 players to the player selection screen and display them to then load the game with the player saved
+array_node_t *get_players_from_db(sqlite3 *db) {
 
     char sql[100] = "SELECT id, name FROM PLAYER LIMIT 3";
 

@@ -118,6 +118,18 @@ void heal_mana(player_t * player, unsigned int amount);
  */
 void free_player(player_t *player);
 
-array_node_t *players_from_db(sqlite3 *db);
+/**
+ * @brief Creates an array of players from the database.
+ *
+ * This function creates an array with the three saves the player can have.
+ *
+ * @param db A pointer to the SQLite3 database connection.
+ *
+ * @return A pointer to the array of players created from the database.
+ * @sideeffects May modify the SQLite database by inserting new data.
+ * @dependencies Depends on the SQLite3 library.
+ * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
+ */
+array_node_t *get_players_from_db(sqlite3 *db);
 
 #endif

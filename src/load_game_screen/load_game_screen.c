@@ -11,7 +11,7 @@ int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db)
 
     event_t e;
     bool quit = false;
-    array_node_t *players = players_from_db(db);
+    array_node_t *players = get_players_from_db(db);
     unsigned short active_option = 0;
 
 
