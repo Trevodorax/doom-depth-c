@@ -22,17 +22,11 @@ stage_t * json_to_stage(Json * json_stage) {
     }
 
     // default values
-    result->is_start = false;
     result->is_done = false;
     result->has_linked_map = false;
     result->fight = NULL;
     result->top = result->right = result->bottom = result->left = NULL;
     result->counted = false;
-
-    Json * start = get_object_at_key(json_stage, "start");
-    if (start && start->type == 'n') {
-        result->is_start = start->number;
-    }
 
     Json *done = get_object_at_key(json_stage, "done");
     if (done && done->type == 'n')
@@ -49,11 +43,6 @@ stage_t * json_to_stage(Json * json_stage) {
         result->has_linked_map = true;
         result->linked_map_file_path = malloc(strlen(linked_map->string) + 1);
         strcpy(result->linked_map_file_path, linked_map->string);
-    }
-
-    if (result->is_start) {
-        result->player = malloc(sizeof(player_t));
-        result->player_orientation = SOUTH;
     }
 
     // set stage type

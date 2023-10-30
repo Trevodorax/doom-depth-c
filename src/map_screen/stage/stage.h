@@ -34,7 +34,6 @@ typedef struct stage_t stage_t;
 struct stage_t {
     stage_type_t type;
 
-    bool is_start; // true if the stage is where the player is placed when entering the map
     bool is_done; // true if the stage is not a fight or if the fight is done
 
     bool has_linked_map; // true if the user goes to a linked map when stepping on this stage

@@ -22,7 +22,7 @@ int main_loop(game_window_t * main_window) {
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
     player_t *player = NULL;
 
-    main_window->context->current_screen = FIGHT_SCREEN;
+    main_window->context->current_screen = MAP_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
@@ -41,15 +41,15 @@ int main_loop(game_window_t * main_window) {
             case FIGHT_SCREEN : {
                 // FIXME : remove test struct
                 fight_t * fight = malloc(sizeof(fight_t));
-                fight->enemies_list = malloc(sizeof(char*)*3);
-                fight->enemies_list[0] = malloc(sizeof(char)*4);
+                fight->enemies_list = malloc(sizeof(char*) * 3);
+                fight->enemies_list[0] = malloc(sizeof(char) * 4);
                 strcpy(fight->enemies_list[0],"zombie");
-                fight->enemies_list[1] = malloc(sizeof(char)*7);
+                fight->enemies_list[1] = malloc(sizeof(char) * 7);
                 strcpy(fight->enemies_list[1],"goblin");
-                fight->enemies_list[2] = malloc(sizeof(char)*6);
+                fight->enemies_list[2] = malloc(sizeof(char) * 6);
                 strcpy(fight->enemies_list[2],"troll");
 
-                fight->enemies_chances_to_appear = malloc(sizeof(int)*3);
+                fight->enemies_chances_to_appear = malloc(sizeof(int) * 3);
                 fight->enemies_chances_to_appear[0] = 50;
                 fight->enemies_chances_to_appear[1] = 25;
                 fight->enemies_chances_to_appear[2] = 25;
@@ -73,7 +73,7 @@ int main_loop(game_window_t * main_window) {
                 player->healing_spell->type = HEALING;
                 player->healing_spell->amount = 80;
                 player->defensive_spell = malloc(sizeof(spell_t));
-                player->defensive_spell->name = malloc(sizeof(char)*16);
+                player->defensive_spell->name = malloc(sizeof(char) * 16);
                 strcpy(player->defensive_spell->name,"Fire Protection");
                 player->defensive_spell->cost = 20;
                 player->defensive_spell->id = 2;
@@ -125,7 +125,7 @@ int main_loop(game_window_t * main_window) {
     return EXIT_SUCCESS;
 }
 
-ui_type_t get_ui_type(char *ui_argument) {
+ui_type_t get_ui_type(char * ui_argument) {
     ui_type_t default_type = CLI;
 
     if (ui_argument == NULL) {
@@ -156,6 +156,12 @@ ui_type_t get_ui_type(char *ui_argument) {
 
 
 int doom_depth_gui() {
+    init_global_logger();
+
+    if (global_logger) {
+        global_logger->info("Application started");
+    }
+
     game_window_t * main_window = init_game_window(GUI);
 
     int result = main_loop(main_window);
@@ -171,6 +177,12 @@ int doom_depth_gui() {
 };
 
 int doom_depth_cli() {
+    init_global_logger();
+
+    if (global_logger) {
+        global_logger->info("Application started");
+    }
+
     game_window_t * main_window = init_game_window(CLI);
 
     int result = main_loop(main_window);
@@ -185,11 +197,6 @@ int doom_depth_cli() {
 }
 
 doom_depth_main doom_depth_factory(ui_type_t ui_type) {
-    init_global_logger();
-
-    if (global_logger) {
-        global_logger->info("Application started");
-    }
     switch (ui_type) {
         case CLI:
             return doom_depth_cli;
