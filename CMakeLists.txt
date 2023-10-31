@@ -114,6 +114,8 @@ set(cross_platform_targets
         src/fight_screen/fight_menu/display/cli/cli.h
         src/fight_screen/fight_menu/display/gui/gui.c
         src/fight_screen/fight_menu/display/gui/gui.h
+        src/inventory_screen/display/gui/gui.c
+        src/inventory_screen/display/gui/gui.h
 )
 
 # for unix
