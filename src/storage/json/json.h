@@ -80,4 +80,22 @@ json_t * get_object_at_key(json_t * json, char * key);
  */
 void free_json(json_t * json);
 
+/**
+ * @brief Writes a json to a file
+ *
+ * @param json The json to write
+ * @param file_path The file to write it in
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int write_json_to_file(json_t * json, char * file_path);
+
+/**
+ * @brief Adds an entry to a json object
+ *
+ * @param object The object to add the values in
+ * @param key
+ * @param value
+ */
+void add_key_value_to_object(json_t * object, const char * key, json_t * value);
+
 #endif //DOOM_DEPTH_C_JSON_H

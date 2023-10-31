@@ -57,7 +57,7 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
 }
 
 map_t * get_map_from_file(char * file_path) {
-    json_t * json_map = get_json_from_file("../assets/maps/map_1.json");
+    json_t * json_map = get_json_from_file(file_path);
     if (!json_map) {
         fprintf(stderr, "\nget_map_from_file error: could not retrieve map from file.");
         return NULL;
@@ -68,13 +68,60 @@ map_t * get_map_from_file(char * file_path) {
         return NULL;
     }
 
-    free_json(json_map);
-
     return map;
 }
 
 void free_map(map_t * map) {
-    free(map->name);
-    free_stages(map->first_stage);
-    free(map);
+    if(map) {
+        if(map->name) {
+            free(map->name);
+        }
+        free_stages(map->first_stage);
+        free(map);
+    }
+}
+
+json_t * map_to_json(map_t * map) {
+    if (!map) {
+        fprintf(stderr, "map_to_json error: invalid map\n");
+        return NULL;
+    }
+
+    json_t * json_map = malloc(sizeof(json_t));
+    if (!json_map) {
+        fprintf(stderr, "map_to_json error: memory allocation failed\n");
+        return NULL;
+    }
+
+    json_map->type = 'o';
+    json_map->nb_elements = 0;
+    json_map->keys = NULL;
+    json_map->values = NULL;
+
+    // name
+    if (map->name) {
+        json_t * json_name = malloc(sizeof(json_t));
+        json_name->type = 's';
+        json_name->string = malloc(strlen(map->name) + 1);
+        strcpy(json_name->string, map->name);
+        add_key_value_to_object(json_map, "name", json_name);
+    }
+
+    // array containing stages
+    json_t * stages_array = malloc(sizeof(json_t));
+    stages_array->type = 'a';
+    stages_array->nb_elements = 1;
+    stages_array->values = malloc(stages_array->nb_elements * sizeof(json_t));
+
+    // stages
+    if (map->first_stage) {
+        json_t * json_first_stage = stage_to_json(map->first_stage);
+        if (json_first_stage) {
+            stages_array->values[0] = *json_first_stage;
+        }
+    }
+
+    add_key_value_to_object(json_map, "stages", stages_array);
+
+    return json_map;
 }

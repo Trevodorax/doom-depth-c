@@ -110,4 +110,12 @@ stage_t *get_player_stage(stage_t * stages);
  */
 void free_stages(stage_t * stages);
 
+/**
+ * @brief Creates a json version of a stage
+ *
+ * @param stage The stage to convert
+ * @return The json version
+ */
+json_t * stage_to_json(stage_t * stage);
+
 #endif //DOOM_DEPTH_C_STAGE_H

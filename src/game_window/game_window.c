@@ -104,12 +104,10 @@ void free_game_window_cli(game_window_t * game_window) {
 }
 
 void free_game_window_gui(game_window_t *game_window) {
-    if (game_window->window)
-    {
+    if (game_window->window) {
         SDL_DestroyWindow(game_window->window);
     }
-    if (game_window->renderer)
-    {
+    if (game_window->renderer) {
         SDL_DestroyRenderer(game_window->renderer);
     }
 

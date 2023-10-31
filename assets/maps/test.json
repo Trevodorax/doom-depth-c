@@ -1,0 +1,1 @@
+{"name": "Map 1", "stages": [{"done": 1, "top": {"done": 1}, "bottom": {"done": 1, "bottom": {"done": 1, "right": {"done": 1, "linked_map": "map_2.json"}, "bottom": {"done": 0}, "left": {"done": 1, "left": {"done": 1, "left": {"done": 0}}}}}}]}

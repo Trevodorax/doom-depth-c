@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "json.h"
+#include "../../logs/log.h"
 
 /**
  * @brief parses a json object
@@ -355,4 +356,87 @@ json_t * get_object_at_key(json_t * json, char * key) {
     }
 
     return &(json->values[index]);
+}
+
+int write_json_to_file_rec(FILE *file, json_t *json) {
+    switch (json->type) {
+        case 'n': // number
+            fprintf(file, "%d", json->number);
+            break;
+        case 's': // string
+            fprintf(file, "\"%s\"", json->string);
+            break;
+        case 'a': // array
+            fprintf(file, "[");
+            for (int i = 0; i < json->nb_elements; i++) {
+                if (i > 0) {
+                    fprintf(file, ", ");
+                }
+                if (write_json_to_file_rec(file, &(json->values[i])) == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+            }
+            fprintf(file, "]");
+            break;
+        case 'o': // object
+            fprintf(file, "{");
+            for (int i = 0; i < json->nb_elements; i++) {
+                if (i > 0) {
+                    fprintf(file, ", ");
+                }
+                fprintf(file, "\"%s\": ", json->keys[i]);
+                if (write_json_to_file_rec(file, &(json->values[i])) == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+            }
+            fprintf(file, "}");
+            break;
+        default:
+            return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
+}
+
+int write_json_to_file(json_t *json, char *file_path) {
+    FILE * file = fopen(file_path, "w");
+    if (!file) {
+        return EXIT_FAILURE;
+    }
+
+    if (write_json_to_file_rec(file, json) == EXIT_FAILURE) {
+        fclose(file);
+        return EXIT_FAILURE;
+    }
+
+    fclose(file);
+    return EXIT_SUCCESS;
+}
+
+void add_key_value_to_object(json_t * object, const char * key, json_t * value) {
+    if (!object || object->type != 'o' || !key || !value) {
+        global_logger->error("\nadd_key_value_to_object error: invalid inputs");
+        return;
+    }
+
+    // make some space
+    object->keys = realloc(object->keys, (object->nb_elements + 1) * sizeof(char *));
+    object->values = realloc(object->values, (object->nb_elements + 1) * sizeof(json_t));
+    if (!object->keys || !object->values) {
+        global_logger->error("\nadd_key_value_to_object error: memory allocation failed");
+        return;
+    }
+
+    // put the values in there
+    object->keys[object->nb_elements] = malloc(strlen(key) + 1);
+    if (!object->keys[object->nb_elements]) {
+        global_logger->error("\nadd_key_value_to_object error: memory allocation failed for key");
+        return;
+    }
+    strcpy(object->keys[object->nb_elements], key);
+
+    // Add the new value to the values array
+    object->values[object->nb_elements] = *value;
+
+    // Increase the number of elements
+    object->nb_elements++;
 }
