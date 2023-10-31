@@ -26,4 +26,12 @@ fight_t * json_to_fight(json_t * fight_json);
  */
 void free_fight(fight_t * fight);
 
+/**
+ * @brief Puts the details of a fight on a json object
+ *
+ * @param object The object to add the fight to
+ * @param fight The fight to get the info of
+ */
+void add_fight_to_json_object(json_t * object, fight_t * fight);
+
 #endif

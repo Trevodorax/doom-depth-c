@@ -75,6 +75,7 @@ int main_loop(game_window_t * main_window) {
                     return EXIT_FAILURE;
                 }
                 break;
+
             case MAP_SCREEN :
                 main_window->context->current_screen = map_screen(main_window, map, player);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
@@ -132,6 +133,8 @@ int main_loop(game_window_t * main_window) {
         }
     }
 
+    json_t * json_map = map_to_json(map);
+    write_json_to_file(json_map, "../assets/maps/map_1.json");
     free_map(map);
     free_player(player);
 
@@ -180,7 +183,6 @@ int doom_depth_gui() {
     int result = main_loop(main_window);
 
     free_game_window(main_window, GUI);
-    SDL_Quit();
 
     if (global_logger) {
         logger_free();

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "../../ui_utils/sdl_utils/sdl_utils.h"
+#include "../../logs/log.h"
 
 // internal functions, must be used only by the functions exposed in the header file (or the stages must be uncounted before)
 void get_stage_dimensions_rec(stage_t * stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
@@ -221,4 +222,92 @@ void free_stages(stage_t * stages) {
     free_stage(stages->right);
     free_stage(stages->bottom);
     free_stage(stages->left);
+}
+
+json_t * stage_to_json_rec(stage_t * stage);
+json_t * stages_to_json(stage_t * stage) {
+    uncount_stages(stage);
+    return stage_to_json_rec(stage);
+}
+
+json_t * stage_to_json_rec(stage_t * stage) {
+    if (!stage || stage->counted) {
+        return NULL;
+    }
+
+    stage->counted = true;
+
+    json_t * json_stage = malloc(sizeof(json_t));
+    if (!json_stage) {
+        global_logger->error("\nstage_to_json error: memory allocation failed");
+        return NULL;
+    }
+
+    json_stage->type = 'o';
+    json_stage->nb_elements = 0;
+    json_stage->keys = NULL;
+    json_stage->values = NULL;
+
+    // done
+    json_t * done = malloc(sizeof(json_t));
+    done->type = 'n';
+    done->number = stage->is_done ? 1 : 0;
+    add_key_value_to_object(&json_stage, "done", done);
+
+    // fight
+    if (stage->type == FIGHT && stage->fight) {
+        add_fight_to_json_object(json_stage, stage->fight);
+    }
+
+    // linked_map
+    if (stage->has_linked_map && stage->linked_map_file_path) {
+        json_t * linked_map = malloc(sizeof(json_t));
+        linked_map->type = 's';
+        linked_map->string = strdup(stage->linked_map_file_path);  // duplicating string
+        add_key_value_to_object(&json_stage, "linked_map", linked_map);
+    }
+
+    // type
+    if (stage->type == TREASURE) {
+        json_t * json_treasure = malloc(sizeof(json_t));
+        json_treasure->type = 'o';
+        json_treasure->nb_elements = 0;
+        add_key_value_to_object(&json_stage, "treasure", json_treasure);
+    } else if (stage->type == SHOP) {
+        json_t * json_shop = malloc(sizeof(json_t));
+        json_shop->type = 'o';
+        json_shop->nb_elements = 0;
+        add_key_value_to_object(&json_stage, "shop", json_shop);
+    }
+
+    // calls for other stages
+    if (stage->top) {
+        json_t * json_top = stage_to_json_rec(stage->top);
+        if (json_top) {
+            add_key_value_to_object(&json_stage, "top", json_top);
+        }
+    }
+
+    if (stage->right) {
+        json_t * json_right = stage_to_json_rec(stage->right);
+        if (json_right) {
+            add_key_value_to_object(&json_stage, "right", json_right);
+        }
+    }
+
+    if (stage->bottom) {
+        json_t * json_bottom = stage_to_json_rec(stage->bottom);
+        if (json_bottom) {
+            add_key_value_to_object(&json_stage, "bottom", json_bottom);
+        }
+    }
+
+    if (stage->left) {
+        json_t * json_left = stage_to_json_rec(stage->left);
+        if (json_left) {
+            add_key_value_to_object(&json_stage, "left", json_left);
+        }
+    }
+
+    return json_stage;
 }

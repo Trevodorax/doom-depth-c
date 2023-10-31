@@ -45,4 +45,12 @@ map_t * get_map_from_file(char * file_path);
  */
 void free_map(map_t * map);
 
+/**
+ * @brief Creates a json version of a map
+ *
+ * @param map The map to convert
+ * @return The json version
+ */
+json_t * map_to_json(map_t * map);
+
 #endif //DOOM_DEPTH_C_MAP_H

@@ -44,7 +44,7 @@ static char * test_json_to_map() {
             "}";
     json_t *missing_fields_json_obj = parse_json(&json_str_missing_fields);
 
-    mu_assert("error, missing_fields_json_obj is NULL", missing_fields_json_obj != NULL); // Asserting that parsing didn't fail outright
+    mu_assert("error, missing_fields_json_obj is NULL", missing_fields_json_obj != NULL);
     map_t *missing_fields_map = json_to_map(missing_fields_json_obj);
     mu_assert("error, missing_fields_map is not NULL", missing_fields_map == NULL);
 
