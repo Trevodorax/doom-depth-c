@@ -358,39 +358,47 @@ json_t * get_object_at_key(json_t * json, char * key) {
     return &(json->values[index]);
 }
 
-int write_json_to_file_rec(FILE *file, json_t *json) {
+int write_json_to_file_rec(FILE * file, json_t * json, int indent) {
     switch (json->type) {
         case 'n': // number
             fprintf(file, "%d", json->number);
             break;
+
         case 's': // string
             fprintf(file, "\"%s\"", json->string);
             break;
+
         case 'a': // array
-            fprintf(file, "[");
+            fprintf(file, "[\n");
             for (int i = 0; i < json->nb_elements; i++) {
                 if (i > 0) {
-                    fprintf(file, ", ");
+                    fprintf(file, ",\n");
                 }
-                if (write_json_to_file_rec(file, &(json->values[i])) == EXIT_FAILURE) {
-                    return EXIT_FAILURE;
-                }
+                write_json_to_file_rec(file, &(json->values[i]), indent + 1);
             }
+            fprintf(file, "\n");
+            for (int j = 0; j < indent; j++)
+                fprintf(file, "    ");
             fprintf(file, "]");
             break;
+
         case 'o': // object
-            fprintf(file, "{");
+            fprintf(file, "{\n");
             for (int i = 0; i < json->nb_elements; i++) {
                 if (i > 0) {
-                    fprintf(file, ", ");
+                    fprintf(file, ",\n");
                 }
+                for (int j = 0; j < indent + 1; j++)
+                    fprintf(file, "    ");
                 fprintf(file, "\"%s\": ", json->keys[i]);
-                if (write_json_to_file_rec(file, &(json->values[i])) == EXIT_FAILURE) {
-                    return EXIT_FAILURE;
-                }
+                write_json_to_file_rec(file, &(json->values[i]), indent + 1);
             }
+            fprintf(file, "\n");
+            for (int j = 0; j < indent; j++)
+                fprintf(file, "    ");
             fprintf(file, "}");
             break;
+
         default:
             return EXIT_FAILURE;
     }
@@ -403,7 +411,7 @@ int write_json_to_file(json_t *json, char *file_path) {
         return EXIT_FAILURE;
     }
 
-    if (write_json_to_file_rec(file, json) == EXIT_FAILURE) {
+    if (write_json_to_file_rec(file, json, 0) == EXIT_FAILURE) {
         fclose(file);
         return EXIT_FAILURE;
     }

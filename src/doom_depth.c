@@ -22,7 +22,7 @@ int main_loop(game_window_t * main_window) {
     init_entities(db);
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
 
-    map_t * map = get_map_from_file("../assets/maps/test.json");
+    map_t * map = get_map_from_file("../assets/maps/map_1.json");
 
     // FIXME : remove test struct
     player_t *player = NULL;
@@ -134,7 +134,7 @@ int main_loop(game_window_t * main_window) {
     }
 
     json_t * json_map = map_to_json(map);
-    write_json_to_file(json_map, "../assets/maps/test.json");
+    write_json_to_file(json_map, "../assets/maps/map_1.json");
     free_map(map);
     free_player(player);
 

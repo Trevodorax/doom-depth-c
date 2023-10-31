@@ -269,9 +269,15 @@ json_t * stage_to_json_rec(stage_t * stage) {
 
     // type
     if (stage->type == TREASURE) {
-        // TODO: add treasure
+        json_t * json_treasure = malloc(sizeof(json_t));
+        json_treasure->type = 'o';
+        json_treasure->nb_elements = 0;
+        add_key_value_to_object(&json_stage, "treasure", json_treasure);
     } else if (stage->type == SHOP) {
-        // TODO: add shop
+        json_t * json_shop = malloc(sizeof(json_t));
+        json_shop->type = 'o';
+        json_shop->nb_elements = 0;
+        add_key_value_to_object(&json_stage, "shop", json_shop);
     }
 
     // calls for other stages
