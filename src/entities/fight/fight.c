@@ -1,4 +1,5 @@
 #include "fight.h"
+#include "../../logs/log.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -69,4 +70,56 @@ void free_fight(fight_t * fight) {
     free(fight->enemies_list);
 
     free(fight);
+}
+
+void add_fight_to_json_object(json_t * object, fight_t * fight) {
+    if (!fight || !object || object->type != 'o') {
+        global_logger->error("\nfight_to_json error: wrong parameters");
+        return;
+    }
+
+    // min_nb_enemies
+    json_t * json_min_nb_enemies = malloc(sizeof(json_t));
+    json_min_nb_enemies->type = 'n';
+    json_min_nb_enemies->number = (int)fight->min_nb_enemies;
+    add_key_value_to_object(&object, "min_nb_enemies", json_min_nb_enemies);
+
+    // max_nb_enemies
+    json_t * json_max_nb_enemies = malloc(sizeof(json_t));
+    json_max_nb_enemies->type = 'n';
+    json_max_nb_enemies->number = (int)fight->max_nb_enemies;
+    add_key_value_to_object(&object, "max_nb_enemies", json_max_nb_enemies);
+
+    // enemies_list
+    if (fight->enemies_list) {
+        json_t * json_enemies_list = malloc(sizeof(json_t));
+        json_enemies_list->type = 'a';
+        json_enemies_list->nb_elements = fight->enemies_size;
+        json_enemies_list->values = malloc(fight->enemies_size * sizeof(json_t));
+
+        for (int i = 0; i < fight->enemies_size; i++) {
+            json_t * json_enemy_name = malloc(sizeof(json_t));
+            json_enemy_name->type = 's';
+            json_enemy_name->string = malloc(strlen(fight->enemies_list[i]) + 1);
+            strcpy(json_enemy_name->string, fight->enemies_list[i]);
+            json_enemies_list->values[i] = *json_enemy_name;
+        }
+        add_key_value_to_object(&object, "enemies_list", json_enemies_list);
+    }
+
+    // enemies_chances_to_appear
+    if (fight->enemies_chances_to_appear) {
+        json_t * json_chances = malloc(sizeof(json_t));
+        json_chances->type = 'a';
+        json_chances->nb_elements = fight->enemies_size;
+        json_chances->values = malloc(fight->enemies_size * sizeof(json_t));
+
+        for (int i = 0; i < fight->enemies_size; i++) {
+            json_t * json_chance = malloc(sizeof(json_t));
+            json_chance->type = 'n';
+            json_chance->number = fight->enemies_chances_to_appear[i];
+            json_chances->values[i] = *json_chance;
+        }
+        add_key_value_to_object(&object, "enemies_chances_to_appear", json_chances);
+    }
 }

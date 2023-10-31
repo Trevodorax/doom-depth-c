@@ -412,31 +412,31 @@ int write_json_to_file(json_t *json, char *file_path) {
     return EXIT_SUCCESS;
 }
 
-void add_key_value_to_object(json_t * object, const char * key, json_t * value) {
-    if (!object || object->type != 'o' || !key || !value) {
+void add_key_value_to_object(json_t ** object, const char * key, json_t * value) {
+    if (!object || !(*object) || (*object)->type != 'o' || !key || !value) {
         global_logger->error("\nadd_key_value_to_object error: invalid inputs");
         return;
     }
 
     // make some space
-    object->keys = realloc(object->keys, (object->nb_elements + 1) * sizeof(char *));
-    object->values = realloc(object->values, (object->nb_elements + 1) * sizeof(json_t));
-    if (!object->keys || !object->values) {
+    (*object)->keys = realloc((*object)->keys, ((*object)->nb_elements + 1) * sizeof(char *));
+    (*object)->values = realloc((*object)->values, ((*object)->nb_elements + 1) * sizeof(json_t));
+    if (!(*object)->keys || !(*object)->values) {
         global_logger->error("\nadd_key_value_to_object error: memory allocation failed");
         return;
     }
 
     // put the values in there
-    object->keys[object->nb_elements] = malloc(strlen(key) + 1);
-    if (!object->keys[object->nb_elements]) {
+    (*object)->keys[(*object)->nb_elements] = malloc(strlen(key) + 1);
+    if (!(*object)->keys[(*object)->nb_elements]) {
         global_logger->error("\nadd_key_value_to_object error: memory allocation failed for key");
         return;
     }
-    strcpy(object->keys[object->nb_elements], key);
+    strcpy((*object)->keys[(*object)->nb_elements], key);
 
     // Add the new value to the values array
-    object->values[object->nb_elements] = *value;
+            (*object)->values[(*object)->nb_elements] = *value;
 
     // Increase the number of elements
-    object->nb_elements++;
+    (*object)->nb_elements++;
 }

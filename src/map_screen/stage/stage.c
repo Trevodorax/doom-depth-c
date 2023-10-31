@@ -225,7 +225,7 @@ void free_stages(stage_t * stages) {
 }
 
 json_t * stage_to_json_rec(stage_t * stage);
-json_t * stage_to_json(stage_t * stage) {
+json_t * stages_to_json(stage_t * stage) {
     uncount_stages(stage);
     return stage_to_json_rec(stage);
 }
@@ -252,11 +252,11 @@ json_t * stage_to_json_rec(stage_t * stage) {
     json_t * done = malloc(sizeof(json_t));
     done->type = 'n';
     done->number = stage->is_done ? 1 : 0;
-    add_key_value_to_object(json_stage, "done", done);
+    add_key_value_to_object(&json_stage, "done", done);
 
     // fight
     if (stage->type == FIGHT && stage->fight) {
-        // TODO: add fight
+        add_fight_to_json_object(json_stage, stage->fight);
     }
 
     // linked_map
@@ -264,7 +264,7 @@ json_t * stage_to_json_rec(stage_t * stage) {
         json_t * linked_map = malloc(sizeof(json_t));
         linked_map->type = 's';
         linked_map->string = strdup(stage->linked_map_file_path);  // duplicating string
-        add_key_value_to_object(json_stage, "linked_map", linked_map);
+        add_key_value_to_object(&json_stage, "linked_map", linked_map);
     }
 
     // type
@@ -278,28 +278,28 @@ json_t * stage_to_json_rec(stage_t * stage) {
     if (stage->top) {
         json_t * json_top = stage_to_json_rec(stage->top);
         if (json_top) {
-            add_key_value_to_object(json_stage, "top", json_top);
+            add_key_value_to_object(&json_stage, "top", json_top);
         }
     }
 
     if (stage->right) {
         json_t * json_right = stage_to_json_rec(stage->right);
         if (json_right) {
-            add_key_value_to_object(json_stage, "right", json_right);
+            add_key_value_to_object(&json_stage, "right", json_right);
         }
     }
 
     if (stage->bottom) {
         json_t * json_bottom = stage_to_json_rec(stage->bottom);
         if (json_bottom) {
-            add_key_value_to_object(json_stage, "bottom", json_bottom);
+            add_key_value_to_object(&json_stage, "bottom", json_bottom);
         }
     }
 
     if (stage->left) {
         json_t * json_left = stage_to_json_rec(stage->left);
         if (json_left) {
-            add_key_value_to_object(json_stage, "left", json_left);
+            add_key_value_to_object(&json_stage, "left", json_left);
         }
     }
 

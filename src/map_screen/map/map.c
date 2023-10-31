@@ -104,7 +104,7 @@ json_t * map_to_json(map_t * map) {
         json_name->type = 's';
         json_name->string = malloc(strlen(map->name) + 1);
         strcpy(json_name->string, map->name);
-        add_key_value_to_object(json_map, "name", json_name);
+        add_key_value_to_object(&json_map, "name", json_name);
     }
 
     // array containing stages
@@ -115,13 +115,13 @@ json_t * map_to_json(map_t * map) {
 
     // stages
     if (map->first_stage) {
-        json_t * json_first_stage = stage_to_json(map->first_stage);
+        json_t * json_first_stage = stages_to_json(map->first_stage);
         if (json_first_stage) {
             stages_array->values[0] = *json_first_stage;
         }
     }
 
-    add_key_value_to_object(json_map, "stages", stages_array);
+    add_key_value_to_object(&json_map, "stages", stages_array);
 
     return json_map;
 }

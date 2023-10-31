@@ -96,6 +96,6 @@ int write_json_to_file(json_t * json, char * file_path);
  * @param key
  * @param value
  */
-void add_key_value_to_object(json_t * object, const char * key, json_t * value);
+void add_key_value_to_object(json_t **object, const char * key, json_t * value);
 
 #endif //DOOM_DEPTH_C_JSON_H

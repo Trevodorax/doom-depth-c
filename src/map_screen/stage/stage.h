@@ -116,6 +116,6 @@ void free_stages(stage_t * stages);
  * @param stage The stage to convert
  * @return The json version
  */
-json_t * stage_to_json(stage_t * stage);
+json_t * stages_to_json(stage_t * stage);
 
 #endif //DOOM_DEPTH_C_STAGE_H
