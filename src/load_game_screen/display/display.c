@@ -20,15 +20,27 @@ int display_load_game(game_window_t *game_window, array_node_t *players, unsigne
     };
 
     rect_t *rects = get_rectangle_layout(3, &container_saves, VERTICAL);
-    for (int i = 0; i < 3; i++) {
-        player_t *current_player = get_value_at_index(players, i);
-        print_text_in_rectangle(
-                game_window->renderer,
-                rect_to_SDL_Rect(rects[i]),
-                current_player != NULL ? current_player->name : "Empty",
-                text_color,
-                ALIGN_CENTER,
-                ALIGN_CENTER);
+    if (players != NULL) {
+        for (int i = 0; i < 3; i++) {
+            player_t *current_player = get_value_at_index(players, i);
+            print_text_in_rectangle(
+                    game_window->renderer,
+                    rect_to_SDL_Rect(rects[i]),
+                    current_player != NULL ? current_player->name : "Empty",
+                    text_color,
+                    ALIGN_CENTER,
+                    ALIGN_CENTER);
+        }
+    } else {
+        for (int i = 0; i < 3; i++) {
+            print_text_in_rectangle(
+                    game_window->renderer,
+                    rect_to_SDL_Rect(rects[i]),
+                    "Empty",
+                    text_color,
+                    ALIGN_CENTER,
+                    ALIGN_CENTER);
+        }
     }
 
     rect_t container_cursor = {
