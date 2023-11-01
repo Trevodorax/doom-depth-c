@@ -36,10 +36,21 @@ int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db)
                     active_option = (active_option + 2) % 3;
                     break;
                 case ENTER_KEY:
-/*                    if (selected_player != NULL) {
-                        *player = selected_player;
-                        return EXIT_SUCCESS;
-                    }*/
+                    if (players != NULL) {
+                        *player = get_value_at_index(players, active_option);
+                        if (*player == NULL) {
+                            return NEW_GAME_SCREEN;
+                        }
+
+                        char sql_query[300];
+                        sprintf(sql_query, create_player_from_db_sql, (*player)->id);
+                        array_node_t *p = create_struct_from_db(db, sql_query, create_player_from_db, sizeof (player_t));
+                        *player = (player_t *) p->value;
+                        free(p);
+                        return MAP_SCREEN;
+                    } else {
+                        return NEW_GAME_SCREEN;
+                    }
                     break;
                 default:
                     break;
