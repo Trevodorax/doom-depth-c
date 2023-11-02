@@ -66,7 +66,7 @@ int main_loop(game_window_t * main_window) {
     player->defensive_spell->type = DEFENSE;
     player->defensive_spell->amount = 10;
 
-    main_window->context->current_screen = MAP_SCREEN;
+    main_window->context->current_screen = LOAD_GAME_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :

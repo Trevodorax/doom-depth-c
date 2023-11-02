@@ -5,6 +5,7 @@
 #include "../../ui_utils/sdl_utils/sdl_utils.h"
 #include "../../ui_utils/ui_utils.h"
 #include "../../utils/array.h"
+#include "../../entities/player/player.h"
 
 /**
  * @brief Displays the load game screen.
