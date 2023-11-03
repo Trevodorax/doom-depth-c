@@ -50,11 +50,11 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
                             }
                             break;
 
-                        case CONFIRM:
+                        case ACTIONS:
                             handle_actions_input(event, player, &active_section, active_category, active_item, &active_action);
                             break;
 
-                        case ACTIONS:
+                        case CONFIRM:
                             return EXIT_FAILURE;
                     }
                     break;
@@ -166,10 +166,12 @@ void handle_actions_input(event_t event, player_t *player, section_options_t *ac
         if (*active_action == THROW_AWAY) {
             if (active_category == WEAPONS) {
                 delete_node(&(player->inventory->weapons_head), active_item);
+                player->inventory->nb_weapons--;
                 *active_section = ITEMS;
             }
             if (active_category == ARMORS) {
                 delete_node(&(player->inventory->armors_head), active_item);
+                player->inventory->nb_armors--;
                 *active_section = ITEMS;
             }
         }
