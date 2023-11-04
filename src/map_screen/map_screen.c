@@ -51,7 +51,6 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                                 break;
                             }
 
-                            delay(game_window->ui_type, 1000);
                             router_t fight_result = fight_screen(game_window, player, player_stage->fight);
 
                             switch (fight_result) {
@@ -69,8 +68,14 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                         }
                         case SHOP:
                             // TODO: open shop
+                            break;
                         case TREASURE:
-                            // TODO: give the treasure to the player
+                            if (player_stage->is_done) {
+                                break;
+                            }
+                            player_stage->is_done = true;
+                            give_treasure_to_player(player_stage->treasure, player);
+                            break;
                         case EMPTY:
                         default:
                             break;
@@ -149,7 +154,7 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction) {
             break;
     }
 
-    if(player_stage->type != FIGHT) {
+    if(player_stage->type != FIGHT && player_stage->type != TREASURE) {
         player_stage->is_done = true;
     }
 

@@ -15,6 +15,7 @@ typedef enum {
     SHOP,
     TREASURE,
     FIGHT_DONE,
+    TREASURE_DONE,
     STAGE_TYPE_COUNT
 } stage_type_t;
 
@@ -23,7 +24,8 @@ static const char * stage_texture_files[STAGE_TYPE_COUNT] = {
         "../assets/stages/image/fight_stage.png",
         "../assets/stages/image/shop_stage.png",
         "../assets/stages/image/treasure_stage.png",
-        "../assets/stages/image/fight_done_stage.png"
+        "../assets/stages/image/fight_done_stage.png",
+        "../assets/stages/image/treasure_done_stage.png"
 };
 
 typedef enum {

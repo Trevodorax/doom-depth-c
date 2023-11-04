@@ -83,6 +83,10 @@ int print_stage_gui(game_window_t *game_window, stage_t *stage, int x_coord, int
     SDL_Texture * stage_texture = NULL;
     if(stage->type == FIGHT && stage->is_done) {
         stage_texture = stage_textures[FIGHT_DONE];
+
+    } else if(stage->type == TREASURE && stage->is_done) {
+        stage_texture = stage_textures[TREASURE_DONE];
+
     } else {
         stage_texture = stage_textures[stage->type];
     }

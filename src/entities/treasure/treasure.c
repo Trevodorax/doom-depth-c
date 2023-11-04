@@ -2,6 +2,12 @@
 #include "../../logs/log.h"
 
 int give_treasure_to_player(treasure_t * treasure, player_t * player) {
+    if(!treasure || !player) {
+        return EXIT_FAILURE;
+    }
+
+    player->gold += treasure->coins;
+    printf("player gold: %d", player->gold);
 
     return EXIT_SUCCESS;
 }
