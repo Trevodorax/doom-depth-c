@@ -55,8 +55,8 @@ int display_inventory_cli(cli_matrix_t * cli_matrix,
     cli_draw_fill_rect(cli_matrix, categories_container, (cli_char_t){'#', CYAN});
     cli_draw_fill_rect(cli_matrix, items_container, (cli_char_t){'#', BLUE});
     cli_draw_fill_rect(cli_matrix, actions_container, (cli_char_t){'#', BLACK});
-     */
     cli_draw_fill_rect(cli_matrix, item_details_container, (cli_char_t){'#', RED});
+     */
 
     display_categories_cli(cli_matrix, categories_container, active_section, active_category);
     if (active_section == CATEGORIES) {
@@ -215,7 +215,7 @@ int display_items_cli(cli_matrix_t * cli_matrix, rect_t * items_container, rect_
             break;
     }
 
-    cli_print_text_in_rectangle(cli_matrix, details_container, details, BLACK, ALIGN_CENTER, ALIGN_CENTER, TINY_TEXT);
+    cli_print_text_in_rectangle(cli_matrix, details_container, details, BLACK, ALIGN_START, ALIGN_START, TINY_TEXT);
 
     return EXIT_SUCCESS;
 }
@@ -255,7 +255,6 @@ int display_actions_cli(cli_matrix_t * cli_matrix,
                 cursor_size
         };
 
-
         cli_print_text_in_rectangle(cli_matrix, action_container, actions[i], BLACK, ALIGN_START, ALIGN_CENTER, TINY_TEXT);
     }
 
@@ -272,7 +271,7 @@ int display_actions_cli(cli_matrix_t * cli_matrix,
 }
 
 int display_nothing_to_see_cli(cli_matrix_t * cli_matrix, rect_t container) {
-    cli_print_text_in_rectangle(cli_matrix, container, "Nothing to see", BLACK, ALIGN_CENTER, ALIGN_CENTER, TINY_TEXT);
+    cli_print_text_in_rectangle(cli_matrix, container, "Nothing to see", BLACK, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
     return EXIT_SUCCESS;
 }
 
