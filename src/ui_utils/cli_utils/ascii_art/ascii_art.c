@@ -48,7 +48,7 @@ cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width,
 
     if (ascii_art->versions[picked_ascii_art_index]->nb_cols > max_width ||
         ascii_art->versions[picked_ascii_art_index]->nb_rows > max_height) {
-        return create_cli_matrix(max_height / 2, max_width / 2, '#', MAGENTA);
+        return create_cli_matrix(max_height, max_width, '#', CYAN);
     }
 
     return ascii_art->versions[picked_ascii_art_index];

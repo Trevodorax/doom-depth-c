@@ -25,7 +25,7 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
         if (game_window->ui_type == CLI) {
             set_cli_raw_mode(true);
         }
-        delay(game_window->ui_type, 50);
+        delay(game_window->ui_type, 100);
 
         while (get_event(game_window->ui_type, &event)) {
             switch (event) {

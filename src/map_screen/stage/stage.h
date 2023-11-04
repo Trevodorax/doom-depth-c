@@ -28,6 +28,15 @@ static const char * stage_texture_files[STAGE_TYPE_COUNT] = {
         "../assets/stages/image/treasure_done_stage.png"
 };
 
+static const char * stage_ascii_arts_files[STAGE_TYPE_COUNT] = {
+        "../assets/stages/ascii/empty_stage.asciiart",
+        "../assets/stages/ascii/fight_stage.asciiart",
+        "../assets/stages/ascii/shop_stage.asciiart",
+        "../assets/stages/ascii/treasure_stage.asciiart",
+        "../assets/stages/ascii/fight_done_stage.asciiart",
+        "../assets/stages/ascii/treasure_done_stage.asciiart"
+};
+
 typedef enum {
     NORTH,
     EAST,
@@ -54,10 +63,10 @@ struct stage_t {
     orientation_t player_orientation;
 
     // next stages
-    stage_t *top;
-    stage_t *right;
-    stage_t *bottom;
-    stage_t *left;
+    stage_t * top;
+    stage_t * right;
+    stage_t * bottom;
+    stage_t * left;
 };
 
 /**
