@@ -7,6 +7,7 @@
 #include "../../storage/json/json.h"
 #include "../../entities/player/player.h"
 #include "../../game_window/game_window.h"
+#include "../../entities/treasure/treasure.h"
 
 typedef enum {
     EMPTY,
@@ -44,6 +45,7 @@ struct stage_t {
     bool counted; // for the get_map_dimensions function
 
     fight_t * fight; // only if type is FIGHT
+    treasure_t * treasure; // only if type is TREASURE
 
     // player on the stage (if there is one)
     player_t * player;
@@ -63,7 +65,7 @@ struct stage_t {
  * @error If the json is not a correct stage, will return NULL
  * @return The parsed stage or NULL
  */
-stage_t *json_to_stage(json_t *json_stage, bool first_stage);
+stage_t * json_to_stage(json_t *json_stage, bool first_stage);
 
 /**
  * @brief Computes and updates the dimensions of the given stage.
@@ -76,7 +78,7 @@ stage_t *json_to_stage(json_t *json_stage, bool first_stage);
  * @param min_x Pointer to store the minimum x-coord.
  * @param min_y Pointer to store the minimum y-coord.
  */
-void get_stage_dimensions(stage_t *stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
+void get_stage_dimensions(stage_t * stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
 
 /**
  * @brief Gets a color according to the stage type

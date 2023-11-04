@@ -58,16 +58,19 @@ stage_t * json_to_stage(json_t * json_stage, bool first_stage) {
         result->type = EMPTY;
     }
 
-    json_t * treasure = get_object_at_key(json_stage, "treasure");
-    if (treasure && treasure->type == 'o') {
-        result->type = TREASURE;
-        // TODO: set treasure
+    // add treasure if there is one
+    json_t * treasure_json = get_object_at_key(json_stage, "treasure");
+    if (treasure_json && treasure_json->type == 'o') {
+        treasure_t * treasure = json_to_treasure(treasure_json);
+        if(treasure) {
+            result->treasure = treasure;
+            result->type = TREASURE;
+        }
     }
 
     json_t * shop = get_object_at_key(json_stage, "shop");
     if (shop && shop->type == 'o') {
         result->type = SHOP;
-        // TODO: set shop
     }
 
     // recursive calls for next stages
@@ -224,13 +227,13 @@ void free_stages(stage_t * stages) {
     free_stage(stages->left);
 }
 
-json_t * stage_to_json_rec(stage_t * stage);
+json_t * stages_to_json_rec(stage_t * stage);
 json_t * stages_to_json(stage_t * stage) {
     uncount_stages(stage);
-    return stage_to_json_rec(stage);
+    return stages_to_json_rec(stage);
 }
 
-json_t * stage_to_json_rec(stage_t * stage) {
+json_t * stages_to_json_rec(stage_t * stage) {
     if (!stage || stage->counted) {
         return NULL;
     }
@@ -263,7 +266,7 @@ json_t * stage_to_json_rec(stage_t * stage) {
     if (stage->has_linked_map && stage->linked_map_file_path) {
         json_t * linked_map = malloc(sizeof(json_t));
         linked_map->type = 's';
-        linked_map->string = strdup(stage->linked_map_file_path);  // duplicating string
+        linked_map->string = strdup(stage->linked_map_file_path);
         add_key_value_to_object(&json_stage, "linked_map", linked_map);
     }
 
@@ -272,6 +275,7 @@ json_t * stage_to_json_rec(stage_t * stage) {
         json_t * json_treasure = malloc(sizeof(json_t));
         json_treasure->type = 'o';
         json_treasure->nb_elements = 0;
+        add_treasure_to_json_object(json_treasure, stage->treasure);
         add_key_value_to_object(&json_stage, "treasure", json_treasure);
     } else if (stage->type == SHOP) {
         json_t * json_shop = malloc(sizeof(json_t));
@@ -282,28 +286,28 @@ json_t * stage_to_json_rec(stage_t * stage) {
 
     // calls for other stages
     if (stage->top) {
-        json_t * json_top = stage_to_json_rec(stage->top);
+        json_t * json_top = stages_to_json_rec(stage->top);
         if (json_top) {
             add_key_value_to_object(&json_stage, "top", json_top);
         }
     }
 
     if (stage->right) {
-        json_t * json_right = stage_to_json_rec(stage->right);
+        json_t * json_right = stages_to_json_rec(stage->right);
         if (json_right) {
             add_key_value_to_object(&json_stage, "right", json_right);
         }
     }
 
     if (stage->bottom) {
-        json_t * json_bottom = stage_to_json_rec(stage->bottom);
+        json_t * json_bottom = stages_to_json_rec(stage->bottom);
         if (json_bottom) {
             add_key_value_to_object(&json_stage, "bottom", json_bottom);
         }
     }
 
     if (stage->left) {
-        json_t * json_left = stage_to_json_rec(stage->left);
+        json_t * json_left = stages_to_json_rec(stage->left);
         if (json_left) {
             add_key_value_to_object(&json_stage, "left", json_left);
         }

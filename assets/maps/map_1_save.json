@@ -23,7 +23,9 @@
           "enemies_chances_to_appear": [30, 40, 20, 10],
           "done": 0,
           "bottom": {
-            "treasure": {}
+            "treasure": {
+              "coins": 20
+            }
           },
           "top": {
             "done": 0,
