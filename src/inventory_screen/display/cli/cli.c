@@ -149,7 +149,13 @@ int display_categories_cli(cli_matrix_t * cli_matrix,
                 break;
             }
         }
-        if (print_ascii_art_in_rectangle(cli_matrix, ascii_path, categories[i], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE) {
+        rect_t ascii_art_container = {
+                categories[i].x + 1,
+                categories[i].y + 1,
+                categories[i].w - 2,
+                categories[i].h - 2
+        };
+        if (print_ascii_art_in_rectangle(cli_matrix, ascii_path, ascii_art_container, ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE) {
             return EXIT_FAILURE;
         }
     }
@@ -189,7 +195,13 @@ int display_items_cli(cli_matrix_t * cli_matrix, rect_t * items_container, rect_
                 if (active_item % items_count == i) {
                     cli_draw_stroke_rect(cli_matrix, items[i], (cli_char_t){'#', active_section == ITEMS ? WHITE : RED});
                 }
-                if (print_ascii_art_in_rectangle(cli_matrix, armor_to_print->ascii_path, items[i], ALIGN_START,ALIGN_START) == EXIT_FAILURE){
+                rect_t ascii_art_container = {
+                        items[i].x + 1,
+                        items[i].y + 1,
+                        items[i].w - 2,
+                        items[i].h - 2
+                };
+                if (print_ascii_art_in_rectangle(cli_matrix, armor_to_print->ascii_path, ascii_art_container, ALIGN_CENTER,ALIGN_CENTER) == EXIT_FAILURE){
                     return EXIT_FAILURE;
                 }
             }
@@ -206,7 +218,13 @@ int display_items_cli(cli_matrix_t * cli_matrix, rect_t * items_container, rect_
                 if (active_item % items_count == i) {
                     cli_draw_stroke_rect(cli_matrix, items[i], (cli_char_t){'#', active_section == ITEMS ? WHITE : RED});
                 }
-                if (print_ascii_art_in_rectangle(cli_matrix, weapon_to_print->ascii_path, items[i], ALIGN_START,ALIGN_START)){
+                rect_t ascii_art_container = {
+                        items[i].x + 1,
+                        items[i].y + 1,
+                        items[i].w - 2,
+                        items[i].h - 2
+                };
+                if (print_ascii_art_in_rectangle(cli_matrix, weapon_to_print->ascii_path, ascii_art_container, ALIGN_CENTER,ALIGN_CENTER)){
                     return EXIT_FAILURE;
                 }
             }
