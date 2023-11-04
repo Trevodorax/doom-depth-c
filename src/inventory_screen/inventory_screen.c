@@ -2,6 +2,8 @@
 #include "../utils/router.h"
 #include "display/display.h"
 #include "../event/event.h"
+#include "../utils/utils.h"
+#include "../logs/log.h"
 
 void handle_categories_input(event_t event, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item);
 void handle_items_input(event_t event, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count);
@@ -9,13 +11,18 @@ void handle_actions_input(event_t event, player_t *player, section_options_t *ac
 
 int inventory_screen(game_window_t *game_window, player_t *player) {
     if (!game_window) {
-        printf("Cannot display inventory : no game window\n");
+        global_logger->error("Cannot display inventory : no game window\n");
         return EXIT_FAILURE;
     }
     if (!player) {
-        printf("Cannot display inventory : no player\n");
+        global_logger->error("Cannot display inventory : no player\n");
         return EXIT_FAILURE;
     }
+
+    if(game_window->ui_type == CLI) {
+        resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
+    }
+
 
     event_t event;
     bool quit = false;
@@ -24,9 +31,10 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
     action_options_t active_action = USE;
     unsigned short active_item = 0;
     while (!quit){
+        delay(game_window->ui_type, 50);
+        set_cli_raw_mode(true);
         while (get_event(game_window->ui_type, &event)) {
             switch (event) {
-
                 case QUIT:
                     return QUIT_GAME;
                 case Z_KEY:
@@ -63,7 +71,9 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
                     break;
             }
         }
+        // set_cli_raw_mode(false);
         display_inventory(game_window, player->inventory, active_section, active_category, active_action, active_item);
+        render_present(game_window);
     }
     return EXIT_SUCCESS;
 }

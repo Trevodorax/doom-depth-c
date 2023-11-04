@@ -3,6 +3,7 @@
 #include "../../utils/utils.h"
 #include "../../ui_utils/ui_utils.h"
 #include "gui/gui.h"
+#include "cli/cli.h"
 
 int display_inventory(game_window_t * game_window,
                       inventory_t * inventory,
@@ -12,6 +13,7 @@ int display_inventory(game_window_t * game_window,
                       unsigned short active_item) {
     switch(game_window->ui_type) {
         case CLI:
+            return display_inventory_cli(game_window->matrix, inventory, active_section, active_category, active_action, active_item);
         case GUI:
             return display_inventory_gui(game_window, inventory, active_section, active_category, active_action, active_item);
     }

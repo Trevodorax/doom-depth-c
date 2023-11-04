@@ -66,9 +66,11 @@ int cli_print_text_in_rectangle(cli_matrix_t *matrix, rect_t rect, const char *t
         return EXIT_FAILURE;
     }
 
-    for(int i = text_size; i >= 0; i--) {
-        if (print_text_ascii_art(matrix, rect, text, x_align, y_align, i) == EXIT_SUCCESS) {
-            return EXIT_SUCCESS;
+    if(text_size > TINY_TEXT) {
+        for(int i = (int)(text_size - 1); i >= 0; i--) {
+            if (print_text_ascii_art(matrix, rect, text, x_align, y_align, i) == EXIT_SUCCESS) {
+                return EXIT_SUCCESS;
+            }
         }
     }
 

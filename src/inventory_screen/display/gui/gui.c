@@ -89,7 +89,6 @@ int display_inventory_gui(game_window_t * game_window,
 
     display_categories_gui(game_window->renderer, category_size, unit_padding, active_section, active_category);
     if (active_section == CATEGORIES) {
-        SDL_RenderPresent(game_window->renderer);
         return EXIT_SUCCESS;
     }
 
@@ -152,13 +151,10 @@ int display_inventory_gui(game_window_t * game_window,
     }
 
     if (active_section == ITEMS){
-        SDL_RenderPresent(game_window->renderer);
         return EXIT_SUCCESS;
     }
 
     display_actions_gui(game_window->renderer, rect_to_SDL_Rect(actions_container), unit_padding - 2, active_action);
-
-    SDL_RenderPresent(game_window->renderer);
 
     return EXIT_SUCCESS;
 }

@@ -51,6 +51,7 @@ const char create_armor_table_sql[] =
         "id       INTEGER"
         "        primary key autoincrement,"
         "    name     TEXT    not null,"
+        "    ascii_path TEXT not null,"
         "    amount   INTEGER not null,"
         "    rarity   INTEGER not null,"
         "    max_uses INTEGER not null,"
@@ -69,7 +70,8 @@ const char create_weapon_table_sql[] =
         "    rarity           INTEGER not null,"
         "    max_uses         INTEGER not null,"
         "    cost             INTEGER not null,"
-        "    image            TEXT    not null"
+        "    image            TEXT    not null,"
+        "    ascii_path       TEXT    not null"
         ");";
 
 const char create_armors_in_inventory_table_sql[] =
@@ -111,21 +113,21 @@ const char create_stage_table_sql[] =
         ");";
 
 const char insert_armor_sql[] =
-        "INSERT INTO ARMOR (name, amount, rarity, max_uses, cost, image)"
-        "VALUES ('Leather Armor', 1, 1, 10, 10, '../assets/armors/image/leather.png'),"
-        "       ('Chainmail', 2, 1, 20, 20, '../assets/armors/image/chain_mail.png'),"
-        "       ('Plate Armor', 3, 2, 30, 30, '../assets/armors/image/plate.png'),"
-        "       ('Dragon Armor', 5, 2, 40, 40, '../assets/armors/image/dragon.png'),"
-        "       ('God Armor', 7, 5, 50, 50, '../assets/armors/image/god.png');";
+        "INSERT INTO ARMOR (name, amount, rarity, max_uses, cost, image, ascii_path)"
+        "VALUES ('Leather Armor', 1, 1, 10, 10, '../assets/armors/image/leather.png', '../assets/armors/ascii/leather.asciiart'),"
+        "       ('Chainmail', 2, 1, 20, 20, '../assets/armors/image/chain_mail.png', '../assets/armors/ascii/chain_mail.asciiart'),"
+        "       ('Plate Armor', 3, 2, 30, 30, '../assets/armors/image/plate.png', '../assets/armors/ascii/plate.asciiart'),"
+        "       ('Dragon Armor', 5, 2, 40, 40, '../assets/armors/image/dragon.png', '../assets/armors/ascii/dragon.asciiart'),"
+        "       ('God Armor', 7, 5, 50, 50, '../assets/armors/image/god.png', '../assets/armors/ascii/god.asciiart');";
 
 const char insert_weapon_sql[] =
-        "INSERT INTO WEAPON (name, min_attack, max_attack, attacks_per_turn, rarity, max_uses, cost, image)"
-        "VALUES ('Butter Knife', 1, 2, 1, 1, 10, 3, '../assets/weapons/image/butter_knife.png'),"
-        "       ('Compass', 2, 4, 1, 1, 10, 5, '../assets/weapons/image/compass.png'),"
-        "       ('Wooden Sword', 3, 6, 1, 2, 10, 10, '../assets/weapons/image/wooden_sword.png'),"
-        "       ('Lightsaber', 4, 8, 1, 2, 10, 15, '../assets/weapons/image/lightsaber.png'),"
-        "       ('Flip-Flops', 5, 10, 1, 3, 10, 20, '../assets/weapons/image/flip_flop.png'),"
-        "       ('Wand', 6, 12, 1, 3, 10, 25, '../assets/weapons/image/elder_wand.png');";
+        "INSERT INTO WEAPON (name, min_attack, max_attack, attacks_per_turn, rarity, max_uses, cost, image, ascii_path)"
+        "VALUES ('Butter Knife', 1, 2, 1, 1, 10, 3, '../assets/weapons/image/butter_knife.png', '../assets/weapons/ascii/butter_knife.asciiart'),"
+        "       ('Compass', 2, 4, 1, 1, 10, 5, '../assets/weapons/image/compass.png', '../assets/weapons/ascii/compass.asciiart'),"
+        "       ('Wooden Sword', 3, 6, 1, 2, 10, 10, '../assets/weapons/image/wooden_sword.png', '../assets/weapons/ascii/wooden_sword.asciiart'),"
+        "       ('Lightsaber', 4, 8, 1, 2, 10, 15, '../assets/weapons/image/lightsaber.png', '../assets/weapons/ascii/lightsaber.asciiart'),"
+        "       ('Flip-Flops', 5, 10, 1, 3, 10, 20, '../assets/weapons/image/flip_flop.png', '../assets/weapons/ascii/flip_flop.asciiart'),"
+        "       ('Wand', 6, 12, 1, 3, 10, 25, '../assets/weapons/image/elder_wand.png', '../assets/weapons/ascii/elder_wand.asciiart');";
 
 const char insert_spell_sql[] =
         "INSERT INTO SPELL (type, name, amount, cost) VALUES (1, 'Heal', 10, 10),"

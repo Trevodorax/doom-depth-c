@@ -8,7 +8,7 @@
 
 typedef struct {
     int id;
-    char *name;
+    char * name;
     unsigned int min_attack;
     unsigned int max_attack;
     unsigned int attacks_per_turn;
@@ -16,7 +16,8 @@ typedef struct {
     unsigned int max_uses;
     unsigned int uses;
     unsigned int cost;
-    char *image_path;
+    char * image_path;
+    char * ascii_path;
     int chosen;
     int id_in_inventory;
 } weapon_t;
