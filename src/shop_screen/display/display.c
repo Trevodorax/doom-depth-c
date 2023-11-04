@@ -5,6 +5,7 @@
 #include "../utils/shop_utils.h"
 #include "../../inventory_screen/display/display.h"
 #include "../../ui_utils/ui_utils.h"
+#include "../../inventory_screen/display/gui/gui.h"
 
 #define ITEMS_PER_PAGE 9
 
@@ -324,7 +325,7 @@ int display_shop_items(SDL_Renderer * renderer,
 
     int first_item_to_print = (active_item / ITEMS_PER_PAGE) * ITEMS_PER_PAGE;
 
-    display_scroll_indicator(renderer, rect_to_SDL_Rect(*items_container), font_size, ITEMS_PER_PAGE, quantity, first_item_to_print);
+    display_scroll_indicator_gui(renderer, rect_to_SDL_Rect(*items_container), font_size, ITEMS_PER_PAGE, quantity, first_item_to_print);
 
     switch (active_category) {
         case ARMORS:

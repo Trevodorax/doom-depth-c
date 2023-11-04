@@ -8,13 +8,14 @@
 
 typedef struct {
     int id;
-    char *name;
+    char * name;
     short rarity;
     unsigned int amount;
     unsigned int uses;
     unsigned int max_uses;
     unsigned int cost;
-    char *image_path;
+    char * image_path;
+    char * ascii_path;
     int chosen;
     int id_in_inventory;
 } armor_t;

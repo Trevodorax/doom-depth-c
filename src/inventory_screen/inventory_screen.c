@@ -1,76 +1,95 @@
 #include "inventory_screen.h"
 #include "../utils/router.h"
-#include "SDL_keycode.h"
 #include "display/display.h"
+#include "../event/event.h"
+#include "../utils/utils.h"
+#include "../logs/log.h"
 
-void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item);
-void handle_items_input(SDL_Keycode keycode, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count);
-void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options_t *active_section, category_options_t active_category, unsigned short active_item, action_options_t *active_action);
+void handle_categories_input(event_t event, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item);
+void handle_items_input(event_t event, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count);
+void handle_actions_input(event_t event, player_t *player, section_options_t *active_section, category_options_t active_category, unsigned short active_item, action_options_t *active_action);
 
 int inventory_screen(game_window_t *game_window, player_t *player) {
     if (!game_window) {
-        printf("Cannot display inventory : no game window\n");
+        global_logger->error("Cannot display inventory : no game window\n");
         return EXIT_FAILURE;
     }
     if (!player) {
-        printf("Cannot display inventory : no player\n");
+        global_logger->error("Cannot display inventory : no player\n");
         return EXIT_FAILURE;
     }
 
-    SDL_Event e;
+    if(game_window->ui_type == CLI) {
+        resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
+    }
+
+
+    event_t event;
     bool quit = false;
     section_options_t active_section = CATEGORIES;
     category_options_t active_category = WEAPONS;
     action_options_t active_action = USE;
     unsigned short active_item = 0;
     while (!quit){
-        while (SDL_PollEvent(&e)){
-            if (e.type == SDL_QUIT){
-                return QUIT_GAME;
-            }
-            if (e.type == SDL_KEYDOWN){
-                switch (active_section){
-                    case CATEGORIES:
-                        handle_categories_input(e.key.keysym.sym, &quit, &active_section, &active_category, &active_item);
-                        if (quit) {
-                            return QUIT_GAME;
-                        }
-                        break;
+        delay(game_window->ui_type, 50);
+        set_cli_raw_mode(true);
+        while (get_event(game_window->ui_type, &event)) {
+            switch (event) {
+                case QUIT:
+                    return QUIT_GAME;
+                case Z_KEY:
+                case Q_KEY:
+                case S_KEY:
+                case D_KEY:
+                case ENTER_KEY:
+                    switch (active_section){
+                        case CATEGORIES:
+                            handle_categories_input(event, &quit, &active_section, &active_category, &active_item);
+                            if (quit) {
+                                return QUIT_GAME;
+                            }
+                            break;
 
-                    case ITEMS:
-                        if (active_category == WEAPONS) {
-                            handle_items_input(e.key.keysym.sym, &active_section, active_category, &active_item, player->inventory->nb_weapons);
-                        } else if (active_category == ARMORS) {
-                            handle_items_input(e.key.keysym.sym, &active_section, active_category, &active_item, player->inventory->nb_armors);
-                        }
-                        break;
+                        case ITEMS:
+                            if (active_category == WEAPONS) {
+                                handle_items_input(event, &active_section, active_category, &active_item, player->inventory->nb_weapons);
+                            } else if (active_category == ARMORS) {
+                                handle_items_input(event, &active_section, active_category, &active_item, player->inventory->nb_armors);
+                            }
+                            break;
 
-                    case CONFIRM:
-                        handle_actions_input(e.key.keysym.sym, player, &active_section, active_category, active_item, &active_action);
-                        break;
+                        case ACTIONS:
+                            handle_actions_input(event, player, &active_section, active_category, active_item, &active_action);
+                            break;
 
-                    case ACTIONS:
-                        return EXIT_FAILURE;
-                }
+                        case CONFIRM:
+                            return EXIT_FAILURE;
+                    }
+                    break;
+                case UNKNOWN_EVENT:
+                default:
+                    break;
             }
         }
+        // set_cli_raw_mode(false);
         display_inventory(game_window, player->inventory, active_section, active_category, active_action, active_item);
+        render_present(game_window);
     }
     return EXIT_SUCCESS;
 }
 
-void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item) {
+void handle_categories_input(event_t event, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item) {
     // navigating through the categories
-    if (keycode == SDLK_DOWN && *active_category != MANA_POTIONS) {
+    if (event == S_KEY && *active_category != MANA_POTIONS) {
     (*active_category)++;
     *active_item = 0;
     }
-    if (keycode == SDLK_UP && *active_category != GO_BACK) {
+    if (event == Z_KEY && *active_category != GO_BACK) {
     (*active_category)--;
     *active_item = 0;
     }
     // accessing the chosen category
-    if (keycode == SDLK_RETURN || keycode == SDLK_KP_ENTER) {
+    if (event == ENTER_KEY) {
     switch (*active_category) {
         case GO_BACK:
             *quit = true;
@@ -89,9 +108,9 @@ void handle_categories_input(SDL_Keycode keycode, bool *quit, section_options_t 
     }
 }
 
-void handle_items_input(SDL_Keycode keycode, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count) {
+void handle_items_input(event_t event, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count) {
     // going back to categories when pressing the left arrow on the left column
-    if (keycode == SDLK_LEFT) {
+    if (event == Q_KEY) {
         if (*active_item % 3 == 0) {
             (*active_section)--;
         } else {
@@ -100,17 +119,17 @@ void handle_items_input(SDL_Keycode keycode, section_options_t *active_section, 
     }
 
     // moving in the items grid
-    if (keycode == SDLK_RIGHT) {
+    if (event == D_KEY) {
         if (*active_item % 3 != 2 && *active_item < category_items_count - 1) {
             (*active_item)++;
         }
     }
-    if (keycode == SDLK_DOWN) {
+    if (event == S_KEY) {
         if ((active_category == WEAPONS || active_category == ARMORS) && *active_item + 3 < category_items_count) {
             (*active_item) += 3;
         }
     }
-    if (keycode == SDLK_UP) {
+    if (event == Z_KEY) {
         if ((active_category == WEAPONS && *active_item - 3 >= 0) ||
             (active_category == ARMORS && *active_item - 3 >= 0)) {
             (*active_item) -= 3;
@@ -118,14 +137,14 @@ void handle_items_input(SDL_Keycode keycode, section_options_t *active_section, 
     }
 
     // choosing an item
-    if (keycode == SDLK_RETURN || keycode == SDLK_KP_ENTER) {
+    if (event == ENTER_KEY) {
         (*active_section)++;
     }
 }
 
-void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options_t *active_section, category_options_t active_category, unsigned short active_item, action_options_t *active_action) {
+void handle_actions_input(event_t event, player_t *player, section_options_t *active_section, category_options_t active_category, unsigned short active_item, action_options_t *active_action) {
     // going back to previous section when pressing the left arrow on the left column
-    if (keycode == SDLK_LEFT) {
+    if (event == Q_KEY) {
         if (active_category == MANA_POTIONS || active_category == HEALTH_POTIONS) {
             *active_section = CATEGORIES;
         } else {
@@ -134,16 +153,16 @@ void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options
     }
 
     // moving through actions
-    if (keycode == SDLK_DOWN && *active_action != THROW_AWAY) {
+    if (event == S_KEY && *active_action != THROW_AWAY) {
         (*active_action)++;
     }
-    if (keycode == SDLK_UP && *active_action != USE) {
+    if (event == Z_KEY && *active_action != USE) {
         (*active_action)--;
     }
 
     // TODO : add actions for potions
     // choosing action
-    if (keycode == SDLK_RETURN || keycode == SDLK_KP_ENTER) {
+    if (event == ENTER_KEY) {
         if (*active_action == USE) {
             if (active_category == WEAPONS) {
                 player->chosen_weapon = get_value_at_index(player->inventory->weapons_head, active_item);
@@ -157,10 +176,12 @@ void handle_actions_input(SDL_Keycode keycode, player_t *player, section_options
         if (*active_action == THROW_AWAY) {
             if (active_category == WEAPONS) {
                 delete_node(&(player->inventory->weapons_head), active_item);
+                player->inventory->nb_weapons--;
                 *active_section = ITEMS;
             }
             if (active_category == ARMORS) {
                 delete_node(&(player->inventory->armors_head), active_item);
+                player->inventory->nb_armors--;
                 *active_section = ITEMS;
             }
         }

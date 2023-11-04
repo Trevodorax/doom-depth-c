@@ -66,9 +66,11 @@ int cli_print_text_in_rectangle(cli_matrix_t *matrix, rect_t rect, const char *t
         return EXIT_FAILURE;
     }
 
-    for(int i = text_size; i >= 0; i--) {
-        if (print_text_ascii_art(matrix, rect, text, x_align, y_align, i) == EXIT_SUCCESS) {
-            return EXIT_SUCCESS;
+    if(text_size > TINY_TEXT) {
+        for(int i = (int)(text_size - 1); i >= 0; i--) {
+            if (print_text_ascii_art(matrix, rect, text, x_align, y_align, i) == EXIT_SUCCESS) {
+                return EXIT_SUCCESS;
+            }
         }
     }
 
@@ -105,7 +107,6 @@ int cli_print_text_in_rectangle(cli_matrix_t *matrix, rect_t rect, const char *t
             break;
         case ALIGN_START:
         default:
-            // no change needed
             break;
     }
 
@@ -130,7 +131,17 @@ int cli_print_text_in_rectangle(cli_matrix_t *matrix, rect_t rect, const char *t
         }
 
         for (size_t j = current_start_col; j < end_col && char_index < text_len; j++) {
-            fill_char.character = ready_text[char_index++];
+            char checked_char = ready_text[char_index++];
+
+            if (checked_char == '\n') {
+                break;
+            }
+
+            if (i >= matrix->nb_rows) {
+                return EXIT_SUCCESS;
+            }
+
+            fill_char.character = checked_char;
             fill_char.color = text_color;
 
             matrix->matrix[i][j] = fill_char;

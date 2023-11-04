@@ -11,6 +11,8 @@
  * @param matrix The matrix on which to print the ascii art
  * @param ascii_file_path The path of the ascii art file
  * @param container The container in which to print the ascii art
+ * @param x_align
+ * @param y_align
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int print_ascii_art_in_rectangle(cli_matrix_t * matrix, const char * ascii_file_path, rect_t container, alignment_t x_align,

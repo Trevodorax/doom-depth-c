@@ -10,6 +10,7 @@ typedef enum {
 } alignment_t;
 
 typedef enum {
+    TINY_TEXT,
     SMALL_TEXT,
     MEDIUM_TEXT
 } text_size_t;
