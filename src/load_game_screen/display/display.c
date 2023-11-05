@@ -38,7 +38,7 @@ int display_load_game_gui(game_window_t *game_window, array_node_t *players, uns
                     game_window->renderer,
                     rect_to_SDL_Rect(rects[i]),
                     current_player != NULL ? current_player->name : "Empty",
-                    text_color,
+                    active_option == i ? (SDL_Color) {255, 255, 0, 255} : text_color,
                     ALIGN_CENTER,
                     ALIGN_CENTER);
         }
@@ -48,7 +48,7 @@ int display_load_game_gui(game_window_t *game_window, array_node_t *players, uns
                     game_window->renderer,
                     rect_to_SDL_Rect(rects[i]),
                     "Empty",
-                    text_color,
+                    active_option == i ? (SDL_Color) {255, 0, 0, 255} : text_color,
                     ALIGN_CENTER,
                     ALIGN_CENTER);
         }
@@ -56,7 +56,7 @@ int display_load_game_gui(game_window_t *game_window, array_node_t *players, uns
 
     rect_t container_cursor = {
             rects[active_option].x - (rects[active_option].w / 10),
-            rects[active_option].y + (rects[active_option].h / 2),
+            rects[active_option].y + (rects[active_option].h / 2) - (rects[active_option].h / 4),
             rects[active_option].w / 10,
             rects[active_option].h / 2
     };
@@ -105,10 +105,10 @@ int display_load_game_cli(game_window_t *game_window, array_node_t *players, uns
                                 MEDIUM_TEXT);
 
     rect_t container_saves = {
-            (size_t)window_width / 2,
+            0,
             (size_t)window_height / 2,
-            (size_t)(window_width * 0.3),
-            (size_t)(window_height * 0.3)
+            window_width,
+            (size_t)(window_height * 0.4)
     };
     rect_t *rects = get_rectangle_layout(3, &container_saves, VERTICAL, 0);
 
@@ -120,7 +120,7 @@ int display_load_game_cli(game_window_t *game_window, array_node_t *players, uns
                     game_window->matrix,
                     rects[i],
                     current_player != NULL ? current_player->name : "Empty",
-                    BLACK,
+                    BLUE,
                     ALIGN_CENTER,
                     ALIGN_CENTER,
                     MEDIUM_TEXT);
@@ -130,19 +130,13 @@ int display_load_game_cli(game_window_t *game_window, array_node_t *players, uns
             cli_print_text_in_rectangle(
                     game_window->matrix,
                     rects[i],
-                    "Empty",
-                    BLACK,
+                    active_option == i ? "> Empty" : "Empty",
+                    BLUE,
                     ALIGN_CENTER,
                     ALIGN_CENTER,
                     MEDIUM_TEXT);
         }
     }
-
-    // print cursor
-    rect_t cursor_rect = {0, 0, 1, 1};
-    cursor_rect.y = rects[active_option].y;
-    cursor_rect.x = rects[active_option].x - 2;
-    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", BLACK, ALIGN_START, ALIGN_START, SMALL_TEXT);
 
     return EXIT_SUCCESS;
 
