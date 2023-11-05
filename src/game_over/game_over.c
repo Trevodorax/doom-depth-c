@@ -34,7 +34,7 @@ int game_over_screen(game_window_t *game_window) {
                     if(active_option == START_MENU) {
                         return START_MENU;
                     }
-                    // TODO : link to TRY_AGAIN option
+                    // TODO : link to TRY_AGAIN option @paul
                 default:
                     break;
             }

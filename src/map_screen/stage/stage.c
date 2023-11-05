@@ -207,9 +207,6 @@ void free_stage(stage_t * stage) {
     if (stage->fight) {
         free_fight(stage->fight);
     }
-    if (stage->player) {
-        // TODO: free the player
-    }
 
     free(stage);
 }

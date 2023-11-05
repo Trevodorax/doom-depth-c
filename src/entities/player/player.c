@@ -148,7 +148,7 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
     player->base_defense = sqlite3_column_int(stmt, 10);
     player->action_points = sqlite3_column_int(stmt, 11);
     player->max_action_points = sqlite3_column_int(stmt, 12);
-    player->is_defending = false; // TODO ?
+    player->is_defending = false;
 
     player->offensive_spell = find_spell(spells, sqlite3_column_int(stmt, 13));
     player->defensive_spell = find_spell(spells, sqlite3_column_int(stmt, 14));

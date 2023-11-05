@@ -31,6 +31,8 @@ router_t fight_screen(game_window_t * game_window, player_t * player, fight_t * 
                         render_present(game_window);
                         delay(game_window->ui_type, 2000);
                         give_treasure_to_player(fight_context->treasure, fight_context->player);
+
+                        // TODO: handle level up if there was one (display it etc.) @noam
                     }
 
                     free_fight_context(fight_context);
@@ -48,10 +50,11 @@ router_t fight_screen(game_window_t * game_window, player_t * player, fight_t * 
                     }
                 }
             }
+            heal_mana(fight_context->player, 10);
         } else {
             monsters_turn(game_window, fight_context, fight_zone);
             if(player->hp == 0) {
-                // TODO: handle game over
+                // TODO: handle game over @paul
             }
 
             fight_context->player_turn = true;

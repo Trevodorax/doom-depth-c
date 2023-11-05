@@ -58,7 +58,6 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                                     player_stage->is_done = true;
                                     break;
                                 case QUIT_GAME:
-                                    // TODO: save and quit
                                 case GAME_OVER:
                                 default:
                                     break;
@@ -67,8 +66,7 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                             return fight_result;
                         }
                         case SHOP:
-                            // TODO: open shop
-                            break;
+                            return SHOP_SCREEN;
                         case TREASURE:
                             if (player_stage->is_done) {
                                 break;
