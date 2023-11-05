@@ -120,6 +120,8 @@ set(cross_platform_targets
         src/inventory_screen/display/cli/cli.h
         src/shop_screen/display/gui/gui.c
         src/shop_screen/display/gui/gui.h
+        src/shop_screen/display/cli/cli.c
+        src/shop_screen/display/cli/cli.h
         src/entities/treasure/treasure.c
         src/entities/treasure/treasure.h
 )
@@ -128,8 +130,6 @@ set(cross_platform_targets
 set(unix_targets
         src/ui_utils/cli_utils/cli_utils_unix.c
         src/ui_utils/cli_utils/cli_text/cli_text_unix.c
-        src/shop_screen/display/cli/cli.c
-        src/shop_screen/display/cli/cli.h
 )
 
 # for windows
