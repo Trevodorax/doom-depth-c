@@ -4,6 +4,17 @@ int display_title(game_window_t *game_window, int window_width, int window_heigh
 
 int display_load_game(game_window_t *game_window, array_node_t *players, unsigned short active_option) {
 
+    switch (game_window->ui_type) {
+        case CLI:
+            return display_load_game_cli(game_window, players, active_option);
+        case GUI:
+            return display_load_game_gui(game_window, players, active_option);
+    }
+
+}
+
+int display_load_game_gui(game_window_t *game_window, array_node_t *players, unsigned short active_option) {
+
     int window_width = 0;
     int window_height = 0;
     SDL_GetWindowSize(game_window->window, &window_width, &window_height);
@@ -78,4 +89,37 @@ int display_title(game_window_t *game_window, int window_width, int window_heigh
             ALIGN_CENTER);
 
     return EXIT_SUCCESS;
+}
+
+int display_load_game_cli(game_window_t *game_window, array_node_t *players, unsigned short active_option) {
+
+    int window_height = 0;
+    int window_width = 0;
+    cli_get_window_size(&window_width, &window_height);
+
+    cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
+
+    // print title
+    rect_t title_rect = {0, 0, window_width, window_height / 2};
+    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Load a game", BLACK, ALIGN_CENTER, ALIGN_START,
+                                MEDIUM_TEXT);
+
+    // print options
+    // TODO: print saves names
+    rect_t option_1_rect = {2, window_height / 2, window_width, window_height / 4};
+    rect_t option_2_rect = {2, 3 * (window_height / 4), window_width, window_height / 4};
+
+    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, "Option 1", BLACK, ALIGN_START, ALIGN_START,
+                                SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, "Option 2", BLACK, ALIGN_START, ALIGN_START,
+                                SMALL_TEXT);
+
+    // print cursor
+    rect_t cursor_rect = {0, 0, 1, 1};
+    cursor_rect.y = active_option == 0 ? option_1_rect.y : option_2_rect.y;
+    cursor_rect.x = option_1_rect.x - 2;
+    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", BLACK, ALIGN_START, ALIGN_START, SMALL_TEXT);
+
+    return EXIT_SUCCESS;
+
 }
