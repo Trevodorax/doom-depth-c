@@ -3,12 +3,14 @@
 
 #include "../entities/player/player.h"
 #include "../logs/log.h"
+#include "../entities/treasure/treasure.h"
 
 typedef struct {
     player_t * player;
     array_node_t * monsters;
     char * notification_message;
     bool player_turn;
+    treasure_t * treasure;
 } fight_context_t;
 
 typedef struct {

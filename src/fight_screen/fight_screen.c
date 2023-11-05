@@ -10,7 +10,7 @@ void monsters_turn(game_window_t * game_window, fight_context_t * fight_context,
 void monster_turn(game_window_t * game_window, player_t * player, monster_t * monster, fight_context_t * fight_context, rect_t fight_zone);
 
 router_t fight_screen(game_window_t * game_window, player_t * player, fight_t * fight) {
-    if(game_window->ui_type == CLI) {
+    if (game_window->ui_type == CLI) {
         cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
     }
     rect_t fight_zone;
@@ -25,6 +25,14 @@ router_t fight_screen(game_window_t * game_window, player_t * player, fight_t * 
             fight_action_t * selected_action = fight_menu(game_window, menu, fight_context, &fight_zone, &menu_zone, false);
             switch (selected_action->callback(fight_context, selected_action->params)) {
                 case FA_QUIT: {
+                    if(get_size(fight_context->monsters) == 0) {
+                        build_notification_formatted(fight_context, "Player wins %d gold from fight !", fight_context->treasure->coins);
+                        display_fight(game_window, fight_context, fight_zone);
+                        render_present(game_window);
+                        delay(game_window->ui_type, 2000);
+                        give_treasure_to_player(fight_context->treasure, fight_context->player);
+                    }
+
                     free_fight_context(fight_context);
                     player->action_points = player->max_action_points;
                     return MAP_SCREEN;
@@ -42,6 +50,10 @@ router_t fight_screen(game_window_t * game_window, player_t * player, fight_t * 
             }
         } else {
             monsters_turn(game_window, fight_context, fight_zone);
+            if(player->hp == 0) {
+                // TODO: handle game over
+            }
+
             fight_context->player_turn = true;
             player->action_points = player->max_action_points;
         }
@@ -57,6 +69,9 @@ void monsters_turn(game_window_t * game_window, fight_context_t * fight_context,
         monster_t * current_monster = void_to_monster(current_monster_node->value);
 
         monster_turn(game_window, fight_context->player, current_monster, fight_context, fight_zone);
+        if (fight_context->player->hp == 0) {
+            break;
+        }
 
         current_monster_node = current_monster_node->next;
     }

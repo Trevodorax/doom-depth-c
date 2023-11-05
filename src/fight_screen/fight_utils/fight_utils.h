@@ -67,6 +67,15 @@ void debug_action_points(player_t *player);
 bool check_and_remove_action_points(player_t *player, unsigned int amount);
 
 /**
+ * @brief Checks if a player has sufficient mana and deducts the required amount if possible.
+ *
+ * @param player The player whose mana are being checked.
+ * @param amount The amount of mana required.
+ * @return Returns true if the player has enough mana and they are deducted, false otherwise.
+ */
+bool check_and_remove_mana(player_t * player, unsigned int amount);
+
+/**
  * @brief creates the fight context out of the fight info
  *
  * @param fight The infos for the fight

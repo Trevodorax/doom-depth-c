@@ -22,27 +22,11 @@ int main_loop(game_window_t * main_window) {
     init_entities(db);
     array_node_t *spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
 
+    // TODO: get specific player map if there is one, otherwise this one
     map_t * map = get_map_from_file("../assets/maps/map_1.json");
 
-    // FIXME : remove test struct
+    // TODO: replace this with the actual player initialization
     player_t *player = NULL;
-    fight_t * fight = malloc(sizeof(fight_t));
-    fight->enemies_list = malloc(sizeof(char*) * 3);
-    fight->enemies_list[0] = malloc(sizeof(char) * 4);
-    strcpy(fight->enemies_list[0],"zombie");
-    fight->enemies_list[1] = malloc(sizeof(char) * 7);
-    strcpy(fight->enemies_list[1],"goblin");
-    fight->enemies_list[2] = malloc(sizeof(char) * 6);
-    strcpy(fight->enemies_list[2],"troll");
-
-    fight->enemies_chances_to_appear = malloc(sizeof(int) * 3);
-    fight->enemies_chances_to_appear[0] = 50;
-    fight->enemies_chances_to_appear[1] = 25;
-    fight->enemies_chances_to_appear[2] = 25;
-    fight->enemies_size = 3;
-    fight->min_nb_enemies = 1;
-    fight->max_nb_enemies = 5;
-
     player = create_player("TEST_PLAYER");
     player->offensive_spell = malloc(sizeof(spell_t));
     player->offensive_spell->name = malloc(sizeof(char) * 10);
@@ -71,7 +55,7 @@ int main_loop(game_window_t * main_window) {
     player->inventory->nb_weapons = get_size(player_weapons);
     player->inventory->weapons_head = player_weapons;
 
-    main_window->context->current_screen = LOAD_GAME_SCREEN;
+    main_window->context->current_screen = MAP_SCREEN;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
@@ -89,7 +73,8 @@ int main_loop(game_window_t * main_window) {
                 break;
 
             case FIGHT_SCREEN : {
-                main_window->context->current_screen = fight_screen(main_window, player, fight);
+                // never happens
+                main_window->context->current_screen = fight_screen(main_window, player, NULL);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
@@ -138,8 +123,15 @@ int main_loop(game_window_t * main_window) {
         }
     }
 
+    // save player
+    save_player(db, player);
+
+    // save map
     json_t * json_map = map_to_json(map);
+    // TODO: save to specific player map
     write_json_to_file(json_map, "../assets/maps/map_1.json");
+
+    // free everything
     free_map(map);
     free_player(player);
 

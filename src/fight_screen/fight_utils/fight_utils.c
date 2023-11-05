@@ -85,6 +85,17 @@ bool check_and_remove_action_points(player_t *player, unsigned int amount) {
     }
 }
 
+bool check_and_remove_mana(player_t * player, unsigned int amount) {
+    if (player->mana < amount) {
+        return false;
+    } else {
+        player->mana -= amount;
+        return true;
+    }
+}
+
+treasure_t * get_treasure_from_fight_context(fight_context_t * fight_context);
+
 fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
     srand(time(NULL));
     fight_context_t * fight_context = malloc(sizeof(fight_context_t));
@@ -114,5 +125,33 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
 
     fight_context->notification_message = NULL;
     fight_context->player_turn = true;
+
+    // loot
+    fight_context->treasure = get_treasure_from_fight_context(fight_context);
     return fight_context;
 }
+
+treasure_t * get_treasure_from_fight_context(fight_context_t * fight_context) {
+    // safeguards
+    if (!fight_context) {
+        return NULL;
+    }
+
+    // calculate number of coins
+    int coins = 0;
+    array_node_t *current = fight_context->monsters;
+    while (current != NULL) {
+        monster_t *monster = void_to_monster(current->value);
+        if (monster) {
+            coins += (int)(monster->hp_max + monster->attack) / 2;
+        }
+        current = current->next;
+    }
+
+    // create and return treasure
+    treasure_t *treasure = malloc(sizeof(treasure_t));
+    if (!treasure) return NULL;
+    treasure->coins = coins;
+    return treasure;
+}
+
