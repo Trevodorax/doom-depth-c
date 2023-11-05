@@ -11,7 +11,7 @@
 /**
  * @brief Displays the load game screen.
  *
- * This function calls the right display function according to the ui type.
+ * This function displays the load game screen.
  *
  * @param game_window A pointer to the game window.
  * @param players A pointer to the array of players.
