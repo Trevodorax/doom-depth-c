@@ -118,7 +118,7 @@ int display_categories_cli(cli_matrix_t * cli_matrix,
                            section_options_t active_section,
                            category_options_t active_category) {
     const int categories_count = 5;
-    rect_t * categories = get_rectangle_layout(categories_count, &container, VERTICAL);
+    rect_t * categories = get_rectangle_layout(categories_count, &container, VERTICAL, 2);
 
     for (int i = 0; i < categories_count; ++i) {
         // The images are replaced with text labels for CLI version.
@@ -178,7 +178,7 @@ int display_items_cli(cli_matrix_t * cli_matrix, rect_t * items_container, rect_
     }
 
     const int items_count = 9;
-    rect_t *items = get_rectangle_layout(items_count, items_container, GRID);
+    rect_t *items = get_rectangle_layout(items_count, items_container, GRID, 2);
     int first_item_to_print = (active_item / items_count) * items_count;
 
     // TODO: find a replacement for this

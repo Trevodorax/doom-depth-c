@@ -63,7 +63,7 @@ int display_fight_gui(game_window_t * game_window, fight_context_t * fight_conte
 int display_monsters_gui(game_window_t * game_window, array_node_t * monsters, rect_t container) {
     size_t nb_monsters = get_size(monsters);
 
-    rect_t * monster_containers = get_rectangle_layout(nb_monsters, &container, HORIZONTAL);
+    rect_t * monster_containers = get_rectangle_layout(nb_monsters, &container, HORIZONTAL, 2);
     if(!monster_containers) {
         return EXIT_FAILURE;
     }

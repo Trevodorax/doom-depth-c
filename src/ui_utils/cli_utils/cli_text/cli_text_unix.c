@@ -258,12 +258,19 @@ ascii_art_t *get_special_char_ascii_art(char character) {
         right_bracket = parse_ascii_art_file("../assets/ascii_text/special/right_bracket.asciiart");
     }
 
+    static ascii_art_t * greater_than = NULL;
+    if(!greater_than) {
+        greater_than = parse_ascii_art_file("../assets/ascii_text/special/greater_than.asciiart");
+    }
+
     // return the right one
     switch(character) {
         case '(':
             return left_bracket;
         case ')':
             return right_bracket;
+        case '>':
+            return greater_than;
         default:
             return unknown;
     }

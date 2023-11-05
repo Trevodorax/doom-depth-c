@@ -163,7 +163,7 @@ int display_shop_categories_gui(SDL_Renderer * renderer, rect_t * categories_con
         return EXIT_FAILURE;
     }
 
-    rect_t *categories_rect = get_rectangle_layout(3, categories_container, HORIZONTAL);
+    rect_t *categories_rect = get_rectangle_layout(3, categories_container, HORIZONTAL, 2);
     if (print_text_in_rectangle(renderer, rect_to_SDL_Rect(categories_rect[0]), "WEAPONS", white, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
@@ -258,7 +258,7 @@ int display_shop_items_gui(SDL_Renderer * renderer,
             quantity = 2;
     }
 
-    rect_t *items = get_rectangle_layout(ITEMS_PER_PAGE, items_container, GRID);
+    rect_t *items = get_rectangle_layout(ITEMS_PER_PAGE, items_container, GRID, 2);
 
     int first_item_to_print = (active_item / ITEMS_PER_PAGE) * ITEMS_PER_PAGE;
 
@@ -334,7 +334,7 @@ int display_item_confirm_gui(SDL_Renderer *renderer, SDL_Rect window_rect, rect_
             container->x, container->y + container_new_height,
             container->w, container->h - container_new_height
     };
-    rect_t * confirmation_rects = get_rectangle_layout(2, &confirmation_container, VERTICAL);
+    rect_t * confirmation_rects = get_rectangle_layout(2, &confirmation_container, VERTICAL, 2);
 
     if (draw_image_in_rectangle(renderer, window_rect, "../assets/backgrounds/white_semi_transparent.png", NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;

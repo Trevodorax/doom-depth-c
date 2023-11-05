@@ -34,7 +34,7 @@ rect_t * get_rectangle_grid(size_t nb_rectangles, rect_t *container) {
     return rect_grid;
 }
 
-rect_t * get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertical) {
+rect_t *get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertical, int margin) {
     if (nb_rectangles <= 0 || container == NULL) {
         return NULL;
     }
@@ -49,8 +49,8 @@ rect_t * get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertic
         cols = (int)nb_rectangles;
     }
 
-    int cell_width = ((int) container->w / cols) - 2;
-    int cell_height = ((int) container->h / rows) - 2;
+    int cell_width = ((int) container->w / cols) - margin;
+    int cell_height = ((int) container->h / rows) - margin;
 
     rect_t *rect_display = malloc(rows * cols * sizeof(rect_t));
     if (!rect_display) {
@@ -61,8 +61,8 @@ rect_t * get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertic
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             int index = i * cols + j;
-            rect_display[index].x = container->x + j * (cell_width + 2);
-            rect_display[index].y = container->y + i * (cell_height + 2);
+            rect_display[index].x = container->x + j * (cell_width + margin);
+            rect_display[index].y = container->y + i * (cell_height + margin);
             rect_display[index].w = cell_width;
             rect_display[index].h = cell_height;
         }
@@ -71,13 +71,13 @@ rect_t * get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertic
     return rect_display;
 }
 
-rect_t * get_rectangle_layout(size_t nb_rectangles, rect_t * container, layout_t layout) {
+rect_t *get_rectangle_layout(size_t nb_rectangles, rect_t *container, layout_t layout, int margin) {
     switch(layout) {
         case GRID:
             return get_rectangle_grid(nb_rectangles, container);
         case HORIZONTAL:
-            return get_rectangle_line(nb_rectangles, container, false);
+            return get_rectangle_line(nb_rectangles, container, false, margin);
         case VERTICAL:
-            return get_rectangle_line(nb_rectangles, container, true);
+            return get_rectangle_line(nb_rectangles, container, true, margin);
     }
 }
