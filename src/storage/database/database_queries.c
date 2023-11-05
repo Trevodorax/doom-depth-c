@@ -51,12 +51,12 @@ const char create_armor_table_sql[] =
         "id       INTEGER"
         "        primary key autoincrement,"
         "    name     TEXT    not null,"
-        "    ascii_path TEXT not null,"
         "    amount   INTEGER not null,"
         "    rarity   INTEGER not null,"
         "    max_uses INTEGER not null,"
         "    cost     INTEGER not null,"
-        "    image    TEXT    not null"
+        "    image    TEXT    not null,"
+        "    ascii_path TEXT not null"
         ");";
 
 const char create_weapon_table_sql[] =

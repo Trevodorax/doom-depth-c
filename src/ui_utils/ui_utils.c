@@ -3,7 +3,7 @@
 #include <math.h>
 #include "ui_utils.h"
 
-rect_t *get_rectangle_grid(size_t nb_rectangles, rect_t *container) {
+rect_t * get_rectangle_grid(size_t nb_rectangles, rect_t *container) {
     if (nb_rectangles <= 0 || container == NULL) {
         return NULL;
     }
@@ -34,7 +34,7 @@ rect_t *get_rectangle_grid(size_t nb_rectangles, rect_t *container) {
     return rect_grid;
 }
 
-rect_t *get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertical) {
+rect_t * get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertical) {
     if (nb_rectangles <= 0 || container == NULL) {
         return NULL;
     }
