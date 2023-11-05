@@ -22,7 +22,7 @@ int display_shop_cli(game_window_t * game_window,
     rect_t confirm_rect = {window_width / 4, window_height / 4, window_width / 2, window_height / 2};
 
     int nb_details = 7;
-    rect_t * details_rects = get_rectangle_layout(nb_details, &confirm_rect, VERTICAL);
+    rect_t * details_rects = get_rectangle_layout(nb_details, &confirm_rect, VERTICAL, 2);
 
     rect_t go_back_rect = {1, 0, window_width / 2 - 1, 1};
     cli_print_text_in_rectangle(game_window->matrix, go_back_rect, "Go back", BLACK, ALIGN_START, ALIGN_START,
@@ -36,10 +36,10 @@ int display_shop_cli(game_window_t * game_window,
 
 
     rect_t items_container = {(window_width - (3 * unit + 4 * unit_padding)) / 2, window_height - (3 * unit + 4 * unit_padding), 3 * unit + 4 * unit_padding, 3 * unit + 4 * unit_padding};
-    rect_t * items_rects = get_rectangle_layout(ITEMS_PER_PAGE, &items_container, GRID);
+    rect_t * items_rects = get_rectangle_layout(ITEMS_PER_PAGE, &items_container, GRID, 2);
 
     rect_t categories_container = {0, items_container.y - 1, window_width, 3};
-    rect_t * categories_rect = get_rectangle_layout(3, &categories_container, HORIZONTAL);
+    rect_t * categories_rect = get_rectangle_layout(3, &categories_container, HORIZONTAL, 2);
     // leave space for cursor
     for (int i = 0; i < 3; i++) {
         categories_rect[i].w -= 1;

@@ -30,7 +30,7 @@ int display_load_game_gui(game_window_t *game_window, array_node_t *players, uns
             (size_t)(window_height * 0.3)
     };
 
-    rect_t *rects = get_rectangle_layout(3, &container_saves, VERTICAL);
+    rect_t *rects = get_rectangle_layout(3, &container_saves, VERTICAL, 2);
     if (players != NULL) {
         for (int i = 0; i < 3; i++) {
             player_t *current_player = get_value_at_index(players, i);
@@ -110,7 +110,7 @@ int display_load_game_cli(game_window_t *game_window, array_node_t *players, uns
             (size_t)(window_width * 0.3),
             (size_t)(window_height * 0.3)
     };
-    rect_t *rects = get_rectangle_layout(3, &container_saves, VERTICAL);
+    rect_t *rects = get_rectangle_layout(3, &container_saves, VERTICAL, 0);
 
     // print saves
     if (players != NULL) {
