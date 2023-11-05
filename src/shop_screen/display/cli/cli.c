@@ -25,14 +25,16 @@ int display_shop_cli(game_window_t * game_window,
     rect_t * details_rects = get_rectangle_layout(nb_details, &confirm_rect, VERTICAL, 2);
 
     rect_t go_back_rect = {1, 0, window_width / 2 - 1, 1};
-    cli_print_text_in_rectangle(game_window->matrix, go_back_rect, "Go back", BLACK, ALIGN_START, ALIGN_START,
+    cli_print_text_in_rectangle(game_window->matrix, go_back_rect, "<-- Go back", BLACK, ALIGN_START, ALIGN_START,
                                 SMALL_TEXT);
-    // TODO : display go back ascii art
 
     rect_t gold_rect = {window_width - (go_back_rect.x + go_back_rect.w), 0, window_width / 2, 1};
-    cli_print_text_in_rectangle(game_window->matrix, gold_rect, player_gold_to_string(player), BLACK, ALIGN_END, ALIGN_START,
+    char * buffer = malloc(sizeof(char) * 20);
+    buffer = strdup(player_gold_to_string(player));
+    strcat(buffer, " $");
+    cli_print_text_in_rectangle(game_window->matrix, gold_rect, buffer, BLACK, ALIGN_END, ALIGN_START,
                                 SMALL_TEXT);
-    // TODO : display gold ascii art
+    free(buffer);
 
 
     rect_t items_container = {(window_width - (3 * unit + 4 * unit_padding)) / 2, window_height - (3 * unit + 4 * unit_padding), 3 * unit + 4 * unit_padding, 3 * unit + 4 * unit_padding};
@@ -77,7 +79,7 @@ int display_shop_cli(game_window_t * game_window,
             if (display_shop_items_cli(game_window->matrix, items_rects, active_category, active_item) == EXIT_FAILURE) {
                 return EXIT_FAILURE;
             }
-            if (display_cursor_cli(game_window->matrix, items_rects[active_item % ITEMS_PER_PAGE]) == EXIT_FAILURE) {
+            if ((active_category == ARMORS || active_category == WEAPONS) && display_cursor_cli(game_window->matrix, items_rects[active_item % ITEMS_PER_PAGE]) == EXIT_FAILURE) {
                 return EXIT_FAILURE;
             }
             break;
@@ -131,16 +133,35 @@ int display_shop_items_cli(cli_matrix_t * matrix, rect_t * items_rects, category
             break;
 
         case HEALTH_POTIONS:
-        case MANA_POTIONS:
-            if (active_category == HEALTH_POTIONS) {
-                // TODO : highlight when item is active
-            } else if (active_category == MANA_POTIONS) {
-                // TODO : highlight when item is active
+            items_rects[0].x += 1;
+            items_rects[0].w -= 1;
+            items_rects[1].x += 1;
+            items_rects[1].w -= 1;
+
+            if(display_cursor_cli(matrix, items_rects[0])) {
+                return EXIT_FAILURE;
             }
             if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/health_potions.asciiart", items_rects[0], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
                 return EXIT_FAILURE;
             }
-            if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/mana_potions.asciiart", items_rects[0], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+            if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/mana_potions.asciiart", items_rects[1], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                return EXIT_FAILURE;
+            }
+            break;
+
+        case MANA_POTIONS:
+            items_rects[0].x += 1;
+            items_rects[0].w -= 1;
+            items_rects[1].x += 1;
+            items_rects[1].w -= 1;
+
+            if(display_cursor_cli(matrix, items_rects[1])) {
+                return EXIT_FAILURE;
+            }
+            if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/health_potions.asciiart", items_rects[0], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                return EXIT_FAILURE;
+            }
+            if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/mana_potions.asciiart", items_rects[1], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
                 return EXIT_FAILURE;
             }
             break;
