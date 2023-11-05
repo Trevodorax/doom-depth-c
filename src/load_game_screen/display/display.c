@@ -104,20 +104,44 @@ int display_load_game_cli(game_window_t *game_window, array_node_t *players, uns
     cli_print_text_in_rectangle(game_window->matrix, title_rect, "Load a game", BLACK, ALIGN_CENTER, ALIGN_START,
                                 MEDIUM_TEXT);
 
-    // print options
-    // TODO: print saves names
-    rect_t option_1_rect = {2, window_height / 2, window_width, window_height / 4};
-    rect_t option_2_rect = {2, 3 * (window_height / 4), window_width, window_height / 4};
+    rect_t container_saves = {
+            (size_t)window_width / 2,
+            (size_t)window_height / 2,
+            (size_t)(window_width * 0.3),
+            (size_t)(window_height * 0.3)
+    };
+    rect_t *rects = get_rectangle_layout(3, &container_saves, VERTICAL);
 
-    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, "Option 1", BLACK, ALIGN_START, ALIGN_START,
-                                SMALL_TEXT);
-    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, "Option 2", BLACK, ALIGN_START, ALIGN_START,
-                                SMALL_TEXT);
+    // print saves
+    if (players != NULL) {
+        for (int i = 0; i < 3; i++) {
+            player_t *current_player = get_value_at_index(players, i);
+            cli_print_text_in_rectangle(
+                    game_window->matrix,
+                    rects[i],
+                    current_player != NULL ? current_player->name : "Empty",
+                    BLACK,
+                    ALIGN_CENTER,
+                    ALIGN_CENTER,
+                    MEDIUM_TEXT);
+        }
+    } else {
+        for (int i = 0; i < 3; i++) {
+            cli_print_text_in_rectangle(
+                    game_window->matrix,
+                    rects[i],
+                    "Empty",
+                    BLACK,
+                    ALIGN_CENTER,
+                    ALIGN_CENTER,
+                    MEDIUM_TEXT);
+        }
+    }
 
     // print cursor
     rect_t cursor_rect = {0, 0, 1, 1};
-    cursor_rect.y = active_option == 0 ? option_1_rect.y : option_2_rect.y;
-    cursor_rect.x = option_1_rect.x - 2;
+    cursor_rect.y = rects[active_option].y;
+    cursor_rect.x = rects[active_option].x - 2;
     cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", BLACK, ALIGN_START, ALIGN_START, SMALL_TEXT);
 
     return EXIT_SUCCESS;
