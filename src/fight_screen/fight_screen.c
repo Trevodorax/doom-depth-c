@@ -26,10 +26,12 @@ router_t fight_screen(game_window_t * game_window, player_t * player, fight_t * 
             switch (selected_action->callback(fight_context, selected_action->params)) {
                 case FA_QUIT: {
                     free_fight_context(fight_context);
+                    player->action_points = player->max_action_points;
                     return MAP_SCREEN;
                 }
                 case FA_END_TURN: {
                     fight_context->player_turn = false;
+                    player->action_points = player->max_action_points;
                     break;
                 }
                 default: {
