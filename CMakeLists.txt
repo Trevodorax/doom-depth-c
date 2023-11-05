@@ -118,6 +118,8 @@ set(cross_platform_targets
         src/inventory_screen/display/gui/gui.h
         src/inventory_screen/display/cli/cli.c
         src/inventory_screen/display/cli/cli.h
+        src/entities/treasure/treasure.c
+        src/entities/treasure/treasure.h
 )
 
 # for unix
