@@ -79,7 +79,7 @@ int display_shop_cli(game_window_t * game_window,
             if (display_shop_items_cli(game_window->matrix, items_rects, active_category, active_item) == EXIT_FAILURE) {
                 return EXIT_FAILURE;
             }
-            if (display_cursor_cli(game_window->matrix, items_rects[active_item % ITEMS_PER_PAGE]) == EXIT_FAILURE) {
+            if ((active_category == ARMORS || active_category == WEAPONS) && display_cursor_cli(game_window->matrix, items_rects[active_item % ITEMS_PER_PAGE]) == EXIT_FAILURE) {
                 return EXIT_FAILURE;
             }
             break;
@@ -133,16 +133,35 @@ int display_shop_items_cli(cli_matrix_t * matrix, rect_t * items_rects, category
             break;
 
         case HEALTH_POTIONS:
-        case MANA_POTIONS:
-            if (active_category == HEALTH_POTIONS) {
-                // TODO : highlight when item is active
-            } else if (active_category == MANA_POTIONS) {
-                // TODO : highlight when item is active
+            items_rects[0].x += 1;
+            items_rects[0].w -= 1;
+            items_rects[1].x += 1;
+            items_rects[1].w -= 1;
+
+            if(display_cursor_cli(matrix, items_rects[0])) {
+                return EXIT_FAILURE;
             }
             if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/health_potions.asciiart", items_rects[0], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
                 return EXIT_FAILURE;
             }
-            if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/mana_potions.asciiart", items_rects[0], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+            if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/mana_potions.asciiart", items_rects[1], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                return EXIT_FAILURE;
+            }
+            break;
+
+        case MANA_POTIONS:
+            items_rects[0].x += 1;
+            items_rects[0].w -= 1;
+            items_rects[1].x += 1;
+            items_rects[1].w -= 1;
+
+            if(display_cursor_cli(matrix, items_rects[1])) {
+                return EXIT_FAILURE;
+            }
+            if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/health_potions.asciiart", items_rects[0], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                return EXIT_FAILURE;
+            }
+            if (print_ascii_art_in_rectangle(matrix, "../assets/items_mgmt/ascii/mana_potions.asciiart", items_rects[1], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
                 return EXIT_FAILURE;
             }
             break;
