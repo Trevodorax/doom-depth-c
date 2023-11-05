@@ -17,8 +17,9 @@ int display_merchant_gui(SDL_Renderer * renderer, SDL_Rect merchant_container, S
                          const char * message);
 int display_shop_items_gui(SDL_Renderer * renderer, rect_t * items_container,
                            category_options_t active_category, unsigned short active_item);
-int display_item_confirm_gui(SDL_Renderer * renderer, SDL_Rect window_rect, SDL_Rect container,
+int display_item_confirm_gui(SDL_Renderer * renderer, SDL_Rect window_rect, rect_t * container,
                              bool active_confirmation, category_options_t active_category,
                              unsigned int active_item);
+int display_cursor_gui(SDL_Renderer * renderer, rect_t * aimed_container);
 
 #endif //DOOM_DEPTH_C_SHOP_DISPLAY_GUI_H

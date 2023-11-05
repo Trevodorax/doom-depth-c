@@ -108,7 +108,7 @@ int display_shop_gui(game_window_t * game_window,
         return EXIT_FAILURE;
     }
     if (active_section == CONFIRM && display_item_confirm_gui(game_window->renderer, rect_to_SDL_Rect(window_rect),
-                                                              rect_to_SDL_Rect(confirm_rect), active_confirmation,
+                                                              &confirm_rect, active_confirmation,
                                                               active_category, active_item)) {
         return EXIT_FAILURE;
     }
@@ -320,13 +320,26 @@ int display_shop_items_gui(SDL_Renderer * renderer,
     return EXIT_SUCCESS;
 }
 
-int display_item_confirm_gui(SDL_Renderer *renderer, SDL_Rect window_rect, SDL_Rect container,
+int display_item_confirm_gui(SDL_Renderer *renderer, SDL_Rect window_rect, rect_t * container,
                              bool active_confirmation, category_options_t active_category,
                              unsigned int active_item) {
+    SDL_Color white = (SDL_Color) {255, 255, 255, 255};
+    unsigned long container_new_height = container->h * .8;
+
+    rect_t details_container  = {
+            container->x, container->y,
+            container->w, container_new_height
+    };
+    rect_t confirmation_container = {
+            container->x, container->y + container_new_height,
+            container->w, container->h - container_new_height
+    };
+    rect_t * confirmation_rects = get_rectangle_layout(2, &confirmation_container, VERTICAL);
+
     if (draw_image_in_rectangle(renderer, window_rect, "../assets/backgrounds/white_semi_transparent.png", NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_fill_rect(container, (SDL_Color) {0, 0, 0, 255}, renderer)) {
+    if (draw_fill_rect(rect_to_SDL_Rect(*container), (SDL_Color) {0, 0, 0, 255}, renderer)) {
         return EXIT_FAILURE;
     }
 
@@ -357,11 +370,36 @@ int display_item_confirm_gui(SDL_Renderer *renderer, SDL_Rect window_rect, SDL_R
             break;
     }
 
-    char * confirmation_string = active_confirmation ? ">YES\n\n   NO" : "   YES\n\n>NO";
-    details = realloc(details, sizeof(char) * (strlen(details) + strlen(confirmation_string) + 1));
-    strcat(details, confirmation_string);
+    print_text_in_rectangle(renderer, rect_to_SDL_Rect(details_container), details, white, ALIGN_CENTER, ALIGN_CENTER);
+    print_text_in_rectangle(renderer, rect_to_SDL_Rect(confirmation_rects[0]), "YES", white, ALIGN_CENTER, ALIGN_CENTER);
+    print_text_in_rectangle(renderer, rect_to_SDL_Rect(confirmation_rects[1]), "NO", white, ALIGN_CENTER, ALIGN_CENTER);
 
-    print_text_in_rectangle(renderer, container, details, (SDL_Color) {255, 255, 255, 255}, ALIGN_CENTER, ALIGN_CENTER);
+    display_cursor_gui(renderer, (active_confirmation == true) ? &confirmation_rects[0] : &confirmation_rects[1]);
+
+    return EXIT_SUCCESS;
+}
+
+int display_cursor_gui(SDL_Renderer * renderer, rect_t * aimed_container) {
+    SDL_Texture * cursor_texture = get_string_texture(renderer, ">", "../assets/PixelifySans-Regular.ttf", 12, (SDL_Color) {255, 255, 255, 255});
+    if (!cursor_texture) {
+        return EXIT_FAILURE;
+    }
+
+    int cursor_width = 0;
+    int cursor_height = 0;
+    SDL_QueryTexture(cursor_texture, NULL, NULL, &cursor_width, &cursor_height);
+
+    rect_t cursor_rect = {
+            aimed_container->x, aimed_container->y + (aimed_container->h - cursor_height) / 2,
+            cursor_width, cursor_height
+    };
+
+    aimed_container->x += cursor_width;
+    aimed_container->w -= cursor_width;
+
+    SDL_Rect cursor_sdl_rect = rect_to_SDL_Rect(cursor_rect);
+
+    SDL_RenderCopy(renderer, cursor_texture, NULL, &cursor_sdl_rect);
 
     return EXIT_SUCCESS;
 }
