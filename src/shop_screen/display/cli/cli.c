@@ -25,14 +25,16 @@ int display_shop_cli(game_window_t * game_window,
     rect_t * details_rects = get_rectangle_layout(nb_details, &confirm_rect, VERTICAL, 2);
 
     rect_t go_back_rect = {1, 0, window_width / 2 - 1, 1};
-    cli_print_text_in_rectangle(game_window->matrix, go_back_rect, "Go back", BLACK, ALIGN_START, ALIGN_START,
+    cli_print_text_in_rectangle(game_window->matrix, go_back_rect, "<-- Go back", BLACK, ALIGN_START, ALIGN_START,
                                 SMALL_TEXT);
-    // TODO : display go back ascii art
 
     rect_t gold_rect = {window_width - (go_back_rect.x + go_back_rect.w), 0, window_width / 2, 1};
-    cli_print_text_in_rectangle(game_window->matrix, gold_rect, player_gold_to_string(player), BLACK, ALIGN_END, ALIGN_START,
+    char * buffer = malloc(sizeof(char) * 20);
+    buffer = strdup(player_gold_to_string(player));
+    strcat(buffer, " $");
+    cli_print_text_in_rectangle(game_window->matrix, gold_rect, buffer, BLACK, ALIGN_END, ALIGN_START,
                                 SMALL_TEXT);
-    // TODO : display gold ascii art
+    free(buffer);
 
 
     rect_t items_container = {(window_width - (3 * unit + 4 * unit_padding)) / 2, window_height - (3 * unit + 4 * unit_padding), 3 * unit + 4 * unit_padding, 3 * unit + 4 * unit_padding};
