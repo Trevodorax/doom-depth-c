@@ -50,6 +50,7 @@ struct stage_t {
 
     bool is_done; // true if the stage is not a fight or if the fight is done
 
+    // TODO: handle linked maps @paul
     bool has_linked_map; // true if the user goes to a linked map when stepping on this stage
     char * linked_map_file_path;
 

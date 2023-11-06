@@ -36,22 +36,19 @@ int mana_potion(fight_context_t *fight_context, void *custom_params) {
 }
 
 int end_turn(fight_context_t *fight_context, void *custom_params) {
-    global_logger->info("\nEnd turn");
     return FA_END_TURN;
 }
 
 int attack_spell(fight_context_t *fight_context, void *custom_params) {
-    global_logger->info("\nAttack with spell");
     if(!check_and_remove_action_points(fight_context->player, 2)) {
         build_notification(fight_context, "Not enough action points !");
         return FA_NOTHING;
     }
-
     if (fight_context->player->offensive_spell == NULL) {
         build_notification(fight_context, "No offensive spell learned !");
         return FA_NOTHING;
     }
-    if (fight_context->player->mana < fight_context->player->offensive_spell->cost) {
+    if(!check_and_remove_mana(fight_context->player, fight_context->player->offensive_spell->cost)) {
         build_notification(fight_context, "Not enough mana !");
         return FA_NOTHING;
     }
@@ -93,7 +90,6 @@ int attack_spell(fight_context_t *fight_context, void *custom_params) {
 }
 
 int defend_spell(fight_context_t *fight_context, void *custom_params) {
-    global_logger->info("\nDefend with spell");
     if(!check_and_remove_action_points(fight_context->player, 2)) {
         build_notification(fight_context, "Not enough action points !");
         return FA_NOTHING;
@@ -102,7 +98,7 @@ int defend_spell(fight_context_t *fight_context, void *custom_params) {
         build_notification(fight_context, "No defensive spell learned !");
         return FA_NOTHING;
     }
-    if (fight_context->player->mana < fight_context->player->defensive_spell->cost) {
+    if(!check_and_remove_mana(fight_context->player, fight_context->player->defensive_spell->cost)) {
         build_notification(fight_context, "Not enough mana !");
         return FA_NOTHING;
     }
@@ -126,7 +122,7 @@ int heal_spell(fight_context_t *fight_context, void *custom_params) {
         build_notification(fight_context, "No heal spell learned !");
         return FA_NOTHING;
     }
-    if (fight_context->player->mana < fight_context->player->healing_spell->cost) {
+    if(!check_and_remove_mana(fight_context->player, fight_context->player->healing_spell->cost)) {
         build_notification(fight_context, "Not enough mana !");
         return FA_NOTHING;
     }

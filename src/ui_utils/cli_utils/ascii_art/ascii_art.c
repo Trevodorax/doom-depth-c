@@ -164,7 +164,7 @@ cli_matrix_t * ascii_art_to_matrix(char * raw_ascii_art) {
             col = 0;
         } else {
             matrix->matrix[row][col].character = *p;
-            // TODO: allow colors to be set in asciiart files
+            // TODOSOMEDAY: allow colors to be set in asciiart files
             matrix->matrix[row][col].color = BLACK;
             col++;
         }

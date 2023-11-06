@@ -160,7 +160,6 @@ void handle_actions_input(event_t event, player_t *player, section_options_t *ac
         (*active_action)--;
     }
 
-    // TODO : add actions for potions
     // choosing action
     if (event == ENTER_KEY) {
         if (*active_action == USE) {

@@ -85,6 +85,17 @@ bool check_and_remove_action_points(player_t *player, unsigned int amount) {
     }
 }
 
+bool check_and_remove_mana(player_t * player, unsigned int amount) {
+    if (player->mana < amount) {
+        return false;
+    } else {
+        player->mana -= amount;
+        return true;
+    }
+}
+
+treasure_t * get_treasure_from_fight_context(fight_context_t * fight_context);
+
 fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
     srand(time(NULL));
     fight_context_t * fight_context = malloc(sizeof(fight_context_t));
@@ -114,5 +125,88 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
 
     fight_context->notification_message = NULL;
     fight_context->player_turn = true;
+
+    // loot
+    fight_context->treasure = get_treasure_from_fight_context(fight_context);
     return fight_context;
 }
+
+treasure_t * get_treasure_from_fight_context(fight_context_t * fight_context) {
+    // safeguards
+    if (!fight_context) {
+        return NULL;
+    }
+
+    // calculate number of coins
+    int coins = 0;
+    array_node_t *current = fight_context->monsters;
+    while (current != NULL) {
+        monster_t *monster = void_to_monster(current->value);
+        if (monster) {
+            coins += (int)(monster->hp_max + monster->attack) / 2;
+        }
+        current = current->next;
+    }
+
+    // create and return treasure
+    treasure_t *treasure = malloc(sizeof(treasure_t));
+    if (!treasure) return NULL;
+    treasure->coins = coins;
+    return treasure;
+}
+
+void fight_context_to_json(json_t * object, fight_context_t * fight_context) {
+    if (!fight_context || !object || object->type != 'o') {
+        global_logger->error("\nfight_context_to_json error: wrong parameters");
+        return;
+    }
+
+    // monsters
+    if (fight_context->monsters) {
+        int nb_monsters = get_size(fight_context->monsters);
+
+        json_t * json_monsters = malloc(sizeof(json_t));
+        json_monsters->type = 'a';
+        json_monsters->nb_elements = nb_monsters;
+        json_monsters->values = malloc(nb_monsters * sizeof(json_t));
+
+        array_node_t * current_monster = fight_context->monsters;
+        int monster_index = 0;
+        while (current_monster != NULL) {
+            monster_t * monster = void_to_monster(current_monster->value);
+
+            json_monsters->values[monster_index].type = 's';
+            json_monsters->values[monster_index].string = strdup(monster->name);
+
+            monster_index++;
+            current_monster = current_monster->next;
+        }
+        add_key_value_to_object(&object, "monsters", json_monsters);
+    }
+
+    // notification_message
+    if (fight_context->notification_message) {
+        json_t * json_notification = malloc(sizeof(json_t));
+        json_notification->type = 's';
+        json_notification->string = strdup(fight_context->notification_message);
+        add_key_value_to_object(&object, "notification_message", json_notification);
+    }
+
+    // player_turn
+    json_t * json_player_turn = malloc(sizeof(json_t));
+    json_player_turn->type = 'n';
+    json_player_turn->number = fight_context->player_turn ? 1 : 0;
+    add_key_value_to_object(&object, "player_turn", json_player_turn);
+
+    // treasure
+    if (fight_context->treasure) {
+        json_t * json_treasure = malloc(sizeof(json_t));
+        json_treasure->type = 'o';
+        json_treasure->nb_elements = 0; // Assuming treasure_to_json will fill these
+        json_treasure->keys = NULL;
+        json_treasure->values = NULL;
+        add_treasure_to_json_object(json_treasure, fight_context->treasure);
+        add_key_value_to_object(&object, "treasure", json_treasure);
+    }
+}
+

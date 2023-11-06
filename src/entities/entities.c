@@ -38,6 +38,9 @@ monster_t* get_monster_by_name(char * name) {
     array_node_t* current = monsters;
     while (current) {
         monster_t* monster = void_to_monster(current->value);
+        if(!monster || !monster->name) {
+            continue;
+        }
         if (strcmp(monster->name, name) == 0) {
             return copy_monster(monster);
         }

@@ -51,20 +51,19 @@ player_t * create_player(char *name) {
 
     array_node_t *spells = get_spells();
 
-    player->hp = 200u;
     player->hp_max = 200u;
-    player->mana = 100u;
+    player->hp = player->hp_max;
     player->mana_max = 100u;
+    player->mana = player->mana_max;
     player->xp = 0u;
     player->level = 1u;
     player->base_attack = 5u;
     player->base_defense = 2u;
     player->gold = 100u;
-    player->action_points = (unsigned short)6;
     player->max_action_points = (unsigned short)6;
+    player->action_points = player->max_action_points;
     player->is_defending = false;
 
-    // TODO : add one spell at least for the beginning, see with @TomBrd
     player->offensive_spell = find_noob_spell(spells, 3);
     player->defensive_spell = find_noob_spell(spells, 2);
     player->healing_spell = find_noob_spell(spells, 1);
@@ -79,7 +78,6 @@ player_t * create_player(char *name) {
 }
 
 void create_player_in_db(player_t *player) {
-
     sqlite3 *db = db_connect();
     char *z_err_msg = NULL;
     sqlite3_stmt *stmt;
@@ -150,7 +148,7 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
     player->base_defense = sqlite3_column_int(stmt, 10);
     player->action_points = sqlite3_column_int(stmt, 11);
     player->max_action_points = sqlite3_column_int(stmt, 12);
-    player->is_defending = false; // TODO ?
+    player->is_defending = false;
 
     player->offensive_spell = find_spell(spells, sqlite3_column_int(stmt, 13));
     player->defensive_spell = find_spell(spells, sqlite3_column_int(stmt, 14));

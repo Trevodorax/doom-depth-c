@@ -256,7 +256,7 @@ void free_list(array_node_t **head_ref) {
 
     while (current != NULL) {
         next = current->next;
-        // TODO: add an enum with the type of entity to free accordingly
+        // TODOSOMEDAY: add an enum with the type of entity to free accordingly
         free(current->value);
         free(current);
         current = next;

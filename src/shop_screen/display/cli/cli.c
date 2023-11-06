@@ -36,7 +36,6 @@ int display_shop_cli(game_window_t * game_window,
                                 SMALL_TEXT);
     free(buffer);
 
-
     rect_t items_container = {(window_width - (3 * unit + 4 * unit_padding)) / 2, window_height - (3 * unit + 4 * unit_padding), 3 * unit + 4 * unit_padding, 3 * unit + 4 * unit_padding};
     rect_t * items_rects = get_rectangle_layout(ITEMS_PER_PAGE, &items_container, GRID, 2);
 

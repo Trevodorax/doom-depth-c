@@ -181,7 +181,7 @@ int display_items_cli(cli_matrix_t * cli_matrix, rect_t * items_container, rect_
     rect_t *items = get_rectangle_layout(items_count, items_container, GRID, 2);
     int first_item_to_print = (active_item / items_count) * items_count;
 
-    // TODO: find a replacement for this
+    // TODOSOMEDAY: find a replacement for this
     // display_scroll_indicator_gui(renderer, rect_to_SDL_Rect(*items_container), details_font_size, items_count, quantity, first_item_to_print);
 
     char * details;
