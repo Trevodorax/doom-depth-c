@@ -3,6 +3,7 @@
 
 #include "../ui_utils/sdl_utils/sdl_utils.h"
 #include "../entities/player/player.h"
+#include "../map_screen/map/map.h"
 
 /**
  * @brief switches the window to new game screen which contains a welcome message and asks the player for their name
@@ -13,6 +14,6 @@
  * @param player the player currently playing
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int new_game_screen(game_window_t *game_window, player_t **player);
+int new_game_screen(game_window_t *game_window, player_t **player, map_t **map);
 
 #endif

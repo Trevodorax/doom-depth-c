@@ -20,17 +20,6 @@
             "fight_context": {
                 "monsters": [
 {
-                        "id": 1,
-                        "type": 0,
-                        "name": "bat",
-                        "hp": 6,
-                        "hp_max": 10,
-                        "attack": 2,
-                        "defense": 1,
-                        "image_path": "../assets/monsters/image/bat.png",
-                        "ascii_path": "../assets/monsters/ascii/bat.asciiart"
-                    },
-{
                         "id": 4,
                         "type": 0,
                         "name": "skeleton",
@@ -53,7 +42,7 @@
                         "ascii_path": "../assets/monsters/ascii/bat.asciiart"
                     }
                 ],
-                "notification_message": "",
+                "notification_message": "Spell casted !",
                 "player_turn": 1,
                 "treasure": {
                     "coins": 544433511

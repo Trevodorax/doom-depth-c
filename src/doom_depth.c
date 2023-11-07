@@ -21,7 +21,7 @@ int main_loop(game_window_t * main_window) {
     init_entities(db);
 
     // TODO: get specific player map if there is one, otherwise this one @paul
-    map_t * map = get_map_from_file("../assets/maps/map_1.json");
+    map_t * map = NULL;
 
     player_t *player = NULL;
 
@@ -68,14 +68,14 @@ int main_loop(game_window_t * main_window) {
             }
 
             case NEW_GAME_SCREEN :
-                main_window->context->current_screen = new_game_screen(main_window, &player);
+                main_window->context->current_screen = new_game_screen(main_window, &player, &map);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
 
             case LOAD_GAME_SCREEN :
-                main_window->context->current_screen = load_game_screen(main_window, &player, db);
+                main_window->context->current_screen = load_game_screen(main_window, &player, &map, db);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
@@ -96,10 +96,7 @@ int main_loop(game_window_t * main_window) {
     // save player
     save_player(db, player);
 
-    // save map
-    json_t * json_map = map_to_json(map);
-    // TODO: save to specific player map @paul
-    write_json_to_file(json_map, "../assets/maps/map_1.json");
+    save_player_map(player, map);
 
     // free everything
     free_map(map);

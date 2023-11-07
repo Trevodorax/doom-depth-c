@@ -53,4 +53,20 @@ void free_map(map_t * map);
  */
 json_t * map_to_json(map_t * map);
 
+/**
+ * @brief Get the map from a player
+ * @param player The player to get the map for
+ *
+ * @return The map
+ */
+map_t * get_player_map(player_t * player);
+
+/**
+ * @brief Saves the map of the player
+ *
+ * @param player The player to save the map for
+ * @param map The saved map
+ */
+void save_player_map(player_t * player, map_t * map);
+
 #endif //DOOM_DEPTH_C_MAP_H
