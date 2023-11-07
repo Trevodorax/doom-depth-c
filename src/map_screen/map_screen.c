@@ -5,6 +5,7 @@
 #include "../event/event.h"
 #include "../utils/utils.h"
 #include "../fight_screen/fight_screen.h"
+#include "../fight_screen/fight_utils/fight_utils.h"
 
 /**
  * @brief Moves the player and returns the stage he is on
@@ -18,6 +19,21 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction);
 
 int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
     stage_t * player_stage = get_player_stage(map->first_stage);
+
+    if (player_stage->fight_context) {
+        player_stage->fight_context->player = player;
+        router_t fight_result = fight_screen(game_window, player, player_stage, player_stage->fight_context);
+        switch (fight_result) {
+            case MAP_SCREEN:
+                player_stage->is_done = true;
+                player_stage->fight_context = NULL;
+                break;
+            default:
+                break;
+        }
+
+        return fight_result;
+    }
 
     event_t event;
     bool quit = false;
@@ -51,7 +67,7 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                                 break;
                             }
 
-                            router_t fight_result = fight_screen(game_window, player, player_stage->fight);
+                            router_t fight_result = fight_screen(game_window, player, player_stage, NULL);
 
                             switch (fight_result) {
                                 case MAP_SCREEN:

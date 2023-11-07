@@ -7,6 +7,8 @@
 #include "display/display.h"
 #include "../../utils/utils.h"
 #include "../display/display.h"
+#include "../fight_utils/fight_utils.h"
+#include "../../map_screen/map/map.h"
 
 menu_t* create_menu(int nb_options, const char * title, const char * image_path, int (*callback)(fight_context_t *, void * custom_params), void * custom_params) {
     menu_t *new_menu = malloc(sizeof(menu_t));
@@ -81,12 +83,13 @@ void free_menu(menu_t * menu) {
     free(menu);
 }
 
-fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, rect_t * fight_zone, rect_t * menu_zone, bool is_nested) {
+fight_action_t * fight_menu(game_window_t *game_window, menu_t *menu, fight_context_t *fight_context, rect_t *fight_zone,
+                           rect_t *menu_zone, bool is_nested, stage_t * stage) {
     int selected_item_index = 0;
     event_t event;
     while (true){
         set_cli_raw_mode(true);
-        while (get_event(game_window->ui_type, &event)){
+        while (get_event(game_window->ui_type, &event)) {
             switch(event) {
                 case Z_KEY:
                     selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, NORTH);
@@ -100,13 +103,17 @@ fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_co
                 case D_KEY:
                     selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, EAST);
                     break;
+                case QUIT:
+                    stage->fight_context = fight_context;
+                    return NULL;
                 case ENTER_KEY:
                     if(!fight_context->player_turn){
                         break;
                     }
                     menu_t * clicked_menu = menu->options[selected_item_index];
                     if (clicked_menu->nb_options > 0) {
-                        fight_action_t * selected_action = fight_menu(game_window, clicked_menu, fight_context, fight_zone, menu_zone, true);
+                        fight_action_t * selected_action = fight_menu(game_window, clicked_menu, fight_context,
+                                                                      fight_zone, menu_zone, true, NULL);
                         if (!selected_action || !selected_action->callback) {
                             break;
                         } else {

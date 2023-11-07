@@ -3,6 +3,7 @@
 
 #include "../../utils/array.h"
 #include "../../storage/database/database.h"
+#include "../../storage/json/json.h"
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,5 +51,21 @@ monster_t * void_to_monster(void * void_monster);
  * @return A deep copy of the monster
  */
 monster_t * copy_monster(const monster_t * monster);
+
+/**
+ * @brief Creates a json version of a monster
+ *
+ * @param monster The map to convert
+ * @return The json version
+ */
+json_t * monster_to_json(monster_t *monster);
+
+/**
+ * @brief Creates a monster out of a json
+ *
+ * @param object The json object
+ * @return The monster
+ */
+monster_t * json_to_monster(json_t * object);
 
 #endif

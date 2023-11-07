@@ -8,6 +8,7 @@
 #include "../../entities/player/player.h"
 #include "../../game_window/game_window.h"
 #include "../../entities/treasure/treasure.h"
+#include "../../fight_screen/types.h"
 
 typedef enum {
     EMPTY,
@@ -62,6 +63,9 @@ struct stage_t {
     // player on the stage (if there is one)
     player_t * player;
     orientation_t player_orientation;
+
+    // if there is a fight currently happening
+    fight_context_t * fight_context;
 
     // next stages
     stage_t * top;

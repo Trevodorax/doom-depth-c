@@ -116,10 +116,9 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
         probs[i] = probs[i - 1] + fight->enemies_chances_to_appear[i];
     }
 
-    for(int i = 0; i < number_of_monsters; i++){
+    while(get_size(fight_context->monsters) < number_of_monsters) {
         int random_number = rand() % 100;
         int index = find_index(random_number,probs,fight->enemies_size);
-        // FIXME : add monster chosen on fight context, waiting so we can search on monsters by name
         append(&fight_context->monsters,get_monster_by_name(fight->enemies_list[index]),sizeof(monster_t));
     }
 
@@ -155,11 +154,14 @@ treasure_t * get_treasure_from_fight_context(fight_context_t * fight_context) {
     return treasure;
 }
 
-void fight_context_to_json(json_t * object, fight_context_t * fight_context) {
-    if (!fight_context || !object || object->type != 'o') {
+json_t * fight_context_to_json(fight_context_t * fight_context) {
+    if (!fight_context) {
         global_logger->error("\nfight_context_to_json error: wrong parameters");
-        return;
+        return NULL;
     }
+
+    json_t * fight_context_json = calloc(1, sizeof(json_t));
+    fight_context_json->type = 'o';
 
     // monsters
     if (fight_context->monsters) {
@@ -174,14 +176,14 @@ void fight_context_to_json(json_t * object, fight_context_t * fight_context) {
         int monster_index = 0;
         while (current_monster != NULL) {
             monster_t * monster = void_to_monster(current_monster->value);
+            json_t * monster_json = monster_to_json(monster);
 
-            json_monsters->values[monster_index].type = 's';
-            json_monsters->values[monster_index].string = strdup(monster->name);
+            json_monsters->values[monster_index] = *monster_json;
 
             monster_index++;
             current_monster = current_monster->next;
         }
-        add_key_value_to_object(&object, "monsters", json_monsters);
+        add_key_value_to_object(&fight_context_json, "monsters", json_monsters);
     }
 
     // notification_message
@@ -189,24 +191,76 @@ void fight_context_to_json(json_t * object, fight_context_t * fight_context) {
         json_t * json_notification = malloc(sizeof(json_t));
         json_notification->type = 's';
         json_notification->string = strdup(fight_context->notification_message);
-        add_key_value_to_object(&object, "notification_message", json_notification);
+        add_key_value_to_object(&fight_context_json, "notification_message", json_notification);
     }
 
     // player_turn
     json_t * json_player_turn = malloc(sizeof(json_t));
     json_player_turn->type = 'n';
     json_player_turn->number = fight_context->player_turn ? 1 : 0;
-    add_key_value_to_object(&object, "player_turn", json_player_turn);
+    add_key_value_to_object(&fight_context_json, "player_turn", json_player_turn);
 
     // treasure
     if (fight_context->treasure) {
         json_t * json_treasure = malloc(sizeof(json_t));
         json_treasure->type = 'o';
-        json_treasure->nb_elements = 0; // Assuming treasure_to_json will fill these
+        json_treasure->nb_elements = 0;
         json_treasure->keys = NULL;
         json_treasure->values = NULL;
         add_treasure_to_json_object(json_treasure, fight_context->treasure);
-        add_key_value_to_object(&object, "treasure", json_treasure);
+        add_key_value_to_object(&fight_context_json, "treasure", json_treasure);
     }
+
+    return fight_context_json;
 }
 
+fight_context_t * json_to_fight_context(json_t * object) {
+    if (!object || object->type != 'o') {
+        global_logger->error("\njson_to_fight_context error: wrong parameters");
+        return NULL;
+    }
+
+    fight_context_t * context = malloc(sizeof(fight_context_t));
+    if (!context) {
+        global_logger->error("\njson_to_fight_context error: memory allocation failed");
+        return NULL;
+    }
+
+    // monsters
+    json_t * json_monsters = get_object_at_key(object, "monsters");
+    if (json_monsters) {
+        if (json_monsters->type == 'a') {
+            size_t nb_monsters = json_monsters->nb_elements;
+            array_node_t *head = NULL;
+
+            for (int i = 0; i < nb_monsters; ++i) {
+                json_t * monster_json = &json_monsters->values[i];
+                monster_t * monster = json_to_monster(monster_json);
+
+                append(&head, monster, sizeof(monster_t));
+            }
+
+            context->monsters = head;
+        }
+    }
+
+    // notification_message
+    json_t * json_message = get_object_at_key(object, "notification_message");
+    if (json_message && json_message->type == 's') {
+        context->notification_message = strdup(json_message->string);
+    }
+
+    // player_turn
+    json_t * json_player_turn = get_object_at_key(object, "player_turn");
+    if (json_player_turn && json_player_turn->type == 'n') {
+        context->player_turn = json_player_turn->number != 0;
+    }
+
+    // treasure
+    json_t * json_treasure = get_object_at_key(object, "treasure");
+    if (json_treasure) {
+        context->treasure = json_to_treasure(json_treasure);
+    }
+
+    return context;
+}
