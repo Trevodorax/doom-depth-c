@@ -116,6 +116,7 @@ int display_inventory_gui(game_window_t * game_window,
         case WEAPONS:
             if (!inventory->nb_weapons) {
                 display_nothing_to_see_gui(game_window->renderer, rect_to_SDL_Rect(items_container));
+                return EXIT_SUCCESS;
             } else {
                 display_items_gui(game_window->renderer, &items_container, rect_to_SDL_Rect(item_details_container), WEAPON, inventory, unit_padding - 2, active_item, active_section);
             }
@@ -124,6 +125,7 @@ int display_inventory_gui(game_window_t * game_window,
         case ARMORS:
             if (!inventory->nb_armors) {
                 display_nothing_to_see_gui(game_window->renderer, rect_to_SDL_Rect(items_container));
+                return EXIT_SUCCESS;
             } else {
                 display_items_gui(game_window->renderer, &items_container, rect_to_SDL_Rect(item_details_container), ARMOR, inventory, unit_padding - 2, active_item, active_section);
             }
@@ -132,6 +134,7 @@ int display_inventory_gui(game_window_t * game_window,
         case HEALTH_POTIONS:
             if (!inventory->nb_health_potions) {
                 display_nothing_to_see_gui(game_window->renderer, rect_to_SDL_Rect(items_container));
+                return EXIT_SUCCESS;
             } else {
                 display_potions_gui(game_window->renderer, HEALTH, rect_to_SDL_Rect(item_details_container), inventory->nb_health_potions);
             }
@@ -140,6 +143,7 @@ int display_inventory_gui(game_window_t * game_window,
         case MANA_POTIONS:
             if (inventory->nb_mana_potions == 0) {
                 display_nothing_to_see_gui(game_window->renderer, rect_to_SDL_Rect(items_container));
+                return EXIT_SUCCESS;
             } else {
                 display_potions_gui(game_window->renderer, MANA, rect_to_SDL_Rect(item_details_container), inventory->nb_mana_potions);
             }
