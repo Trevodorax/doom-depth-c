@@ -75,7 +75,7 @@ int main_loop(game_window_t * main_window) {
                 break;
 
             case LOAD_GAME_SCREEN :
-                main_window->context->current_screen = load_game_screen(main_window, &player, &map, NULL);
+                main_window->context->current_screen = load_game_screen(main_window, &player, &map, db);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

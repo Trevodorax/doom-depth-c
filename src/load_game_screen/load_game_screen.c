@@ -14,6 +14,7 @@ int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** m
 
     event_t event;
     array_node_t *players = get_players_from_db(db);
+
     unsigned short active_option = 0;
 
     while (true) {
