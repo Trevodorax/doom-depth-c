@@ -3,6 +3,7 @@
 
 #include "../ui_utils/sdl_utils/sdl_utils.h"
 #include "../entities/player/player.h"
+#include "../map_screen/map/map.h"
 
 /**
  * @brief switches the window to load game screen which contains a welcome message and asks the player for their name
@@ -14,6 +15,6 @@
  * @param db the database connection
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db);
+int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** map, sqlite3 * db);
 
 #endif

@@ -59,12 +59,10 @@ int get_map_dimensions(map_t *map, int * width, int * height, int * initial_x, i
 map_t * get_map_from_file(char * file_path) {
     json_t * json_map = get_json_from_file(file_path);
     if (!json_map) {
-        fprintf(stderr, "\nget_map_from_file error: could not retrieve map from file.");
         return NULL;
     }
     map_t * map = json_to_map(json_map);
     if (!map) {
-        fprintf(stderr, "\nget_map_from_file error: could not convert json to map.");
         return NULL;
     }
 
@@ -124,4 +122,33 @@ json_t * map_to_json(map_t * map) {
     add_key_value_to_object(&json_map, "stages", stages_array);
 
     return json_map;
+}
+
+char * get_player_map_name(player_t * player) {
+    char * map_name = calloc(1000, sizeof(char));
+    sprintf(map_name, "../assets/maps/%s_map_1.json", player->name);
+
+    return map_name;
+}
+
+map_t * get_player_map(player_t * player) {
+    char * map_name = get_player_map_name(player);
+
+    map_t * retrieved_map = get_map_from_file(map_name);
+    if(!retrieved_map) {
+        retrieved_map = get_map_from_file("../assets/maps/map_1.json");
+    }
+
+    free(map_name);
+
+    return retrieved_map;
+}
+
+void save_player_map(player_t * player, map_t * map) {
+    char * map_name = get_player_map_name(player);
+
+    json_t * json_map = map_to_json(map);
+    write_json_to_file(json_map, map_name);
+
+    free(map_name);
 }

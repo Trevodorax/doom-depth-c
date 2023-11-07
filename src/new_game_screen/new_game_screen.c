@@ -8,7 +8,7 @@
 
 void handle_name_input(SDL_Event e, char *name);
 
-int new_game_screen(game_window_t *game_window, player_t **player) {
+int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** map) {
     if (!game_window) {
         printf("Cannot display new game initialization : no game window\n");
         return EXIT_FAILURE;
@@ -28,6 +28,8 @@ int new_game_screen(game_window_t *game_window, player_t **player) {
                     if (strlen(name)) {
                         *player = create_player(name);
                         create_player_in_db(*player);
+
+                        *map = get_player_map(*player);
                         return MAP_SCREEN;
                     }
                 }

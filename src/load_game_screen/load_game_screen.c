@@ -3,8 +3,9 @@
 #include "../utils/utils.h"
 #include "../event/event.h"
 #include "../logs/log.h"
+#include "../map_screen/map/map.h"
 
-int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db) {
+int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** map, sqlite3 * db) {
 
     if (!game_window) {
         global_logger->error("Cannot display new game initialization : no game window");
@@ -36,6 +37,7 @@ int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db)
                     break;
                 case ENTER_KEY:
                     if (players != NULL) {
+                        // retrieve player
                         *player = get_value_at_index(players, active_option);
                         if (*player == NULL) {
                             return NEW_GAME_SCREEN;
@@ -46,11 +48,14 @@ int load_game_screen(game_window_t *game_window, player_t **player, sqlite3 *db)
                         array_node_t *p = create_struct_from_db(db, sql_query, create_player_from_db, sizeof (player_t));
                         *player = (player_t *) p->value;
                         free(p);
+
+                        // retrieve map
+                        *map = get_player_map(*player);
+
                         return MAP_SCREEN;
                     } else {
                         return NEW_GAME_SCREEN;
                     }
-                    break;
                 default:
                     break;
             }
