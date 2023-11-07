@@ -44,7 +44,7 @@ int main_loop(game_window_t * main_window) {
 
             case FIGHT_SCREEN : {
                 // never happens
-                main_window->context->current_screen = fight_screen(main_window, player, NULL);
+                main_window->context->current_screen = fight_screen(main_window, player, NULL, NULL);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

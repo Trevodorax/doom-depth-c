@@ -44,6 +44,12 @@ stage_t * json_to_stage(json_t * json_stage, bool first_stage) {
         result->fight = fight;
     }
 
+    // fight context
+    json_t * fight_context = get_object_at_key(json_stage, "fight_context");
+    if (fight_context) {
+        result->fight_context = json_to_fight_context(fight_context);
+    }
+
     // linked map stuff
     json_t *linked_map = get_object_at_key(json_stage, "linked_map");
     if (linked_map && linked_map->type == 's') {

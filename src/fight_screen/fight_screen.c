@@ -9,14 +9,19 @@
 void monsters_turn(game_window_t * game_window, fight_context_t * fight_context, rect_t fight_zone);
 void monster_turn(game_window_t * game_window, player_t * player, monster_t * monster, fight_context_t * fight_context, rect_t fight_zone);
 
-router_t fight_screen(game_window_t * game_window, player_t * player, stage_t * stage) {
+router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *stage, fight_context_t * previous_fight_context) {
     if (game_window->ui_type == CLI) {
         cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
     }
     rect_t fight_zone;
     rect_t menu_zone;
 
-    fight_context_t * fight_context = build_fight_context(stage->fight, player);
+    fight_context_t * fight_context = NULL;
+    if (previous_fight_context) {
+        fight_context = previous_fight_context;
+    } else {
+        fight_context = build_fight_context(stage->fight, player);
+    }
 
     while (true) {
         update_fight_section_dimensions(game_window, &fight_zone, &menu_zone);

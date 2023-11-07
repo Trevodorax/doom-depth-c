@@ -16,7 +16,7 @@
  * @param stage The fight data used to randomly create a fight
  * @return 0 if game over, 1 if victory
  */
-router_t fight_screen(game_window_t * game_window, player_t * player, stage_t *stage);
+router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *stage, fight_context_t *previous_fight_context);
 
 void build_notification(fight_context_t * fight_context, char * message);
 void build_notification_formatted(fight_context_t * fight_context, char * message, ...);

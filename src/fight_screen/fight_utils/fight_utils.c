@@ -116,10 +116,9 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
         probs[i] = probs[i - 1] + fight->enemies_chances_to_appear[i];
     }
 
-    for(int i = 0; i < number_of_monsters; i++){
+    while(get_size(fight_context->monsters) < number_of_monsters) {
         int random_number = rand() % 100;
         int index = find_index(random_number,probs,fight->enemies_size);
-        // FIXME : add monster chosen on fight context, waiting so we can search on monsters by name
         append(&fight_context->monsters,get_monster_by_name(fight->enemies_list[index]),sizeof(monster_t));
     }
 
@@ -221,8 +220,6 @@ fight_context_t * json_to_fight_context(json_t * object) {
         return NULL;
     }
 
-    fight_context_t * fight_context = calloc(1, sizeof(fight_context_t));
-
     fight_context_t * context = malloc(sizeof(fight_context_t));
     if (!context) {
         global_logger->error("\njson_to_fight_context error: memory allocation failed");
@@ -243,7 +240,7 @@ fight_context_t * json_to_fight_context(json_t * object) {
                 append(&head, monster, sizeof(monster_t));
             }
 
-            fight_context->monsters = head;
+            context->monsters = head;
         }
     }
 
