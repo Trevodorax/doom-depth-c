@@ -174,9 +174,9 @@ void fight_context_to_json(json_t * object, fight_context_t * fight_context) {
         int monster_index = 0;
         while (current_monster != NULL) {
             monster_t * monster = void_to_monster(current_monster->value);
+            json_t * monster_json = monster_to_json(monster);
 
-            json_monsters->values[monster_index].type = 's';
-            json_monsters->values[monster_index].string = strdup(monster->name);
+            json_monsters->values[monster_index] = *monster_json;
 
             monster_index++;
             current_monster = current_monster->next;
@@ -210,3 +210,55 @@ void fight_context_to_json(json_t * object, fight_context_t * fight_context) {
     }
 }
 
+fight_context_t * json_to_fight_context(json_t * object) {
+    if (!object || object->type != 'o') {
+        global_logger->error("\njson_to_fight_context error: wrong parameters");
+        return NULL;
+    }
+
+    fight_context_t * fight_context = calloc(1, sizeof(fight_context_t));
+
+    fight_context_t * context = malloc(sizeof(fight_context_t));
+    if (!context) {
+        global_logger->error("\njson_to_fight_context error: memory allocation failed");
+        return NULL;
+    }
+
+    // monsters
+    json_t * json_monsters = get_object_at_key(object, "monsters");
+    if (json_monsters) {
+        if (json_monsters->type == 'a') {
+            size_t nb_monsters = json_monsters->nb_elements;
+            array_node_t *head = NULL;
+
+            for (int i = 0; i < nb_monsters; ++i) {
+                json_t * monster_json = &json_monsters->values[i];
+                monster_t * monster = json_to_monster(monster_json);
+
+                append(&head, monster, sizeof(monster_t));
+            }
+
+            fight_context->monsters = head;
+        }
+    }
+
+    // notification_message
+    json_t * json_message = get_object_at_key(object, "notification_message");
+    if (json_message && json_message->type == 's') {
+        context->notification_message = strdup(json_message->string);
+    }
+
+    // player_turn
+    json_t * json_player_turn = get_object_at_key(object, "player_turn");
+    if (json_player_turn && json_player_turn->type == 'n') {
+        context->player_turn = json_player_turn->number != 0;
+    }
+
+    // treasure
+    json_t * json_treasure = get_object_at_key(object, "treasure");
+    if (json_treasure) {
+        context->treasure = json_to_treasure(json_treasure);
+    }
+
+    return context;
+}

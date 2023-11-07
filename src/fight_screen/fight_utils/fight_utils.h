@@ -92,4 +92,14 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player);
  */
 void free_fight_context(fight_context_t * fight_context);
 
+/**
+ * @brief Creates a json version of a fight_context
+ *
+ * @param fight_context The map to convert
+ * @return The json version
+ */
+void fight_context_to_json(json_t * object, fight_context_t * fight_context);
+
+
+
 #endif //DOOM_DEPTH_C_FIGHT_UTILS_H
