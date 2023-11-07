@@ -155,11 +155,14 @@ treasure_t * get_treasure_from_fight_context(fight_context_t * fight_context) {
     return treasure;
 }
 
-void fight_context_to_json(json_t * object, fight_context_t * fight_context) {
-    if (!fight_context || !object || object->type != 'o') {
+json_t * fight_context_to_json(fight_context_t * fight_context) {
+    if (!fight_context) {
         global_logger->error("\nfight_context_to_json error: wrong parameters");
-        return;
+        return NULL;
     }
+
+    json_t * fight_context_json = calloc(1, sizeof(json_t));
+    fight_context_json->type = 'o';
 
     // monsters
     if (fight_context->monsters) {
@@ -181,7 +184,7 @@ void fight_context_to_json(json_t * object, fight_context_t * fight_context) {
             monster_index++;
             current_monster = current_monster->next;
         }
-        add_key_value_to_object(&object, "monsters", json_monsters);
+        add_key_value_to_object(&fight_context_json, "monsters", json_monsters);
     }
 
     // notification_message
@@ -189,25 +192,27 @@ void fight_context_to_json(json_t * object, fight_context_t * fight_context) {
         json_t * json_notification = malloc(sizeof(json_t));
         json_notification->type = 's';
         json_notification->string = strdup(fight_context->notification_message);
-        add_key_value_to_object(&object, "notification_message", json_notification);
+        add_key_value_to_object(&fight_context_json, "notification_message", json_notification);
     }
 
     // player_turn
     json_t * json_player_turn = malloc(sizeof(json_t));
     json_player_turn->type = 'n';
     json_player_turn->number = fight_context->player_turn ? 1 : 0;
-    add_key_value_to_object(&object, "player_turn", json_player_turn);
+    add_key_value_to_object(&fight_context_json, "player_turn", json_player_turn);
 
     // treasure
     if (fight_context->treasure) {
         json_t * json_treasure = malloc(sizeof(json_t));
         json_treasure->type = 'o';
-        json_treasure->nb_elements = 0; // Assuming treasure_to_json will fill these
+        json_treasure->nb_elements = 0;
         json_treasure->keys = NULL;
         json_treasure->values = NULL;
         add_treasure_to_json_object(json_treasure, fight_context->treasure);
-        add_key_value_to_object(&object, "treasure", json_treasure);
+        add_key_value_to_object(&fight_context_json, "treasure", json_treasure);
     }
+
+    return fight_context_json;
 }
 
 fight_context_t * json_to_fight_context(json_t * object) {

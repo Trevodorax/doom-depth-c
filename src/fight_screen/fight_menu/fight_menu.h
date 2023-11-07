@@ -36,7 +36,8 @@ struct menu_t {
  * @sideeffects modifies the fight and menu zone if window is resized
  * @return The action selected in the menu
  */
-fight_action_t * fight_menu(game_window_t * game_window, menu_t * menu, fight_context_t * fight_context, rect_t *fight_zone, rect_t *menu_zone, bool is_nested);
+fight_action_t *fight_menu(game_window_t *game_window, menu_t *menu, fight_context_t *fight_context, rect_t *fight_zone,
+                           rect_t *menu_zone, bool is_nested, stage_t *stage);
 
 /**
  * @brief Recursively frees a menu

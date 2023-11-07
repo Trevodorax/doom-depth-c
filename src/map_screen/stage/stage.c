@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include "../../ui_utils/sdl_utils/sdl_utils.h"
 #include "../../logs/log.h"
+#include "../../fight_screen/fight_utils/fight_utils.h"
 
 // internal functions, must be used only by the functions exposed in the header file (or the stages must be uncounted before)
 void get_stage_dimensions_rec(stage_t * stage, int x, int y, int * max_x, int * max_y, int * min_x, int * min_y);
@@ -239,7 +240,7 @@ json_t * stages_to_json_rec(stage_t * stage) {
 
     json_t * json_stage = malloc(sizeof(json_t));
     if (!json_stage) {
-        global_logger->error("\nstage_to_json error: memory allocation failed");
+        global_logger->error("\nstages_to_json_rec error: memory allocation failed");
         return NULL;
     }
 
@@ -257,6 +258,12 @@ json_t * stages_to_json_rec(stage_t * stage) {
     // fight
     if (stage->type == FIGHT && stage->fight) {
         add_fight_to_json_object(json_stage, stage->fight);
+    }
+
+    // fight memory
+    if (stage->fight_context) {
+        json_t * fight_context_json = fight_context_to_json(stage->fight_context);
+        add_key_value_to_object(&json_stage, "fight_context", fight_context_json);
     }
 
     // linked_map

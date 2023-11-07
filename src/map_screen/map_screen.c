@@ -51,7 +51,7 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                                 break;
                             }
 
-                            router_t fight_result = fight_screen(game_window, player, player_stage->fight);
+                            router_t fight_result = fight_screen(game_window, player, player_stage);
 
                             switch (fight_result) {
                                 case MAP_SCREEN:
