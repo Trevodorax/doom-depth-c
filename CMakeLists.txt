@@ -124,6 +124,9 @@ set(cross_platform_targets
         src/shop_screen/display/cli/cli.h
         src/entities/treasure/treasure.c
         src/entities/treasure/treasure.h
+        src/ui_utils/themes/themes.h
+        src/ui_utils/themes/themes.c
+        src/ui_utils/themes/types.h
 )
 
 # for unix
