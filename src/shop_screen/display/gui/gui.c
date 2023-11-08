@@ -390,7 +390,8 @@ int display_cursor_gui(SDL_Renderer * renderer, rect_t * aimed_container) {
     SDL_QueryTexture(cursor_texture, NULL, NULL, &cursor_width, &cursor_height);
 
     rect_t cursor_rect = {
-            aimed_container->x, aimed_container->y + (aimed_container->h - cursor_height) / 2,
+            (aimed_container->x - 2 * cursor_width > 0) ? aimed_container->x - 2 * cursor_width : 0,
+            aimed_container->y + (aimed_container->h - cursor_height) / 2,
             cursor_width, cursor_height
     };
 
