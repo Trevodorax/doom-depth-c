@@ -125,8 +125,8 @@ json_t * map_to_json(map_t * map) {
 }
 
 char * get_player_map_name(player_t * player) {
-    char * map_name = calloc(1000, sizeof(char));
-    sprintf(map_name, "../assets/maps/%s_map_1.json", player->name);
+    char * map_name = calloc(500, sizeof(char));
+    sprintf(map_name, "../assets/maps/%s_%s", player->name, player->current_map ? player->current_map : "map_1");
 
     return map_name;
 }

@@ -18,7 +18,7 @@
 
 typedef struct {
     int id;
-    char *name;
+    char * name;
     unsigned int hp;
     unsigned int hp_max;
     unsigned int mana;
@@ -31,16 +31,17 @@ typedef struct {
     unsigned short action_points;
     unsigned short max_action_points;
     bool is_defending;
-    spell_t *offensive_spell;
-    spell_t *defensive_spell;
-    spell_t *healing_spell;
-    armor_t *chosen_armor;
-    weapon_t *chosen_weapon;
-    inventory_t *inventory;
-    stats_t *stats;
+    spell_t * offensive_spell;
+    spell_t * defensive_spell;
+    spell_t * healing_spell;
+    armor_t * chosen_armor;
+    weapon_t * chosen_weapon;
+    inventory_t * inventory;
+    stats_t * stats;
+    char * current_map;
 } player_t;
 
-player_t *create_player(char *name);
+player_t * create_player(char * name);
 
 /**
  * @brief Creates a player in the database.
@@ -54,7 +55,7 @@ player_t *create_player(char *name);
  * @dependencies Depends on the SQLite3 library.
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
  */
-void create_player_in_db(player_t *player);
+void create_player_in_db(player_t * player);
 
 /**
  * @brief Creates a player from the database.

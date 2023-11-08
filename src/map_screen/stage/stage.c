@@ -29,6 +29,7 @@ stage_t * json_to_stage(json_t * json_stage, bool first_stage) {
     result->fight = NULL;
     result->top = result->right = result->bottom = result->left = NULL;
     result->counted = false;
+    result->type = EMPTY;
 
     if (first_stage) {
         result->player = malloc(sizeof(player_t));
@@ -42,6 +43,7 @@ stage_t * json_to_stage(json_t * json_stage, bool first_stage) {
     fight_t * fight = json_to_fight(json_stage);
     if (fight) {
         result->fight = fight;
+        result->type = FIGHT;
     }
 
     // fight context
@@ -50,19 +52,12 @@ stage_t * json_to_stage(json_t * json_stage, bool first_stage) {
         result->fight_context = json_to_fight_context(fight_context);
     }
 
-    // linked map stuff
     json_t *linked_map = get_object_at_key(json_stage, "linked_map");
     if (linked_map && linked_map->type == 's') {
         result->has_linked_map = true;
         result->linked_map_file_path = malloc(strlen(linked_map->string) + 1);
         strcpy(result->linked_map_file_path, linked_map->string);
-    }
-
-    // set stage type
-    if (result->fight) {
-        result->type = FIGHT;
-    } else {
-        result->type = EMPTY;
+        result->type = LINKED_MAP;
     }
 
     // add treasure if there is one
