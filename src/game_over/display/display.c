@@ -53,7 +53,7 @@ int display_game_over_gui(game_window_t *game_window, unsigned short active_opti
     print_text_in_rectangle(game_window->renderer, rect_to_SDL_Rect(main_menu_rect), "Go back to main menu",
                             game_window->sdl_color_palette->text, ALIGN_CENTER, ALIGN_CENTER);
 
-    display_cursor_gui(game_window->renderer, (active_option == START_MENU) ? &main_menu_rect : &try_again_rect);
+    display_cursor_gui(game_window, (active_option == START_MENU) ? &main_menu_rect : &try_again_rect);
 
     return EXIT_SUCCESS;
 }

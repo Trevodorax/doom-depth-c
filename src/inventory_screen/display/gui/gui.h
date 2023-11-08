@@ -15,7 +15,7 @@ int display_inventory_gui(game_window_t * game_window,
 /**
  * @brief displays indicators at the right side of a container if the user can scroll up or down
  *
- * @param renderer the renderer to use
+ * @param game_window the game window to use
  * @param container the rectangle in which the indicator will be
  * @param font_size the font size of the indicator
  * @param items_count the number of items displayed on one page
@@ -23,6 +23,6 @@ int display_inventory_gui(game_window_t * game_window,
  * @param first_item_to_print the index of the first item to be printed on the page
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_scroll_indicator_gui(SDL_Renderer * renderer, SDL_Rect container, int font_size, int items_count, int quantity, int first_item_to_print);
+int display_scroll_indicator_gui(game_window_t * game_window, SDL_Rect container, int font_size, int items_count, int quantity, int first_item_to_print);
 
 #endif //DOOM_DEPTH_C_GUI_H

@@ -47,7 +47,7 @@ ascii_art_t ** get_stage_ascii_arts() {
         return stage_ascii_arts;
     }
 
-    stage_ascii_arts = malloc(sizeof(ascii_art_t*) * STAGE_TYPE_COUNT);
+    stage_ascii_arts = calloc(STAGE_TYPE_COUNT, sizeof(ascii_art_t*));
     for (int i = 0; i < STAGE_TYPE_COUNT; i++) {
         stage_ascii_arts[i] = parse_ascii_art_file(stage_ascii_arts_files[i], BLACK);
         if (!stage_ascii_arts[i]) {

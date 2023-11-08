@@ -23,6 +23,20 @@ void init_colors_gui(sdl_color_palette_t * color_palette, color_scheme_t color_s
     SDL_Color white = {255, 255, 255, 255};
     SDL_Color black = {0, 0, 0, 255};
     SDL_Color red = {255, 0, 0, 255};
+    SDL_Color green = {0, 255, 0, 255};
+    SDL_Color blue = {0, 0, 255, 255};
+    SDL_Color cyan = {0, 255, 255, 255};
+    SDL_Color magenta = {255, 0, 255, 255};
+    SDL_Color yellow = {255, 255, 0, 255};
+
+    color_palette->black = black;
+    color_palette->white = white;
+    color_palette->red = red;
+    color_palette->green = green;
+    color_palette->blue = blue;
+    color_palette->cyan = cyan;
+    color_palette->magenta = magenta;
+    color_palette->yellow = yellow;
 
     switch (color_scheme) {
         case LIGHT:
@@ -39,15 +53,31 @@ void init_colors_gui(sdl_color_palette_t * color_palette, color_scheme_t color_s
             break;
     }
     color_palette->highlight = red;
+
+    // additional colors
+    color_palette->white80 = (SDL_Color) {0, 0, 0, 80};
+    color_palette->purple = (SDL_Color) {66, 22, 144, 255};
+    color_palette->purple80 = (SDL_Color) {66, 22, 144, 80};
 }
 
 void init_colors_cli(cli_color_palette_t * color_palette, color_scheme_t color_scheme) {
+    color_palette->black = BLACK;
+    color_palette->white = WHITE;
+    color_palette->red = RED;
+    color_palette->green = GREEN;
+    color_palette->blue = BLUE;
+    color_palette->cyan = CYAN;
+    color_palette->magenta = MAGENTA;
+    color_palette->yellow = YELLOW;
+
     switch (color_scheme) {
         case LIGHT:
+            color_palette->background = WHITE;
             color_palette->text = BLACK;
             break;
 
         case DARK:
+            color_palette->background = BLACK;
             color_palette->text = WHITE;
             break;
 

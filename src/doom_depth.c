@@ -23,7 +23,7 @@ int main_loop(game_window_t * main_window) {
     map_t * map = NULL;
     player_t * player = NULL;
 
-    main_window->context->current_screen = INVENTORY_SCREEN;
+    main_window->context->current_screen = START_MENU;
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :

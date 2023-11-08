@@ -16,7 +16,7 @@ int display_fight_cli(game_window_t * game_window, fight_context_t * fight_conte
         return EXIT_FAILURE;
     }
 
-    cli_draw_fill_rect(game_window->matrix, fight_zone, (cli_char_t){' ', WHITE});
+    cli_draw_fill_rect(game_window->matrix, fight_zone, (cli_char_t){' ', game_window->cli_color_palette->background});
 
     bool has_notification_message = fight_context->notification_message && strlen(fight_context->notification_message) > 0;
 
@@ -126,7 +126,8 @@ int display_monster_cli(game_window_t * game_window, monster_t *monster, rect_t 
 
     print_ascii_art_in_rectangle(game_window->matrix, monster->ascii_path, monster_rect, ALIGN_CENTER, ALIGN_CENTER);
 
-    if(display_stat_bar_cli(game_window, (int) monster->hp, (int) monster->hp_max, hp_rect, GREEN, RED) == EXIT_FAILURE) {
+    if(display_stat_bar_cli(game_window, (int) monster->hp, (int) monster->hp_max, hp_rect,
+                            game_window->cli_color_palette->green, game_window->cli_color_palette->red) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
@@ -149,7 +150,7 @@ int display_player_in_fight_cli(game_window_t * game_window, player_t * player, 
 }
 
 int display_notification_zone_cli(game_window_t * game_window, char * notification_text, rect_t container) {
-    if(cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){' ', WHITE}) == EXIT_FAILURE) {
+    if(cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){' ', game_window->cli_color_palette->white}) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
 
@@ -167,7 +168,8 @@ int display_notification_zone_cli(game_window_t * game_window, char * notificati
             container.h - padding_y * 2
     };
 
-    cli_print_text_in_rectangle(game_window->matrix, text_container, notification_text, BLACK, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, text_container, notification_text, game_window->cli_color_palette->text,
+                                ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
 
     return EXIT_SUCCESS;
 }
@@ -202,7 +204,7 @@ int display_stat_bar_cli(game_window_t *game_window, int current_stat, int max_s
 }
 
 int display_player_stats_zone_cli(game_window_t * game_window, player_t * player, rect_t container) {
-    cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){' ', WHITE});
+    cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){' ', game_window->cli_color_palette->white});
 
     // apply padding
     int container_padding_x = container.w / 10 > 5 ? 5 : (int)container.w / 10;
@@ -243,36 +245,39 @@ int display_player_stats_zone_cli(game_window_t * game_window, player_t * player
             (int)player->hp,
             (int)player->hp_max,
             hp_rect,
-            GREEN,
-            RED
+            game_window->cli_color_palette->green,
+            game_window->cli_color_palette->red
     ) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
-    cli_print_text_in_rectangle(game_window->matrix, hp_rect, "HP", BLACK, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, hp_rect, "HP", game_window->cli_color_palette->text,
+                                ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
 
     if(display_stat_bar_cli(
             game_window,
             (int)player->mana,
             (int)player->mana_max,
             mana_rect,
-            BLUE,
-            BLACK
+            game_window->cli_color_palette->blue,
+            game_window->cli_color_palette->black
     ) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
-    cli_print_text_in_rectangle(game_window->matrix, mana_rect, "MANA", BLACK, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, mana_rect, "MANA", game_window->cli_color_palette->text,
+                                ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
 
     if(display_stat_bar_cli(
             game_window,
             (int)player->action_points,
             (int)player->max_action_points,
             actions_points_rect,
-            YELLOW,
-            BLACK
+            game_window->cli_color_palette->yellow,
+            game_window->cli_color_palette->black
     ) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
-    cli_print_text_in_rectangle(game_window->matrix, actions_points_rect, "AP", BLACK, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, actions_points_rect, "AP", game_window->cli_color_palette->text,
+                                ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
 
     return EXIT_SUCCESS;
 }

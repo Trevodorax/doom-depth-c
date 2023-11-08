@@ -229,7 +229,7 @@ int display_items_gui(game_window_t * game_window,
     rect_t *items = get_rectangle_grid(items_count, items_container);
     int first_item_to_print = (active_item / items_count) * items_count;
 
-    display_scroll_indicator_gui(game_window->renderer, rect_to_SDL_Rect(*items_container), details_font_size, items_count, (int) quantity, first_item_to_print);
+    display_scroll_indicator_gui(game_window, rect_to_SDL_Rect(*items_container), details_font_size, items_count, (int) quantity, first_item_to_print);
 
     char *details;
     switch (type) {
@@ -372,7 +372,7 @@ int display_nothing_to_see_gui(game_window_t * game_window, SDL_Rect container) 
     return EXIT_SUCCESS;
 }
 
-int display_scroll_indicator_gui(SDL_Renderer * renderer,
+int display_scroll_indicator_gui(game_window_t * game_window,
                              SDL_Rect container,
                              int font_size,
                              int items_count,
@@ -380,11 +380,11 @@ int display_scroll_indicator_gui(SDL_Renderer * renderer,
                              int first_item_to_print) {
     if (quantity > items_count) {
         SDL_Texture *arrow_texture = get_string_texture(
-                renderer,
+                game_window->renderer,
                 "v",
                 "../assets/PixelifySans-Regular.ttf",
                 font_size,
-                (SDL_Color) {255, 255, 255, 255}
+                game_window->sdl_color_palette->text
         );
         if (!arrow_texture) {
             return EXIT_FAILURE;
@@ -404,7 +404,7 @@ int display_scroll_indicator_gui(SDL_Renderer * renderer,
 
             SDL_Point up_center = (SDL_Point) {up_container.w / 2, up_container.h / 2};
 
-            SDL_RenderCopyEx(renderer, arrow_texture, NULL, &up_container, 180, &up_center, SDL_FLIP_NONE);
+            SDL_RenderCopyEx(game_window->renderer, arrow_texture, NULL, &up_container, 180, &up_center, SDL_FLIP_NONE);
         }
 
         if (first_item_to_print < quantity - items_count){
@@ -415,7 +415,7 @@ int display_scroll_indicator_gui(SDL_Renderer * renderer,
                     arrow_height
             };
 
-            SDL_RenderCopy(renderer, arrow_texture, NULL, &down_container);
+            SDL_RenderCopy(game_window->renderer, arrow_texture, NULL, &down_container);
         }
     }
 

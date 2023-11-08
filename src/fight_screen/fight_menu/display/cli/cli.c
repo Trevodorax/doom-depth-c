@@ -11,7 +11,7 @@ int display_menu_cli(game_window_t * game_window, menu_t *menu, rect_t container
     }
 
     char bg_char = player_turn ? ' ' : '.';
-    cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){bg_char, WHITE});
+    cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){bg_char, game_window->cli_color_palette->background});
 
     rect_t * menu_items_grid = get_rectangle_grid(menu->nb_options, &container);
     for (int i = 0; i < menu->nb_options; i++) {
@@ -33,7 +33,7 @@ int display_menu_item_cli(game_window_t * game_window, const char * title, const
     }
 
     char bg_char = is_selected ? '>' : ' ';
-    cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){bg_char, CYAN});
+    cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){bg_char, game_window->cli_color_palette->cyan});
 
     // print the ascii art if there is one
     if (ascii_art_path && strlen(ascii_art_path) > 0) {
@@ -42,7 +42,8 @@ int display_menu_item_cli(game_window_t * game_window, const char * title, const
 
     // print the title if there is one
     if (title) {
-        cli_print_text_in_rectangle(game_window->matrix, container, title, BLACK, ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
+        cli_print_text_in_rectangle(game_window->matrix, container, title, game_window->cli_color_palette->text,
+                                    ALIGN_CENTER, ALIGN_CENTER, SMALL_TEXT);
     }
 
     return EXIT_SUCCESS;

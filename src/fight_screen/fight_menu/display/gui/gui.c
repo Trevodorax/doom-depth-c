@@ -10,8 +10,12 @@ int display_menu_gui(game_window_t *game_window, menu_t * menu, rect_t container
         return EXIT_FAILURE;
     }
 
-    int a_value = player_turn ? 255 : 80;
-    draw_fill_rect(rect_to_SDL_Rect(container), (SDL_Color){0, 0, 0, a_value}, game_window->renderer);
+    SDL_Color rect_color = player_turn ? game_window->sdl_color_palette->white : game_window->sdl_color_palette->white80;
+    draw_fill_rect(
+            rect_to_SDL_Rect(container),
+            rect_color,
+            game_window->renderer
+    );
 
     rect_t * menu_items_grid = get_rectangle_grid(menu->nb_options, &container);
     for (int i = 0; i < menu->nb_options; i++) {
@@ -33,8 +37,6 @@ int display_menu_item_gui(game_window_t *game_window, const char * title, const 
         return EXIT_FAILURE;
     }
 
-    int a_value = is_selected ? 255 : 80;
-
     SDL_Rect item_container = container;
 
     int selected_border_thickness = 5;
@@ -47,13 +49,18 @@ int display_menu_item_gui(game_window_t *game_window, const char * title, const 
         draw_thick_rect(
                 item_container,
                 selected_border_thickness,
-                (SDL_Color){40, 171, 112, 255},
+                game_window->sdl_color_palette->green,
                 game_window->renderer
         );
     }
 
     // draw the item background
-    draw_fill_rect(item_container, (SDL_Color){66, 22, 144, a_value}, game_window->renderer);
+    SDL_Color rect_color = is_selected ? game_window->sdl_color_palette->purple : game_window->sdl_color_palette->purple80;
+    draw_fill_rect(
+            item_container,
+            rect_color,
+            game_window->renderer
+    );
 
     // get the content zone
     int container_padding = item_container.w / 10;
@@ -83,7 +90,7 @@ int display_menu_item_gui(game_window_t *game_window, const char * title, const 
                 title,
                 "../assets/PixelifySans-Bold.ttf",
                 14,
-                (SDL_Color) {255, 255, 255, a_value >= 235 ? 255 : a_value+20}
+                game_window->sdl_color_palette->text
         );
         if (!title_texture) {
             global_logger->error("\ndisplay_menu_item error: could not retrieve title texture.");
