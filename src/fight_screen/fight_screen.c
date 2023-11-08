@@ -23,6 +23,8 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
         fight_context = build_fight_context(stage->fight, player);
     }
 
+    player_state_checkpoint(player, true);
+
     while (true) {
         update_fight_section_dimensions(game_window, &fight_zone, &menu_zone);
         menu_t * menu = build_nested_menu(fight_context);
@@ -63,7 +65,8 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
         } else {
             monsters_turn(game_window, fight_context, fight_zone);
             if(player->hp == 0) {
-                // TODO: handle game over @paul
+                stage->fight_context = NULL;
+                return GAME_OVER;
             }
 
             fight_context->player_turn = true;

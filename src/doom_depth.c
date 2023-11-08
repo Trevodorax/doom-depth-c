@@ -21,8 +21,7 @@ int main_loop(game_window_t * main_window) {
     init_entities(db);
 
     map_t * map = NULL;
-
-    player_t *player = NULL;
+    player_t * player = NULL;
 
     main_window->context->current_screen = START_MENU;
     while (main_window->context->current_screen != QUIT_GAME) {
@@ -81,7 +80,7 @@ int main_loop(game_window_t * main_window) {
                 break;
 
             case GAME_OVER :
-                main_window->context->current_screen = game_over_screen(main_window);
+                main_window->context->current_screen = game_over_screen(main_window, player, map);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

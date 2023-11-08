@@ -149,8 +149,6 @@ int display_game_over_gui(game_window_t *game_window, unsigned short active_opti
     SDL_RenderCopy(game_window->renderer, cursor_texture, NULL, &cursor_rect);
     SDL_DestroyTexture(cursor_texture);
 
-    SDL_RenderPresent(game_window->renderer);
-
     return EXIT_SUCCESS;
 }
 
