@@ -17,7 +17,7 @@ stage_t * json_to_stage(json_t * json_stage, bool first_stage) {
         return NULL;
     }
 
-    stage_t *result = malloc(sizeof(stage_t));
+    stage_t *result = calloc(1,sizeof(stage_t));
     if (!result) {
         fprintf(stderr, "json_to_stage error: memory allocation failed\n");
         return NULL;
