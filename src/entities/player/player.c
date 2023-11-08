@@ -51,7 +51,7 @@ player_t * create_player(char *name) {
 
     array_node_t *spells = get_spells();
 
-    player->hp_max = 200u;
+    player->hp_max = 10u;
     player->hp = player->hp_max;
     player->mana_max = 100u;
     player->mana = player->mana_max;
@@ -288,4 +288,28 @@ while (sqlite3_step(stmt) == SQLITE_ROW) {
     }
 
     return players;
+}
+
+void player_state_checkpoint(player_t * player, bool save) {
+    static unsigned int hp = -1;
+    static unsigned int mana = -1;
+    static unsigned int xp = -1;
+    static unsigned int level = -1;
+
+    if (!save) {
+        if(hp == -1 || mana == -1 || xp == -1 || level == -1) {
+            return;
+        }
+
+        player->hp = hp;
+        player->mana = mana;
+        player->xp = xp;
+        player->level = level;
+    }
+    if (save) {
+        hp = player->hp;
+        mana = player->mana;
+        xp = player->xp;
+        level = player->level;
+    }
 }

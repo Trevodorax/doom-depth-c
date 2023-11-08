@@ -12,6 +12,6 @@
  * @param game_window // the window to display the map on
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int game_over_screen(game_window_t *game_window);
+int game_over_screen(game_window_t *game_window, player_t *player);
 
 #endif

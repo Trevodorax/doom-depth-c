@@ -4,7 +4,7 @@
 #include "../event/event.h"
 #include "../utils/utils.h"
 
-int game_over_screen(game_window_t *game_window) {
+int game_over_screen(game_window_t * game_window, player_t * player) {
     unsigned short active_option = TRY_AGAIN;
     event_t event;
     while (true){
@@ -31,10 +31,15 @@ int game_over_screen(game_window_t *game_window) {
                     }
                     break;
                 case ENTER_KEY:
-                    if(active_option == START_MENU) {
-                        return START_MENU;
+                    switch (active_option) {
+                        case START_MENU:
+                            return START_MENU;
+                        case TRY_AGAIN:
+                            player_state_checkpoint(player, false);
+                            return MAP_SCREEN;
+                        default:
+                            break;
                     }
-                    // TODO : link to TRY_AGAIN option @paul
                 default:
                     break;
             }

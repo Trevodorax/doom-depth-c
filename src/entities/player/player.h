@@ -132,4 +132,12 @@ void free_player(player_t *player);
  */
 array_node_t *get_players_from_db(sqlite3 *db);
 
+/**
+ * @brief Saves or retrieves a checkpoint for the state of the user
+ *
+ * @param player The player
+ * @param save true if saving, false if retrieving
+ */
+void player_state_checkpoint(player_t * player, bool save);
+
 #endif
