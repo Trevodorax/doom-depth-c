@@ -171,6 +171,18 @@ void handle_actions_input(event_t event, player_t *player, section_options_t *ac
                 player->chosen_armor = get_value_at_index(player->inventory->armors_head, active_item);
                 *active_section = ITEMS;
             }
+            if (active_category == HEALTH_POTIONS) {
+                heal_player(player, 20);
+                if (player->inventory->nb_health_potions > 0) {
+                    (player->inventory->nb_health_potions)--;
+                }
+            }
+            if (active_category == MANA_POTIONS) {
+                heal_mana(player, 20);
+                if (player->inventory->nb_mana_potions > 0) {
+                    (player->inventory->nb_mana_potions)--;
+                }
+            }
         }
         if (*active_action == THROW_AWAY) {
             if (active_category == WEAPONS) {
@@ -182,6 +194,12 @@ void handle_actions_input(event_t event, player_t *player, section_options_t *ac
                 delete_node(&(player->inventory->armors_head), active_item);
                 player->inventory->nb_armors--;
                 *active_section = ITEMS;
+            }
+            if (active_category == HEALTH_POTIONS && player->inventory->nb_health_potions > 0) {
+                (player->inventory->nb_health_potions)--;
+            }
+            if (active_category == MANA_POTIONS && player->inventory->nb_mana_potions > 0) {
+                (player->inventory->nb_mana_potions)--;
             }
         }
     }
