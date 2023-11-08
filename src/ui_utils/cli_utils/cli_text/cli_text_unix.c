@@ -159,10 +159,10 @@ int get_letters_ascii_arts(ascii_art_t ***lowercase_ascii_arts, ascii_art_t ***u
     static ascii_art_t *static_lowercase_ascii_arts[COLOR_CODE_COUNT][26] = {NULL};
     static ascii_art_t *static_uppercase_ascii_arts[COLOR_CODE_COUNT][26] = {NULL};
     static ascii_art_t *static_digit_ascii_arts[COLOR_CODE_COUNT][10] = {NULL};
-    if (static_lowercase_ascii_arts[color][0]) {
-        *lowercase_ascii_arts = static_lowercase_ascii_arts[color];
-        *uppercase_ascii_arts = static_uppercase_ascii_arts[color];
-        *digit_ascii_arts = static_digit_ascii_arts[color];
+    if (static_lowercase_ascii_arts[color - FIRST_COLOR][0]) {
+        *lowercase_ascii_arts = static_lowercase_ascii_arts[color - FIRST_COLOR];
+        *uppercase_ascii_arts = static_uppercase_ascii_arts[color - FIRST_COLOR];
+        *digit_ascii_arts = static_digit_ascii_arts[color - FIRST_COLOR];
         return EXIT_SUCCESS;
     }
 
@@ -171,7 +171,7 @@ int get_letters_ascii_arts(ascii_art_t ***lowercase_ascii_arts, ascii_art_t ***u
     // get all ascii arts from files
     for (int i = 0; i < 26; i++) {
         snprintf(filepath, sizeof(filepath), "../assets/ascii_text/lowercase/%c.asciiart", 'a' + i);
-        static_lowercase_ascii_arts[color][i] = parse_ascii_art_file(filepath, color);
+        static_lowercase_ascii_arts[color - FIRST_COLOR][i] = parse_ascii_art_file(filepath, color);
         if (!static_lowercase_ascii_arts[i]) {
 
             return EXIT_FAILURE;
@@ -179,23 +179,23 @@ int get_letters_ascii_arts(ascii_art_t ***lowercase_ascii_arts, ascii_art_t ***u
     }
     for (int i = 0; i < 26; i++) {
         snprintf(filepath, sizeof(filepath), "../assets/ascii_text/uppercase/%c.asciiart", 'A' + i);
-        static_uppercase_ascii_arts[color][i] = parse_ascii_art_file(filepath, color);
+        static_uppercase_ascii_arts[color - FIRST_COLOR][i] = parse_ascii_art_file(filepath, color);
         if (!static_uppercase_ascii_arts[i]) {
             return EXIT_FAILURE;
         }
     }
     for (int i = 0; i < 10; i++) {
         snprintf(filepath, sizeof(filepath), "../assets/ascii_text/digit/%d.asciiart", i);
-        static_digit_ascii_arts[color][i] = parse_ascii_art_file(filepath, color);
+        static_digit_ascii_arts[color - FIRST_COLOR][i] = parse_ascii_art_file(filepath, color);
         if (!static_digit_ascii_arts[i]) {
             return EXIT_FAILURE;
         }
     }
 
     // return
-    *lowercase_ascii_arts = static_lowercase_ascii_arts[color];
-    *uppercase_ascii_arts = static_uppercase_ascii_arts[color];
-    *digit_ascii_arts = static_digit_ascii_arts[color];
+    *lowercase_ascii_arts = static_lowercase_ascii_arts[color - FIRST_COLOR];
+    *uppercase_ascii_arts = static_uppercase_ascii_arts[color - FIRST_COLOR];
+    *digit_ascii_arts = static_digit_ascii_arts[color - FIRST_COLOR];
 
     return EXIT_SUCCESS;
 }
@@ -238,35 +238,35 @@ ascii_art_t *get_letter_ascii_art(char character, color_code_t color) {
 ascii_art_t *get_special_char_ascii_art(char character, color_code_t color) {
     // get special char ascii arts
     static ascii_art_t * unknown[COLOR_CODE_COUNT] = {NULL};
-    if(!unknown[color]) {
-        unknown[color] = parse_ascii_art_file("../assets/ascii_text/special/unknown.asciiart", color);
+    if(!unknown[color - FIRST_COLOR]) {
+        unknown[color - FIRST_COLOR] = parse_ascii_art_file("../assets/ascii_text/special/unknown.asciiart", color);
     }
 
     static ascii_art_t * left_bracket[COLOR_CODE_COUNT] = {NULL};
-    if(!left_bracket[color]) {
-        left_bracket[color] = parse_ascii_art_file("../assets/ascii_text/special/left_bracket.asciiart", color);
+    if(!left_bracket[color - FIRST_COLOR]) {
+        left_bracket[color - FIRST_COLOR] = parse_ascii_art_file("../assets/ascii_text/special/left_bracket.asciiart", color);
     }
 
     static ascii_art_t * right_bracket[COLOR_CODE_COUNT] = {NULL};
-    if(!right_bracket[color]) {
-        right_bracket[color] = parse_ascii_art_file("../assets/ascii_text/special/right_bracket.asciiart", color);
+    if(!right_bracket[color - FIRST_COLOR]) {
+        right_bracket[color - FIRST_COLOR] = parse_ascii_art_file("../assets/ascii_text/special/right_bracket.asciiart", color);
     }
 
     static ascii_art_t * greater_than[COLOR_CODE_COUNT] = {NULL};
-    if(!greater_than[color]) {
-        greater_than[color] = parse_ascii_art_file("../assets/ascii_text/special/greater_than.asciiart", color);
+    if(!greater_than[color - FIRST_COLOR]) {
+        greater_than[color - FIRST_COLOR] = parse_ascii_art_file("../assets/ascii_text/special/greater_than.asciiart", color);
     }
 
     // return the right one
     switch(character) {
         case '(':
-            return left_bracket[color];
+            return left_bracket[color - FIRST_COLOR];
         case ')':
-            return right_bracket[color];
+            return right_bracket[color - FIRST_COLOR];
         case '>':
-            return greater_than[color];
+            return greater_than[color - FIRST_COLOR];
         default:
-            return unknown[color];
+            return unknown[color - FIRST_COLOR];
     }
 }
 

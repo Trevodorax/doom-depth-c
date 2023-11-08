@@ -3,16 +3,18 @@
 
 #include <stddef.h>
 
+#define FIRST_COLOR 30
+#define COLOR_CODE_COUNT 8
+
 typedef enum {
-    BLACK = 30,
+    BLACK = FIRST_COLOR,
     RED,
     GREEN,
     YELLOW,
     BLUE,
     MAGENTA,
     CYAN,
-    WHITE,
-    COLOR_CODE_COUNT
+    WHITE
 } color_code_t;
 
 typedef struct {

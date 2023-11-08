@@ -23,7 +23,7 @@
                         "id": 4,
                         "type": 0,
                         "name": "skeleton",
-                        "hp": 5,
+                        "hp": 25,
                         "hp_max": 25,
                         "attack": 5,
                         "defense": 4,
@@ -31,21 +31,31 @@
                         "ascii_path": "../assets/monsters/ascii/skeleton.asciiart"
                     },
 {
-                        "id": 1,
+                        "id": 2,
                         "type": 0,
-                        "name": "bat",
-                        "hp": 6,
-                        "hp_max": 10,
-                        "attack": 2,
-                        "defense": 1,
-                        "image_path": "../assets/monsters/image/bat.png",
-                        "ascii_path": "../assets/monsters/ascii/bat.asciiart"
+                        "name": "goblin",
+                        "hp": 15,
+                        "hp_max": 15,
+                        "attack": 3,
+                        "defense": 2,
+                        "image_path": "../assets/monsters/image/goblin.png",
+                        "ascii_path": "../assets/monsters/ascii/goblin.asciiart"
+                    },
+{
+                        "id": 5,
+                        "type": 0,
+                        "name": "troll",
+                        "hp": 30,
+                        "hp_max": 30,
+                        "attack": 6,
+                        "defense": 5,
+                        "image_path": "../assets/monsters/image/troll.png",
+                        "ascii_path": "../assets/monsters/ascii/troll.asciiart"
                     }
                 ],
-                "notification_message": "Spell casted !",
                 "player_turn": 1,
                 "treasure": {
-                    "coins": 544433511
+                    "coins": 42
                 }
             },
             "top": {
@@ -65,7 +75,7 @@
                 "min_nb_enemies": 1,
                 "max_nb_enemies": 1,
                 "enemies_list": [
-"earch"
+"troll"
                 ],
                 "enemies_chances_to_appear": [
 100
