@@ -80,7 +80,7 @@ int main_loop(game_window_t * main_window) {
                 break;
 
             case GAME_OVER :
-                main_window->context->current_screen = game_over_screen(main_window, player);
+                main_window->context->current_screen = game_over_screen(main_window, player, map);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

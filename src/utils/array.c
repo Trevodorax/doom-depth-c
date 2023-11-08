@@ -47,7 +47,9 @@ void append(array_node_t **head_ref, void *new_data, size_t data_size) {
     new_node->value = malloc(data_size);
     new_node->next = NULL;
 
-    memcpy(new_node->value, new_data, data_size);
+    if(new_data) {
+        memcpy(new_node->value, new_data, data_size);
+    }
 
     if (*head_ref == NULL) {
         *head_ref = new_node;

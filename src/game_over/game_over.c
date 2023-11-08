@@ -3,8 +3,9 @@
 #include "display/display.h"
 #include "../event/event.h"
 #include "../utils/utils.h"
+#include "../map_screen/map/map.h"
 
-int game_over_screen(game_window_t * game_window, player_t * player) {
+int game_over_screen(game_window_t *game_window, player_t *player, map_t * map) {
     unsigned short active_option = TRY_AGAIN;
     event_t event;
     while (true){
@@ -35,6 +36,7 @@ int game_over_screen(game_window_t * game_window, player_t * player) {
                         case START_MENU:
                             return START_MENU;
                         case TRY_AGAIN:
+                            save_player_map(player, map);
                             player_state_checkpoint(player, false);
                             return MAP_SCREEN;
                         default:
