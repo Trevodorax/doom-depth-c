@@ -49,7 +49,7 @@ ascii_art_t ** get_stage_ascii_arts() {
 
     stage_ascii_arts = malloc(sizeof(ascii_art_t*) * STAGE_TYPE_COUNT);
     for (int i = 0; i < STAGE_TYPE_COUNT; i++) {
-        stage_ascii_arts[i] = parse_ascii_art_file(stage_ascii_arts_files[i]);
+        stage_ascii_arts[i] = parse_ascii_art_file(stage_ascii_arts_files[i], BLACK);
         if (!stage_ascii_arts[i]) {
             // cleanup and leave
             fprintf(stderr, "\nget_stage_ascii_arts error: failed to get the file ascii arts.");

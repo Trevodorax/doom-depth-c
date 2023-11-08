@@ -13,7 +13,7 @@ print_ascii_art_in_rectangle(cli_matrix_t * matrix, const char * ascii_file_path
         global_logger->error("\nprint_ascii_art_in_rectangle error: please provide all necessary arguments");
     }
 
-    ascii_art_t * ascii_art = parse_ascii_art_file(ascii_file_path);
+    ascii_art_t * ascii_art = parse_ascii_art_file(ascii_file_path, BLACK);
     if (!ascii_art) {
         return EXIT_FAILURE;
     }
@@ -54,7 +54,7 @@ cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width,
     return ascii_art->versions[picked_ascii_art_index];
 }
 
-ascii_art_t * parse_ascii_art_file(const char *file_path) {
+ascii_art_t *parse_ascii_art_file(const char *file_path, color_code_t color) {
     // get file content
     FILE *file = fopen(file_path, "r");
     if (!file) {
@@ -112,7 +112,7 @@ ascii_art_t * parse_ascii_art_file(const char *file_path) {
         strncpy(token, start, length);
         token[length] = '\0';
 
-        ascii_art->versions[i] = ascii_art_to_matrix(token);
+        ascii_art->versions[i] = ascii_art_to_matrix(token, color);
 
         free(token);
         start = end + strlen(delimiter);
@@ -123,7 +123,7 @@ ascii_art_t * parse_ascii_art_file(const char *file_path) {
     return ascii_art;
 }
 
-cli_matrix_t * ascii_art_to_matrix(char * raw_ascii_art) {
+cli_matrix_t * ascii_art_to_matrix(char *raw_ascii_art, color_code_t color) {
     if (!raw_ascii_art) {
         return NULL;
     }
@@ -165,7 +165,7 @@ cli_matrix_t * ascii_art_to_matrix(char * raw_ascii_art) {
         } else {
             matrix->matrix[row][col].character = *p;
             // TODOSOMEDAY: allow colors to be set in asciiart files
-            matrix->matrix[row][col].color = BLACK;
+            matrix->matrix[row][col].color = color;
             col++;
         }
         p++;

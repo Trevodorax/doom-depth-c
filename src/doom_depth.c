@@ -20,7 +20,6 @@ int main_loop(game_window_t * main_window) {
     sqlite3 *db = db_connection();
     init_entities(db);
 
-    // TODO: get specific player map if there is one, otherwise this one @paul
     map_t * map = NULL;
 
     player_t *player = NULL;
