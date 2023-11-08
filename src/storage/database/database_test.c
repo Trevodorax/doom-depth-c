@@ -49,11 +49,13 @@ void print_player(void *player) {
 
 char * test_save_player() {
     sqlite3 *db = db_connection();
+    init_entities(db);
 
     // get the player in DB
-    char *sql = "SELECT * FROM PLAYER WHERE id = 4";
-    array_node_t *players = create_struct_from_db(db, sql, create_player_from_db, sizeof (player_t));
-    player_t *player = (player_t *)players->value;
+    char sql_query[300];
+    sprintf(sql_query, create_player_from_db_sql, 1);
+    array_node_t *p = create_struct_from_db(db, sql_query, create_player_from_db, sizeof (player_t));
+    player_t *player = (player_t *) p->value;
     player->action_points = 2;
 
     print_player(player);
@@ -209,14 +211,14 @@ char *test_get_players_from_db() {
 
 char * all_tests() {
     // mu_run_test(test_db_connection);
-    // mu_run_test(test_save_player);
+    mu_run_test(test_save_player);
     // mu_run_test(test_create_monsters_from_db);
     // mu_run_test(test_create_armors_from_db);
     // mu_run_test(test_create_weapons_from_db);
     // mu_run_test(test_create_spells_from_db);
     // mu_run_test(test_create_stats_from_db);
     // mu_run_test(test_create_inventory_from_db);
-    mu_run_test(test_get_players_from_db);
+    // mu_run_test(test_get_players_from_db);
     return 0;
 }
 
