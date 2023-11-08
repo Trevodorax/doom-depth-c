@@ -12,6 +12,7 @@ typedef enum {
     MAGENTA,
     CYAN,
     WHITE,
+    COLOR_CODE_COUNT
 } color_code_t;
 
 typedef struct {

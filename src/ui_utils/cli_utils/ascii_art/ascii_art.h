@@ -34,7 +34,7 @@ cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width,
  * @param file_path The file path of the ascii art
  * @return The ascii_art object
  */
-ascii_art_t * parse_ascii_art_file(const char *file_path);
+ascii_art_t *parse_ascii_art_file(const char *file_path, color_code_t color);
 
 /**
  * @brief Get a cli_matrix from the string of an ascii art version
@@ -42,6 +42,6 @@ ascii_art_t * parse_ascii_art_file(const char *file_path);
  * @param raw_ascii_art The string of the ascii art
  * @return The matrix of the ascii art
  */
-cli_matrix_t * ascii_art_to_matrix(char * raw_ascii_art);
+cli_matrix_t *ascii_art_to_matrix(char *raw_ascii_art, color_code_t color);
 
 #endif //DOOM_DEPTH_C_ASCII_ART_H

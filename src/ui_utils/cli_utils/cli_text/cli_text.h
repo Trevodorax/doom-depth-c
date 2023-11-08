@@ -50,6 +50,6 @@ int cli_print_text_in_rectangle(cli_matrix_t *matrix, rect_t rect, const char *t
  * @param letter
  * @return
  */
-ascii_art_t * get_letter_ascii_art(char character);
+ascii_art_t *get_letter_ascii_art(char character, color_code_t color);
 
 #endif //DOOM_DEPTH_C_CLI_TEXT_H

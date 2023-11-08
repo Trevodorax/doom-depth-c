@@ -5,7 +5,7 @@
 
 static char * test_ascii_art_to_matrix() {
     char *test_art = ",#####,\n|a` `a|\n|  u  |\n\\ = /";
-    cli_matrix_t *result = ascii_art_to_matrix(test_art);
+    cli_matrix_t *result = ascii_art_to_matrix(test_art, BLACK);
 
     mu_assert("\nascii_art_to_matrix test failed: wrong number of rows.", result->nb_rows == 4);
     mu_assert("\nascii_art_to_matrix test failed: wrong number of cols.", result->nb_cols == 7);
@@ -21,7 +21,7 @@ static char * test_ascii_art_to_matrix() {
 
 static char * test_parse_ascii_art_file() {
     char *file_path = "../assets/player/ascii/player.asciiart";
-    ascii_art_t *result = parse_ascii_art_file(file_path);
+    ascii_art_t *result = parse_ascii_art_file(file_path, BLACK);
 
     mu_assert("\nparse_ascii_art_file test failed: wrong number of versions.", result->nb_versions == 3);
 
