@@ -30,7 +30,6 @@ stage_t * json_to_stage(json_t * json_stage, bool first_stage) {
     result->top = result->right = result->bottom = result->left = NULL;
     result->counted = false;
     result->type = EMPTY;
-//    result->fight_context = NULL;
 
     if (first_stage) {
         result->player = malloc(sizeof(player_t));
