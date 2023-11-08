@@ -2,7 +2,7 @@
 #include "src/storage/json/json_test.h"
 #include "src/storage/database/database_test.h"
 #include "src/map_screen/map/map_test.h"
-#include "src/cli_utils/ascii_art/ascii_art_test.h"
+#include "src/ui_utils/cli_utils/ascii_art/ascii_art_test.h"
 
 int tests_run = 0;
 

@@ -115,7 +115,7 @@ int display_shop_items_cli(game_window_t * game_window, rect_t * items_rects, ca
     switch (active_category) {
         case ARMORS:
             for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-                array_node_t *armors = get_armors();
+                list_t *armors = get_armors();
                 armor_t *armor_to_print = get_value_at_index(armors, first_item_to_print + i);
                 if (!armor_to_print) {
                     break;
@@ -129,7 +129,7 @@ int display_shop_items_cli(game_window_t * game_window, rect_t * items_rects, ca
 
         case WEAPONS:
             for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-                array_node_t * weapons = get_weapons();
+                list_t * weapons = get_weapons();
                 weapon_t * weapon_to_print = get_value_at_index(weapons, first_item_to_print + i);
                 if (!weapon_to_print) {
                     break;
@@ -211,7 +211,7 @@ int display_item_confirm_cli(game_window_t * game_window, rect_t * container, re
     num_buffer[0] = '\0';
     switch (active_category) {
         case ARMORS: {
-            array_node_t * armors = get_armors();
+            list_t * armors = get_armors();
             armor_t * armor_to_print = get_value_at_index(armors, (int) active_item);
 
             strcat(buffer, "Name : ");
@@ -251,7 +251,7 @@ int display_item_confirm_cli(game_window_t * game_window, rect_t * container, re
         }
 
         case WEAPONS: {
-            array_node_t * weapons = get_weapons();
+            list_t * weapons = get_weapons();
             weapon_t * weapon_to_print = get_value_at_index(weapons, (int) active_item);
 
             strcat(buffer, "Name : ");

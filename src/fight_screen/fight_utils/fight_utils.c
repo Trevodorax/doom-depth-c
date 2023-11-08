@@ -72,7 +72,7 @@ int find_index(int rand_num, const int probs[], int size) {
 
 void free_fight_context(fight_context_t * fight_context) {
     free(fight_context->notification_message);
-    free_list(&fight_context->monsters);
+    free_list(fight_context->monsters);
     free(fight_context);
 }
 
@@ -106,7 +106,7 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
     srand(time(NULL));
     fight_context_t * fight_context = malloc(sizeof(fight_context_t));
     fight_context->player = player;
-    fight_context->monsters = NULL;
+    fight_context->monsters = new_list(MONSTER_STRUCT);
     global_logger->info("Building Fight Context");
 
     int enemies_size = fight->enemies_size;
@@ -122,10 +122,10 @@ fight_context_t * build_fight_context(fight_t * fight, player_t * player) {
         probs[i] = probs[i - 1] + fight->enemies_chances_to_appear[i];
     }
 
-    while(get_size(fight_context->monsters) < number_of_monsters) {
+    while(fight_context->monsters->size < number_of_monsters) {
         int random_number = rand() % 100;
         int index = find_index(random_number,probs,fight->enemies_size);
-        append(&fight_context->monsters,get_monster_by_name(fight->enemies_list[index]),sizeof(monster_t));
+        append(fight_context->monsters,get_monster_by_name(fight->enemies_list[index]));
     }
 
     fight_context->notification_message = NULL;
@@ -144,7 +144,7 @@ treasure_t * get_treasure_from_fight_context(fight_context_t * fight_context) {
 
     // calculate number of coins
     int coins = 0;
-    array_node_t *current = fight_context->monsters;
+    array_node_t *current = fight_context->monsters->head;
     while (current != NULL) {
         monster_t *monster = void_to_monster(current->value);
         if (monster) {
@@ -174,14 +174,14 @@ json_t * fight_context_to_json(fight_context_t * fight_context) {
 
     // monsters
     if (fight_context->monsters) {
-        int nb_monsters = get_size(fight_context->monsters);
+        int nb_monsters = fight_context->monsters->size;
 
         json_t * json_monsters = malloc(sizeof(json_t));
         json_monsters->type = 'a';
         json_monsters->nb_elements = nb_monsters;
         json_monsters->values = malloc(nb_monsters * sizeof(json_t));
 
-        array_node_t * current_monster = fight_context->monsters;
+        array_node_t * current_monster = fight_context->monsters->head;
         int monster_index = 0;
         while (current_monster != NULL) {
             monster_t * monster = void_to_monster(current_monster->value);
@@ -240,16 +240,16 @@ fight_context_t * json_to_fight_context(json_t * object) {
     if (json_monsters) {
         if (json_monsters->type == 'a') {
             size_t nb_monsters = json_monsters->nb_elements;
-            array_node_t *head = NULL;
+            list_t *monster_list = new_list(MONSTER_STRUCT);
 
             for (int i = 0; i < nb_monsters; ++i) {
                 json_t * monster_json = &json_monsters->values[i];
                 monster_t * monster = json_to_monster(monster_json);
 
-                append(&head, monster, sizeof(monster_t));
+                append(monster_list, monster);
             }
 
-            context->monsters = head;
+            context->monsters = monster_list;
         }
     }
 

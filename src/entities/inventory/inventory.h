@@ -15,8 +15,8 @@ typedef struct {
     unsigned int nb_armors;
     unsigned int nb_mana_potions;
     unsigned int nb_health_potions;
-    array_node_t *armors_head;
-    array_node_t *weapons_head;
+    list_t *armors_list;
+    list_t *weapons_list;
 } inventory_t;
 
 inventory_t *create_inventory();
@@ -52,7 +52,7 @@ void *create_inventory_from_db(sqlite3_stmt *stmt);
  * @dependencies Depends on the SQLite library.
  * @errors Errors during database operations or memory allocation can result in NULL being returned.
  */
-array_node_t *create_full_inventory_from_db(sqlite3 *db, int player_id);
+list_t *create_full_inventory_from_db(sqlite3 *db, int player_id);
 
 /**
  * @brief Saves the inventory's data to the database.

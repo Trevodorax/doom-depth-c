@@ -235,7 +235,7 @@ int display_items_gui(game_window_t * game_window,
     switch (type) {
         case ARMOR:
             for (int i = 0; i < items_count; i++) {
-                armor_t *armor_to_print = get_value_at_index(inventory->armors_head, first_item_to_print + i);
+                armor_t *armor_to_print = get_value_at_index(inventory->armors_list, first_item_to_print + i);
                 if (!armor_to_print) {
                     break;
                 }
@@ -252,12 +252,12 @@ int display_items_gui(game_window_t * game_window,
                 }
             }
 
-            details = inventory_armor_details_to_string(get_value_at_index(inventory->armors_head, active_item));
+            details = inventory_armor_details_to_string(get_value_at_index(inventory->armors_list, active_item));
             break;
 
         case WEAPON:
             for (int i = 0; i < items_count; i++) {
-                weapon_t *weapon_to_print = get_value_at_index(inventory->weapons_head, first_item_to_print + i);
+                weapon_t *weapon_to_print = get_value_at_index(inventory->weapons_list, first_item_to_print + i);
                 if (!weapon_to_print) {
                     break;
                 }
@@ -274,7 +274,7 @@ int display_items_gui(game_window_t * game_window,
                 }
             }
 
-            details = inventory_weapon_details_to_string(get_value_at_index(inventory->weapons_head, active_item));
+            details = inventory_weapon_details_to_string(get_value_at_index(inventory->weapons_list, active_item));
             break;
     }
 

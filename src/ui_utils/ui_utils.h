@@ -14,7 +14,7 @@
  * @param container Rectangle in which all the rectangles of the grid should be
  * @return The array of rectangles that form the grid
  */
-rect_t *get_rectangle_grid(size_t nb_rectangles, rect_t *container);
+rect_t *get_rectangle_grid(int nb_rectangles, rect_t *container);
 
 /**
  * @brief Get a list of rectangles that form a specified layout
@@ -24,6 +24,6 @@ rect_t *get_rectangle_grid(size_t nb_rectangles, rect_t *container);
  * @param layout The specified layout
  * @return The array of rectangles forming the layout
  */
-rect_t *get_rectangle_layout(size_t nb_rectangles, rect_t *container, layout_t layout, int margin);
+rect_t *get_rectangle_layout(int nb_rectangles, rect_t *container, layout_t layout, int margin);
 
 #endif //DOOM_DEPTH_C_UI_UTILS_H

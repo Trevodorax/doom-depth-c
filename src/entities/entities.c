@@ -1,32 +1,32 @@
 #include "entities.h"
 
-array_node_t  *weapons = NULL;
-array_node_t  *spells = NULL;
-array_node_t  *armors = NULL;
-array_node_t  *monsters = NULL;
+list_t  *weapons = NULL;
+list_t  *spells = NULL;
+list_t  *armors = NULL;
+list_t  *monsters = NULL;
 
 void init_entities(sqlite3 *db) {
 
-    weapons = create_struct_from_db(db, "SELECT * FROM WEAPON", create_weapon_from_db, sizeof (weapon_t));
-    spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, sizeof (spell_t));
-    armors = create_struct_from_db(db, "SELECT * FROM ARMOR", create_armor_from_db, sizeof (armor_t));
-    monsters = create_struct_from_db(db, "SELECT * FROM MONSTER", create_monster_from_db, sizeof (monster_t));
+    weapons = create_struct_from_db(db, "SELECT * FROM WEAPON", create_weapon_from_db, WEAPON_STRUCT);
+    spells = create_struct_from_db(db, "SELECT * FROM SPELL", create_spell_from_db, SPELL_STRUCT);
+    armors = create_struct_from_db(db, "SELECT * FROM ARMOR", create_armor_from_db, ARMOR_STRUCT);
+    monsters = create_struct_from_db(db, "SELECT * FROM MONSTER", create_monster_from_db, MONSTER_STRUCT);
 
 }
 
-array_node_t *get_weapons() {
+list_t *get_weapons() {
     return weapons;
 }
 
-array_node_t *get_spells() {
+list_t *get_spells() {
     return spells;
 }
 
-array_node_t *get_armors() {
+list_t *get_armors() {
     return armors;
 }
 
-array_node_t *get_monsters() {
+list_t *get_monsters() {
     return monsters;
 }
 
@@ -35,7 +35,7 @@ monster_t* get_monster_by_name(char * name) {
         return NULL;
     }
 
-    array_node_t* current = monsters;
+    array_node_t* current = monsters->head;
     while (current) {
         monster_t* monster = void_to_monster(current->value);
         if(!monster || !monster->name) {

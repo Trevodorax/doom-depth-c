@@ -1,6 +1,6 @@
 #include "player.h"
 
-unsigned int compute_xp_needed(unsigned int level){
+unsigned int compute_xp_needed(unsigned int level) {
     unsigned int total_xp = 0;
     for (int i = 1; i <= level; ++i) {
         total_xp += 20 * i;
@@ -8,16 +8,16 @@ unsigned int compute_xp_needed(unsigned int level){
     return total_xp;
 }
 
-bool check_level_up(player_t * player) {
+void check_level_up(player_t *player) {
     return compute_xp_needed(player->level) <= player->xp;
 }
 
-void give_exp(player_t * player, unsigned int amount) {
+void give_exp(player_t *player, unsigned int amount) {
     player->xp += amount;
 }
 
-unsigned int heal_player(player_t * player, unsigned int amount){
-    if(player->hp_max < player->hp+amount){
+unsigned int heal_player(player_t *player, unsigned int amount) {
+    if (player->hp_max < player->hp + amount) {
         unsigned int diff = player->hp_max - player->hp;
         player->hp = player->hp_max;
         return diff;
@@ -27,20 +27,20 @@ unsigned int heal_player(player_t * player, unsigned int amount){
     }
 }
 
-void heal_mana(player_t * player, unsigned int amount){
-    if(player->mana_max < player->mana+amount){
+void heal_mana(player_t *player, unsigned int amount) {
+    if (player->mana_max < player->mana + amount) {
         player->mana = player->mana_max;
     } else {
         player->mana += amount;
     }
 }
 
-player_t * create_player(char *name) {
-    player_t * player = malloc(sizeof(player_t));
-    player->name = malloc(sizeof(char)*strlen(name)+1);
+player_t *create_player(char *name) {
+    player_t *player = malloc(sizeof(player_t));
+    player->name = malloc(sizeof(char) * strlen(name) + 1);
     strcpy(player->name, name);
 
-    array_node_t *spells = get_spells();
+    list_t *spells = get_spells();
 
     player->hp_max = 100u;
     player->hp = player->hp_max;
@@ -51,7 +51,7 @@ player_t * create_player(char *name) {
     player->base_attack = 5u;
     player->base_defense = 2u;
     player->gold = 100u;
-    player->max_action_points = (unsigned short)6;
+    player->max_action_points = (unsigned short) 6;
     player->action_points = player->max_action_points;
     player->is_defending = false;
 
@@ -122,7 +122,7 @@ void create_player_in_db(player_t *player) {
 void *create_player_from_db(sqlite3_stmt *stmt) {
 
     player_t *player = malloc(sizeof(player_t));
-    array_node_t *spells = get_spells();
+    list_t *spells = get_spells();
 
     if (!player) {
         fprintf(stderr, "Failed to allocate memory for player.\n");
@@ -149,13 +149,13 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
     player->healing_spell = find_spell(spells, sqlite3_column_int(stmt, 15));
     player->current_map = strdup((char *) sqlite3_column_text(stmt, 16));
 
-    array_node_t *inventory = create_full_inventory_from_db(db_connection(), player->id);
-    player->inventory = (inventory_t *)inventory->value;
+    list_t *inventory = create_full_inventory_from_db(db_connection(), player->id);
+    player->inventory = (inventory_t *) inventory->head->value;
 
     char *sql = malloc(sizeof(char) * 150);
     sprintf(sql, "SELECT * FROM STATS WHERE id = (SELECT stats_id FROM PLAYER WHERE id = %d)", player->id);
-    array_node_t *stats = create_struct_from_db(db_connection(), sql, create_stats_from_db, sizeof (stats_t));
-    player->stats = (stats_t *)stats->value;
+    list_t *stats = create_struct_from_db(db_connection(), sql, create_stats_from_db, sizeof(stats_t));
+    player->stats = (stats_t *) stats->head->value;
 
     player->chosen_weapon = get_chosen_weapon(player->inventory);
     player->chosen_armor = get_chosen_armor(player->inventory);
@@ -262,25 +262,19 @@ void free_player(player_t *player) {
     }
 }
 
-array_node_t *get_players_from_db(sqlite3 *db) {
+list_t *get_players_from_db(sqlite3 *db) {
 
     char sql_request[100] = "SELECT id, name FROM PLAYER LIMIT 3";
 
     sqlite3_stmt *stmt;
     sqlite3_prepare_v2(db, sql_request, -1, &stmt, NULL);
-    array_node_t *players = NULL;
+    list_t *players = new_list(PLAYER_STRUCT);
 
-while (sqlite3_step(stmt) == SQLITE_ROW) {
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
         player_t *player = malloc(sizeof(player_t));
         player->id = sqlite3_column_int(stmt, 0);
         player->name = strdup((char *) sqlite3_column_text(stmt, 1));
-        if (players == NULL) {
-            players = malloc(sizeof(array_node_t));
-            players->value = player;
-            players->next = NULL;
-        } else {
-            append(&players, player, sizeof(player_t));
-        }
+        append(players, player);
     }
 
     return players;

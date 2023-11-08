@@ -75,11 +75,11 @@ int attack_spell(fight_context_t *fight_context, void *custom_params) {
     if (target->hp == 0) {
         global_logger->info("\n%s is DEAD !", target->name);
 
-        remove_node(&fight_context->monsters, (void *)&target);
+        remove_node(fight_context->monsters, (void *)&target);
 
-        global_logger->info("\n%d monster(s) left", get_size(fight_context->monsters));
+        global_logger->info("\n%d monster(s) left", fight_context->monsters->size);
 
-        if (get_size(fight_context->monsters) == 0) {
+        if (fight_context->monsters->size == 0) {
             global_logger->info("\nAll monsters are dead !");
             return FA_QUIT;
         }
@@ -157,10 +157,10 @@ int attack_weapon(fight_context_t *fight_context, void *custom_params) {
     if (target->hp == 0) {
         global_logger->info("\n%s is DEAD !", target->name);
 
-        remove_node(&fight_context->monsters, (void *)&target);
-        global_logger->info("\n%d monster(s) left", get_size(fight_context->monsters));
+        remove_node(fight_context->monsters, (void *)&target);
+        global_logger->info("\n%d monster(s) left", fight_context->monsters->size);
 
-        if (get_size(fight_context->monsters) == 0) {
+        if (fight_context->monsters->size == 0) {
             global_logger->info("\nAll monsters are dead !");
             return FA_QUIT;
         }

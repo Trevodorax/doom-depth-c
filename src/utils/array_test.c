@@ -5,12 +5,11 @@
 #include <string.h>
 
 char * test_get_node_int_value_at_index() {
-    array_node_t *start = NULL;
+    list_t *start = new_list(INT_STRUCT);
 
-    unsigned int_size = sizeof(int);
     int arr[] = {10, 20, 30, 40, 50}, i;
     for (i = 4; i >= 0; i--) {
-        push(&start, &arr[i], int_size);
+        push(start, &arr[i]);
     }
     int * assertValue = (int *)get_value_at_index(start,1);
     mu_assert("\nError in test_get_node_at_index : WRONG VALUE - Expecting 20", *assertValue == 20);
@@ -18,14 +17,11 @@ char * test_get_node_int_value_at_index() {
 }
 
 char * test_get_node_float_value_at_index() {
-    array_node_t *start = NULL;
+    list_t *start = new_list(FLOAT_STRUCT);
 
-    // Example with floats
-    unsigned float_size = sizeof(float);
-    start = NULL;
     float arr_f[] = {10.1f, 20.2f, 30.3f, 40.4f, 50.5f};
     for (int i = 4; i >= 0; i--) {
-        push(&start, &arr_f[i], float_size);
+        push(start, &arr_f[i]);
     }
     float * assertValue = (float *)get_value_at_index(start,1);
     mu_assert("Error in test float array", *assertValue == 20.2f);
@@ -33,13 +29,12 @@ char * test_get_node_float_value_at_index() {
 }
 
 char * test_get_node_string_value_at_index() {
-    array_node_t *start = NULL;
 
-    // Example with strings
-    unsigned string_size = sizeof(char *);
+    list_t *start = new_list(STRING_STRUCT);
+
     char *arr_s[] = {"one", "two", "three", "four", "five"};
     for (int i = 4; i >= 0; i--) {
-        push(&start, &arr_s[i], string_size);
+        push(start, &arr_s[i]);
     }
     char **assertValue = (char **)get_value_at_index(start, 1);
     mu_assert("Error in test string array", strcmp(*assertValue, "two") == 0);

@@ -161,11 +161,11 @@ void handle_actions_input(event_t event, player_t *player, section_options_t *ac
     if (event == ENTER_KEY) {
         if (*active_action == USE) {
             if (active_category == WEAPONS) {
-                player->chosen_weapon = get_value_at_index(player->inventory->weapons_head, active_item);
+                player->chosen_weapon = get_value_at_index(player->inventory->weapons_list, active_item);
                 *active_section = ITEMS;
             }
             if (active_category == ARMORS) {
-                player->chosen_armor = get_value_at_index(player->inventory->armors_head, active_item);
+                player->chosen_armor = get_value_at_index(player->inventory->armors_list, active_item);
                 *active_section = ITEMS;
             }
             if (active_category == HEALTH_POTIONS) {
@@ -183,12 +183,12 @@ void handle_actions_input(event_t event, player_t *player, section_options_t *ac
         }
         if (*active_action == THROW_AWAY) {
             if (active_category == WEAPONS) {
-                delete_node(&(player->inventory->weapons_head), active_item);
+                delete_node(player->inventory->weapons_list, active_item);
                 player->inventory->nb_weapons--;
                 *active_section = ITEMS;
             }
             if (active_category == ARMORS) {
-                delete_node(&(player->inventory->armors_head), active_item);
+                delete_node(player->inventory->armors_list, active_item);
                 player->inventory->nb_armors--;
                 *active_section = ITEMS;
             }

@@ -240,14 +240,14 @@ int display_shop_items_gui(game_window_t * game_window,
             break;
 
         case WEAPONS: {
-            array_node_t * weapons = get_weapons();
-            quantity = get_count(weapons);
+            list_t * weapons = get_weapons();
+            quantity = weapons->size;
             break;
         }
 
         case ARMORS: {
-            array_node_t * armors = get_armors();
-            quantity = get_count(armors);
+            list_t * armors = get_armors();
+            quantity = armors->size;
             break;
         }
 
@@ -265,7 +265,7 @@ int display_shop_items_gui(game_window_t * game_window,
     switch (active_category) {
         case ARMORS:
             for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-                array_node_t * armors = get_armors();
+                list_t * armors = get_armors();
                 armor_t * armor_to_print = get_value_at_index(armors, first_item_to_print + i);
                 if (!armor_to_print) {
                     break;
@@ -282,7 +282,7 @@ int display_shop_items_gui(game_window_t * game_window,
 
         case WEAPONS:
             for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-                array_node_t * weapons = get_weapons();
+                list_t * weapons = get_weapons();
                 weapon_t * weapon_to_print = get_value_at_index(weapons, first_item_to_print + i);
                 if (!weapon_to_print) {
                     break;
@@ -348,13 +348,13 @@ int display_item_confirm_gui(game_window_t * game_window, SDL_Rect window_rect, 
     char *details = NULL;
     switch (active_category) {
         case ARMORS: {
-            array_node_t * armors = get_armors();
+            list_t * armors = get_armors();
             details = shop_armor_details_to_string(get_value_at_index(armors, (int) active_item));
             break;
         }
 
         case WEAPONS: {
-            array_node_t * weapons = get_weapons();
+            list_t * weapons = get_weapons();
             details = shop_weapon_details_to_string(get_value_at_index(weapons, (int) active_item));
             break;
         }

@@ -7,7 +7,7 @@
 
 typedef struct {
     player_t * player;
-    array_node_t * monsters;
+    list_t * monsters;
     char * notification_message;
     bool player_turn;
     treasure_t * treasure;

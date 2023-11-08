@@ -17,8 +17,8 @@ void *create_spell_from_db(sqlite3_stmt *stmt) {
 
 }
 
-spell_t *find_noob_spell(array_node_t * spells, int type) {
-    array_node_t * current = spells;
+spell_t *find_noob_spell(list_t * spells, int type) {
+    array_node_t * current = spells->head;
     spell_t * noob_spell = NULL;
     while(current != NULL){
         spell_t * spell = (spell_t *)current->value;
@@ -34,9 +34,9 @@ spell_t *find_noob_spell(array_node_t * spells, int type) {
     return noob_spell;
 }
 
-spell_t *find_spell(array_node_t * spells, int id) {
+spell_t *find_spell(list_t * spells, int id) {
 
-    array_node_t * current = spells;
+    array_node_t * current = spells->head;
     spell_t * spell = NULL;
     while(current != NULL){
         spell = (spell_t *)current->value;

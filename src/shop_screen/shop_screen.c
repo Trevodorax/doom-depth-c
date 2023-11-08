@@ -194,7 +194,7 @@ void handle_confirm(event_t event, player_t * player, section_options_t * active
 void handle_actions(player_t * player, category_options_t active_category, unsigned short active_item) {
     switch (active_category) {
         case WEAPONS: {
-            array_node_t * weapons = get_weapons();
+            list_t * weapons = get_weapons();
             if (!weapons) {
                 printf("could not get armors\n");
                 return;
@@ -205,13 +205,7 @@ void handle_actions(player_t * player, category_options_t active_category, unsig
                 return;
             }
             if (player->gold >= weapon_to_buy->cost && !is_full(player->inventory)) {
-                if(!&(player->inventory->weapons_head)){
-                    player->inventory->weapons_head = malloc(sizeof(array_node_t));
-                    player->inventory->weapons_head->value = weapon_to_buy;
-                    player->inventory->weapons_head->next = NULL;
-                } else {
-                    push(&(player->inventory->weapons_head), weapon_to_buy, sizeof(weapon_t));
-                }
+                push(player->inventory->weapons_list, weapon_to_buy);
                 player->inventory->nb_weapons++;
                 player->gold -= weapon_to_buy->cost;
             }
@@ -219,7 +213,7 @@ void handle_actions(player_t * player, category_options_t active_category, unsig
         }
 
         case ARMORS: {
-            array_node_t * armors = get_armors();
+            list_t * armors = get_armors();
             if (!armors) {
                 printf("could not get armors\n");
                 return;
@@ -229,16 +223,10 @@ void handle_actions(player_t * player, category_options_t active_category, unsig
                 printf("could not get armor to buy\n");
                 return;
             }
-            if (player->gold >= armor_to_buy->cost && !is_full(player->inventory)) {
-                if(!&(player->inventory->armors_head)){
-                    player->inventory->armors_head = malloc(sizeof(array_node_t));
-                    player->inventory->armors_head->value = armor_to_buy;
-                    player->inventory->armors_head->next = NULL;
-                } else {
-                    push(&(player->inventory->armors_head), armor_to_buy, sizeof(armor_t));
-                }
-                player->inventory->nb_armors++;
-                player->gold -= armor_to_buy->cost;
+            if ((*player)->gold >= armor_to_buy->cost && !is_full((*player)->inventory)) {
+                push((*player)->inventory->armors_list, armor_to_buy);
+                ((*player)->inventory->nb_armors)++;
+                (*player)->gold -= armor_to_buy->cost;
             }
             break;
         }

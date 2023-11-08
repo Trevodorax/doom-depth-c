@@ -126,7 +126,7 @@ sqlite3 *db_connection() {
     return NULL;
 }
 
-array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback, size_t struct_size) {
+list_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback, array_type_t type) {
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
@@ -136,7 +136,7 @@ array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struc
         return NULL;
     }
 
-    array_node_t *head = NULL;
+    list_t *list = new_list(type);
 
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 
@@ -148,7 +148,7 @@ array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struc
             return NULL;
         }
 
-        append(&head, struct_ptr, struct_size);
+        append(list, struct_ptr);
     }
 
     if (rc != SQLITE_DONE) {
@@ -158,6 +158,6 @@ array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struc
     }
 
     sqlite3_finalize(stmt);
-    return head;
+    return list;
 
 }

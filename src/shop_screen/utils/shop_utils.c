@@ -6,13 +6,13 @@
 int get_items_count(category_options_t category) {
     switch (category) {
         case ARMORS: {
-            array_node_t *armors = get_armors();
-            return get_count(armors);
+            list_t *armors = get_armors();
+            return armors->size;
         }
 
         case WEAPONS: {
-            array_node_t *weapons = get_weapons();
-            return get_count(weapons);
+            list_t *weapons = get_weapons();
+            return weapons->size;
         }
 
         case HEALTH_POTIONS:

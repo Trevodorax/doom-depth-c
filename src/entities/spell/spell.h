@@ -47,7 +47,7 @@ void *create_spell_from_db(sqlite3_stmt *stmt);
  * @dependencies Depends on the SQLite library.
  * @errors Errors during database operations or memory allocation can result in NULL being returned.
  */
-spell_t *find_noob_spell(array_node_t * spells, int type);
+spell_t *find_noob_spell(list_t * spells, int type);
 
 /**
  * @brief Finds the spell.
@@ -62,7 +62,7 @@ spell_t *find_noob_spell(array_node_t * spells, int type);
  * @dependencies Depends on the SQLite library.
  * @errors Errors during database operations or memory allocation can result in NULL being returned.
  */
-spell_t *find_spell(array_node_t * spells, int id);
+spell_t *find_spell(list_t * spells, int id);
 
 /**
  * @brief Frees the spell

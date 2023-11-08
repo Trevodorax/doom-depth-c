@@ -37,7 +37,7 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
             }
             switch (selected_action->callback(fight_context, selected_action->params)) {
                 case FA_QUIT: {
-                    if(get_size(fight_context->monsters) == 0) {
+                    if(fight_context->monsters->size == 0) {
                         build_notification_formatted(fight_context, "Player wins %d gold from fight !", fight_context->treasure->coins);
                         display_fight(game_window, fight_context, fight_zone);
                         render_present(game_window);
@@ -86,7 +86,7 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
 }
 
 void monsters_turn(game_window_t * game_window, fight_context_t * fight_context, rect_t fight_zone) {
-    array_node_t * current_monster_node = fight_context->monsters;
+    array_node_t * current_monster_node = fight_context->monsters->head;
 
     while(current_monster_node) {
         monster_t * current_monster = void_to_monster(current_monster_node->value);

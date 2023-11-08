@@ -22,7 +22,7 @@
  * @dependencies Depends on the SDL2 library.
  * @errors None.
  */
-int display_load_game(game_window_t *game_window, array_node_t *players, unsigned short active_option);
+int display_load_game(game_window_t *game_window, list_t *players, unsigned short active_option);
 
 /**
  * @brief Displays the load game screen GUI.
@@ -38,7 +38,7 @@ int display_load_game(game_window_t *game_window, array_node_t *players, unsigne
  * @dependencies Depends on the SDL2 library.
  * @errors None.
  */
-int display_load_game_gui(game_window_t *game_window, array_node_t *players, unsigned short active_option);
+int display_load_game_gui(game_window_t *game_window, list_t *players, unsigned short active_option);
 
 /**
  * @brief Displays the load game screen CLI.
@@ -54,6 +54,6 @@ int display_load_game_gui(game_window_t *game_window, array_node_t *players, uns
  * @dependencies None.
  * @errors None.
  */
-int display_load_game_cli(game_window_t *game_window, array_node_t *players, unsigned short active_option);
+int display_load_game_cli(game_window_t *game_window, list_t *players, unsigned short active_option);
 
 #endif

@@ -21,7 +21,6 @@ set(cross_platform_targets
         src/entities/entities.c
         src/storage/json/json.c
         src/storage/json/json.h
-        src/utils/array.c
         src/utils/array.h
         src/map_screen/map_screen.c
         src/map_screen/map_screen.h
@@ -124,6 +123,7 @@ set(cross_platform_targets
         src/shop_screen/display/cli/cli.h
         src/entities/treasure/treasure.c
         src/entities/treasure/treasure.h
+        src/utils/list.c
         src/level_up_screen/level_up_screen.c
         src/level_up_screen/level_up_screen.h
         src/level_up_screen/types.h

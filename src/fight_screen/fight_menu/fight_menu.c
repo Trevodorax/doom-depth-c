@@ -33,18 +33,17 @@ menu_t* create_menu(int nb_options, const char * title, const char * image_path,
 }
 
 menu_t* build_nested_menu(fight_context_t * fight_context) {
-    int monsters_size = get_size(fight_context->monsters);
 
     menu_t *root_menu = create_menu(3, "Root Menu", NULL, NULL, NULL);
 
-    menu_t *sub_menu_weapon = create_menu(monsters_size, "Weapon", NULL, NULL, NULL);
+    menu_t *sub_menu_weapon = create_menu(fight_context->monsters->size, "Weapon", NULL, NULL, NULL);
     menu_t *sub_menu_spells = create_menu(3, "Spells", NULL, NULL, NULL);
 
-    sub_menu_spells->options[0] = create_menu(monsters_size, "Attack Spell", NULL, NULL, NULL);
+    sub_menu_spells->options[0] = create_menu(fight_context->monsters->size, "Attack Spell", NULL, NULL, NULL);
     sub_menu_spells->options[1] = create_menu(0, "Defend Spell", NULL, defend_spell, NULL);
     sub_menu_spells->options[2] = create_menu(0, "Heal Spell", NULL, heal_spell, NULL);
 
-    array_node_t * current_monster = fight_context->monsters;
+    array_node_t * current_monster = fight_context->monsters->head;
     int i = 0;
     while(current_monster != NULL){
         monster_t * monster = (monster_t*)current_monster->value;

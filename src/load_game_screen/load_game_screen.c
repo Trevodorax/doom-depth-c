@@ -2,8 +2,6 @@
 #include "display/display.h"
 #include "../utils/utils.h"
 #include "../event/event.h"
-#include "../logs/log.h"
-#include "../map_screen/map/map.h"
 
 int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** map, sqlite3 * db) {
 
@@ -13,7 +11,7 @@ int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** m
     }
 
     event_t event;
-    array_node_t *players = get_players_from_db(db);
+    list_t *players = get_players_from_db(db);
 
     unsigned short active_option = 0;
 

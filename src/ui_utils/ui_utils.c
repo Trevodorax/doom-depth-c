@@ -3,13 +3,13 @@
 #include <math.h>
 #include "ui_utils.h"
 
-rect_t * get_rectangle_grid(size_t nb_rectangles, rect_t *container) {
+rect_t * get_rectangle_grid(int nb_rectangles, rect_t *container) {
     if (nb_rectangles <= 0 || container == NULL) {
         return NULL;
     }
 
-    int rows = (int)sqrt((int)nb_rectangles);
-    int cols = ((int)nb_rectangles + rows - 1) / rows; // calculate columns based on rows
+    int rows = (int)sqrt(nb_rectangles);
+    int cols = (nb_rectangles + rows - 1) / rows; // calculate columns based on rows
 
     // calculate width and height for each cell with a small margin
     int cell_width = ((int) container->w / cols) - 2;
@@ -34,7 +34,7 @@ rect_t * get_rectangle_grid(size_t nb_rectangles, rect_t *container) {
     return rect_grid;
 }
 
-rect_t *get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertical, int margin) {
+rect_t *get_rectangle_line(int nb_rectangles, rect_t *container, bool vertical, int margin) {
     if (nb_rectangles <= 0 || container == NULL) {
         return NULL;
     }
@@ -42,11 +42,11 @@ rect_t *get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertica
     int rows, cols;
 
     if (vertical) {
-        rows = (int)nb_rectangles;
+        rows = nb_rectangles;
         cols = 1;
     } else {
         rows = 1;
-        cols = (int)nb_rectangles;
+        cols = nb_rectangles;
     }
 
     int cell_width = ((int) container->w / cols) - margin;
@@ -71,7 +71,7 @@ rect_t *get_rectangle_line(size_t nb_rectangles, rect_t *container, bool vertica
     return rect_display;
 }
 
-rect_t *get_rectangle_layout(size_t nb_rectangles, rect_t *container, layout_t layout, int margin) {
+rect_t *get_rectangle_layout(int nb_rectangles, rect_t *container, layout_t layout, int margin) {
     switch(layout) {
         case GRID:
             return get_rectangle_grid(nb_rectangles, container);

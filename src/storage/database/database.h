@@ -85,6 +85,6 @@ sqlite3 *db_connection();
  * @dependencies Depends on the SQLite3 library.
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
  */
-array_node_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback, size_t struct_size);
+list_t *create_struct_from_db(sqlite3 *db, const char *query, sql_to_struct_callback callback, array_type_t type);
 
 #endif //DOOM_DEPTH_C_DATABASE_H

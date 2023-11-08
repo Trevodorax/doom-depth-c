@@ -34,7 +34,7 @@ void init_entities(sqlite3 *db);
  * @dependencies None.
  * @errors None.
  */
-array_node_t * get_weapons();
+list_t * get_weapons();
 
 /**
  * @brief Gets the spells.
@@ -47,7 +47,7 @@ array_node_t * get_weapons();
  * @dependencies None.
  * @errors None.
  */
-array_node_t * get_spells();
+list_t * get_spells();
 
 /**
  * @brief Gets the armors.
@@ -60,7 +60,7 @@ array_node_t * get_spells();
  * @dependencies None.
  * @errors None.
  */
-array_node_t * get_armors();
+list_t * get_armors();
 
 /**
  * @brief Gets the monsters.
@@ -73,7 +73,7 @@ array_node_t * get_armors();
  * @dependencies None.
  * @errors None.
  */
-array_node_t * get_monsters();
+list_t * get_monsters();
 
 /**
  * @brief Retrieves a monster by its name

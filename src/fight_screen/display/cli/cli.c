@@ -2,7 +2,7 @@
 #include "../../../ui_utils/ui_utils.h"
 #include "../../../ui_utils/cli_utils/ascii_art/ascii_art.h"
 
-int display_monsters_cli(game_window_t * game_window, array_node_t * monsters, rect_t container);
+int display_monsters_cli(game_window_t * game_window, list_t * monsters, rect_t container);
 int display_monster_cli(game_window_t * game_window, monster_t *monster, rect_t container);
 int display_player_in_fight_cli(game_window_t * game_window, player_t * player, rect_t container);
 int display_notification_zone_cli(game_window_t * game_window, char * notification_text, rect_t container);
@@ -74,16 +74,15 @@ int display_fight_cli(game_window_t * game_window, fight_context_t * fight_conte
     return EXIT_SUCCESS;
 }
 
-int display_monsters_cli(game_window_t * game_window, array_node_t * monsters, rect_t container) {
-    size_t nb_monsters = get_size(monsters);
+int display_monsters_cli(game_window_t * game_window, list_t * monsters, rect_t container) {
 
-    rect_t * monster_containers = get_rectangle_layout(nb_monsters, &container, HORIZONTAL, 2);
+    rect_t * monster_containers = get_rectangle_layout(monsters->size, &container, HORIZONTAL, 2);
     if(!monster_containers) {
         return EXIT_FAILURE;
     }
 
     size_t i = 0;
-    array_node_t * current_monster = monsters;
+    array_node_t * current_monster = monsters->head;
     while(current_monster != NULL) {
         monster_t * checked_current_monster = void_to_monster(current_monster->value);
         if(!checked_current_monster) {

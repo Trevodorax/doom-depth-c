@@ -3,8 +3,8 @@
 
 inventory_t * create_inventory(){
     inventory_t * inv = malloc(sizeof(inventory_t));
-    inv->armors_head = NULL;
-    inv->weapons_head = NULL;
+    inv->armors_list = new_list(ARMOR_STRUCT);
+    inv->weapons_list = new_list(WEAPON_STRUCT);
     inv->nb_armors = 0u;
     inv->nb_weapons = 0u;
     inv->nb_health_potions = 1u;
@@ -27,36 +27,35 @@ void *create_inventory_from_db(sqlite3_stmt *stmt) {
     inventory->nb_armors = sqlite3_column_int(stmt, 2);
     inventory->nb_mana_potions = sqlite3_column_int(stmt, 3);
     inventory->nb_health_potions = sqlite3_column_int(stmt, 4);
-    inventory->armors_head = NULL;
-    inventory->weapons_head = NULL;
+    inventory->armors_list = new_list(ARMOR_STRUCT);
+    inventory->weapons_list = new_list(WEAPON_STRUCT);
 
     return inventory;
 }
 
-array_node_t *create_full_inventory_from_db(sqlite3 *db, int player_id) {
+list_t *create_full_inventory_from_db(sqlite3 *db, int player_id) {
 
     char *sql = malloc(sizeof(char) * 150);
     sprintf(sql, "SELECT inventory_capacity, nb_weapons, nb_armors, nb_mana_potions, nb_health_potions FROM PLAYER WHERE id = %d", player_id);
-    array_node_t *inventory = create_struct_from_db(db, sql, create_inventory_from_db, sizeof (inventory_t));
+    list_t *inventory = create_struct_from_db(db, sql, create_inventory_from_db, INVENTORY_STRUCT);
 
     sprintf(sql, "SELECT W.*, WI.uses, WI.chosen, WI.id FROM WEAPON W JOIN WEAPONS_IN_INVENTORY WI ON W.id = WI.weapon_id WHERE WI.player_id = %d", player_id);
-    array_node_t *weapons_in_inventory = create_struct_from_db(db, sql, create_weapon_from_db, sizeof (weapon_t));
+    list_t *weapons_in_inventory = create_struct_from_db(db, sql, create_weapon_from_db, WEAPON_STRUCT);
 
     sprintf(sql, "SELECT A.* FROM ARMOR A JOIN ARMORS_IN_INVENTORY AI ON A.id = AI.armor_id WHERE AI.player_id = %d", player_id);
-    array_node_t *armors_in_inventory = create_struct_from_db(db, sql, create_armor_from_db, sizeof (armor_t));
+    list_t *armors_in_inventory = create_struct_from_db(db, sql, create_armor_from_db, ARMOR_STRUCT);
 
-    inventory_t *i = (inventory_t *)inventory->value;
-    i->weapons_head = weapons_in_inventory;
-    i->armors_head = armors_in_inventory;
+    inventory_t *i = (inventory_t *)inventory->head->value;
+    i->weapons_list = weapons_in_inventory;
+    i->armors_list = armors_in_inventory;
 
     free(sql);
     return inventory;
-
 }
 
 weapon_t *get_chosen_weapon(inventory_t *inventory){
 
-    array_node_t * current_node = inventory->weapons_head;
+    array_node_t * current_node = inventory->weapons_list->head;
     while(current_node != NULL){
         weapon_t * weapon = (weapon_t *) current_node->value;
         if(weapon->chosen == 1){
@@ -71,7 +70,7 @@ weapon_t *get_chosen_weapon(inventory_t *inventory){
 
 armor_t *get_chosen_armor(inventory_t *inventory) {
 
-    array_node_t *current_node = inventory->armors_head;
+    array_node_t *current_node = inventory->armors_list->head;
     while (current_node != NULL) {
         armor_t *armor = (armor_t *) current_node->value;
         if (armor->chosen == 1) {
@@ -130,7 +129,7 @@ int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id) {
         return rc;
     }
 
-    array_node_t *current_node = inventory->weapons_head;
+    array_node_t *current_node = inventory->weapons_list->head;
     while (current_node != NULL) {
         weapon_t *weapon = (weapon_t *) current_node->value;
         sqlite3_bind_int64(stmt, 1, player_id);
@@ -157,7 +156,7 @@ int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id) {
         return rc;
     }
 
-    current_node = inventory->armors_head;
+    current_node = inventory->armors_list->head;
     while (current_node != NULL) {
         armor_t *armor = (armor_t *) current_node->value;
         sqlite3_bind_int64(stmt, 1, player_id);
@@ -181,22 +180,8 @@ int save_inventory(sqlite3 *db, inventory_t *inventory, int player_id) {
 
 void free_inventory(inventory_t * inventory) {
     if (inventory) {
-        array_node_t *current = inventory->armors_head;
-        while (current) {
-            array_node_t *temp = current;
-            current = current->next;
-            free_armor((armor_t *)temp->value);
-            free_array_node(temp);
-        }
-
-        current = inventory->weapons_head;
-        while (current) {
-            array_node_t *temp = current;
-            current = current->next;
-            free_weapon((weapon_t *)temp->value);
-            free_array_node(temp);
-        }
-
+        free_list(inventory->armors_list);
+        free_list(inventory->weapons_list);
         free(inventory);
     }
 }

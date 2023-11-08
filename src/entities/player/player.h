@@ -139,7 +139,7 @@ void free_player(player_t *player);
  * @dependencies Depends on the SQLite3 library.
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
  */
-array_node_t *get_players_from_db(sqlite3 *db);
+list_t *get_players_from_db(sqlite3 *db);
 
 /**
  * @brief Saves or retrieves a checkpoint for the state of the user
