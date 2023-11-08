@@ -24,6 +24,7 @@ const char create_player_table_sql[] =
         "CREATE TABLE IF NOT EXISTS PLAYER ("
         "    id                 INTEGER primary key autoincrement,"
         "    name               TEXT    not null,"
+        "    current_map        TEXT    not null,"
         "    hp                 INTEGER not null,"
         "    hp_max             INTEGER not null,"
         "    mana               INTEGER not null,"
@@ -218,13 +219,15 @@ const char update_player_sql[] =
         "nb_mana_potions = ?, "
         "nb_health_potions = ?, "
         "action_points = ?, "
-        "max_action_points = ? "
+        "max_action_points = ?, "
+        "current_map = ? "
         "WHERE id = ?;";
 
 const char create_new_player_sql[] =
-        "INSERT INTO PLAYER (name, hp, hp_max, mana, mana_max, xp, level, base_attack, base_defense, gold, offensive_spell_id, defensive_spell_id, healing_spell_id, stats_id, inventory_capacity, nb_weapons, nb_armors, nb_mana_potions, nb_health_potions, action_points, max_action_points) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        "INSERT INTO PLAYER (name, current_map, hp, hp_max, mana, mana_max, xp, level, base_attack, base_defense, gold, offensive_spell_id, defensive_spell_id, healing_spell_id, stats_id, inventory_capacity, nb_weapons, nb_armors, nb_mana_potions, nb_health_potions, action_points, max_action_points) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 const char create_player_from_db_sql[] =
         "SELECT id, name, hp, hp_max, mana, mana_max, gold, xp, level, base_attack, "
-        "base_defense, action_points, max_action_points, offensive_spell_id, defensive_spell_id, healing_spell_id FROM PLAYER WHERE id = %d;";
+        "base_defense, action_points, max_action_points, offensive_spell_id, defensive_spell_id, healing_spell_id, "
+        "current_map FROM PLAYER WHERE id = %d;";

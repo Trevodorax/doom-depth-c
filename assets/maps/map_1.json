@@ -42,7 +42,10 @@
             "enemies_list": ["troll"],
             "enemies_chances_to_appear": [100],
             "done": 0,
-            "linked_map": "map_2.json"
+            "right": {
+              "done": 0,
+              "linked_map": "map_2.json"
+            }
           }
         }
       }

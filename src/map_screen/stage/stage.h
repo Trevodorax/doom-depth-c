@@ -17,6 +17,7 @@ typedef enum {
     TREASURE,
     FIGHT_DONE,
     TREASURE_DONE,
+    LINKED_MAP,
     STAGE_TYPE_COUNT
 } stage_type_t;
 
@@ -26,7 +27,8 @@ static const char * stage_texture_files[STAGE_TYPE_COUNT] = {
         "../assets/stages/image/shop_stage.png",
         "../assets/stages/image/treasure_stage.png",
         "../assets/stages/image/fight_done_stage.png",
-        "../assets/stages/image/treasure_done_stage.png"
+        "../assets/stages/image/treasure_done_stage.png",
+        "../assets/stages/image/linked_map_stage.png"
 };
 
 static const char * stage_ascii_arts_files[STAGE_TYPE_COUNT] = {
@@ -35,7 +37,8 @@ static const char * stage_ascii_arts_files[STAGE_TYPE_COUNT] = {
         "../assets/stages/ascii/shop_stage.asciiart",
         "../assets/stages/ascii/treasure_stage.asciiart",
         "../assets/stages/ascii/fight_done_stage.asciiart",
-        "../assets/stages/ascii/treasure_done_stage.asciiart"
+        "../assets/stages/ascii/treasure_done_stage.asciiart",
+        "../assets/stages/image/linked_map_stage.asciiart"
 };
 
 typedef enum {
@@ -51,7 +54,6 @@ struct stage_t {
 
     bool is_done; // true if the stage is not a fight or if the fight is done
 
-    // TODO: handle linked maps @paul
     bool has_linked_map; // true if the user goes to a linked map when stepping on this stage
     char * linked_map_file_path;
 
