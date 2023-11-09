@@ -9,7 +9,7 @@ int display_items_cli(game_window_t * game_window, rect_t *items_container, rect
                       player_t * player, unsigned short active_item, section_options_t active_section);
 int display_potions_cli(game_window_t * game_window, potion_types_t type, rect_t details_container, unsigned int quantity);
 int display_actions_cli(game_window_t *game_window, rect_t actions_container, action_options_t active_action,
-                        bool can_be_used);
+                        bool can_be_used, bool can_be_unequipped);
 int display_nothing_to_see_cli(game_window_t * game_window, rect_t container);
 
 int display_inventory_cli(game_window_t * game_window,
@@ -115,9 +115,9 @@ int display_inventory_cli(game_window_t * game_window,
 
     if ((active_category == ARMORS && get_value_at_index(player->inventory->armors_head, active_item) == player->chosen_armor) ||
         (active_category == WEAPONS && get_value_at_index(player->inventory->weapons_head, active_item) == player->chosen_weapon)) {
-        display_actions_cli(game_window, actions_container, active_action, false);
+        display_actions_cli(game_window, actions_container, active_action, false, 0);
     } else {
-        display_actions_cli(game_window, actions_container, active_action, true);
+        display_actions_cli(game_window, actions_container, active_action, true, 0);
     }
 
     return EXIT_SUCCESS;
@@ -282,7 +282,7 @@ int display_potions_cli(game_window_t * game_window,
 
 #define ACTIONS_COUNT 3
 int display_actions_cli(game_window_t *game_window, rect_t actions_container, action_options_t active_action,
-                        bool can_be_used) {
+                        bool can_be_used, bool can_be_unequipped) {
     char *actions[ACTIONS_COUNT] = {"Use", "Unequip", "Throw away"};
     int cursor_size = 5;
 
@@ -295,7 +295,7 @@ int display_actions_cli(game_window_t *game_window, rect_t actions_container, ac
         };
 
         cli_print_text_in_rectangle(game_window->matrix, action_container, actions[i],
-                                    (i == 0 && !can_be_used) ? game_window->cli_color_palette->disabled : game_window->cli_color_palette->text,
+                                    ((i == USE && !can_be_used) || (i == UNEQUIP && !can_be_unequipped)) ? game_window->cli_color_palette->disabled : game_window->cli_color_palette->text,
                                     ALIGN_START, ALIGN_CENTER, TINY_TEXT);
     }
 
@@ -306,7 +306,7 @@ int display_actions_cli(game_window_t *game_window, rect_t actions_container, ac
             cursor_size
     };
 
-    if (can_be_used || active_action != USE) {
+    if ((can_be_used || active_action != USE) && (can_be_unequipped || active_action != UNEQUIP)) {
         cli_print_text_in_rectangle(game_window->matrix, cursor_container, ">",
                                     game_window->cli_color_palette->text, ALIGN_CENTER, ALIGN_CENTER, TINY_TEXT);
     }
