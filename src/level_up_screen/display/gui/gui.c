@@ -2,8 +2,8 @@
 #include "../../../ui_utils/sdl_utils/sdl_utils.h"
 #include "../../../ui_utils/ui_utils.h"
 
-int display_stat_options_gui(game_window_t * game_window, rect_t container, stat_t selected_stat, player_t * player);
-int display_stat_option_gui(game_window_t * game_window, unsigned int amount, char * display_name, char * image_path, rect_t container, bool is_selected);
+int display_level_up_stat_options_gui(game_window_t * game_window, rect_t container, stat_t selected_stat, player_t * player);
+int display_level_up_stat_option_gui(game_window_t * game_window, unsigned int amount, char * display_name, char * image_path, rect_t container, bool is_selected);
 
 int display_level_up_gui(game_window_t * game_window, player_t * player, stat_t selected_stat) {
     set_background_color(game_window->renderer, game_window->sdl_color_palette->background);
@@ -50,14 +50,14 @@ int display_level_up_gui(game_window_t * game_window, player_t * player, stat_t 
             ALIGN_START
         );
 
-    display_stat_options_gui(game_window, stats_container, selected_stat, player);
+    display_level_up_stat_options_gui(game_window, stats_container, selected_stat, player);
 
     free(title_text);
 
     return EXIT_SUCCESS;
 }
 
-int display_stat_options_gui(game_window_t * game_window, rect_t container, stat_t selected_stat, player_t * player) {
+int display_level_up_stat_options_gui(game_window_t * game_window, rect_t container, stat_t selected_stat, player_t * player) {
     if (!player) {
         return EXIT_FAILURE;
     }
@@ -86,7 +86,7 @@ int display_stat_options_gui(game_window_t * game_window, rect_t container, stat
                 current_stat_amount = 0;
         }
 
-        display_stat_option_gui(
+        display_level_up_stat_option_gui(
                 game_window,
                 current_stat_amount,
                 stat_display_name[i],
@@ -99,7 +99,7 @@ int display_stat_options_gui(game_window_t * game_window, rect_t container, stat
     return EXIT_SUCCESS;
 }
 
-int display_stat_option_gui(game_window_t * game_window, unsigned int amount, char * display_name, char * image_path, rect_t container, bool is_selected) {
+int display_level_up_stat_option_gui(game_window_t * game_window, unsigned int amount, char * display_name, char * image_path, rect_t container, bool is_selected) {
     char * text = calloc(100, sizeof(char));
     snprintf(text, 100, "%s (%u)", display_name, amount);
 

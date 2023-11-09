@@ -139,12 +139,23 @@ set(cross_platform_targets
         src/help_screen/help_screen.c
         src/help_screen/help_screen.h
         src/help_screen/display/gui/gui.c
+        src/help_screen/display/gui/gui.h
         src/help_screen/display/cli/cli.c
+        src/help_screen/display/cli/cli.h
         src/help_screen/display/display.c
+        src/help_screen/display/display.h
         src/confirm_quit_screen/confirm_quit_screen.h
         src/confirm_quit_screen/confirm_quit_screen.c
         src/confirm_quit_screen/display/display.h
         src/confirm_quit_screen/display/display.c
+        src/stats_screen/display/display.c
+        src/stats_screen/display/display.h
+        src/stats_screen/display/cli/cli.c
+        src/stats_screen/display/cli/cli.h
+        src/stats_screen/display/gui/gui.c
+        src/stats_screen/display/gui/gui.h
+        src/stats_screen/stats_screen.c
+        src/stats_screen/stats_screen.h
 )
 
 # for unix

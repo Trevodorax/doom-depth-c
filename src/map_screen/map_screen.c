@@ -9,6 +9,7 @@
 #include "../inventory_screen/inventory_screen.h"
 #include "../help_screen/help_screen.h"
 #include "../confirm_quit_screen/confirm_quit_screen.h"
+#include "../stats_screen/stats_screen.h"
 
 /**
  * @brief Moves the player and returns the stage he is on
@@ -71,6 +72,9 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
                         return EXIT_FAILURE;
                     }
                     break;
+                case m_KEY:
+                    stats_screen(game_window, player);
+                    break;
                 case h_KEY:
                     help_screen(game_window);
                     break;
@@ -114,9 +118,6 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
                             break;
                     }
                     break;
-                // FIXME: remove this, it is for testing
-                case Y_KEY:
-                    return LEVEL_UP_SCREEN;
                 default:
                     break;
             }

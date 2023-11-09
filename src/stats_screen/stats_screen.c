@@ -1,11 +1,10 @@
-#include "help_screen.h"
+#include "stats_screen.h"
 #include "../event/event.h"
 #include "../utils/utils.h"
-#include "types.h"
 #include "display/display.h"
-#include "../confirm_quit_screen/confirm_quit_screen.h"
+#include "../help_screen/help_screen.h"
 
-int help_screen(game_window_t * game_window) {
+int stats_screen(game_window_t * game_window, player_t * player) {
     event_t event;
     while (true){
         delay(game_window->ui_type, 50);
@@ -16,9 +15,10 @@ int help_screen(game_window_t * game_window) {
 
         while (get_event(game_window->ui_type, &event)){
             switch (event) {
+                case ESCAPE_KEY:
                 case Q_KEY:
                 case QUIT:
-                    return QUIT_GAME;
+                    return MAP_SCREEN;
                 default:
                     break;
             }
@@ -26,7 +26,7 @@ int help_screen(game_window_t * game_window) {
         if (game_window->ui_type == CLI) {
             set_cli_raw_mode(false);
         }
-        if (display_help(game_window) == EXIT_FAILURE) {
+        if (display_stats(game_window, player) == EXIT_FAILURE) {
             return QUIT_GAME;
         }
         render_present(game_window);

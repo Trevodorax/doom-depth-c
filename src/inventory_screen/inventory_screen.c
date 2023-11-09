@@ -5,6 +5,7 @@
 #include "../utils/utils.h"
 #include "../logs/log.h"
 #include "../help_screen/help_screen.h"
+#include "../stats_screen/stats_screen.h"
 
 void handle_categories_input(event_t event, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item);
 void handle_items_input(event_t event, section_options_t *active_section, category_options_t active_category,
@@ -37,6 +38,9 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
         set_cli_raw_mode(true);
         while (get_event(game_window->ui_type, &event)) {
             switch (event) {
+                case m_KEY:
+                    stats_screen(game_window, player);
+                    break;
                 case h_KEY:
                     help_screen(game_window);
                     break;
