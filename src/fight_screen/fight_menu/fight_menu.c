@@ -48,6 +48,10 @@ menu_t* build_nested_menu(fight_context_t * fight_context) {
     int i = 0;
     while(current_monster != NULL){
         monster_t * monster = (monster_t*)current_monster->value;
+        if (!monster->name) {
+            current_monster = current_monster->next;
+            continue;
+        }
         char * name_and_hp = malloc(sizeof(char)*(strlen(monster->name)+10));
         sprintf(name_and_hp,"%s (%d)",monster->name,monster->hp);
         sub_menu_weapon->options[i] = create_menu(0, name_and_hp, NULL, attack_weapon, monster);
