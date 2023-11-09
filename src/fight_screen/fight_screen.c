@@ -61,7 +61,6 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
                     }
                 }
             }
-            heal_mana(fight_context->player, 10);
         } else {
             monsters_turn(game_window, fight_context, fight_zone);
             if(player->hp == 0) {
@@ -75,6 +74,7 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
                 fight_context->player->base_defense -= fight_context->player->defensive_spell->amount;
                 fight_context->player->is_defending = false;
             }
+            heal_mana(fight_context->player, 10);
         }
 
         free_menu(menu);
