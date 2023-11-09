@@ -3,6 +3,7 @@
 #include "../utils/utils.h"
 #include "types.h"
 #include "display/display.h"
+#include "../help_screen/help_screen.h"
 
 void level_up_upgrade_stat(player_t *player, stat_t selected_stat);
 

@@ -2,6 +2,7 @@
 #include "../event/event.h"
 #include "display/display.h"
 #include "../utils/utils.h"
+#include "../help_screen/help_screen.h"
 
 int start_menu_screen(game_window_t *game_window) {
     event_t event;
@@ -15,6 +16,9 @@ int start_menu_screen(game_window_t *game_window) {
 
         while (get_event(game_window->ui_type, &event)){
             switch (event) {
+                case h_KEY:
+                    help_screen(game_window);
+                    break;
                 case Q_KEY:
                 case QUIT:
                     return QUIT_GAME;
