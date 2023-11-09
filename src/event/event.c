@@ -40,6 +40,7 @@ char event_to_char(event_t event) {
             case GT_KEY: return '>';
             case ENTER_KEY: return '\n';
             case ESCAPE_KEY: return (char)27;
+            case BACKSPACE_KEY: return (char)127;
             default: return '?';
         }
     }
@@ -58,6 +59,7 @@ event_t char_to_event(char c) {
             case '>': return GT_KEY;
             case '\n': return ENTER_KEY;
             case 27: return ESCAPE_KEY;
+            case 127: return BACKSPACE_KEY;
             default: return UNKNOWN_EVENT;
         }
     }
@@ -94,6 +96,7 @@ event_t sdl_get_event() {
             case SDLK_GREATER: return GT_KEY;
             case SDLK_RETURN:
             case SDLK_KP_ENTER: return ENTER_KEY;
+            case SDLK_BACKSPACE: return BACKSPACE_KEY;
             case SDLK_ESCAPE: return ESCAPE_KEY;
             default: return UNKNOWN_EVENT;
         }
