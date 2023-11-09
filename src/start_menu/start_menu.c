@@ -14,6 +14,7 @@ int start_menu_screen(game_window_t *game_window) {
         }
 
         while (get_event(game_window->ui_type, &event)){
+            printf("\nevent: %c", event_to_char(event));
             switch (event) {
                 case QUIT:
                     return QUIT_GAME;
