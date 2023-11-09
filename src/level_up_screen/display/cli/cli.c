@@ -42,7 +42,7 @@ int display_level_up_cli(game_window_t * game_window, player_t * player, stat_t 
             container.h - title_container.h - title_bottom_padding
     };
 
-    cli_print_text_in_rectangle(game_window->matrix, title_container, title_text, BLACK, ALIGN_CENTER, ALIGN_START, MEDIUM_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, title_container, title_text, game_window->cli_color_palette->text, ALIGN_CENTER, ALIGN_START, MEDIUM_TEXT);
 
     display_stat_options_cli(game_window, stats_container, selected_stat, player);
 
@@ -108,7 +108,7 @@ int display_stat_option_cli(game_window_t * game_window, unsigned int amount, ch
 
     // display highlight if selected option
     if (is_selected) {
-        cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){'>', GREEN});
+        cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){'>', game_window->cli_color_palette->green});
     }
 
     int image_size = content_container.w > content_container.h ? content_container.h : content_container.w / 5;
@@ -117,12 +117,12 @@ int display_stat_option_cli(game_window_t * game_window, unsigned int amount, ch
     image_container.w = image_size;
     image_container.h = image_size;
 
-    print_ascii_art_in_rectangle(game_window->matrix, ascii_path, image_container, ALIGN_CENTER, ALIGN_CENTER, BLACK);
+    print_ascii_art_in_rectangle(game_window->matrix, ascii_path, image_container, ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->text);
 
     rect_t text_container = content_container;
     text_container.x += image_container.w + image_right_margin;
     text_container.w -= image_container.w - image_right_margin;
-    cli_print_text_in_rectangle(game_window->matrix, text_container, text, BLACK, ALIGN_START, ALIGN_CENTER, SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, text_container, text, game_window->cli_color_palette->text, ALIGN_START, ALIGN_CENTER, SMALL_TEXT);
 
     free(text);
 

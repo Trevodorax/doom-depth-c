@@ -6,7 +6,7 @@ int display_stat_options_gui(game_window_t * game_window, rect_t container, stat
 int display_stat_option_gui(game_window_t * game_window, unsigned int amount, char * display_name, char * image_path, rect_t container, bool is_selected);
 
 int display_level_up_gui(game_window_t * game_window, player_t * player, stat_t selected_stat) {
-    set_background_color(game_window->renderer, (SDL_Color){255, 255, 255, 255});
+    set_background_color(game_window->renderer, game_window->sdl_color_palette->background);
 
     int window_width = 0;
     int window_height = 0;
@@ -45,7 +45,7 @@ int display_level_up_gui(game_window_t * game_window, player_t * player, stat_t 
             game_window->renderer,
             rect_to_SDL_Rect(title_container),
             title_text,
-            (SDL_Color) {0, 0, 0, 255},
+            game_window->sdl_color_palette->text,
             ALIGN_CENTER,
             ALIGN_START
         );
@@ -127,7 +127,7 @@ int display_stat_option_gui(game_window_t * game_window, unsigned int amount, ch
             game_window->renderer,
             rect_to_SDL_Rect(text_container),
             text,
-            (SDL_Color) {0, 0, 0, 255},
+            game_window->sdl_color_palette->text,
             ALIGN_START,
             ALIGN_CENTER
     );
@@ -137,7 +137,7 @@ int display_stat_option_gui(game_window_t * game_window, unsigned int amount, ch
         draw_thick_rect(
                 rect_to_SDL_Rect(container),
                 2,
-                (SDL_Color){100, 100, 255, 255},
+                game_window->sdl_color_palette->blue,
                 game_window->renderer
         );
     }
