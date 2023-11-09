@@ -28,6 +28,7 @@ typedef enum {
 
 typedef enum {
     USE,
+    UNEQUIP,
     THROW_AWAY
 } action_options_t;
 

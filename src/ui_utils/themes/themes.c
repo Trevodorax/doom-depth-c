@@ -21,6 +21,7 @@ int init_colors(game_window_t * game_window, color_scheme_t color_scheme) {
 
 void init_colors_gui(sdl_color_palette_t * color_palette, color_scheme_t color_scheme) {
     SDL_Color white = {255, 255, 255, 255};
+    SDL_Color grey = {128, 128, 128, 255};
     SDL_Color black = {0, 0, 0, 255};
     SDL_Color red = {255, 0, 0, 255};
     SDL_Color green = {0, 255, 0, 255};
@@ -29,6 +30,7 @@ void init_colors_gui(sdl_color_palette_t * color_palette, color_scheme_t color_s
     SDL_Color magenta = {255, 0, 255, 255};
     SDL_Color yellow = {255, 255, 0, 255};
 
+    color_palette->disabled = grey;
     color_palette->black = black;
     color_palette->white = white;
     color_palette->red = red;
@@ -61,6 +63,7 @@ void init_colors_gui(sdl_color_palette_t * color_palette, color_scheme_t color_s
 }
 
 void init_colors_cli(cli_color_palette_t * color_palette, color_scheme_t color_scheme) {
+    color_palette->disabled = BLACK;
     color_palette->black = BLACK;
     color_palette->white = WHITE;
     color_palette->red = RED;

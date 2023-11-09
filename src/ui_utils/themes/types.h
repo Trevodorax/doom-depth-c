@@ -13,6 +13,7 @@ typedef struct {
     SDL_Color background;
     SDL_Color text;
     SDL_Color highlight;
+    SDL_Color disabled;
 
     SDL_Color black;
     SDL_Color white;
@@ -34,6 +35,7 @@ typedef struct {
     color_code_t background;
     color_code_t text;
     color_code_t highlight;
+    color_code_t disabled;
 
     color_code_t black;
     color_code_t white;

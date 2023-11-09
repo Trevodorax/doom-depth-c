@@ -54,7 +54,8 @@ int display_potions_gui(game_window_t * game_window, potion_types_t type, SDL_Re
  * @param active_action the action the cursor is currently on
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_actions_gui(game_window_t * game_window, SDL_Rect actions_container, int font_size, action_options_t active_action);
+int display_actions_gui(game_window_t *game_window, SDL_Rect actions_container, int font_size,
+                        action_options_t active_action, bool can_be_used);
 
 /**
  * @brief displays "Nothing to see" in a given container
@@ -160,7 +161,12 @@ int display_inventory_gui(game_window_t * game_window,
         return EXIT_SUCCESS;
     }
 
-    display_actions_gui(game_window, rect_to_SDL_Rect(actions_container), unit_padding - 2, active_action);
+    if ((active_category == ARMORS && get_value_at_index(player->inventory->armors_head, active_item) == player->chosen_armor) ||
+            (active_category == WEAPONS && get_value_at_index(player->inventory->weapons_head, active_item) == player->chosen_weapon)) {
+        display_actions_gui(game_window, rect_to_SDL_Rect(actions_container), unit_padding - 2, active_action, false);
+    } else {
+        display_actions_gui(game_window, rect_to_SDL_Rect(actions_container), unit_padding - 2, active_action, true);
+    }
 
     return EXIT_SUCCESS;
 }
@@ -313,19 +319,17 @@ int display_potions_gui(game_window_t * game_window,
     return EXIT_SUCCESS;
 }
 
-#define ACTIONS_COUNT 2
-int display_actions_gui(game_window_t * game_window,
-                    SDL_Rect actions_container,
-                    int font_size,
-                    action_options_t active_action) {
-    char *actions[ACTIONS_COUNT] = {"Use", "Throw away"};
+#define ACTIONS_COUNT 3
+int display_actions_gui(game_window_t *game_window, SDL_Rect actions_container, int font_size,
+                        action_options_t active_action, bool can_be_used) {
+    char *actions[ACTIONS_COUNT] = {"Use", "Unequip", "Throw away"};
 
     SDL_Texture *cursor_texture = get_string_texture(
             game_window->renderer,
             ">",
             "../assets/PixelifySans-Regular.ttf",
             font_size,
-            game_window->sdl_color_palette->text
+            game_window->sdl_color_palette->highlight
     );
     if (!cursor_texture) {
         return EXIT_FAILURE;
@@ -341,7 +345,7 @@ int display_actions_gui(game_window_t * game_window,
                 actions[i],
                 "../assets/PixelifySans-Regular.ttf",
                 font_size,
-                game_window->sdl_color_palette->text
+                (i == 0 && !can_be_used) ?game_window->sdl_color_palette->disabled : game_window->sdl_color_palette->text
         );
         if (!actions_texture) {
             return EXIT_FAILURE;
@@ -369,8 +373,10 @@ int display_actions_gui(game_window_t * game_window,
             cursor_height
     };
 
-    SDL_RenderCopy(game_window->renderer, cursor_texture, NULL, &cursor_container);
-    SDL_DestroyTexture(cursor_texture);
+    if (can_be_used || active_action != USE) {
+        SDL_RenderCopy(game_window->renderer, cursor_texture, NULL, &cursor_container);
+        SDL_DestroyTexture(cursor_texture);
+    }
 
     return EXIT_SUCCESS;
 }
