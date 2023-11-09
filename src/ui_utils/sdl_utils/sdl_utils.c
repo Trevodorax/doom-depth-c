@@ -393,7 +393,7 @@ int print_text_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const ch
             renderer,
             text,
             "../assets/PixelifySans-Bold.ttf",
-            24,
+            32,
             color);
     if (!texture) {
         return EXIT_FAILURE;
