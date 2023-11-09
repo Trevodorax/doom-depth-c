@@ -71,6 +71,10 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
 
             fight_context->player_turn = true;
             player->action_points = player->max_action_points;
+            if (fight_context->player->is_defending) {
+                fight_context->player->base_defense -= fight_context->player->defensive_spell->amount;
+                fight_context->player->is_defending = false;
+            }
         }
 
         free_menu(menu);
