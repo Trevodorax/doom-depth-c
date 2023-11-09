@@ -4,7 +4,7 @@
 #include "types.h"
 #include "display/display.h"
 
-void level_up_upgrade_stat(game_window_t * game_window, player_t * player, stat_t selected_stat);
+void level_up_upgrade_stat(player_t *player, stat_t selected_stat);
 
 int level_up_screen(game_window_t * game_window, player_t * player) {
     stat_t selected_stat = STAT_HP;
@@ -38,7 +38,7 @@ int level_up_screen(game_window_t * game_window, player_t * player) {
                 case QUIT:
                     return QUIT_GAME;
                 case ENTER_KEY:
-                    level_up_upgrade_stat(game_window, player, selected_stat);
+                    level_up_upgrade_stat(player, selected_stat);
                     display_level_up(game_window, player, selected_stat);
                     render_present(game_window);
                     delay(game_window->ui_type, 1000);
@@ -58,7 +58,7 @@ int level_up_screen(game_window_t * game_window, player_t * player) {
     }
 }
 
-void level_up_upgrade_stat(game_window_t * game_window, player_t * player, stat_t selected_stat) {
+void level_up_upgrade_stat(player_t *player, stat_t selected_stat) {
     if (!player) {
         return;
     }
