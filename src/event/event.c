@@ -28,7 +28,7 @@ event_t cli_get_event() {
 }
 
 char event_to_char(event_t event) {
-    if (event >= A_KEY && event <= Z_KEY) {
+    if (event >= A_KEY && event <= z_KEY) {
         return 'A' + (event - A_KEY);
     } else if (event >= a_KEY && event <= z_KEY) {
         return 'a' + (event - a_KEY);
@@ -40,17 +40,12 @@ char event_to_char(event_t event) {
             case GT_KEY: return '>';
             case ENTER_KEY: return '\n';
             case ESCAPE_KEY: return (char)27;
-            case QUIT: return 'Q';
-            default: return (char)UNKNOWN_EVENT;
+            default: return '?';
         }
     }
 }
 
 event_t char_to_event(char c) {
-    if (c == 'Q') {
-        return QUIT;
-    }
-
     if (isupper(c)) {
         return (event_t)(A_KEY + (c - 'A'));
     } else if (islower(c)) {

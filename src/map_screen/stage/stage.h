@@ -38,7 +38,7 @@ static const char * stage_ascii_arts_files[STAGE_TYPE_COUNT] = {
         "../assets/stages/ascii/treasure_stage.asciiart",
         "../assets/stages/ascii/fight_done_stage.asciiart",
         "../assets/stages/ascii/treasure_done_stage.asciiart",
-        "../assets/stages/image/linked_map_stage.asciiart"
+        "../assets/stages/ascii/linked_map_stage.asciiart"
 };
 
 typedef enum {
