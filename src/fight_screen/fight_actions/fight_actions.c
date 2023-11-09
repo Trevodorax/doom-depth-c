@@ -67,6 +67,7 @@ int attack_spell(fight_context_t *fight_context, void *custom_params) {
         dmg = target->hp;
     }
     target->hp -= dmg;
+    give_exp(fight_context->player,dmg);
 
     global_logger->info("\nDamages on %s : -%dHP", target->name, dmg);
     global_logger->info("\nHP left : %d", target->hp);

@@ -1,8 +1,6 @@
 #include "new_game_screen.h"
-#include "../utils/router.h"
 #include "display/display.h"
 #include "../utils/utils.h"
-#include "../entities/player/player.h"
 
 #define PLAYER_NAME_MAX_LEN 25
 
@@ -38,7 +36,6 @@ int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** ma
         }
         display_new_game(game_window, name);
     }
-    return EXIT_SUCCESS;
 }
 
 void handle_name_input(SDL_Event e, char *name) {

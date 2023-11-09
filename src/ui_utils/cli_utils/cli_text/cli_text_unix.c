@@ -359,13 +359,13 @@ int get_ascii_art_text_dimensions(const char *text, size_t *width, size_t *heigh
             total_width += 5;
             continue;
         }
-        ascii_art_t *art = get_letter_ascii_art(text[i], BLACK);
+        ascii_art_t * art = get_letter_ascii_art(text[i], BLACK);
 
         if(!art || !art->versions[text_size]) {
             return EXIT_FAILURE;
         }
 
-        cli_matrix_t *character_matrix = art->versions[text_size];
+        cli_matrix_t * character_matrix = art->versions[text_size];
 
         total_width += character_matrix->nb_cols;
         if (character_matrix->nb_rows > max_height) {
