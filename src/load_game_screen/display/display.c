@@ -113,12 +113,28 @@ int display_load_game_cli(game_window_t *game_window, array_node_t *players, uns
 
     // print saves
     if (players != NULL) {
+        char buffer[100];
         for (int i = 0; i < 3; i++) {
             player_t *current_player = get_value_at_index(players, i);
+
+            if (current_player != NULL) {
+                if (active_option == i) {
+                    sprintf(buffer, "> %s", current_player->name);
+                } else {
+                    sprintf(buffer, "%s", current_player->name);
+                }
+            } else {
+                if (active_option == i) {
+                    sprintf(buffer, "> Empty");
+                } else {
+                    sprintf(buffer, "Empty");
+                }
+            }
+
             cli_print_text_in_rectangle(
                     game_window->matrix,
                     rects[i],
-                    current_player != NULL ? current_player->name : "Empty",
+                    buffer,
                     game_window->cli_color_palette->text,
                     ALIGN_CENTER,
                     ALIGN_CENTER,

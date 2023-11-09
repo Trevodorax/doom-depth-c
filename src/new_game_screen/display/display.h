@@ -4,13 +4,31 @@
 #include "../../game_window/game_window.h"
 
 /**
- * @brief handles the different parts of the new game screen and their display
+ * @brief displays the new game screen
  *
  * @param game_window the window to display the map on
  * @param name the name of the player
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int display_new_game(game_window_t *game_window, char *name);
+
+/**
+ * @brief handles the different parts of the new game screen CLI and their display
+ *
+ * @param game_window the window to display the map on
+ * @param name the name of the player
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int display_new_game_cli(game_window_t *game_window, char *name);
+
+/**
+ * @brief handles the different parts of the new game screen GUI and their display
+ *
+ * @param game_window the window to display the map on
+ * @param name the name of the player
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+int display_new_game_gui(game_window_t *game_window, char *name);
 
 /**
  * @brief displays a welcome message : "Welcome new player"

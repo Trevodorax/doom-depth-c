@@ -4,6 +4,45 @@
 
 int display_new_game(game_window_t *game_window, char *name) {
 
+    switch (game_window->ui_type) {
+        case CLI:
+            return display_new_game_cli(game_window, name);
+        case GUI:
+            return display_new_game_gui(game_window, name);
+    }
+
+}
+
+int display_new_game_cli(game_window_t *game_window, char *name) {
+
+    int window_width = 0;
+    int window_height = 0;
+
+    cli_get_window_size(&window_width, &window_height);
+
+    cli_render_clear(game_window->matrix, (cli_char_t){' ', game_window->cli_color_palette->background});
+
+    // Display welcome message
+    rect_t welcome_rect = {0, 0, window_width, window_height / 2};
+    cli_print_text_in_rectangle(game_window->matrix, welcome_rect, "Create a new game", game_window->cli_color_palette->text, ALIGN_CENTER, ALIGN_START,
+                                MEDIUM_TEXT);
+
+    // Display name question
+    rect_t name_question_rect = {0, welcome_rect.y + welcome_rect.h, window_width, window_height / 4};
+    cli_print_text_in_rectangle(game_window->matrix, name_question_rect, "Enter your name", game_window->cli_color_palette->text, ALIGN_CENTER, ALIGN_START,
+                                SMALL_TEXT);
+
+    // Display name input
+    rect_t name_input_rect = {0, name_question_rect.y + name_question_rect.h + 2, window_width, window_height / 4};
+    cli_print_text_in_rectangle(game_window->matrix, name_input_rect, name, game_window->cli_color_palette->text, ALIGN_CENTER, ALIGN_START,
+                                SMALL_TEXT);
+
+    return EXIT_SUCCESS;
+
+}
+
+int display_new_game_gui(game_window_t *game_window, char *name) {
+
     int window_width = 0;
     int window_height = 0;
     SDL_GetWindowSize(game_window->window, &window_width, &window_height);
@@ -39,8 +78,6 @@ int display_new_game(game_window_t *game_window, char *name) {
                 name_input_rect.y
         );
     }
-
-    SDL_RenderPresent(game_window->renderer);
 
     return EXIT_SUCCESS;
 }
