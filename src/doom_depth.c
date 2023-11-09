@@ -15,6 +15,7 @@
 #include "new_game_screen/new_game_screen.h"
 #include "shop_screen/shop_screen.h"
 #include "load_game_screen/load_game_screen.h"
+#include "level_up_screen/level_up_screen.h"
 
 int main_loop(game_window_t * main_window) {
     sqlite3 *db = db_connection();
@@ -78,6 +79,12 @@ int main_loop(game_window_t * main_window) {
                 }
                 break;
 
+            case LEVEL_UP_SCREEN:
+                main_window->context->current_screen = level_up_screen(main_window, player);
+                if (main_window->context->current_screen == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                break;
             case INVENTORY_SCREEN:
             case TRY_AGAIN:
             case QUIT_GAME:

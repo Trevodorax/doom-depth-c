@@ -124,6 +124,15 @@ set(cross_platform_targets
         src/shop_screen/display/cli/cli.h
         src/entities/treasure/treasure.c
         src/entities/treasure/treasure.h
+        src/level_up_screen/level_up_screen.c
+        src/level_up_screen/level_up_screen.h
+        src/level_up_screen/types.h
+        src/level_up_screen/display/display.c
+        src/level_up_screen/display/display.h
+        src/level_up_screen/display/gui/gui.c
+        src/level_up_screen/display/gui/gui.h
+        src/level_up_screen/display/cli/cli.c
+        src/level_up_screen/display/cli/cli.h
         src/ui_utils/themes/themes.h
         src/ui_utils/themes/themes.c
         src/ui_utils/themes/types.h

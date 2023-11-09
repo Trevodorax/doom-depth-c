@@ -144,6 +144,8 @@ SDL_Texture * get_image_texture(SDL_Renderer * renderer, const char * image_path
  * @param container Rectangle in which the text should be
  * @param text The text to draw
  * @param color The color to use
+ * @param x_align Horizontal alignment
+ * @param y_align Vertical alignment
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int print_text_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const char * text, SDL_Color color, alignment_t x_align, alignment_t y_align) ;

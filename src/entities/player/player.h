@@ -97,6 +97,14 @@ int save_player(sqlite3 *db, player_t *player);
 unsigned int heal_player(player_t * player, unsigned int amount);
 
 /**
+ * @brief Checks if a player has to level up
+ *
+ * @param player The player to check
+ * @return If the player levels up
+ */
+bool check_level_up(player_t * player);
+
+/**
  * @brief gives experience point to the player and levels up if necessary
  *
  * @param player
