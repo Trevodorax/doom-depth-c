@@ -134,9 +134,6 @@ char * get_player_map_name(player_t * player) {
 map_t * get_player_map(player_t * player) {
     char * map_name = get_player_map_name(player);
 
-
-
-
     map_t * retrieved_map = get_map_from_file(map_name);
     if(!retrieved_map) {
         char * default_map_name = calloc(500, sizeof(char));
