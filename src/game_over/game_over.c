@@ -4,6 +4,7 @@
 #include "../event/event.h"
 #include "../utils/utils.h"
 #include "../map_screen/map/map.h"
+#include "../help_screen/help_screen.h"
 
 int game_over_screen(game_window_t * game_window, player_t *player, map_t * map) {
     unsigned short active_option = TRY_AGAIN;
@@ -17,6 +18,9 @@ int game_over_screen(game_window_t * game_window, player_t *player, map_t * map)
 
         while (get_event(game_window->ui_type, &event)){
             switch (event) {
+                case h_KEY:
+                    help_screen(game_window);
+                    break;
                 case Q_KEY:
                 case QUIT:
                     return QUIT_GAME;
