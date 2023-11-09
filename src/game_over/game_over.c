@@ -5,6 +5,7 @@
 #include "../utils/utils.h"
 #include "../map_screen/map/map.h"
 #include "../help_screen/help_screen.h"
+#include "../confirm_quit_screen/confirm_quit_screen.h"
 
 int game_over_screen(game_window_t * game_window, player_t *player, map_t * map) {
     unsigned short active_option = TRY_AGAIN;
@@ -23,7 +24,10 @@ int game_over_screen(game_window_t * game_window, player_t *player, map_t * map)
                     break;
                 case Q_KEY:
                 case QUIT:
-                    return QUIT_GAME;
+                    if (confirm_quit_screen(game_window) == QUIT_GAME) {
+                        return QUIT_GAME;
+                    }
+                    break;
                 case d_KEY:
                 case s_KEY:
                     if (active_option == TRY_AGAIN) {

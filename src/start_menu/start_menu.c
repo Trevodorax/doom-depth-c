@@ -3,6 +3,7 @@
 #include "display/display.h"
 #include "../utils/utils.h"
 #include "../help_screen/help_screen.h"
+#include "../confirm_quit_screen/confirm_quit_screen.h"
 
 int start_menu_screen(game_window_t *game_window) {
     event_t event;
@@ -21,7 +22,10 @@ int start_menu_screen(game_window_t *game_window) {
                     break;
                 case Q_KEY:
                 case QUIT:
-                    return QUIT_GAME;
+                    if (confirm_quit_screen(game_window) == QUIT_GAME) {
+                        return QUIT_GAME;
+                    }
+                    break;
                 case d_KEY:
                 case s_KEY:
                     if(active_option == 0) {

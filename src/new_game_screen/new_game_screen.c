@@ -4,6 +4,7 @@
 #include "../entities/player/player.h"
 #include "../event/event.h"
 #include "../help_screen/help_screen.h"
+#include "../confirm_quit_screen/confirm_quit_screen.h"
 
 #define PLAYER_NAME_MAX_LEN 25
 
@@ -32,7 +33,10 @@ int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** ma
                     break;
                 case Q_KEY:
                 case QUIT:
-                    return QUIT_GAME;
+                    if (confirm_quit_screen(game_window) == QUIT_GAME) {
+                        return QUIT_GAME;
+                    }
+                    break;
                 case ENTER_KEY:
                     if (strlen(name)) {
                         *player = create_player(name);

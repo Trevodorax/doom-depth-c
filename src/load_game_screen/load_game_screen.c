@@ -5,6 +5,7 @@
 #include "../logs/log.h"
 #include "../map_screen/map/map.h"
 #include "../help_screen/help_screen.h"
+#include "../confirm_quit_screen/confirm_quit_screen.h"
 
 int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** map, sqlite3 * db) {
 
@@ -32,7 +33,10 @@ int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** m
                     break;
                 case Q_KEY:
                 case QUIT:
-                    return QUIT_GAME;
+                    if (confirm_quit_screen(game_window) == QUIT_GAME) {
+                        return QUIT_GAME;
+                    }
+                    break;
                 case d_KEY:
                 case s_KEY:
                     active_option = (active_option + 1) % 3;

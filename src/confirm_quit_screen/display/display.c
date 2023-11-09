@@ -23,6 +23,8 @@ int display_confirm_quit_gui(game_window_t * game_window, bool quit) {
     // clear renderer
     SDL_RenderClear(game_window->renderer);
 
+    draw_fill_rect((SDL_Rect) {0, 0, window_width, window_height}, game_window->sdl_color_palette->background, game_window->renderer);
+
     rect_t question_rect = {
             window_width / 4,
             window_height / 6,

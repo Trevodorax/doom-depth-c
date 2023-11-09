@@ -8,6 +8,7 @@
 #include "../fight_screen/fight_utils/fight_utils.h"
 #include "../inventory_screen/inventory_screen.h"
 #include "../help_screen/help_screen.h"
+#include "../confirm_quit_screen/confirm_quit_screen.h"
 
 /**
  * @brief Moves the player and returns the stage he is on
@@ -49,7 +50,9 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
             switch (event) {
                 case Q_KEY:
                 case QUIT:
-                    quit = true;
+                    if (confirm_quit_screen(game_window) == QUIT_GAME) {
+                        return QUIT_GAME;
+                    }
                     break;
                 case z_KEY:
                     player_stage = move_player(player_stage, NORTH);

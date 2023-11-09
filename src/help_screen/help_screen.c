@@ -3,6 +3,7 @@
 #include "../utils/utils.h"
 #include "types.h"
 #include "display/display.h"
+#include "../confirm_quit_screen/confirm_quit_screen.h"
 
 int help_screen(game_window_t * game_window) {
     event_t event;
@@ -17,7 +18,10 @@ int help_screen(game_window_t * game_window) {
             switch (event) {
                 case Q_KEY:
                 case QUIT:
-                    return QUIT_GAME;
+                    if (confirm_quit_screen(game_window) == QUIT_GAME) {
+                        return QUIT_GAME;
+                    }
+                    break;
                 default:
                     break;
             }
