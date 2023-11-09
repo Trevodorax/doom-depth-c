@@ -41,15 +41,15 @@ SDL_Texture ** get_stage_textures(SDL_Renderer * renderer) {
     return stage_textures;
 }
 
-ascii_art_t ** get_stage_ascii_arts() {
+ascii_art_t ** get_stage_ascii_arts(color_code_t color) {
     static ascii_art_t ** stage_ascii_arts = NULL;
     if (stage_ascii_arts) {
         return stage_ascii_arts;
     }
 
-    stage_ascii_arts = malloc(sizeof(ascii_art_t*) * STAGE_TYPE_COUNT);
+    stage_ascii_arts = calloc(STAGE_TYPE_COUNT, sizeof(ascii_art_t*));
     for (int i = 0; i < STAGE_TYPE_COUNT; i++) {
-        stage_ascii_arts[i] = parse_ascii_art_file(stage_ascii_arts_files[i], BLACK);
+        stage_ascii_arts[i] = parse_ascii_art_file(stage_ascii_arts_files[i], color);
         if (!stage_ascii_arts[i]) {
             // cleanup and leave
             fprintf(stderr, "\nget_stage_ascii_arts error: failed to get the file ascii arts.");
@@ -130,7 +130,7 @@ int print_stage_cli(game_window_t *game_window, stage_t *stage, int x_coord, int
     rect_t stage_rect = {x_coord, y_coord, stage_size, stage_size};
     color_code_t stage_color = get_stage_color(stage);
 
-    ascii_art_t ** stage_ascii_arts = get_stage_ascii_arts();
+    ascii_art_t ** stage_ascii_arts = get_stage_ascii_arts(game_window->cli_color_palette->text);
     if (stage_ascii_arts) {
         // retrieve right ascii art for stage
         ascii_art_t * stage_ascii_art = NULL;
@@ -187,7 +187,7 @@ int print_player_on_stage_cli(game_window_t * game_window, orientation_t player_
     }
 
     rect_t player_rect = {stage_rect.x + stage_padding, stage_rect.y + stage_padding, stage_rect.w - 2 * stage_padding, stage_rect.h - 2 * stage_padding};
-    print_ascii_art_in_rectangle(game_window->matrix, "../assets/player/ascii/player.asciiart", player_rect, ALIGN_CENTER, ALIGN_CENTER);
+    print_ascii_art_in_rectangle(game_window->matrix, "../assets/player/ascii/player.asciiart", player_rect, ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->highlight);
 
     return EXIT_SUCCESS;
 }

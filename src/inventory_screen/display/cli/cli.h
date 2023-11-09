@@ -1,11 +1,11 @@
 #ifndef DOOM_DEPTH_C_CLI_H
 #define DOOM_DEPTH_C_CLI_H
 
-#include "../../../ui_utils/cli_utils/types.h"
 #include "../../../entities/inventory/inventory.h"
 #include "../../../utils/items_management/types.h"
+#include "../../../game_window/game_window.h"
 
-int display_inventory_cli(cli_matrix_t * cli_matrix,
+int display_inventory_cli(game_window_t * game_window,
                           inventory_t * inventory,
                           section_options_t active_section,
                           category_options_t active_category,

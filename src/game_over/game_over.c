@@ -21,13 +21,13 @@ int game_over_screen(game_window_t *game_window, player_t *player, map_t * map) 
                     return QUIT_GAME;
                 case D_KEY:
                 case S_KEY:
-                    if(active_option == TRY_AGAIN) {
+                    if (active_option == TRY_AGAIN) {
                         active_option = START_MENU;
                     }
                     break;
                 case Q_KEY:
                 case Z_KEY:
-                    if(active_option == START_MENU) {
+                    if (active_option == START_MENU) {
                         active_option = TRY_AGAIN;
                     }
                     break;
@@ -49,7 +49,7 @@ int game_over_screen(game_window_t *game_window, player_t *player, map_t * map) 
         if (game_window->ui_type == CLI) {
             set_cli_raw_mode(false);
         }
-        if(display_game_over(game_window, active_option) == EXIT_FAILURE) {
+        if (display_game_over(game_window, active_option) == EXIT_FAILURE) {
             return QUIT_GAME;
         }
         render_present(game_window);

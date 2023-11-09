@@ -37,7 +37,7 @@ int display_start_menu_gui(game_window_t *game_window, unsigned short active_opt
             "DoomDepthC",
             "../assets/PixelifySans-Bold.ttf",
             48,
-            (SDL_Color) {255, 255, 255, 255}
+            game_window->sdl_color_palette->text
     );
     if (!title_texture) {
         return EXIT_FAILURE;
@@ -66,7 +66,7 @@ int display_start_menu_gui(game_window_t *game_window, unsigned short active_opt
             "Load game",
             "../assets/PixelifySans-Bold.ttf",
             24,
-            (SDL_Color) {255, 255, 255, 255}
+            game_window->sdl_color_palette->text
     );
     if (!loaded_game_texture) {
         return EXIT_FAILURE;
@@ -95,7 +95,7 @@ int display_start_menu_gui(game_window_t *game_window, unsigned short active_opt
             "New game",
             "../assets/PixelifySans-Bold.ttf",
             24,
-            (SDL_Color) {255, 255, 255, 255}
+            game_window->sdl_color_palette->text
     );
     if (!new_game_texture) {
         return EXIT_FAILURE;
@@ -124,7 +124,7 @@ int display_start_menu_gui(game_window_t *game_window, unsigned short active_opt
             ">",
             "../assets/PixelifySans-Bold.ttf",
             12,
-            (SDL_Color) {255, 255, 255, 255}
+            game_window->sdl_color_palette->text
     );
     if (!cursor_texture) {
         return EXIT_FAILURE;
@@ -165,27 +165,27 @@ int display_start_menu_cli(game_window_t *game_window, unsigned short active_opt
     int window_width = 0;
     cli_get_window_size(&window_width, &window_height);
 
-    cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
+    cli_render_clear(game_window->matrix, (cli_char_t){' ', game_window->cli_color_palette->background});
 
     // print title
     rect_t title_rect = {0, 0, window_width, window_height / 2};
-    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Doom Depth C", BLACK, ALIGN_CENTER, ALIGN_START,
-                                MEDIUM_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Doom Depth C", game_window->cli_color_palette->text,
+                                ALIGN_CENTER, ALIGN_START, MEDIUM_TEXT);
 
     // print options
     rect_t option_1_rect = {2, window_height / 2, window_width, window_height / 4};
     rect_t option_2_rect = {2, 3 * (window_height / 4), window_width, window_height / 4};
 
-    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, "Load game", RED, ALIGN_START, ALIGN_START,
-                                SMALL_TEXT);
-    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, "New game", BLACK, ALIGN_START, ALIGN_START,
-                                SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, "Load game", game_window->cli_color_palette->text,
+                                ALIGN_START, ALIGN_START, SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, "New game", game_window->cli_color_palette->text,
+                                ALIGN_START, ALIGN_START, SMALL_TEXT);
 
     // print cursor
     rect_t cursor_rect = {0, 0, 1, 1};
     cursor_rect.y = active_option == 0 ? option_1_rect.y : option_2_rect.y;
 
-    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", RED, ALIGN_START, ALIGN_START, SMALL_TEXT);
+    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", game_window->cli_color_palette->highlight, ALIGN_START, ALIGN_START, SMALL_TEXT);
 
     return EXIT_SUCCESS;
 }

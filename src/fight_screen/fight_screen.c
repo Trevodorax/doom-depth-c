@@ -11,7 +11,7 @@ void monster_turn(game_window_t * game_window, player_t * player, monster_t * mo
 
 router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *stage, fight_context_t * previous_fight_context) {
     if (game_window->ui_type == CLI) {
-        cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
+        cli_render_clear(game_window->matrix, (cli_char_t){' ', game_window->cli_color_palette->background});
     }
     rect_t fight_zone;
     rect_t menu_zone;

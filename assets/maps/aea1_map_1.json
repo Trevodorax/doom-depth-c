@@ -1,0 +1,86 @@
+{
+    "name": "Map 1",
+    "stages": [
+{
+            "done": 1,
+            "min_nb_enemies": 1,
+            "max_nb_enemies": 2,
+            "enemies_list": [
+"bat",
+"goblin"
+            ],
+            "enemies_chances_to_appear": [
+50,
+50
+            ],
+            "right": {
+                "done": 0,
+                "min_nb_enemies": 2,
+                "max_nb_enemies": 4,
+                "enemies_list": [
+"bat",
+"goblin",
+"skeleton",
+"troll"
+                ],
+                "enemies_chances_to_appear": [
+30,
+40,
+20,
+10
+                ],
+                "top": {
+                    "done": 0,
+                    "top": {
+                        "done": 0,
+                        "top": {
+                            "done": 0,
+                            "shop": {
+
+                            }
+                        }
+                    }
+                },
+                "right": {
+                    "done": 0,
+                    "min_nb_enemies": 1,
+                    "max_nb_enemies": 1,
+                    "enemies_list": [
+"troll"
+                    ],
+                    "enemies_chances_to_appear": [
+100
+                    ],
+                    "right": {
+                        "done": 0,
+                        "linked_map": "map_2.json"
+                    }
+                },
+                "bottom": {
+                    "done": 0,
+                    "treasure": {
+                        "coins": 20
+                    }
+                }
+            },
+            "left": {
+                "done": 1,
+                "left": {
+                    "done": 0,
+                    "min_nb_enemies": 1,
+                    "max_nb_enemies": 3,
+                    "enemies_list": [
+"bat",
+"goblin",
+"skeleton"
+                    ],
+                    "enemies_chances_to_appear": [
+50,
+30,
+20
+                    ]
+                }
+            }
+        }
+    ]
+}

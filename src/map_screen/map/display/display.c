@@ -36,7 +36,7 @@ int display_map_cli(game_window_t *game_window, map_t *map) {
     int stage_size = window_size / map_size;
 
     char background_char = ' ';
-    color_code_t background_color = WHITE;
+    color_code_t background_color = game_window->cli_color_palette->background;
     if (cli_render_clear(game_window->matrix, (cli_char_t){background_char, background_color}) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
@@ -68,8 +68,7 @@ int display_map_gui(game_window_t *game_window, map_t *map) {
 
     int stage_size = window_size / map_size;
 
-    SDL_Color background_color = { 255, 255, 255, 255};
-    if (set_background_color(game_window->renderer, background_color) == EXIT_FAILURE) {
+    if (set_background_color(game_window->renderer, game_window->sdl_color_palette->background) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
 

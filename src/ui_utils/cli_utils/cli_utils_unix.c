@@ -15,7 +15,7 @@ void cli_get_window_size(int * width, int * height) {
     *height = w.ws_row;
 }
 
-int cli_render_present(cli_matrix_t * current_matrix) {
+int cli_render_present(cli_matrix_t * current_matrix, color_code_t text_color) {
     // kept in memory between function calls
     static cli_matrix_t * previous_matrix;
     static int previous_window_width = -1;
@@ -47,7 +47,7 @@ int cli_render_present(cli_matrix_t * current_matrix) {
     }
 
     if (!previous_matrix) {
-        previous_matrix = create_cli_matrix(0, 0, ' ', BLACK);
+        previous_matrix = create_cli_matrix(0, 0, ' ', text_color);
     }
 
     // make some space in terminal if more is needed
@@ -94,7 +94,7 @@ int cli_render_present(cli_matrix_t * current_matrix) {
 
     // copy current matrix for next call
     free_matrix(previous_matrix); // free the previous matrix
-    previous_matrix = create_cli_matrix(current_matrix->nb_rows, current_matrix->nb_cols, ' ', BLACK);
+    previous_matrix = create_cli_matrix(current_matrix->nb_rows, current_matrix->nb_cols, ' ', text_color);
     for (size_t i = 0; i < current_matrix->nb_rows; i++) {
         for (size_t j = 0; j < current_matrix->nb_cols; j++) {
             previous_matrix->matrix[i][j] = current_matrix->matrix[i][j];

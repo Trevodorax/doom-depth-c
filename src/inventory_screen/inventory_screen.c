@@ -20,7 +20,7 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
     }
 
     if(game_window->ui_type == CLI) {
-        resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
+        resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', game_window->cli_color_palette->background});
     }
 
     event_t event;

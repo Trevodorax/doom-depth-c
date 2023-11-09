@@ -48,9 +48,8 @@ int main_loop(game_window_t * main_window) {
                 }
                 break;
             }
-
             case SHOP_SCREEN : {
-                main_window->context->current_screen = shop_screen(main_window, &player);
+                main_window->context->current_screen = shop_screen(main_window, player);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
@@ -77,6 +76,8 @@ int main_loop(game_window_t * main_window) {
                     return EXIT_FAILURE;
                 }
                 break;
+
+            case INVENTORY_SCREEN:
             case TRY_AGAIN:
             case QUIT_GAME:
                 break;
@@ -132,7 +133,7 @@ int doom_depth_gui() {
         global_logger->info("Application started");
     }
 
-    game_window_t * main_window = init_game_window(GUI);
+    game_window_t * main_window = init_game_window(GUI, DARK);
 
     int result = main_loop(main_window);
 
@@ -152,7 +153,7 @@ int doom_depth_cli() {
         global_logger->info("Application started");
     }
 
-    game_window_t * main_window = init_game_window(CLI);
+    game_window_t * main_window = init_game_window(CLI, DARK);
 
     int result = main_loop(main_window);
 
