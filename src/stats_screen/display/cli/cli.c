@@ -2,11 +2,11 @@
 #include "../../../ui_utils/ui_utils.h"
 #include "../../../ui_utils/cli_utils/ascii_art/ascii_art.h"
 
-int display_level_up_stat_options_cli(game_window_t * game_window, rect_t container, stat_t selected_stat, player_t * player);
-int display_level_up_stat_option_cli(game_window_t *game_window, unsigned int amount, char *display_name, char *ascii_path,
-                            rect_t container, bool is_selected);
+int display_stat_options_cli(game_window_t *game_window, rect_t container, player_t *player);
+int display_stat_option_cli(game_window_t *game_window, unsigned int amount, char *display_name, char *ascii_path,
+                            rect_t container);
 
-int display_level_up_cli(game_window_t * game_window, player_t * player, stat_t selected_stat) {
+int display_stats_cli(game_window_t *game_window, player_t *player) {
     cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
 
     int window_width = 0;
@@ -45,14 +45,14 @@ int display_level_up_cli(game_window_t * game_window, player_t * player, stat_t 
 
     cli_print_text_in_rectangle(game_window->matrix, title_container, title_text, game_window->cli_color_palette->text, ALIGN_CENTER, ALIGN_START, MEDIUM_TEXT);
 
-    display_level_up_stat_options_cli(game_window, stats_container, selected_stat, player);
+    display_stat_options_cli(game_window, stats_container, player);
 
     free(title_text);
 
     return EXIT_SUCCESS;
 }
 
-int display_level_up_stat_options_cli(game_window_t * game_window, rect_t container, stat_t selected_stat, player_t * player) {
+int display_stat_options_cli(game_window_t *game_window, rect_t container, player_t *player) {
     if (!player) {
         return EXIT_FAILURE;
     }
@@ -81,20 +81,19 @@ int display_level_up_stat_options_cli(game_window_t * game_window, rect_t contai
                 current_stat_amount = 0;
         }
 
-        display_level_up_stat_option_cli(
+        display_stat_option_cli(
                 game_window,
                 current_stat_amount,
                 stat_display_name[i],
                 stat_display_ascii_path[i],
-                stat_rectangles[i],
-                i == selected_stat);
+                stat_rectangles[i]);
     }
 
     return EXIT_SUCCESS;
 }
 
-int display_level_up_stat_option_cli(game_window_t *game_window, unsigned int amount, char *display_name, char *ascii_path,
-                            rect_t container, bool is_selected) {
+int display_stat_option_cli(game_window_t *game_window, unsigned int amount, char *display_name, char *ascii_path,
+                            rect_t container) {
     char * text = calloc(100, sizeof(char));
     snprintf(text, 100, "%s (%u)", display_name, amount);
 
@@ -106,11 +105,6 @@ int display_level_up_stat_option_cli(game_window_t *game_window, unsigned int am
     content_container.y += y_padding;
     content_container.w -= 2 * x_padding;
     content_container.h -= 2 * y_padding;
-
-    // display highlight if selected option
-    if (is_selected) {
-        cli_draw_fill_rect(game_window->matrix, container, (cli_char_t){'>', game_window->cli_color_palette->green});
-    }
 
     int image_size = content_container.w > content_container.h ? content_container.h : content_container.w / 5;
     int image_right_margin = image_size / 3;

@@ -12,6 +12,7 @@
 #include "../../inventory_screen/inventory_screen.h"
 #include "../../help_screen/help_screen.h"
 #include "../../confirm_quit_screen/confirm_quit_screen.h"
+#include "../../stats_screen/stats_screen.h"
 
 menu_t* create_menu(int nb_options, const char * title, const char * image_path, int (*callback)(fight_context_t *, void * custom_params), void * custom_params) {
     menu_t *new_menu = malloc(sizeof(menu_t));
@@ -97,6 +98,9 @@ fight_action_t * fight_menu(game_window_t *game_window, menu_t *menu, fight_cont
         set_cli_raw_mode(true);
         while (get_event(game_window->ui_type, &event)) {
             switch(event) {
+                case m_KEY:
+                    stats_screen(game_window, fight_context->player);
+                    break;
                 case h_KEY:
                     help_screen(game_window);
                     break;
