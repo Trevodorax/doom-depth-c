@@ -15,16 +15,17 @@ int start_menu_screen(game_window_t *game_window) {
 
         while (get_event(game_window->ui_type, &event)){
             switch (event) {
+                case Q_KEY:
                 case QUIT:
                     return QUIT_GAME;
-                case D_KEY:
-                case S_KEY:
+                case d_KEY:
+                case s_KEY:
                     if(active_option == 0) {
                         active_option = 1;
                     }
                     break;
-                case Q_KEY:
-                case Z_KEY:
+                case q_KEY:
+                case z_KEY:
                     if(active_option == 1) {
                         active_option = 0;
                     }

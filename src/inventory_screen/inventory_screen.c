@@ -34,10 +34,10 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
         set_cli_raw_mode(true);
         while (get_event(game_window->ui_type, &event)) {
             switch (event) {
-                case Z_KEY:
-                case Q_KEY:
-                case S_KEY:
-                case D_KEY:
+                case z_KEY:
+                case q_KEY:
+                case s_KEY:
+                case d_KEY:
                 case ENTER_KEY:
                     switch (active_section){
                         case CATEGORIES:
@@ -77,11 +77,11 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
 
 void handle_categories_input(event_t event, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item) {
     // navigating through the categories
-    if (event == S_KEY && *active_category != MANA_POTIONS) {
+    if (event == s_KEY && *active_category != MANA_POTIONS) {
     (*active_category)++;
     *active_item = 0;
     }
-    if (event == Z_KEY && *active_category != GO_BACK) {
+    if (event == z_KEY && *active_category != GO_BACK) {
     (*active_category)--;
     *active_item = 0;
     }
@@ -107,7 +107,7 @@ void handle_categories_input(event_t event, bool *quit, section_options_t *activ
 
 void handle_items_input(event_t event, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count) {
     // going back to categories when pressing the left arrow on the left column
-    if (event == Q_KEY) {
+    if (event == q_KEY) {
         if (*active_item % 3 == 0) {
             (*active_section)--;
         } else {
@@ -116,17 +116,17 @@ void handle_items_input(event_t event, section_options_t *active_section, catego
     }
 
     // moving in the items grid
-    if (event == D_KEY) {
+    if (event == d_KEY) {
         if (*active_item % 3 != 2 && *active_item < category_items_count - 1) {
             (*active_item)++;
         }
     }
-    if (event == S_KEY) {
+    if (event == s_KEY) {
         if ((active_category == WEAPONS || active_category == ARMORS) && *active_item + 3 < category_items_count) {
             (*active_item) += 3;
         }
     }
-    if (event == Z_KEY) {
+    if (event == z_KEY) {
         if ((active_category == WEAPONS && *active_item - 3 >= 0) ||
             (active_category == ARMORS && *active_item - 3 >= 0)) {
             (*active_item) -= 3;
@@ -141,7 +141,7 @@ void handle_items_input(event_t event, section_options_t *active_section, catego
 
 void handle_actions_input(event_t event, player_t *player, section_options_t *active_section, category_options_t active_category, unsigned short active_item, action_options_t *active_action) {
     // going back to previous section when pressing the left arrow on the left column
-    if (event == Q_KEY) {
+    if (event == q_KEY) {
         if (active_category == MANA_POTIONS || active_category == HEALTH_POTIONS) {
             *active_section = CATEGORIES;
         } else {
@@ -150,10 +150,10 @@ void handle_actions_input(event_t event, player_t *player, section_options_t *ac
     }
 
     // moving through actions
-    if (event == S_KEY && *active_action != THROW_AWAY) {
+    if (event == s_KEY && *active_action != THROW_AWAY) {
         (*active_action)++;
     }
-    if (event == Z_KEY && *active_action != USE) {
+    if (event == z_KEY && *active_action != USE) {
         (*active_action)--;
     }
 

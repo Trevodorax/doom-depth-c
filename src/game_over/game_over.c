@@ -5,7 +5,7 @@
 #include "../utils/utils.h"
 #include "../map_screen/map/map.h"
 
-int game_over_screen(game_window_t *game_window, player_t *player, map_t * map) {
+int game_over_screen(game_window_t * game_window, player_t *player, map_t * map) {
     unsigned short active_option = TRY_AGAIN;
     event_t event;
     while (true){
@@ -17,16 +17,17 @@ int game_over_screen(game_window_t *game_window, player_t *player, map_t * map) 
 
         while (get_event(game_window->ui_type, &event)){
             switch (event) {
+                case Q_KEY:
                 case QUIT:
                     return QUIT_GAME;
-                case D_KEY:
-                case S_KEY:
+                case d_KEY:
+                case s_KEY:
                     if (active_option == TRY_AGAIN) {
                         active_option = START_MENU;
                     }
                     break;
-                case Q_KEY:
-                case Z_KEY:
+                case q_KEY:
+                case z_KEY:
                     if (active_option == START_MENU) {
                         active_option = TRY_AGAIN;
                     }

@@ -17,7 +17,6 @@ menu_t* create_menu(int nb_options, const char * title, const char * image_path,
     new_menu->options = malloc(sizeof(menu_t *) * nb_options);
     new_menu->title = strdup(title);
 
-    // no idea why this breaks, fuck C, this is a workaround
     if (image_path) {
         new_menu->image_path = malloc(strlen(image_path));
         strcpy(new_menu->image_path, image_path);
@@ -96,21 +95,22 @@ fight_action_t * fight_menu(game_window_t *game_window, menu_t *menu, fight_cont
         set_cli_raw_mode(true);
         while (get_event(game_window->ui_type, &event)) {
             switch(event) {
-                case Z_KEY:
+                case z_KEY:
                     selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, NORTH);
                     break;
-                case Q_KEY:
+                case q_KEY:
                     selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, WEST);
                     break;
-                case S_KEY:
+                case s_KEY:
                     selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, SOUTH);
                     break;
-                case D_KEY:
+                case d_KEY:
                     selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, EAST);
                     break;
-                case I_KEY:
+                case i_KEY:
                     inventory_screen(game_window, fight_context->player);
                     break;
+                case Q_KEY:
                 case QUIT:
                     stage->fight_context = fight_context;
                     return NULL;

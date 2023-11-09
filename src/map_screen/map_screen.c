@@ -46,22 +46,23 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
 
         while (get_event(game_window->ui_type, &event)) {
             switch (event) {
+                case Q_KEY:
                 case QUIT:
                     quit = true;
                     break;
-                case Z_KEY:
+                case z_KEY:
                     player_stage = move_player(player_stage, NORTH);
                     break;
-                case D_KEY:
+                case d_KEY:
                     player_stage = move_player(player_stage, EAST);
                     break;
-                case S_KEY:
+                case s_KEY:
                     player_stage = move_player(player_stage, SOUTH);
                     break;
-                case Q_KEY:
+                case q_KEY:
                     player_stage = move_player(player_stage, WEST);
                     break;
-                case I_KEY:
+                case i_KEY:
                     if(inventory_screen(game_window, player) == EXIT_FAILURE) {
                         return EXIT_FAILURE;
                     }
