@@ -48,6 +48,7 @@ int main_loop(game_window_t * main_window) {
                 }
                 break;
             }
+
             case SHOP_SCREEN : {
                 main_window->context->current_screen = shop_screen(main_window, player);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
@@ -125,15 +126,43 @@ ui_type_t get_ui_type(char * ui_argument) {
     return default_type;
 }
 
+color_scheme_t get_color_scheme(const char * color_scheme_argument) {
+    color_scheme_t default_color_scheme = DARK;
 
-int doom_depth_gui() {
+    if (color_scheme_argument == NULL) {
+        char * env_color_scheme = getenv("DOOM_DEPTH_COLOR_SCHEME");
+        if (env_color_scheme == NULL) {
+            return default_color_scheme;
+        } else {
+            return get_color_scheme(env_color_scheme);
+        }
+    }
+
+    // not case-sensitive
+    for (char *p = color_scheme_argument; *p; p++) {
+        *p = (char) tolower(*p);
+    }
+
+    // handled cases (containing is enough, I want to make it safe)
+    if (strstr(color_scheme_argument, "light") != NULL) {
+        return LIGHT;
+    }
+    if (strstr(color_scheme_argument, "dark") != NULL) {
+        return DARK;
+    }
+
+    // unhandled cases
+    return default_color_scheme;
+}
+
+int doom_depth_gui(color_scheme_t color_scheme) {
     init_global_logger();
 
     if (global_logger) {
         global_logger->info("Application started");
     }
 
-    game_window_t * main_window = init_game_window(GUI, DARK);
+    game_window_t * main_window = init_game_window(GUI, color_scheme);
 
     int result = main_loop(main_window);
 
@@ -144,16 +173,16 @@ int doom_depth_gui() {
     }
 
     return result;
-};
+}
 
-int doom_depth_cli() {
+int doom_depth_cli(color_scheme_t color_scheme) {
     init_global_logger();
 
     if (global_logger) {
         global_logger->info("Application started");
     }
 
-    game_window_t * main_window = init_game_window(CLI, DARK);
+    game_window_t * main_window = init_game_window(CLI, color_scheme);
 
     int result = main_loop(main_window);
 
@@ -166,11 +195,11 @@ int doom_depth_cli() {
     return result;
 }
 
-doom_depth_main doom_depth_factory(ui_type_t ui_type) {
+doom_depth_main doom_depth_factory(ui_type_t ui_type, color_scheme_t color_scheme) {
     switch (ui_type) {
         case CLI:
-            return doom_depth_cli;
+            return doom_depth_cli(color_scheme);
         case GUI:
-            return doom_depth_gui;
+            return doom_depth_gui(color_scheme);
     }
 }

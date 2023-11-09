@@ -23,6 +23,6 @@ ui_type_t get_ui_type(char * ui_argument);
  * @param ui_type
  * @return The function to call
  */
-doom_depth_main doom_depth_factory(ui_type_t ui_type);
+doom_depth_main doom_depth_factory(ui_type_t ui_type, color_scheme_t color_scheme);
 
 #endif //DOOM_DEPTH_C_DOOM_DEPTH_H
