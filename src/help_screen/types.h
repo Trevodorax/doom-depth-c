@@ -1,7 +1,7 @@
 #ifndef DOOM_DEPTH_C_HELP_SCREEN_TYPES_H
 #define DOOM_DEPTH_C_HELP_SCREEN_TYPES_H
 
-#define NB_TIPS 8
+#define NB_TIPS 9
 
 static char * tips[NB_TIPS][2] = {
         {"z", "Go up / previous"},
@@ -11,7 +11,8 @@ static char * tips[NB_TIPS][2] = {
         {"i", "Open inventory"},
         {"Q", "Quit"},
         {"Enter", "Select"},
-        {"Esc", "Go back"}
+        {"Esc", "Go back"},
+        {"m", "See player stats"}
 };
 
 #endif //DOOM_DEPTH_C_HELP_SCREEN_TYPES_H
