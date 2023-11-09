@@ -40,6 +40,71 @@ void *create_armor_from_db(sqlite3_stmt *stmt) {
 
 }
 
+armor_t* copy_armor(const armor_t* armor) {
+    if (!armor) {
+        return NULL;
+    }
+
+    armor_t* new_armor = (armor_t*) malloc(sizeof(armor_t));
+    if (!new_armor) {
+        return NULL;
+    }
+
+    new_armor->chosen = armor->chosen;
+    new_armor->id_in_inventory = armor->id_in_inventory;
+    new_armor->amount = armor->amount;
+    new_armor->max_uses = armor->max_uses;
+    new_armor->uses = armor->uses;
+    new_armor->rarity = armor->rarity;
+    new_armor->cost = armor->cost;
+    new_armor->amount = armor->amount;
+    new_armor->id = armor->id;
+
+    // deep copy pointers
+    if (armor->name) {
+        new_armor->name = strdup(armor->name);
+        if (!new_armor->name) {
+            free(new_armor); // Free allocated memory for new_armor
+            return NULL; // memory allocation for name failed
+        }
+    } else {
+        new_armor->name = NULL;
+    }
+
+    if (armor->image_path) {
+        new_armor->image_path = strdup(armor->image_path);
+        if (!new_armor->image_path) {
+            free(new_armor->name); // Free allocated memory for name
+            free(new_armor); // Free allocated memory for new_armor
+            return NULL; // memory allocation for image_path failed
+        }
+    } else {
+        new_armor->image_path = NULL;
+    }
+
+    if (armor->ascii_path) {
+        new_armor->ascii_path = strdup(armor->ascii_path);
+        if (!new_armor->ascii_path) {
+            free(new_armor); // Free allocated memory for new_armor
+            return NULL; // memory allocation for ascii_path failed
+        }
+    } else {
+        new_armor->ascii_path = NULL;
+    }
+
+    return new_armor;
+}
+
+armor_t *void_to_armor(void *void_armor) {
+    armor_t *armor = (armor_t *) void_armor;
+
+    if (!armor || !armor->name || !armor->image_path || !armor->ascii_path) {
+        return NULL;
+    }
+
+    return armor;
+}
+
 void free_armor(armor_t *armor) {
     if (armor) {
         free(armor->name);

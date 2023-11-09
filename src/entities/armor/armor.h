@@ -43,4 +43,19 @@ void *create_armor_from_db(sqlite3_stmt *stmt);
  */
 void free_armor(armor_t *armor);
 
+/**
+ * @brief Safely casts a void * into a armor_t *
+ *
+ * @param void_armor The pointer to cast
+ * @return The casted pointer
+ */
+armor_t *void_to_armor(void *void_armor);
+
+/**
+ * @brief Copies an armor deeply
+ *
+ * @param armor The copied armor
+ * @return A deep copy of the armor
+ */
+armor_t * copy_armor(const armor_t * armor);
 #endif

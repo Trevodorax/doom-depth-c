@@ -54,6 +54,8 @@ event_t sdl_get_event() {
                 return S_KEY;
             case SDLK_y:
                 return Y_KEY;
+            case SDLK_i:
+                return I_KEY;
             case SDLK_q:
                 if (event.key.keysym.mod & KMOD_SHIFT) { // uppercase check
                     return QUIT;

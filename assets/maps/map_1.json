@@ -24,7 +24,10 @@
           "done": 0,
           "bottom": {
             "treasure": {
-              "coins": 20
+              "coins": 20,
+              "armor": 1,
+              "weapon": 1,
+              "mana_potions": 10
             }
           },
           "top": {

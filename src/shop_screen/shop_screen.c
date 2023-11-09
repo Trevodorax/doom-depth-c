@@ -16,12 +16,12 @@ void handle_shop_items_input(event_t event, unsigned short category_items_count,
                         section_options_t * active_section, category_options_t * active_category,
                         unsigned short * active_item, bool * active_confirmation);
 // handle user input when confirming buying an item
-void handle_confirm(event_t event, player_t ** player, section_options_t * active_section, category_options_t active_category,
+void handle_confirm(event_t event, player_t * player, section_options_t * active_section, category_options_t active_category,
                     unsigned short active_item, bool * active_confirmation);
 // actions launched after sale confirmation
-void handle_actions(player_t ** player, category_options_t active_category, unsigned short active_item);
+void handle_actions(player_t * player, category_options_t active_category, unsigned short active_item);
 
-int shop_screen(game_window_t * game_window, player_t ** player) {
+int shop_screen(game_window_t * game_window, player_t * player) {
     bool quit = false;
     section_options_t active_section = CATEGORIES;
     category_options_t active_category = ARMORS;
@@ -65,7 +65,7 @@ int shop_screen(game_window_t * game_window, player_t ** player) {
         if (game_window->ui_type == CLI) {
             set_cli_raw_mode(false);
         }
-        if(display_shop(game_window, *player, active_section, active_category, active_confirmation, active_item) == EXIT_FAILURE) {
+        if(display_shop(game_window, player, active_section, active_category, active_confirmation, active_item) == EXIT_FAILURE) {
             return QUIT_GAME;
         }
         render_present(game_window);
@@ -162,7 +162,7 @@ void handle_shop_items_input(event_t event, unsigned short category_items_count,
     }
 }
 
-void handle_confirm(event_t event, player_t ** player, section_options_t * active_section, category_options_t active_category,
+void handle_confirm(event_t event, player_t * player, section_options_t * active_section, category_options_t active_category,
                     unsigned short active_item, bool * active_confirmation) {
     switch (event) {
         case Z_KEY:
@@ -191,7 +191,7 @@ void handle_confirm(event_t event, player_t ** player, section_options_t * activ
     }
 }
 
-void handle_actions(player_t ** player, category_options_t active_category, unsigned short active_item) {
+void handle_actions(player_t * player, category_options_t active_category, unsigned short active_item) {
     switch (active_category) {
         case WEAPONS: {
             array_node_t * weapons = get_weapons();
@@ -204,10 +204,16 @@ void handle_actions(player_t ** player, category_options_t active_category, unsi
                 printf("could not get armor to buy\n");
                 return;
             }
-            if ((*player)->gold >= weapon_to_buy->cost && !is_full((*player)->inventory)) {
-                push(&((*player)->inventory->weapons_head), weapon_to_buy, sizeof(weapon_t));
-                (*player)->inventory->nb_weapons++;
-                (*player)->gold -= weapon_to_buy->cost;
+            if (player->gold >= weapon_to_buy->cost && !is_full(player->inventory)) {
+                if(!&(player->inventory->weapons_head)){
+                    player->inventory->weapons_head = malloc(sizeof(array_node_t));
+                    player->inventory->weapons_head->value = weapon_to_buy;
+                    player->inventory->weapons_head->next = NULL;
+                } else {
+                    push(&(player->inventory->weapons_head), weapon_to_buy, sizeof(weapon_t));
+                }
+                player->inventory->nb_weapons++;
+                player->gold -= weapon_to_buy->cost;
             }
             break;
         }
@@ -223,10 +229,16 @@ void handle_actions(player_t ** player, category_options_t active_category, unsi
                 printf("could not get armor to buy\n");
                 return;
             }
-            if ((*player)->gold >= armor_to_buy->cost && !is_full((*player)->inventory)) {
-                push(&((*player)->inventory->armors_head), armor_to_buy, sizeof(armor_t));
-                ((*player)->inventory->nb_armors)++;
-                (*player)->gold -= armor_to_buy->cost;
+            if (player->gold >= armor_to_buy->cost && !is_full(player->inventory)) {
+                if(!&(player->inventory->armors_head)){
+                    player->inventory->armors_head = malloc(sizeof(array_node_t));
+                    player->inventory->armors_head->value = armor_to_buy;
+                    player->inventory->armors_head->next = NULL;
+                } else {
+                    push(&(player->inventory->armors_head), armor_to_buy, sizeof(armor_t));
+                }
+                player->inventory->nb_armors++;
+                player->gold -= armor_to_buy->cost;
             }
             break;
         }
@@ -234,14 +246,14 @@ void handle_actions(player_t ** player, category_options_t active_category, unsi
         case HEALTH_POTIONS:
         case MANA_POTIONS: {
             int amount_needed = (active_item == HEALTH) ? HEALTH_POTIONS_COST : MANA_POTIONS_COST;
-            if ((*player)->gold >= amount_needed && !is_full((*player)->inventory)) {
+            if (player->gold >= amount_needed && !is_full(player->inventory)) {
                 if (active_item == HEALTH) {
-                    ((*player)->inventory->nb_health_potions)++;
-                    (*player)->gold -= HEALTH_POTIONS_COST;
+                    (player->inventory->nb_health_potions)++;
+                    player->gold -= HEALTH_POTIONS_COST;
                 }
                 if (active_item == MANA) {
-                    ((*player)->inventory->nb_mana_potions)++;
-                    (*player)->gold -= MANA_POTIONS_COST;
+                    (player->inventory->nb_mana_potions)++;
+                    player->gold -= MANA_POTIONS_COST;
                 }
             }
             break;
