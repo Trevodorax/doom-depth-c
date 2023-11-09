@@ -6,7 +6,7 @@
 
 #define PLAYER_NAME_MAX_LEN 25
 
-void handle_name_input(event_t e, char *name);
+void handle_name_input(event_t event, char *name);
 
 int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** map) {
     if (!game_window) {
@@ -54,8 +54,8 @@ int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** ma
     return EXIT_SUCCESS;
 }
 
-void handle_name_input(event_t e, char *name) {
-    char input_char = event_to_char(e);
+void handle_name_input(event_t event, char *name) {
+    char input_char = event_to_char(event);
     if ((input_char >= 'A' && input_char <= 'Z') || (input_char >= 'a' && input_char <= 'z')) {
         if (strlen(name) < PLAYER_NAME_MAX_LEN && custom_char_check(input_char)) {
             name[strlen(name)] = input_char;
