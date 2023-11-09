@@ -15,6 +15,7 @@ int stats_screen(game_window_t * game_window, player_t * player) {
 
         while (get_event(game_window->ui_type, &event)){
             switch (event) {
+                case ESCAPE_KEY:
                 case Q_KEY:
                 case QUIT:
                     return MAP_SCREEN;
