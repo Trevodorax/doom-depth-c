@@ -69,7 +69,7 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
             }
         }
         // set_cli_raw_mode(false);
-        display_inventory(game_window, player->inventory, active_section, active_category, active_action, active_item);
+        display_inventory(game_window, player, active_section, active_category, active_action, active_item);
         render_present(game_window);
     }
     return EXIT_SUCCESS;

@@ -1,12 +1,13 @@
 #include "../../../game_window/game_window.h"
 #include "../../../entities/inventory/inventory.h"
 #include "../../../utils/items_management/types.h"
+#include "../../../entities/player/player.h"
 
 #ifndef DOOM_DEPTH_C_GUI_H
 #define DOOM_DEPTH_C_GUI_H
 
 int display_inventory_gui(game_window_t * game_window,
-                          inventory_t * inventory,
+                          player_t * player,
                           section_options_t active_section,
                           category_options_t active_category,
                           action_options_t active_action,

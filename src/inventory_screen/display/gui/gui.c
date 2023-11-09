@@ -25,13 +25,13 @@ int display_categories_gui(game_window_t * game_window, int icon_size, int paddi
  * @param items_container the rectangle in which to display the grid
  * @param details_container the rectangle in which to display the item details
  * @param type the type of item the cursor is on (armor or weapon)
- * @param inventory the inventory the items are in
+ * @param player player that has the inventory where the items are in
  * @param details_font_size the font size for the item details
  * @param active_item the index of the item the cursor is currently on
  * @param active_section the section of the user experience the user is in
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_items_gui(game_window_t * game_window, rect_t * items_container, SDL_Rect details_container, item_types_t type, inventory_t * inventory, int details_font_size, unsigned short active_item, section_options_t active_section);
+int display_items_gui(game_window_t * game_window, rect_t * items_container, SDL_Rect details_container, item_types_t type, player_t *player, int details_font_size, unsigned short active_item, section_options_t active_section);
 
 /**
  * @brief displays details on the selected heal_potion
@@ -66,12 +66,13 @@ int display_actions_gui(game_window_t * game_window, SDL_Rect actions_container,
 int display_nothing_to_see_gui(game_window_t * game_window, SDL_Rect container);
 
 int display_inventory_gui(game_window_t * game_window,
-                      inventory_t * inventory,
+                      player_t *player,
                       section_options_t active_section,
                       category_options_t active_category,
                       action_options_t active_action,
                       unsigned short active_item) {
-    
+    inventory_t * inventory = player->inventory;
+
     int window_width = 0;
     int window_height = 0;
     SDL_GetWindowSize(game_window->window, &window_width, &window_height);
@@ -119,7 +120,7 @@ int display_inventory_gui(game_window_t * game_window,
                 display_nothing_to_see_gui(game_window, rect_to_SDL_Rect(items_container));
                 return EXIT_SUCCESS;
             } else {
-                display_items_gui(game_window, &items_container, rect_to_SDL_Rect(item_details_container), WEAPON, inventory, unit_padding - 2, active_item, active_section);
+                display_items_gui(game_window, &items_container, rect_to_SDL_Rect(item_details_container), WEAPON, player, unit_padding - 2, active_item, active_section);
             }
             break;
 
@@ -128,7 +129,7 @@ int display_inventory_gui(game_window_t * game_window,
                 display_nothing_to_see_gui(game_window, rect_to_SDL_Rect(items_container));
                 return EXIT_SUCCESS;
             } else {
-                display_items_gui(game_window, &items_container, rect_to_SDL_Rect(item_details_container), ARMOR, inventory, unit_padding - 2, active_item, active_section);
+                display_items_gui(game_window, &items_container, rect_to_SDL_Rect(item_details_container), ARMOR, player, unit_padding - 2, active_item, active_section);
             }
             break;
 
@@ -216,10 +217,12 @@ int display_categories_gui(game_window_t * game_window,
 int display_items_gui(game_window_t * game_window,
                   rect_t * items_container,
                   SDL_Rect details_container,
-                  item_types_t type, inventory_t *inventory,
+                  item_types_t type,
+                  player_t *player,
                   int details_font_size,
                   unsigned short active_item,
                   section_options_t active_section) {
+    inventory_t *inventory = player->inventory;
     unsigned int quantity = (type == ARMOR) ? inventory->nb_armors : (type == WEAPON) ? inventory->nb_weapons : 0;
     if (quantity == 0) {
         return EXIT_FAILURE;
@@ -238,6 +241,9 @@ int display_items_gui(game_window_t * game_window,
                 armor_t *armor_to_print = get_value_at_index(inventory->armors_head, first_item_to_print + i);
                 if (!armor_to_print) {
                     break;
+                }
+                if (armor_to_print == player->chosen_armor) {
+                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, game_window->sdl_color_palette->purple, game_window->renderer);
                 }
                 if (active_item % items_count == i) {
                     if (active_section == ITEMS) {
@@ -260,6 +266,9 @@ int display_items_gui(game_window_t * game_window,
                 weapon_t *weapon_to_print = get_value_at_index(inventory->weapons_head, first_item_to_print + i);
                 if (!weapon_to_print) {
                     break;
+                }
+                if (weapon_to_print == player->chosen_weapon) {
+                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, game_window->sdl_color_palette->purple, game_window->renderer);
                 }
                 if (active_item % items_count == i) {
                     if (active_section == ITEMS) {

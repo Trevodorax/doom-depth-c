@@ -6,17 +6,18 @@
 
 int display_categories_cli(game_window_t * game_window, rect_t container, section_options_t active_section, category_options_t active_category);
 int display_items_cli(game_window_t * game_window, rect_t *items_container, rect_t details_container, item_types_t type,
-                      inventory_t *inventory, unsigned short active_item, section_options_t active_section);
+                      player_t * player, unsigned short active_item, section_options_t active_section);
 int display_potions_cli(game_window_t * game_window, potion_types_t type, rect_t details_container, unsigned int quantity);
 int display_actions_cli(game_window_t * game_window, rect_t actions_container, action_options_t active_action);
 int display_nothing_to_see_cli(game_window_t * game_window, rect_t container);
 
 int display_inventory_cli(game_window_t * game_window,
-                          inventory_t * inventory,
+                          player_t * player,
                           section_options_t active_section,
                           category_options_t active_category,
                           action_options_t active_action,
                           unsigned short active_item) {
+    inventory_t * inventory = player->inventory;
     int cli_width = (int)game_window->matrix->nb_cols;
     int cli_height = (int)game_window->matrix->nb_rows;
 
@@ -68,7 +69,7 @@ int display_inventory_cli(game_window_t * game_window,
             if (!inventory->nb_weapons) {
                 display_nothing_to_see_cli(game_window, items_container);
             } else {
-                display_items_cli(game_window, &items_container, item_details_container, WEAPON, inventory, active_item,
+                display_items_cli(game_window, &items_container, item_details_container, WEAPON, player, active_item,
                                   active_section);
             }
             break;
@@ -77,7 +78,7 @@ int display_inventory_cli(game_window_t * game_window,
             if (!inventory->nb_armors) {
                 display_nothing_to_see_cli(game_window, items_container);
             } else {
-                display_items_cli(game_window, &items_container, item_details_container, ARMOR, inventory, active_item,
+                display_items_cli(game_window, &items_container, item_details_container, ARMOR, player, active_item,
                                   active_section);
             }
             break;
@@ -171,7 +172,8 @@ int display_categories_cli(game_window_t * game_window,
 
 
 int display_items_cli(game_window_t * game_window, rect_t * items_container, rect_t details_container, item_types_t type,
-                      inventory_t * inventory, unsigned short active_item, section_options_t active_section) {
+                      player_t * player, unsigned short active_item, section_options_t active_section) {
+    inventory_t * inventory = player->inventory;
     unsigned int quantity = (type == ARMOR) ? inventory->nb_armors : (type == WEAPON) ? inventory->nb_weapons : 0;
     if (quantity == 0) {
         return EXIT_FAILURE;
@@ -191,6 +193,10 @@ int display_items_cli(game_window_t * game_window, rect_t * items_container, rec
                 armor_t *armor_to_print = get_value_at_index(inventory->armors_head, first_item_to_print + i);
                 if (!armor_to_print) {
                     break;
+                }
+                // FIXME : supposed to work
+                if (armor_to_print == player->chosen_armor) {
+                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, game_window->sdl_color_palette->purple, game_window->renderer);
                 }
                 if (active_item % items_count == i) {
                     cli_draw_stroke_rect(game_window->matrix, items[i],
@@ -215,6 +221,10 @@ int display_items_cli(game_window_t * game_window, rect_t * items_container, rec
                 weapon_t * weapon_to_print = get_value_at_index(inventory->weapons_head, first_item_to_print + i);
                 if (!weapon_to_print) {
                     break;
+                }
+                // FIXME : supposed to work
+                if (weapon_to_print == player->chosen_weapon) {
+                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, game_window->sdl_color_palette->purple, game_window->renderer);
                 }
                 if (active_item % items_count == i) {
                     cli_draw_stroke_rect(game_window->matrix, items[i],

@@ -18,6 +18,6 @@
  * @param active_item the current action the user has chosen or has their cursor on
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int display_inventory(game_window_t * game_window, inventory_t * inventory, section_options_t active_section, category_options_t active_category, action_options_t active_action, unsigned short active_item);
+int display_inventory(game_window_t * game_window, player_t * player, section_options_t active_section, category_options_t active_category, action_options_t active_action, unsigned short active_item);
 
 #endif

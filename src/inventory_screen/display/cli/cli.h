@@ -4,9 +4,10 @@
 #include "../../../entities/inventory/inventory.h"
 #include "../../../utils/items_management/types.h"
 #include "../../../game_window/game_window.h"
+#include "../../../entities/player/player.h"
 
 int display_inventory_cli(game_window_t * game_window,
-                          inventory_t * inventory,
+                          player_t * player,
                           section_options_t active_section,
                           category_options_t active_category,
                           action_options_t active_action,
