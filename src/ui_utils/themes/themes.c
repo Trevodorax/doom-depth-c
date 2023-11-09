@@ -55,9 +55,9 @@ void init_colors_gui(sdl_color_palette_t * color_palette, color_scheme_t color_s
     color_palette->highlight = red;
 
     // additional colors
-    color_palette->white80 = (SDL_Color) {0, 0, 0, 80};
+    color_palette->white80 = (SDL_Color) {20, 20, 20, 255};
     color_palette->purple = (SDL_Color) {66, 22, 144, 255};
-    color_palette->purple80 = (SDL_Color) {66, 22, 144, 80};
+    color_palette->purple80 = (SDL_Color) {46, 14, 102, 255};
 }
 
 void init_colors_cli(cli_color_palette_t * color_palette, color_scheme_t color_scheme) {
