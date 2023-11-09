@@ -67,7 +67,7 @@ void handle_name_input(event_t event, char *name) {
             name[strlen(name) + 1] = '\0';
         }
     }
-    if (e == BACKSPACE_KEY) {
+    if (event == BACKSPACE_KEY) {
         if (strlen(name)) {
             name[strlen(name) - 1] = '\0';
         }
