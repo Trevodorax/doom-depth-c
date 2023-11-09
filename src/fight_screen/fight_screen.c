@@ -5,6 +5,7 @@
 #include "display/display.h"
 #include "fight_dimensions/fight_dimensions.h"
 #include "../utils/utils.h"
+#include "../level_up_screen/level_up_screen.h"
 
 void monsters_turn(game_window_t * game_window, fight_context_t * fight_context, rect_t fight_zone);
 void monster_turn(game_window_t * game_window, player_t * player, monster_t * monster, fight_context_t * fight_context, rect_t fight_zone);
@@ -43,7 +44,10 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
                         delay(game_window->ui_type, 2000);
                         give_treasure_to_player(fight_context->treasure, fight_context->player);
 
-                        // TODO: handle level up if there was one (display it etc.) @noam
+                        // level up
+                        if (check_level_up(player)) {
+                            level_up_screen(game_window, fight_context->player);
+                        };
                     }
 
                     free_fight_context(fight_context);

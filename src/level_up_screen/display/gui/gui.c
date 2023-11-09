@@ -12,6 +12,9 @@ int display_level_up_gui(game_window_t * game_window, player_t * player, stat_t 
     int window_height = 0;
     SDL_GetWindowSize(game_window->window, &window_width, &window_height);
 
+    char * title_text = calloc(100, sizeof(char));
+    snprintf(title_text, 100, "Level up !!   %u >> %u", player->level, player->level + 1);
+
     int window_x_padding = window_width / 10;
     int window_y_padding = window_height / 10;
 
@@ -41,13 +44,15 @@ int display_level_up_gui(game_window_t * game_window, player_t * player, stat_t 
     print_text_in_rectangle(
             game_window->renderer,
             rect_to_SDL_Rect(title_container),
-            "Level up !!",
+            title_text,
             (SDL_Color) {0, 0, 0, 255},
             ALIGN_CENTER,
             ALIGN_START
         );
 
     display_stat_options_gui(game_window, stats_container, selected_stat, player);
+
+    free(title_text);
 
     return EXIT_SUCCESS;
 }

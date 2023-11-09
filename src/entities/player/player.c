@@ -3,26 +3,17 @@
 unsigned int compute_xp_needed(unsigned int level){
     unsigned int total_xp = 0;
     for (int i = 1; i <= level; ++i) {
-        total_xp += 50 * i;
+        total_xp += 20 * i;
     }
     return total_xp;
 }
 
-void level_up(player_t * player) {
-    player->level++;
-    player->base_attack++;
-    printf("\nLEVEL UP !");
+bool check_level_up(player_t * player) {
+    return compute_xp_needed(player->level) <= player->xp;
 }
 
-void check_level_up(player_t * player){
-    if(compute_xp_needed(player->level) <= player->xp){
-        level_up(player);
-    }
-}
-
-void give_exp(player_t * player, unsigned int amount){
+void give_exp(player_t * player, unsigned int amount) {
     player->xp += amount;
-    check_level_up(player);
 }
 
 unsigned int heal_player(player_t * player, unsigned int amount){
