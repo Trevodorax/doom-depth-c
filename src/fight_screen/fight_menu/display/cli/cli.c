@@ -37,7 +37,7 @@ int display_menu_item_cli(game_window_t * game_window, const char * title, const
 
     // print the ascii art if there is one
     if (ascii_art_path && strlen(ascii_art_path) > 0) {
-        print_ascii_art_in_rectangle(game_window->matrix, ascii_art_path, container, ALIGN_CENTER, ALIGN_CENTER);
+        print_ascii_art_in_rectangle(game_window->matrix, ascii_art_path, container, ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->text);
     }
 
     // print the title if there is one

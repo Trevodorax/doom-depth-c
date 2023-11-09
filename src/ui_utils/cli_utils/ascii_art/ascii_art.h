@@ -13,10 +13,11 @@
  * @param container The container in which to print the ascii art
  * @param x_align
  * @param y_align
+ * @param color
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int print_ascii_art_in_rectangle(cli_matrix_t * matrix, const char * ascii_file_path, rect_t container, alignment_t x_align,
-                                 alignment_t y_align);
+                                 alignment_t y_align, color_code_t color);
 
 /**
  * @brief Takes the biggest possible ascii that fits in the given dimensions.

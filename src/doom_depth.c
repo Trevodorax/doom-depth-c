@@ -49,7 +49,7 @@ int main_loop(game_window_t * main_window) {
                 break;
             }
             case SHOP_SCREEN : {
-                main_window->context->current_screen = shop_screen(main_window, &player);
+                main_window->context->current_screen = shop_screen(main_window, player);
                 if(main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
@@ -76,6 +76,8 @@ int main_loop(game_window_t * main_window) {
                     return EXIT_FAILURE;
                 }
                 break;
+
+            case INVENTORY_SCREEN:
             case TRY_AGAIN:
             case QUIT_GAME:
                 break;

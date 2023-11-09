@@ -134,7 +134,7 @@ int render_present(game_window_t * game_window) {
 int render_present_cli(game_window_t * game_window) {
     resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', game_window->cli_color_palette->background});
     set_cli_raw_mode(true);
-    cli_render_present(game_window->matrix);
+    cli_render_present(game_window->matrix, game_window->cli_color_palette->text);
     set_cli_raw_mode(false);
 
     return EXIT_SUCCESS;

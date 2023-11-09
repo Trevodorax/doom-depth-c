@@ -155,7 +155,7 @@ int display_categories_cli(game_window_t * game_window,
                 categories[i].w - 2,
                 categories[i].h - 2
         };
-        if (print_ascii_art_in_rectangle(game_window->matrix, ascii_path, ascii_art_container, ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE) {
+        if (print_ascii_art_in_rectangle(game_window->matrix, ascii_path, ascii_art_container, ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->text) == EXIT_FAILURE) {
             return EXIT_FAILURE;
         }
     }
@@ -202,7 +202,7 @@ int display_items_cli(game_window_t * game_window, rect_t * items_container, rec
                         items[i].w - 2,
                         items[i].h - 2
                 };
-                if (print_ascii_art_in_rectangle(game_window->matrix, armor_to_print->ascii_path, ascii_art_container, ALIGN_CENTER,ALIGN_CENTER) == EXIT_FAILURE){
+                if (print_ascii_art_in_rectangle(game_window->matrix, armor_to_print->ascii_path, ascii_art_container, ALIGN_CENTER,ALIGN_CENTER, game_window->cli_color_palette->text) == EXIT_FAILURE){
                     return EXIT_FAILURE;
                 }
             }
@@ -226,7 +226,7 @@ int display_items_cli(game_window_t * game_window, rect_t * items_container, rec
                         items[i].w - 2,
                         items[i].h - 2
                 };
-                if (print_ascii_art_in_rectangle(game_window->matrix, weapon_to_print->ascii_path, ascii_art_container, ALIGN_CENTER,ALIGN_CENTER)){
+                if (print_ascii_art_in_rectangle(game_window->matrix, weapon_to_print->ascii_path, ascii_art_container, ALIGN_CENTER,ALIGN_CENTER, game_window->cli_color_palette->text)){
                     return EXIT_FAILURE;
                 }
             }

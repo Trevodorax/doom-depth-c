@@ -13,7 +13,7 @@
  * @param current_matrix The matrix to print
  * @return
  */
-int cli_render_present(cli_matrix_t * current_matrix);
+int cli_render_present(cli_matrix_t * current_matrix, color_code_t text_color);
 
 /**
  * @brief Gets the width and height of the terminal window

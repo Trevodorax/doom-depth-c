@@ -61,7 +61,7 @@ int display_shop_cli(game_window_t * game_window,
             window_width / 4, window_height - (go_back_rect.h + items_container.h + categories_container.h)
     };
     print_ascii_art_in_rectangle(game_window->matrix, "../assets/items_mgmt/ascii/shop_owner.asciiart",
-                                 merchant_rect, ALIGN_CENTER, ALIGN_CENTER);
+                                 merchant_rect, ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->yellow);
 
     rect_t message_rect = {
             merchant_rect.x + merchant_rect.w, merchant_rect.y,
@@ -121,7 +121,7 @@ int display_shop_items_cli(game_window_t * game_window, rect_t * items_rects, ca
                     break;
                 }
                 if (print_ascii_art_in_rectangle(game_window->matrix, armor_to_print->ascii_path,
-                                                 items_rects[i], ALIGN_START, ALIGN_START) == EXIT_FAILURE) {
+                                                 items_rects[i], ALIGN_START, ALIGN_START, game_window->cli_color_palette->text) == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
             }
@@ -135,7 +135,7 @@ int display_shop_items_cli(game_window_t * game_window, rect_t * items_rects, ca
                     break;
                 }
                 if (print_ascii_art_in_rectangle(game_window->matrix, weapon_to_print->ascii_path,
-                                                 items_rects[i], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                                                 items_rects[i], ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->text) == EXIT_FAILURE){
                     return EXIT_FAILURE;
                 }
             }
@@ -151,11 +151,11 @@ int display_shop_items_cli(game_window_t * game_window, rect_t * items_rects, ca
                 return EXIT_FAILURE;
             }
             if (print_ascii_art_in_rectangle(game_window->matrix, "../assets/items_mgmt/ascii/health_potions.asciiart",
-                                             items_rects[0], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                                             items_rects[0], ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->text) == EXIT_FAILURE){
                 return EXIT_FAILURE;
             }
             if (print_ascii_art_in_rectangle(game_window->matrix, "../assets/items_mgmt/ascii/mana_potions.asciiart",
-                                             items_rects[1], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                                             items_rects[1], ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->text) == EXIT_FAILURE){
                 return EXIT_FAILURE;
             }
             break;
@@ -170,11 +170,11 @@ int display_shop_items_cli(game_window_t * game_window, rect_t * items_rects, ca
                 return EXIT_FAILURE;
             }
             if (print_ascii_art_in_rectangle(game_window->matrix, "../assets/items_mgmt/ascii/health_potions.asciiart",
-                                             items_rects[0], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                                             items_rects[0], ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->text) == EXIT_FAILURE){
                 return EXIT_FAILURE;
             }
             if (print_ascii_art_in_rectangle(game_window->matrix, "../assets/items_mgmt/ascii/mana_potions.asciiart",
-                                             items_rects[1], ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                                             items_rects[1], ALIGN_CENTER, ALIGN_CENTER, game_window->cli_color_palette->text) == EXIT_FAILURE){
                 return EXIT_FAILURE;
             }
             break;
