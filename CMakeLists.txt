@@ -136,6 +136,11 @@ set(cross_platform_targets
         src/ui_utils/themes/themes.h
         src/ui_utils/themes/themes.c
         src/ui_utils/themes/types.h
+        src/help_screen/help_screen.c
+        src/help_screen/help_screen.h
+        src/help_screen/display/gui/gui.c
+        src/help_screen/display/cli/cli.c
+        src/help_screen/display/display.c
 )
 
 # for unix

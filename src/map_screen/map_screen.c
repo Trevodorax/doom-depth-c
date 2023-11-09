@@ -7,6 +7,7 @@
 #include "../fight_screen/fight_screen.h"
 #include "../fight_screen/fight_utils/fight_utils.h"
 #include "../inventory_screen/inventory_screen.h"
+#include "../help_screen/help_screen.h"
 
 /**
  * @brief Moves the player and returns the stage he is on
@@ -66,6 +67,9 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                     if(inventory_screen(game_window, player) == EXIT_FAILURE) {
                         return EXIT_FAILURE;
                     }
+                    break;
+                case h_KEY:
+                    help_screen(game_window);
                     break;
                 case ENTER_KEY:
                     switch(player_stage->type) {
