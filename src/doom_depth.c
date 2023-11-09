@@ -126,7 +126,7 @@ ui_type_t get_ui_type(char * ui_argument) {
     return default_type;
 }
 
-color_scheme_t get_color_scheme(const char * color_scheme_argument) {
+color_scheme_t get_color_scheme(char *color_scheme_argument) {
     color_scheme_t default_color_scheme = DARK;
 
     if (color_scheme_argument == NULL) {
@@ -195,11 +195,11 @@ int doom_depth_cli(color_scheme_t color_scheme) {
     return result;
 }
 
-doom_depth_main doom_depth_factory(ui_type_t ui_type, color_scheme_t color_scheme) {
+doom_depth_main doom_depth_factory(ui_type_t ui_type) {
     switch (ui_type) {
         case CLI:
-            return doom_depth_cli(color_scheme);
+            return doom_depth_cli;
         case GUI:
-            return doom_depth_gui(color_scheme);
+            return doom_depth_gui;
     }
 }
