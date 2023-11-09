@@ -177,10 +177,18 @@ void handle_actions_input(event_t event, player_t * player, section_options_t * 
 
     // moving through actions
     if (event == s_KEY && *active_action != THROW_AWAY) {
-        (*active_action)++;
+        if (active_category == ARMORS || active_category == WEAPONS) {
+            (*active_action)++;
+        } else {
+            (*active_action) = THROW_AWAY;
+        }
     }
     if (event == z_KEY && *active_action != (can_be_used ? USE : UNEQUIP)) {
-        (*active_action)--;
+        if (active_category == ARMORS || active_category == WEAPONS) {
+            (*active_action)--;
+        } else {
+            (*active_action) = USE;
+        }
     }
 
     // choosing action
