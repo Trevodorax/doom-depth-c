@@ -23,13 +23,19 @@ unsigned int player_attack(player_t * player, monster_t * target) {
 }
 
 unsigned int monster_attack(monster_t * monster, player_t * target) {
-    double armor_ratio = target->chosen_armor ?  (double)target->chosen_armor->amount / 10 : 1;
-    unsigned int damages = (unsigned int)((monster->attack - target->base_defense) * armor_ratio);
+    unsigned int armor = target->chosen_armor ?  target->chosen_armor->amount : 0;
+    unsigned int damages = 0;
+    if(monster->attack > target->base_defense+armor){
+        damages = monster->attack - (target->base_defense+armor);
+    }
 
     if(damages > target->hp){
         damages = target->hp;
     }
     target->hp -= damages;
+
+    global_logger->info("\nMonster attack : %d damages", damages);
+    global_logger->info("\nPlayer hp : %d/%d", target->hp, target->hp_max);
 
     return damages;
 }
