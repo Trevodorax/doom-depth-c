@@ -117,7 +117,7 @@ int display_stat_option_cli(game_window_t * game_window, unsigned int amount, ch
     image_container.w = image_size;
     image_container.h = image_size;
 
-    print_ascii_art_in_rectangle(game_window->matrix, ascii_path, image_container, ALIGN_CENTER, ALIGN_CENTER);
+    print_ascii_art_in_rectangle(game_window->matrix, ascii_path, image_container, ALIGN_CENTER, ALIGN_CENTER, BLACK);
 
     rect_t text_container = content_container;
     text_container.x += image_container.w + image_right_margin;
