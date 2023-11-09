@@ -49,3 +49,44 @@ monster_t* get_monster_by_name(char * name) {
 
     return NULL;
 }
+
+armor_t * get_armor_by_id(int id) {
+    if(!armors) {
+        return NULL;
+    }
+
+    array_node_t * current = armors;
+    while(current) {
+        armor_t * armor = void_to_armor(current->value);
+        if(!armor) {
+            continue;
+        }
+        if(armor->id == id) {
+            return copy_armor(armor);
+        }
+        current = current->next;
+    }
+
+    return NULL;
+}
+
+
+weapon_t * get_weapon_by_id(int id) {
+    if(!weapons) {
+        return NULL;
+    }
+
+    array_node_t * current = weapons;
+    while(current) {
+        weapon_t * weapon = void_to_weapon(current->value);
+        if(!weapon) {
+            continue;
+        }
+        if(weapon->id == id) {
+            return copy_weapon(weapon);
+        }
+        current = current->next;
+    }
+
+    return NULL;
+}

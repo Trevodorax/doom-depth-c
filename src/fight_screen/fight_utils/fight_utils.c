@@ -157,6 +157,9 @@ treasure_t * get_treasure_from_fight_context(fight_context_t * fight_context) {
     treasure_t *treasure = malloc(sizeof(treasure_t));
     if (!treasure) return NULL;
     treasure->coins = coins;
+    treasure->mana_potions = get_size(fight_context->monsters);
+    treasure->armor = NULL;
+    treasure->weapon = NULL;
     return treasure;
 }
 

@@ -7,6 +7,9 @@
 typedef struct {
     int coins;
     // TODO: add other things in there (weapons, armors, etc.) @noam
+    weapon_t * weapon;
+    armor_t * armor;
+    int mana_potions;
 } treasure_t;
 
 /**
