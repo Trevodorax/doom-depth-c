@@ -11,6 +11,6 @@
  * @param player the player currently playing
  * @return EXIT_FAILURE or EXIT_SUCCESS
  */
-int shop_screen(game_window_t * game_window, player_t ** player);
+int shop_screen(game_window_t * game_window, player_t * player);
 
 #endif
