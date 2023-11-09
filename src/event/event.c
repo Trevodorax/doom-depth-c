@@ -28,7 +28,7 @@ event_t cli_get_event() {
 }
 
 char event_to_char(event_t event) {
-    if (event >= A_KEY && event <= z_KEY) {
+    if (event >= A_KEY && event <= Z_KEY) {
         return 'A' + (event - A_KEY);
     } else if (event >= a_KEY && event <= z_KEY) {
         return 'a' + (event - a_KEY);
