@@ -94,6 +94,10 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                         default:
                             break;
                     }
+                    break;
+                // FIXME: remove this, it is for testing
+                case Y_KEY:
+                    return LEVEL_UP_SCREEN;
                 default:
                     break;
             }
