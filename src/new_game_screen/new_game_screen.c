@@ -3,6 +3,7 @@
 #include "../utils/utils.h"
 #include "../entities/player/player.h"
 #include "../event/event.h"
+#include "../help_screen/help_screen.h"
 
 #define PLAYER_NAME_MAX_LEN 25
 
@@ -26,6 +27,10 @@ int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** ma
 
         while (get_event(game_window->ui_type, &event)) {
             switch (event) {
+                case h_KEY:
+                    help_screen(game_window);
+                    break;
+                case Q_KEY:
                 case QUIT:
                     return QUIT_GAME;
                 case ENTER_KEY:
