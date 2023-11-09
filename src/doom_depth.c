@@ -35,7 +35,7 @@ int main_loop(game_window_t * main_window) {
                 break;
 
             case MAP_SCREEN :
-                main_window->context->current_screen = map_screen(main_window, map, player);
+                main_window->context->current_screen = map_screen(main_window, &map, player);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

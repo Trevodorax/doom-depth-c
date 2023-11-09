@@ -15,6 +15,6 @@
  * @param map_file // path to the map json file
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int map_screen(game_window_t * game_window, map_t * map, player_t * player);
+int map_screen(game_window_t * game_window, map_t **map, player_t * player);
 
 #endif //DOOM_DEPTH_C_MAP_SCREEN_H

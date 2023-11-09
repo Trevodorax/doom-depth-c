@@ -19,8 +19,8 @@
  */
 stage_t * move_player(stage_t * player_stage, orientation_t direction);
 
-int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
-    stage_t * player_stage = get_player_stage(map->first_stage);
+int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
+    stage_t * player_stage = get_player_stage((*map)->first_stage);
 
     if (player_stage->fight_context) {
         player_stage->fight_context->player = player;
@@ -101,6 +101,11 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                             player_stage->is_done = true;
                             give_treasure_to_player(player_stage->treasure, player);
                             break;
+                        case LINKED_MAP:
+                            save_player_map(player, *map);
+                            player->current_map = player_stage->linked_map_file_path;
+                            *map = get_player_map(player);
+                            return MAP_SCREEN;
                         case EMPTY:
                         default:
                             break;
@@ -113,12 +118,12 @@ int map_screen(game_window_t * game_window, map_t * map, player_t * player) {
                     break;
             }
         }
-        map->first_stage = player_stage;
+        (*map)->first_stage = player_stage;
         if (game_window->ui_type == CLI) {
             set_cli_raw_mode(false);
         }
 
-        display_map(game_window, map);
+        display_map(game_window, *map);
         render_present(game_window);
 
     }

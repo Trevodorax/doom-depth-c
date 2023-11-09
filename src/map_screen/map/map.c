@@ -136,7 +136,10 @@ map_t * get_player_map(player_t * player) {
 
     map_t * retrieved_map = get_map_from_file(map_name);
     if(!retrieved_map) {
-        retrieved_map = get_map_from_file("../assets/maps/map_1.json");
+        char * default_map_name = calloc(500, sizeof(char));
+        sprintf(default_map_name, "../assets/maps/%s", player->current_map ? player->current_map : "map_1");
+        retrieved_map = get_map_from_file(default_map_name);
+        free(default_map_name);
     }
 
     free(map_name);

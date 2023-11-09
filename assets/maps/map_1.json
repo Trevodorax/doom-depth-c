@@ -8,20 +8,20 @@
         "max_nb_enemies": 3,
         "enemies_list": ["bat", "goblin", "skeleton"],
         "enemies_chances_to_appear": [50, 30, 20],
-        "done": 0
+        "done": 1
       },
       "right": {
         "min_nb_enemies": 1,
         "max_nb_enemies": 2,
         "enemies_list": ["bat", "goblin"],
         "enemies_chances_to_appear": [50, 50],
-        "done": 0,
+        "done": 1,
         "right": {
           "min_nb_enemies": 2,
           "max_nb_enemies": 4,
           "enemies_list": ["bat", "goblin", "skeleton", "troll"],
           "enemies_chances_to_appear": [30, 40, 20, 10],
-          "done": 0,
+          "done": 1,
           "bottom": {
             "treasure": {
               "coins": 20,
@@ -31,9 +31,9 @@
             }
           },
           "top": {
-            "done": 0,
+            "done": 1,
             "top": {
-              "done": 0,
+              "done": 1,
               "top": {
                 "shop": {}
               }
@@ -44,9 +44,9 @@
             "max_nb_enemies": 1,
             "enemies_list": ["troll"],
             "enemies_chances_to_appear": [100],
-            "done": 0,
+            "done": 1,
             "right": {
-              "done": 0,
+              "done": 1,
               "linked_map": "map_2.json"
             }
           }
