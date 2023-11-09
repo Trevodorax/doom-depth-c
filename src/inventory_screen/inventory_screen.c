@@ -6,7 +6,9 @@
 #include "../logs/log.h"
 
 void handle_categories_input(event_t event, bool *quit, section_options_t *active_section, category_options_t *active_category, unsigned short *active_item);
-void handle_items_input(event_t event, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count);
+void handle_items_input(event_t event, section_options_t *active_section, category_options_t active_category,
+                        unsigned short *active_item, action_options_t *active_action,
+                        unsigned short category_items_count, player_t *player);
 void handle_actions_input(event_t event, player_t *player, section_options_t *active_section, category_options_t active_category, unsigned short active_item, action_options_t *active_action);
 
 int inventory_screen(game_window_t *game_window, player_t *player) {
@@ -49,9 +51,11 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
 
                         case ITEMS:
                             if (active_category == WEAPONS) {
-                                handle_items_input(event, &active_section, active_category, &active_item, player->inventory->nb_weapons);
+                                handle_items_input(event, &active_section, active_category, &active_item, &active_action,
+                                                   player->inventory->nb_weapons, player);
                             } else if (active_category == ARMORS) {
-                                handle_items_input(event, &active_section, active_category, &active_item, player->inventory->nb_armors);
+                                handle_items_input(event, &active_section, active_category, &active_item, &active_action,
+                                                   player->inventory->nb_armors, player);
                             }
                             break;
 
@@ -69,7 +73,7 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
             }
         }
         // set_cli_raw_mode(false);
-        display_inventory(game_window, player->inventory, active_section, active_category, active_action, active_item);
+        display_inventory(game_window, player, active_section, active_category, active_action, active_item);
         render_present(game_window);
     }
     return EXIT_SUCCESS;
@@ -105,7 +109,9 @@ void handle_categories_input(event_t event, bool *quit, section_options_t *activ
     }
 }
 
-void handle_items_input(event_t event, section_options_t *active_section, category_options_t active_category, unsigned short *active_item, unsigned short category_items_count) {
+void handle_items_input(event_t event, section_options_t *active_section, category_options_t active_category,
+                        unsigned short *active_item, action_options_t *active_action,
+                        unsigned short category_items_count, player_t *player) {
     // going back to categories when pressing the left arrow on the left column
     if (event == q_KEY) {
         if (*active_item % 3 == 0) {
@@ -135,11 +141,27 @@ void handle_items_input(event_t event, section_options_t *active_section, catego
 
     // choosing an item
     if (event == ENTER_KEY) {
+        if ((active_category == ARMORS && get_value_at_index(player->inventory->armors_head, *active_item) == player->chosen_armor) ||
+            (active_category == WEAPONS && get_value_at_index(player->inventory->weapons_head, *active_item) == player->chosen_weapon)) {
+            *active_action = UNEQUIP;
+        } else {
+            *active_action = USE;
+        }
         (*active_section)++;
     }
 }
 
-void handle_actions_input(event_t event, player_t *player, section_options_t *active_section, category_options_t active_category, unsigned short active_item, action_options_t *active_action) {
+void handle_actions_input(event_t event, player_t * player, section_options_t * active_section,
+                          category_options_t active_category, unsigned short active_item,
+                          action_options_t * active_action) {
+    bool can_be_used;
+    if ((active_category == ARMORS && get_value_at_index(player->inventory->armors_head, active_item) == player->chosen_armor) ||
+        (active_category == WEAPONS && get_value_at_index(player->inventory->weapons_head, active_item) == player->chosen_weapon)) {
+        can_be_used = false;
+    } else {
+        can_be_used = true;
+    }
+
     // going back to previous section when pressing the left arrow on the left column
     if (event == q_KEY) {
         if (active_category == MANA_POTIONS || active_category == HEALTH_POTIONS) {
@@ -153,51 +175,65 @@ void handle_actions_input(event_t event, player_t *player, section_options_t *ac
     if (event == s_KEY && *active_action != THROW_AWAY) {
         (*active_action)++;
     }
-    if (event == z_KEY && *active_action != USE) {
+    if (event == z_KEY && *active_action != (can_be_used ? USE : UNEQUIP)) {
         (*active_action)--;
     }
 
     // choosing action
     if (event == ENTER_KEY) {
-        if (*active_action == USE) {
-            if (active_category == WEAPONS) {
-                player->chosen_weapon = get_value_at_index(player->inventory->weapons_head, active_item);
-                *active_section = ITEMS;
-            }
-            if (active_category == ARMORS) {
-                player->chosen_armor = get_value_at_index(player->inventory->armors_head, active_item);
-                *active_section = ITEMS;
-            }
-            if (active_category == HEALTH_POTIONS) {
-                heal_player(player, 20);
-                if (player->inventory->nb_health_potions > 0) {
+        switch (*active_action) {
+            case USE:
+                if (active_category == WEAPONS) {
+                    player->chosen_weapon = get_value_at_index(player->inventory->weapons_head, active_item);
+                    *active_section = ITEMS;
+                }
+                if (active_category == ARMORS) {
+                    player->chosen_armor = get_value_at_index(player->inventory->armors_head, active_item);
+                    *active_section = ITEMS;
+                }
+                if (active_category == HEALTH_POTIONS) {
+                    heal_player(player, 20);
+                    if (player->inventory->nb_health_potions > 0) {
+                        (player->inventory->nb_health_potions)--;
+                    }
+                }
+                if (active_category == MANA_POTIONS) {
+                    heal_mana(player, 20);
+                    if (player->inventory->nb_mana_potions > 0) {
+                        (player->inventory->nb_mana_potions)--;
+                    }
+                }
+                break;
+
+            case UNEQUIP:
+                if (active_category == WEAPONS) {
+                    player->chosen_weapon = NULL;
+                    *active_section = ITEMS;
+                }
+                if (active_category == ARMORS) {
+                    player->chosen_armor = NULL;
+                    *active_section = ITEMS;
+                }
+                break;
+
+            case THROW_AWAY:
+                if (active_category == WEAPONS) {
+                    delete_node(&(player->inventory->weapons_head), active_item);
+                    player->inventory->nb_weapons--;
+                    *active_section = ITEMS;
+                }
+                if (active_category == ARMORS) {
+                    delete_node(&(player->inventory->armors_head), active_item);
+                    player->inventory->nb_armors--;
+                    *active_section = ITEMS;
+                }
+                if (active_category == HEALTH_POTIONS && player->inventory->nb_health_potions > 0) {
                     (player->inventory->nb_health_potions)--;
                 }
-            }
-            if (active_category == MANA_POTIONS) {
-                heal_mana(player, 20);
-                if (player->inventory->nb_mana_potions > 0) {
+                if (active_category == MANA_POTIONS && player->inventory->nb_mana_potions > 0) {
                     (player->inventory->nb_mana_potions)--;
                 }
-            }
-        }
-        if (*active_action == THROW_AWAY) {
-            if (active_category == WEAPONS) {
-                delete_node(&(player->inventory->weapons_head), active_item);
-                player->inventory->nb_weapons--;
-                *active_section = ITEMS;
-            }
-            if (active_category == ARMORS) {
-                delete_node(&(player->inventory->armors_head), active_item);
-                player->inventory->nb_armors--;
-                *active_section = ITEMS;
-            }
-            if (active_category == HEALTH_POTIONS && player->inventory->nb_health_potions > 0) {
-                (player->inventory->nb_health_potions)--;
-            }
-            if (active_category == MANA_POTIONS && player->inventory->nb_mana_potions > 0) {
-                (player->inventory->nb_mana_potions)--;
-            }
+                break;
         }
     }
 }
