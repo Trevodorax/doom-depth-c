@@ -4,6 +4,7 @@
 #include "types.h"
 #include "display/display.h"
 #include "../help_screen/help_screen.h"
+#include "../confirm_quit_screen/confirm_quit_screen.h"
 
 void level_up_upgrade_stat(player_t *player, stat_t selected_stat);
 
@@ -38,7 +39,10 @@ int level_up_screen(game_window_t * game_window, player_t * player) {
                     break;
                 case Q_KEY:
                 case QUIT:
-                    return QUIT_GAME;
+                    if (confirm_quit_screen(game_window) == QUIT_GAME) {
+                        return QUIT_GAME;
+                    }
+                    break;
                 case ENTER_KEY:
                     level_up_upgrade_stat(player, selected_stat);
                     display_level_up(game_window, player, selected_stat);

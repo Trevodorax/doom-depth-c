@@ -8,6 +8,7 @@
 #include "../utils/items_management/types.h"
 #include "utils/shop_utils.h"
 #include "../help_screen/help_screen.h"
+#include "../confirm_quit_screen/confirm_quit_screen.h"
 
 // handle navigating through the shop categories depending on the user input
 void handle_category_input(event_t event, bool * quit,
@@ -39,7 +40,10 @@ int shop_screen(game_window_t * game_window, player_t * player) {
 
         while (get_event(game_window->ui_type, &event)){
             if (event == QUIT) {
-                return QUIT_GAME;
+                if (confirm_quit_screen(game_window) == QUIT_GAME) {
+                    return QUIT_GAME;
+                }
+                break;
             }
             if (event == h_KEY) {
                 help_screen(game_window);

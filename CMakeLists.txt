@@ -141,6 +141,10 @@ set(cross_platform_targets
         src/help_screen/display/gui/gui.c
         src/help_screen/display/cli/cli.c
         src/help_screen/display/display.c
+        src/confirm_quit_screen/confirm_quit_screen.h
+        src/confirm_quit_screen/confirm_quit_screen.c
+        src/confirm_quit_screen/display/display.h
+        src/confirm_quit_screen/display/display.c
 )
 
 # for unix
