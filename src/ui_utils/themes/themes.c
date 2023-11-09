@@ -30,7 +30,6 @@ void init_colors_gui(sdl_color_palette_t * color_palette, color_scheme_t color_s
     SDL_Color magenta = {255, 0, 255, 255};
     SDL_Color yellow = {255, 255, 0, 255};
 
-    color_palette->disabled = grey;
     color_palette->black = black;
     color_palette->white = white;
     color_palette->red = red;
@@ -55,6 +54,7 @@ void init_colors_gui(sdl_color_palette_t * color_palette, color_scheme_t color_s
             break;
     }
     color_palette->highlight = red;
+    color_palette->disabled = grey;
 
     // additional colors
     color_palette->white80 = (SDL_Color) {20, 20, 20, 255};
@@ -63,7 +63,6 @@ void init_colors_gui(sdl_color_palette_t * color_palette, color_scheme_t color_s
 }
 
 void init_colors_cli(cli_color_palette_t * color_palette, color_scheme_t color_scheme) {
-    color_palette->disabled = BLACK;
     color_palette->black = BLACK;
     color_palette->white = WHITE;
     color_palette->red = RED;
@@ -88,4 +87,5 @@ void init_colors_cli(cli_color_palette_t * color_palette, color_scheme_t color_s
             break;
     }
     color_palette->highlight = RED;
+    color_palette->disabled = color_palette->background;
 }

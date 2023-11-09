@@ -175,7 +175,7 @@ void handle_actions_input(event_t event, player_t * player, section_options_t * 
     if (event == s_KEY && *active_action != THROW_AWAY) {
         (*active_action)++;
     }
-    if (event == Z_KEY && *active_action != (can_be_used ? USE : UNEQUIP)) {
+    if (event == z_KEY && *active_action != (can_be_used ? USE : UNEQUIP)) {
         (*active_action)--;
     }
 

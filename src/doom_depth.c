@@ -105,7 +105,7 @@ int main_loop(game_window_t * main_window) {
 }
 
 ui_type_t get_ui_type(char * ui_argument) {
-    ui_type_t default_type = CLI;
+    ui_type_t default_type = GUI;
 
     if (ui_argument == NULL) {
         char * env_ui_type = getenv("DOOM_DEPTH_UI_TYPE");

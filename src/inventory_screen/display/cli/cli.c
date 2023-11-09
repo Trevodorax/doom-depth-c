@@ -8,7 +8,8 @@ int display_categories_cli(game_window_t * game_window, rect_t container, sectio
 int display_items_cli(game_window_t * game_window, rect_t *items_container, rect_t details_container, item_types_t type,
                       player_t * player, unsigned short active_item, section_options_t active_section);
 int display_potions_cli(game_window_t * game_window, potion_types_t type, rect_t details_container, unsigned int quantity);
-int display_actions_cli(game_window_t * game_window, rect_t actions_container, action_options_t active_action);
+int display_actions_cli(game_window_t *game_window, rect_t actions_container, action_options_t active_action,
+                        bool can_be_used);
 int display_nothing_to_see_cli(game_window_t * game_window, rect_t container);
 
 int display_inventory_cli(game_window_t * game_window,
@@ -68,6 +69,7 @@ int display_inventory_cli(game_window_t * game_window,
         case WEAPONS:
             if (!inventory->nb_weapons) {
                 display_nothing_to_see_cli(game_window, items_container);
+                return EXIT_SUCCESS;
             } else {
                 display_items_cli(game_window, &items_container, item_details_container, WEAPON, player, active_item,
                                   active_section);
@@ -77,6 +79,7 @@ int display_inventory_cli(game_window_t * game_window,
         case ARMORS:
             if (!inventory->nb_armors) {
                 display_nothing_to_see_cli(game_window, items_container);
+                return EXIT_SUCCESS;
             } else {
                 display_items_cli(game_window, &items_container, item_details_container, ARMOR, player, active_item,
                                   active_section);
@@ -86,6 +89,7 @@ int display_inventory_cli(game_window_t * game_window,
         case HEALTH_POTIONS:
             if (!inventory->nb_health_potions) {
                 display_nothing_to_see_cli(game_window, items_container);
+                return EXIT_SUCCESS;
             } else {
                 display_potions_cli(game_window, HEALTH, item_details_container, inventory->nb_health_potions);
             }
@@ -94,6 +98,7 @@ int display_inventory_cli(game_window_t * game_window,
         case MANA_POTIONS:
             if (inventory->nb_mana_potions == 0) {
                 display_nothing_to_see_cli(game_window, items_container);
+                return EXIT_SUCCESS;
             } else {
                 display_potions_cli(game_window, MANA, item_details_container, inventory->nb_mana_potions);
             }
@@ -108,7 +113,12 @@ int display_inventory_cli(game_window_t * game_window,
         return EXIT_SUCCESS;
     }
 
-    display_actions_cli(game_window, actions_container, active_action);
+    if ((active_category == ARMORS && get_value_at_index(player->inventory->armors_head, active_item) == player->chosen_armor) ||
+        (active_category == WEAPONS && get_value_at_index(player->inventory->weapons_head, active_item) == player->chosen_weapon)) {
+        display_actions_cli(game_window, actions_container, active_action, false);
+    } else {
+        display_actions_cli(game_window, actions_container, active_action, true);
+    }
 
     return EXIT_SUCCESS;
 }
@@ -194,9 +204,8 @@ int display_items_cli(game_window_t * game_window, rect_t * items_container, rec
                 if (!armor_to_print) {
                     break;
                 }
-                // FIXME : supposed to work
                 if (armor_to_print == player->chosen_armor) {
-                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, game_window->sdl_color_palette->purple, game_window->renderer);
+                    cli_draw_stroke_rect(game_window->matrix, items[i], (cli_char_t) {'.', game_window->cli_color_palette->cyan});
                 }
                 if (active_item % items_count == i) {
                     cli_draw_stroke_rect(game_window->matrix, items[i],
@@ -222,9 +231,8 @@ int display_items_cli(game_window_t * game_window, rect_t * items_container, rec
                 if (!weapon_to_print) {
                     break;
                 }
-                // FIXME : supposed to work
                 if (weapon_to_print == player->chosen_weapon) {
-                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, game_window->sdl_color_palette->purple, game_window->renderer);
+                    cli_draw_stroke_rect(game_window->matrix, items[i], (cli_char_t) {'.', game_window->cli_color_palette->cyan});
                 }
                 if (active_item % items_count == i) {
                     cli_draw_stroke_rect(game_window->matrix, items[i],
@@ -272,34 +280,36 @@ int display_potions_cli(game_window_t * game_window,
     return EXIT_SUCCESS;
 }
 
-#define ACTIONS_COUNT 2
-int display_actions_cli(game_window_t * game_window,
-                        rect_t actions_container,
-                        action_options_t active_action) {
-    char *actions[ACTIONS_COUNT] = {"Use", "Throw away"};
+#define ACTIONS_COUNT 3
+int display_actions_cli(game_window_t *game_window, rect_t actions_container, action_options_t active_action,
+                        bool can_be_used) {
+    char *actions[ACTIONS_COUNT] = {"Use", "Unequip", "Throw away"};
     int cursor_size = 5;
 
     for (int i = 0; i < ACTIONS_COUNT; i++) {
         rect_t action_container = {
-                actions_container.x + cursor_size + 8,
-                actions_container.y + (cursor_size + 8) * i,
+                actions_container.x + cursor_size + 4,
+                actions_container.y + (cursor_size + 4) * i,
                 actions_container.w,
                 cursor_size
         };
 
         cli_print_text_in_rectangle(game_window->matrix, action_container, actions[i],
-                                    game_window->cli_color_palette->text, ALIGN_START, ALIGN_CENTER, TINY_TEXT);
+                                    (i == 0 && !can_be_used) ? game_window->cli_color_palette->disabled : game_window->cli_color_palette->text,
+                                    ALIGN_START, ALIGN_CENTER, TINY_TEXT);
     }
 
     rect_t cursor_container = {
             actions_container.x,
-            actions_container.y + (cursor_size + 8) * active_action,
+            actions_container.y + (cursor_size + 4) * active_action,
             cursor_size,
             cursor_size
     };
 
-    cli_print_text_in_rectangle(game_window->matrix, cursor_container, ">",
-                                game_window->cli_color_palette->text, ALIGN_CENTER, ALIGN_CENTER, TINY_TEXT);
+    if (can_be_used || active_action != USE) {
+        cli_print_text_in_rectangle(game_window->matrix, cursor_container, ">",
+                                    game_window->cli_color_palette->text, ALIGN_CENTER, ALIGN_CENTER, TINY_TEXT);
+    }
 
     return EXIT_SUCCESS;
 }
