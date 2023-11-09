@@ -73,7 +73,7 @@ int display_stat_options_gui(game_window_t * game_window, rect_t container, stat
             case STAT_MANA:
                 current_stat_amount = player->mana_max;
                 break;
-            case STAT_DEFENCE:
+            case STAT_DEFENSE:
                 current_stat_amount = player->base_defense;
                 break;
             case STAT_ATTACK:

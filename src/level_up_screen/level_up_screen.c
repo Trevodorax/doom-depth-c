@@ -70,7 +70,7 @@ void level_up_upgrade_stat(game_window_t * game_window, player_t * player, stat_
         case STAT_MANA:
             player->mana_max += 20;
             break;
-        case STAT_DEFENCE:
+        case STAT_DEFENSE:
             player->base_defense += 2;
             break;
         case STAT_ATTACK:
