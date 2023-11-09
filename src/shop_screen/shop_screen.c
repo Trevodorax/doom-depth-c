@@ -223,10 +223,10 @@ void handle_actions(player_t * player, category_options_t active_category, unsig
                 printf("could not get armor to buy\n");
                 return;
             }
-            if ((*player)->gold >= armor_to_buy->cost && !is_full((*player)->inventory)) {
-                push((*player)->inventory->armors_list, armor_to_buy);
-                ((*player)->inventory->nb_armors)++;
-                (*player)->gold -= armor_to_buy->cost;
+            if (player->gold >= armor_to_buy->cost && !is_full(player->inventory)) {
+                push(player->inventory->armors_list, armor_to_buy);
+                player->inventory->nb_armors++;
+                player->gold -= armor_to_buy->cost;
             }
             break;
         }

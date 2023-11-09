@@ -71,7 +71,7 @@ void append(list_t *list, void *new_data) {
     new_node->next = NULL;
 
     if(new_data) {
-        memcpy(new_node->value, new_data, data_size);
+        memcpy(new_node->value, new_data, list->type_size);
     }
 
     if (list->head == NULL) {
