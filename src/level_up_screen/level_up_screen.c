@@ -18,6 +18,22 @@ int level_up_screen(game_window_t * game_window, player_t * player) {
 
         while (get_event(game_window->ui_type, &event)){
             switch (event) {
+                case D_KEY:
+                case S_KEY:
+                    if (selected_stat == STAT_COUNT - 1) {
+                        selected_stat = 0;
+                    } else {
+                        selected_stat += 1;
+                    }
+                    break;
+                case Q_KEY:
+                case Z_KEY:
+                    if(selected_stat == 0) {
+                        selected_stat = STAT_COUNT - 1;
+                    } else {
+                        selected_stat -= 1;
+                    }
+                    break;
                 case QUIT:
                     return QUIT_GAME;
                 case ENTER_KEY:
