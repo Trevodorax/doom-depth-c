@@ -44,4 +44,20 @@ void *create_weapon_from_db(sqlite3_stmt *stmt);
  */
 void free_weapon(weapon_t *weapon);
 
+/**
+ * @brief Safely casts a void * into a weapon_t *
+ *
+ * @param void_weapon The pointer to cast
+ * @return The casted pointer
+ */
+weapon_t *void_to_weapon(void *void_weapon);
+
+/**
+ * @brief Copies an weapon deeply
+ *
+ * @param weapon The copied weapon
+ * @return A deep copy of the weapon
+ */
+weapon_t * copy_weapon(const weapon_t * weapon);
+
 #endif

@@ -116,6 +116,12 @@ int display_monster_gui(game_window_t * game_window, monster_t *monster, SDL_Rec
                             (SDL_Color) {50, 200, 50, 255}, (SDL_Color) {200, 50, 50, 255}) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
+
+    // display hp that way : "HP : 80/100"
+    char * hp_text = malloc(20 * sizeof(char));
+    sprintf(hp_text, "HP : %d/%d", (int)monster->hp, (int)monster->hp_max);
+    print_text_in_rectangle(game_window->renderer, hp_rect, hp_text, (SDL_Color){255, 255, 255, 255}, ALIGN_CENTER, ALIGN_CENTER);
+
     return EXIT_SUCCESS;
 }
 
@@ -237,7 +243,11 @@ int display_player_stats_zone_gui(game_window_t * game_window, player_t * player
     ) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
-    print_text_in_rectangle(game_window->renderer, hp_rect, "HP", (SDL_Color){0, 0, 0, 255}, ALIGN_CENTER, ALIGN_CENTER);
+
+    // display hp that way : "HP : 80/100"
+    char * hp_text = malloc(20 * sizeof(char));
+    sprintf(hp_text, "HP : %d/%d", (int)player->hp, (int)player->hp_max);
+    print_text_in_rectangle(game_window->renderer, hp_rect, hp_text, (SDL_Color){0, 0, 0, 255}, ALIGN_CENTER, ALIGN_CENTER);
 
     if(display_stat_bar_gui(
             game_window,
@@ -249,7 +259,11 @@ int display_player_stats_zone_gui(game_window_t * game_window, player_t * player
     ) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
-    print_text_in_rectangle(game_window->renderer, mana_rect, "MANA", (SDL_Color){255, 255, 255, 255}, ALIGN_CENTER, ALIGN_CENTER);
+
+    // display mana that way : "MANA : 80/100"
+    char * mana_text = malloc(24 * sizeof(char));
+    sprintf(mana_text, "MANA : %d/%d", (int)player->mana, (int)player->mana_max);
+    print_text_in_rectangle(game_window->renderer, mana_rect, mana_text, (SDL_Color){255, 255, 255, 255}, ALIGN_CENTER, ALIGN_CENTER);
 
 
     if(display_stat_bar_gui(
@@ -262,7 +276,11 @@ int display_player_stats_zone_gui(game_window_t * game_window, player_t * player
     ) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
-    print_text_in_rectangle(game_window->renderer, actions_points_rect, "PA", (SDL_Color){0, 0, 0, 255}, ALIGN_CENTER, ALIGN_CENTER);
+
+    // display action points that way : "PA : 2/3"
+    char * action_points_text = malloc(15 * sizeof(char));
+    sprintf(action_points_text, "PA : %d/%d", (int)player->action_points, (int)player->max_action_points);
+    print_text_in_rectangle(game_window->renderer, actions_points_rect, action_points_text, (SDL_Color){0, 0, 0, 255}, ALIGN_CENTER, ALIGN_CENTER);
 
 
     return EXIT_SUCCESS;

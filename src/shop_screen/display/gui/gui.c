@@ -3,7 +3,6 @@
 #include "../../../ui_utils/sdl_utils/sdl_utils.h"
 #include "../../utils/shop_utils.h"
 #include "../../../ui_utils/ui_utils.h"
-#include "../../../inventory_screen/display/display.h"
 #include "../../../inventory_screen/display/gui/gui.h"
 
 int display_shop_gui(game_window_t * game_window,
@@ -33,7 +32,7 @@ int display_shop_gui(game_window_t * game_window,
     };
 
     // draw black background
-    draw_fill_rect(rect_to_SDL_Rect(window_rect), (SDL_Color) {0, 0, 0, 0}, game_window->renderer);
+    draw_fill_rect(rect_to_SDL_Rect(window_rect), game_window->sdl_color_palette->background, game_window->renderer);
 
     rect_t go_back_icon_rect = {
             unit_padding,
@@ -92,22 +91,22 @@ int display_shop_gui(game_window_t * game_window,
             merchant_image_rect.h
     };
 
-    if (display_gold_gui(game_window->renderer, player, rect_to_SDL_Rect(gold_icon_rect), rect_to_SDL_Rect(gold_rect))) {
+    if (display_gold_gui(game_window, player, rect_to_SDL_Rect(gold_icon_rect), rect_to_SDL_Rect(gold_rect))) {
         return EXIT_FAILURE;
     }
-    if (display_shop_categories_gui(game_window->renderer, &categories_container, rect_to_SDL_Rect(go_back_icon_rect),
+    if (display_shop_categories_gui(game_window, &categories_container, rect_to_SDL_Rect(go_back_icon_rect),
                                     rect_to_SDL_Rect(go_back_text_rect), active_category)) {
         return EXIT_FAILURE;
     }
-    if (display_merchant_gui(game_window->renderer, rect_to_SDL_Rect(merchant_image_rect),
+    if (display_merchant_gui(game_window, rect_to_SDL_Rect(merchant_image_rect),
                              rect_to_SDL_Rect(dialog_rect), "Hello there")) {
         return EXIT_FAILURE;
     }
     if (active_section == ITEMS &&
-        display_shop_items_gui(game_window->renderer, &items_container, active_category, active_item)) {
+        display_shop_items_gui(game_window, &items_container, active_category, active_item)) {
         return EXIT_FAILURE;
     }
-    if (active_section == CONFIRM && display_item_confirm_gui(game_window->renderer, rect_to_SDL_Rect(window_rect),
+    if (active_section == CONFIRM && display_item_confirm_gui(game_window, rect_to_SDL_Rect(window_rect),
                                                               &confirm_rect, active_confirmation,
                                                               active_category, active_item)) {
         return EXIT_FAILURE;
@@ -116,9 +115,9 @@ int display_shop_gui(game_window_t * game_window,
     return EXIT_SUCCESS;
 }
 
-int display_go_back_gui(SDL_Renderer * renderer, SDL_Rect icon_container, SDL_Rect text_container) {
+int display_go_back_gui(game_window_t * game_window, SDL_Rect icon_container, SDL_Rect text_container) {
     if (draw_image_in_rectangle(
-            renderer,
+            game_window->renderer,
             icon_container,
             "../assets/items_mgmt/image/go_back.png",
             NORTH, true, ALIGN_CENTER, ALIGN_END
@@ -126,8 +125,8 @@ int display_go_back_gui(SDL_Renderer * renderer, SDL_Rect icon_container, SDL_Re
         return EXIT_FAILURE;
     }
 
-    if (print_text_in_rectangle(renderer, text_container,
-                                "Go back", (SDL_Color) {255, 255, 255, 255},
+    if (print_text_in_rectangle(game_window->renderer, text_container,
+                                "Go back", game_window->sdl_color_palette->text,
                                 ALIGN_START, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
@@ -135,9 +134,9 @@ int display_go_back_gui(SDL_Renderer * renderer, SDL_Rect icon_container, SDL_Re
     return EXIT_SUCCESS;
 }
 
-int display_gold_gui(SDL_Renderer * renderer, player_t * player, SDL_Rect icon_container, SDL_Rect text_container) {
+int display_gold_gui(game_window_t * game_window, player_t * player, SDL_Rect icon_container, SDL_Rect text_container) {
     if (draw_image_in_rectangle(
-            renderer,
+            game_window->renderer,
             icon_container,
             "../assets/items_mgmt/image/gold.png",
             NORTH, true, ALIGN_CENTER, ALIGN_END)
@@ -145,8 +144,8 @@ int display_gold_gui(SDL_Renderer * renderer, player_t * player, SDL_Rect icon_c
         return EXIT_FAILURE;
     }
 
-    if (print_text_in_rectangle(renderer, text_container,
-                                player_gold_to_string(player), (SDL_Color) {255, 255, 255, 255},
+    if (print_text_in_rectangle(game_window->renderer, text_container,
+                                player_gold_to_string(player), game_window->sdl_color_palette->text,
                                 ALIGN_END, ALIGN_CENTER)
             ) {
         return EXIT_FAILURE;
@@ -155,28 +154,30 @@ int display_gold_gui(SDL_Renderer * renderer, player_t * player, SDL_Rect icon_c
     return EXIT_SUCCESS;
 }
 
-int display_shop_categories_gui(SDL_Renderer * renderer, rect_t * categories_container,
+int display_shop_categories_gui(game_window_t * game_window, rect_t * categories_container,
                                 SDL_Rect go_back_icon_container, SDL_Rect go_back_text_container,
                                 category_options_t active_category) {
-    SDL_Color white = (SDL_Color) {255, 255, 255, 255};
-    if (display_go_back_gui(renderer, go_back_icon_container, go_back_text_container)) {
+    if (display_go_back_gui(game_window, go_back_icon_container, go_back_text_container)) {
         return EXIT_FAILURE;
     }
 
     rect_t *categories_rect = get_rectangle_layout(3, categories_container, HORIZONTAL, 2);
-    if (print_text_in_rectangle(renderer, rect_to_SDL_Rect(categories_rect[0]), "WEAPONS", white, ALIGN_CENTER, ALIGN_CENTER)) {
+    if (print_text_in_rectangle(game_window->renderer, rect_to_SDL_Rect(categories_rect[0]), "WEAPONS",
+                                game_window->sdl_color_palette->text, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
-    if (print_text_in_rectangle(renderer, rect_to_SDL_Rect(categories_rect[1]), "ARMORS", white, ALIGN_CENTER, ALIGN_CENTER)) {
+    if (print_text_in_rectangle(game_window->renderer, rect_to_SDL_Rect(categories_rect[1]), "ARMORS",
+                                game_window->sdl_color_palette->text, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
-    if (print_text_in_rectangle(renderer, rect_to_SDL_Rect(categories_rect[2]), "POTIONS", white, ALIGN_CENTER, ALIGN_CENTER)) {
+    if (print_text_in_rectangle(game_window->renderer, rect_to_SDL_Rect(categories_rect[2]), "POTIONS",
+                                game_window->sdl_color_palette->text, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
 
     switch (active_category) {
         case GO_BACK:
-            if (draw_thick_rect(go_back_icon_container, 2, white, renderer)) {
+            if (draw_thick_rect(go_back_icon_container, 2, game_window->sdl_color_palette->text, game_window->renderer)) {
                 return EXIT_FAILURE;
             }
             break;
@@ -185,7 +186,7 @@ int display_shop_categories_gui(SDL_Renderer * renderer, rect_t * categories_con
             if (draw_thick_rect(
                     (SDL_Rect) {(int) categories_rect[1].x, (int) categories_rect[1].y + (int) categories_rect[1].h - 2,
                                 (int) categories_rect[1].w, 2},
-                    1, white, renderer)) {
+                    1, game_window->sdl_color_palette->text, game_window->renderer)) {
                 return EXIT_FAILURE;
             }
             break;
@@ -194,7 +195,7 @@ int display_shop_categories_gui(SDL_Renderer * renderer, rect_t * categories_con
             if (draw_thick_rect(
                     (SDL_Rect) {(int) categories_rect[0].x, (int) categories_rect[0].y + (int) categories_rect[0].h - 2,
                                 (int) categories_rect[0].w, 2},
-                    1, white, renderer)) {
+                    1, game_window->sdl_color_palette->text, game_window->renderer)) {
                 return EXIT_FAILURE;
             }
             break;
@@ -204,7 +205,7 @@ int display_shop_categories_gui(SDL_Renderer * renderer, rect_t * categories_con
             if (draw_thick_rect(
                     (SDL_Rect) {(int) categories_rect[2].x, (int) categories_rect[2].y + (int) categories_rect[2].h - 2,
                                 (int) categories_rect[2].w, 2},
-                    1, white, renderer)) {
+                    1, game_window->sdl_color_palette->text, game_window->renderer)) {
                 return EXIT_FAILURE;
             }
             break;
@@ -213,28 +214,25 @@ int display_shop_categories_gui(SDL_Renderer * renderer, rect_t * categories_con
     return EXIT_SUCCESS;
 }
 
-int display_merchant_gui(SDL_Renderer * renderer, SDL_Rect merchant_container, SDL_Rect message_container,
+int display_merchant_gui(game_window_t * game_window, SDL_Rect merchant_container, SDL_Rect message_container,
                          const char *message) {
-    SDL_Color white = (SDL_Color) {255, 255, 255, 255};
-    SDL_Color black = (SDL_Color) {0, 0, 0, 255};
-    if (draw_image_in_rectangle(renderer, merchant_container, "../assets/items_mgmt/image/shop_owner.png", NORTH, true, ALIGN_CENTER, ALIGN_CENTER)) {
+    if (draw_image_in_rectangle(game_window->renderer, merchant_container, "../assets/items_mgmt/image/shop_owner.png",
+                                NORTH, true, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
 
-    draw_fill_rect(message_container, white, renderer);
-    if (print_text_in_rectangle(renderer, message_container, message, black, ALIGN_CENTER, ALIGN_CENTER)) {
+    if (print_text_in_rectangle(game_window->renderer, message_container, message,
+                                game_window->sdl_color_palette->text, ALIGN_CENTER, ALIGN_CENTER)) {
         return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
 }
 
-int display_shop_items_gui(SDL_Renderer * renderer,
+int display_shop_items_gui(game_window_t * game_window,
                            rect_t * items_container,
                            category_options_t active_category,
                            unsigned short active_item) {
-    SDL_Color white = (SDL_Color) {255, 255, 255, 255};
-
     int quantity = -1;
     switch (active_category) {
         case GO_BACK:
@@ -262,7 +260,7 @@ int display_shop_items_gui(SDL_Renderer * renderer,
 
     int first_item_to_print = (active_item / ITEMS_PER_PAGE) * ITEMS_PER_PAGE;
 
-    display_scroll_indicator_gui(renderer, rect_to_SDL_Rect(*items_container), 12, ITEMS_PER_PAGE, quantity, first_item_to_print);
+    display_scroll_indicator_gui(game_window, rect_to_SDL_Rect(*items_container), 12, ITEMS_PER_PAGE, quantity, first_item_to_print);
 
     switch (active_category) {
         case ARMORS:
@@ -273,9 +271,10 @@ int display_shop_items_gui(SDL_Renderer * renderer,
                     break;
                 }
                 if (active_item % ITEMS_PER_PAGE == i) {
-                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, white, renderer);
+                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, game_window->sdl_color_palette->text, game_window->renderer);
                 }
-                if (draw_image_in_rectangle(renderer, rect_to_SDL_Rect(items[i]), armor_to_print->image_path, NORTH, true, ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
+                if (draw_image_in_rectangle(game_window->renderer, rect_to_SDL_Rect(items[i]), armor_to_print->image_path,
+                                            NORTH, true, ALIGN_CENTER, ALIGN_CENTER) == EXIT_FAILURE){
                     return EXIT_FAILURE;
                 }
             }
@@ -289,9 +288,10 @@ int display_shop_items_gui(SDL_Renderer * renderer,
                     break;
                 }
                 if (active_item % ITEMS_PER_PAGE == i) {
-                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, white, renderer);
+                    draw_thick_rect(rect_to_SDL_Rect(items[i]), 2, game_window->sdl_color_palette->text, game_window->renderer);
                 }
-                if (draw_image_in_rectangle(renderer, rect_to_SDL_Rect(items[i]), weapon_to_print->image_path, NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
+                if (draw_image_in_rectangle(game_window->renderer, rect_to_SDL_Rect(items[i]), weapon_to_print->image_path,
+                                            NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
                     return EXIT_FAILURE;
                 }
             }
@@ -300,14 +300,16 @@ int display_shop_items_gui(SDL_Renderer * renderer,
         case HEALTH_POTIONS:
         case MANA_POTIONS:
             if (active_category == HEALTH_POTIONS) {
-                draw_thick_rect(rect_to_SDL_Rect(items[0]), 2, white, renderer);
+                draw_thick_rect(rect_to_SDL_Rect(items[0]), 2, game_window->sdl_color_palette->text, game_window->renderer);
             } else if (active_category == MANA_POTIONS) {
-                draw_thick_rect(rect_to_SDL_Rect(items[1]), 2, white, renderer);
+                draw_thick_rect(rect_to_SDL_Rect(items[1]), 2, game_window->sdl_color_palette->text, game_window->renderer);
             }
-            if (draw_image_in_rectangle(renderer, rect_to_SDL_Rect(items[0]), "../assets/items_mgmt/image/health_potions.png", NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
+            if (draw_image_in_rectangle(game_window->renderer, rect_to_SDL_Rect(items[0]), "../assets/items_mgmt/image/health_potions.png",
+                                        NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
                 return EXIT_FAILURE;
             }
-            if (draw_image_in_rectangle(renderer, rect_to_SDL_Rect(items[1]), "../assets/items_mgmt/image/mana_potions.png", NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
+            if (draw_image_in_rectangle(game_window->renderer, rect_to_SDL_Rect(items[1]), "../assets/items_mgmt/image/mana_potions.png",
+                                        NORTH, true, ALIGN_CENTER, ALIGN_CENTER)){
                 return EXIT_FAILURE;
             }
             break;
@@ -320,10 +322,9 @@ int display_shop_items_gui(SDL_Renderer * renderer,
     return EXIT_SUCCESS;
 }
 
-int display_item_confirm_gui(SDL_Renderer *renderer, SDL_Rect window_rect, rect_t * container,
+int display_item_confirm_gui(game_window_t * game_window, SDL_Rect window_rect, rect_t * container,
                              bool active_confirmation, category_options_t active_category,
                              unsigned int active_item) {
-    SDL_Color white = (SDL_Color) {255, 255, 255, 255};
     unsigned long container_new_height = container->h * .8;
 
     rect_t details_container  = {
@@ -331,15 +332,16 @@ int display_item_confirm_gui(SDL_Renderer *renderer, SDL_Rect window_rect, rect_
             container->w, container_new_height
     };
     rect_t confirmation_container = {
-            container->x, container->y + container_new_height,
-            container->w, container->h - container_new_height
+            container->x + container->w / 4, container->y + container_new_height,
+            container->w / 2, container->h - container_new_height
     };
     rect_t * confirmation_rects = get_rectangle_layout(2, &confirmation_container, VERTICAL, 2);
 
-    if (draw_image_in_rectangle(renderer, window_rect, "../assets/backgrounds/white_semi_transparent.png", NORTH, false, ALIGN_START, ALIGN_START)) {
+    if (draw_image_in_rectangle(game_window->renderer, window_rect, "../assets/backgrounds/white_semi_transparent.png",
+                                NORTH, false, ALIGN_START, ALIGN_START)) {
         return EXIT_FAILURE;
     }
-    if (draw_fill_rect(rect_to_SDL_Rect(*container), (SDL_Color) {0, 0, 0, 255}, renderer)) {
+    if (draw_fill_rect(rect_to_SDL_Rect(*container), game_window->sdl_color_palette->background, game_window->renderer)) {
         return EXIT_FAILURE;
     }
 
@@ -370,17 +372,21 @@ int display_item_confirm_gui(SDL_Renderer *renderer, SDL_Rect window_rect, rect_
             break;
     }
 
-    print_text_in_rectangle(renderer, rect_to_SDL_Rect(details_container), details, white, ALIGN_CENTER, ALIGN_CENTER);
-    print_text_in_rectangle(renderer, rect_to_SDL_Rect(confirmation_rects[0]), "YES", white, ALIGN_CENTER, ALIGN_CENTER);
-    print_text_in_rectangle(renderer, rect_to_SDL_Rect(confirmation_rects[1]), "NO", white, ALIGN_CENTER, ALIGN_CENTER);
+    print_text_in_rectangle(game_window->renderer, rect_to_SDL_Rect(details_container), details,
+                            game_window->sdl_color_palette->text, ALIGN_CENTER, ALIGN_CENTER);
+    print_text_in_rectangle(game_window->renderer, rect_to_SDL_Rect(confirmation_rects[0]), "YES",
+                            game_window->sdl_color_palette->text, ALIGN_CENTER, ALIGN_CENTER);
+    print_text_in_rectangle(game_window->renderer, rect_to_SDL_Rect(confirmation_rects[1]), "NO",
+                            game_window->sdl_color_palette->text, ALIGN_CENTER, ALIGN_CENTER);
 
-    display_cursor_gui(renderer, (active_confirmation == true) ? &confirmation_rects[0] : &confirmation_rects[1]);
+    display_cursor_gui(game_window, (active_confirmation == true) ? &confirmation_rects[0] : &confirmation_rects[1]);
 
     return EXIT_SUCCESS;
 }
 
-int display_cursor_gui(SDL_Renderer * renderer, rect_t * aimed_container) {
-    SDL_Texture * cursor_texture = get_string_texture(renderer, ">", "../assets/PixelifySans-Regular.ttf", 12, (SDL_Color) {255, 255, 255, 255});
+int display_cursor_gui(game_window_t * game_window, rect_t * aimed_container) {
+    SDL_Texture * cursor_texture = get_string_texture(game_window->renderer, ">",
+                                  "../assets/PixelifySans-Regular.ttf", 12, game_window->sdl_color_palette->highlight);
     if (!cursor_texture) {
         return EXIT_FAILURE;
     }
@@ -390,7 +396,8 @@ int display_cursor_gui(SDL_Renderer * renderer, rect_t * aimed_container) {
     SDL_QueryTexture(cursor_texture, NULL, NULL, &cursor_width, &cursor_height);
 
     rect_t cursor_rect = {
-            aimed_container->x, aimed_container->y + (aimed_container->h - cursor_height) / 2,
+            (aimed_container->x - 2 * cursor_width > 0) ? aimed_container->x - 2 * cursor_width : 0,
+            aimed_container->y + (aimed_container->h - cursor_height) / 2,
             cursor_width, cursor_height
     };
 
@@ -399,7 +406,7 @@ int display_cursor_gui(SDL_Renderer * renderer, rect_t * aimed_container) {
 
     SDL_Rect cursor_sdl_rect = rect_to_SDL_Rect(cursor_rect);
 
-    SDL_RenderCopy(renderer, cursor_texture, NULL, &cursor_sdl_rect);
+    SDL_RenderCopy(game_window->renderer, cursor_texture, NULL, &cursor_sdl_rect);
 
     return EXIT_SUCCESS;
 }

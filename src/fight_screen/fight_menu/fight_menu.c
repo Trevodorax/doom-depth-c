@@ -9,6 +9,7 @@
 #include "../display/display.h"
 #include "../fight_utils/fight_utils.h"
 #include "../../map_screen/map/map.h"
+#include "../../inventory_screen/inventory_screen.h"
 
 menu_t* create_menu(int nb_options, const char * title, const char * image_path, int (*callback)(fight_context_t *, void * custom_params), void * custom_params) {
     menu_t *new_menu = malloc(sizeof(menu_t));
@@ -48,6 +49,10 @@ menu_t* build_nested_menu(fight_context_t * fight_context) {
     int i = 0;
     while(current_monster != NULL){
         monster_t * monster = (monster_t*)current_monster->value;
+        if (!monster->name) {
+            current_monster = current_monster->next;
+            continue;
+        }
         char * name_and_hp = malloc(sizeof(char)*(strlen(monster->name)+10));
         sprintf(name_and_hp,"%s (%d)",monster->name,monster->hp);
         sub_menu_weapon->options[i] = create_menu(0, name_and_hp, NULL, attack_weapon, monster);
@@ -102,6 +107,9 @@ fight_action_t * fight_menu(game_window_t *game_window, menu_t *menu, fight_cont
                     break;
                 case D_KEY:
                     selected_item_index = handle_fight_menu_movement(selected_item_index, menu->nb_options, EAST);
+                    break;
+                case I_KEY:
+                    inventory_screen(game_window, fight_context->player);
                     break;
                 case QUIT:
                     stage->fight_context = fight_context;

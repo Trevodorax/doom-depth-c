@@ -8,12 +8,12 @@
 
 int
 print_ascii_art_in_rectangle(cli_matrix_t * matrix, const char * ascii_file_path, rect_t container, alignment_t x_align,
-                             alignment_t y_align) {
+                             alignment_t y_align, color_code_t color) {
     if (!matrix || !ascii_file_path) {
         global_logger->error("\nprint_ascii_art_in_rectangle error: please provide all necessary arguments");
     }
 
-    ascii_art_t * ascii_art = parse_ascii_art_file(ascii_file_path, BLACK);
+    ascii_art_t * ascii_art = parse_ascii_art_file(ascii_file_path, color);
     if (!ascii_art) {
         return EXIT_FAILURE;
     }

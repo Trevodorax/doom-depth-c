@@ -12,7 +12,7 @@ void monster_turn(game_window_t * game_window, player_t * player, monster_t * mo
 
 router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *stage, fight_context_t * previous_fight_context) {
     if (game_window->ui_type == CLI) {
-        cli_render_clear(game_window->matrix, (cli_char_t){' ', WHITE});
+        cli_render_clear(game_window->matrix, (cli_char_t){' ', game_window->cli_color_palette->background});
     }
     rect_t fight_zone;
     rect_t menu_zone;
@@ -65,7 +65,6 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
                     }
                 }
             }
-            heal_mana(fight_context->player, 10);
         } else {
             monsters_turn(game_window, fight_context, fight_zone);
             if(player->hp == 0) {
@@ -75,6 +74,11 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
 
             fight_context->player_turn = true;
             player->action_points = player->max_action_points;
+            if (fight_context->player->is_defending) {
+                fight_context->player->base_defense -= fight_context->player->defensive_spell->amount;
+                fight_context->player->is_defending = false;
+            }
+            heal_mana(fight_context->player, 10);
         }
 
         free_menu(menu);

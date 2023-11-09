@@ -1,8 +1,9 @@
 #include "game_window.h"
+#include "../ui_utils/themes/themes.h"
 #include <SDL_ttf.h>
 
-game_window_t *init_game_window(ui_type_t ui_type) {
-    game_window_t *game_window = malloc(sizeof(game_window_t));
+game_window_t * init_game_window(ui_type_t ui_type, color_scheme_t color_scheme) {
+    game_window_t * game_window = malloc(sizeof(game_window_t));
     if (!game_window) {
         return NULL;
     }
@@ -28,6 +29,10 @@ game_window_t *init_game_window(ui_type_t ui_type) {
             }
             break;
         }
+    }
+
+    if (init_colors(game_window, color_scheme) == EXIT_FAILURE) {
+        return NULL;
     }
 
     return game_window;
@@ -127,9 +132,9 @@ int render_present(game_window_t * game_window) {
 }
 
 int render_present_cli(game_window_t * game_window) {
-    resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
+    resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', game_window->cli_color_palette->background});
     set_cli_raw_mode(true);
-    cli_render_present(game_window->matrix);
+    cli_render_present(game_window->matrix, game_window->cli_color_palette->text);
     set_cli_raw_mode(false);
 
     return EXIT_SUCCESS;

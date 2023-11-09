@@ -83,5 +83,21 @@ array_node_t * get_monsters();
  */
 monster_t * get_monster_by_name(char * name);
 
+/**
+ * @brief Retrieves a armor by its id
+ *
+ * @param id The id of the searched armor
+ * @return A copy of the armor
+ */
+armor_t * get_armor_by_id(int id);
+
+/**
+ * @brief Retrieves a weapon by its id
+ *
+ * @param id The id of the searched weapon
+ * @return A copy of the weapon
+ */
+weapon_t * get_weapon_by_id(int id);
+
 
 #endif //DOOM_DEPTH_C_ENTITIES_H

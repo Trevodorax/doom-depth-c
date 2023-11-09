@@ -20,9 +20,8 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
     }
 
     if(game_window->ui_type == CLI) {
-        resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
+        resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', game_window->cli_color_palette->background});
     }
-
 
     event_t event;
     bool quit = false;
@@ -35,8 +34,6 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
         set_cli_raw_mode(true);
         while (get_event(game_window->ui_type, &event)) {
             switch (event) {
-                case QUIT:
-                    return QUIT_GAME;
                 case Z_KEY:
                 case Q_KEY:
                 case S_KEY:
@@ -46,7 +43,7 @@ int inventory_screen(game_window_t *game_window, player_t *player) {
                         case CATEGORIES:
                             handle_categories_input(event, &quit, &active_section, &active_category, &active_item);
                             if (quit) {
-                                return QUIT_GAME;
+                                return EXIT_SUCCESS;
                             }
                             break;
 

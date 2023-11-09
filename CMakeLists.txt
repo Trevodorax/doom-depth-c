@@ -133,6 +133,9 @@ set(cross_platform_targets
         src/level_up_screen/display/gui/gui.h
         src/level_up_screen/display/cli/cli.c
         src/level_up_screen/display/cli/cli.h
+        src/ui_utils/themes/themes.h
+        src/ui_utils/themes/themes.c
+        src/ui_utils/themes/types.h
 )
 
 # for unix

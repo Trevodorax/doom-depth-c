@@ -23,13 +23,19 @@ unsigned int player_attack(player_t * player, monster_t * target) {
 }
 
 unsigned int monster_attack(monster_t * monster, player_t * target) {
-    double armor_ratio = target->chosen_armor ?  (double)target->chosen_armor->amount / 10 : 1;
-    unsigned int damages = (unsigned int)((monster->attack - target->base_defense) * armor_ratio);
+    unsigned int armor = target->chosen_armor ?  target->chosen_armor->amount : 0;
+    unsigned int damages = 0;
+    if(monster->attack > target->base_defense+armor){
+        damages = monster->attack - (target->base_defense+armor);
+    }
 
     if(damages > target->hp){
         damages = target->hp;
     }
     target->hp -= damages;
+
+    global_logger->info("\nMonster attack : %d damages", damages);
+    global_logger->info("\nPlayer hp : %d/%d", target->hp, target->hp_max);
 
     return damages;
 }
@@ -151,6 +157,9 @@ treasure_t * get_treasure_from_fight_context(fight_context_t * fight_context) {
     treasure_t *treasure = malloc(sizeof(treasure_t));
     if (!treasure) return NULL;
     treasure->coins = coins;
+    treasure->mana_potions = get_size(fight_context->monsters);
+    treasure->armor = NULL;
+    treasure->weapon = NULL;
     return treasure;
 }
 

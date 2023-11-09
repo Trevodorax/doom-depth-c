@@ -9,7 +9,7 @@
  *
  * This function adds a new node at the beginning of the linked list and copies the value into it.
  *
- * @param head_ref Pointer to the head of the linked list.
+ * @param head_ref Pointer to the head of the linked list, this field CANNOT be NULL.
  * @param new_data Pointer to the value to be added.
  * @param data_size Size of the value type.
  * @sideeffects Modifies the linked list by adding a new node at the beginning.
@@ -19,7 +19,8 @@
  * @date 26/09/2023
  */
 void push(array_node_t **head_ref, void *new_data, size_t data_size) {
-    array_node_t *new_node = (array_node_t *)malloc(sizeof(array_node_t));
+    array_node_t *new_node = malloc(sizeof(array_node_t));
+
     new_node->value = malloc(data_size);
     new_node->next = *head_ref;
 
@@ -228,6 +229,9 @@ int find_node(array_node_t *head, void *data_to_find, size_t data_size) {
 void * get_value_at_index(array_node_t *head, int index) {
     array_node_t *current = head;
 
+    if(current == NULL){
+        return NULL;
+    }
     while (index != 0){
         if (current->next!=NULL){
             current = current->next;

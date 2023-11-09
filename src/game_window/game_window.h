@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "../ui_utils/cli_utils/cli_utils.h"
 #include "../utils/router.h"
+#include "../ui_utils/themes/types.h"
 
 typedef enum {
     CLI,
@@ -16,6 +17,8 @@ typedef struct {
 
 typedef struct {
     ui_type_t ui_type;
+    sdl_color_palette_t * sdl_color_palette;
+    cli_color_palette_t * cli_color_palette;
 
     // for GUI mode
     SDL_Window * window;
@@ -48,7 +51,7 @@ void free_game_window_gui(game_window_t *game_window);
  * @param ui_type
  * @return Pointer to the newly created game window structure
  */
-game_window_t *init_game_window(ui_type_t ui_type);
+game_window_t * init_game_window(ui_type_t ui_type, color_scheme_t color_scheme);
 int init_game_window_cli(game_window_t * game_window);
 int init_game_window_gui(game_window_t * game_window);
 

@@ -7,7 +7,7 @@ void update_fight_section_dimensions(game_window_t * game_window, rect_t * fight
 
     switch(game_window->ui_type) {
         case CLI:
-            resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', WHITE});
+            resize_cli_matrix_to_window(game_window->matrix, (cli_char_t){' ', game_window->cli_color_palette->background});
             window_height = (int)game_window->matrix->nb_rows;
             window_width = (int)game_window->matrix->nb_cols;
         case GUI:
