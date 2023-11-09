@@ -26,4 +26,12 @@ static char * stat_display_image_path[STAT_COUNT] = {
         "../assets/stat_icons/image/action_points.png"
 };
 
+static char * stat_display_ascii_path[STAT_COUNT] = {
+        "../assets/stat_icons/ascii/hp.asciiart",
+        "../assets/stat_icons/ascii/mana.asciiart",
+        "../assets/stat_icons/ascii/defence.asciiart",
+        "../assets/stat_icons/ascii/attack.asciiart",
+        "../assets/stat_icons/ascii/action_points.asciiart"
+};
+
 #endif //DOOM_DEPTH_C_LEVEL_UP_SCREEN_TYPES_H
