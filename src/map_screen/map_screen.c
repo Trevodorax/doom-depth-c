@@ -115,6 +115,15 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
                             player->current_map = player_stage->linked_map_file_path;
                             *map = get_player_map(player);
                             return MAP_SCREEN;
+                        case TREASURE:
+                            if (player_stage->is_done) {
+                                break;
+                            }
+
+                            give_treasure_to_player(player_stage->treasure, player);
+
+                            player_stage->is_done = true;
+                            break;
                         case EMPTY:
                         default:
                             break;
@@ -191,12 +200,8 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction) {
             player_stage->left = NULL;
             break;
     }
-
-    if (!next_stage->is_done && next_stage->type == TREASURE) {
-        give_treasure_to_player(next_stage->treasure, next_stage->player);
-    }
-
-    if(player_stage->type != FIGHT) {
+    
+    if(player_stage->type != FIGHT && player_stage->type != TREASURE) {
         player_stage->is_done = true;
     }
 
