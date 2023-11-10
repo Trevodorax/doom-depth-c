@@ -181,11 +181,5 @@ int display_start_menu_cli(game_window_t *game_window, unsigned short active_opt
     cli_print_text_in_rectangle(game_window->matrix, option_2_rect, active_option == 1 ? "> New game" : "New game", game_window->cli_color_palette->text,
                                 ALIGN_START, ALIGN_START, SMALL_TEXT);
 
-//    // print cursor
-//    rect_t cursor_rect = {0, 0, 1, 1};
-//    cursor_rect.y = active_option == 0 ? option_1_rect.y : option_2_rect.y;
-//
-//    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", game_window->cli_color_palette->highlight, ALIGN_START, ALIGN_START, SMALL_TEXT);
-
     return EXIT_SUCCESS;
 }
