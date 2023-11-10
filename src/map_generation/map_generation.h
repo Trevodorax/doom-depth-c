@@ -3,6 +3,24 @@
 #ifndef DOOM_DEPTH_C_MAP_GENERATION_H
 #define DOOM_DEPTH_C_MAP_GENERATION_H
 
+#define NB_MONSTERS 12
+
+static char * monster_names[NB_MONSTERS] = {
+        "goblin",
+        "zombie",
+        "skeleton",
+        "troll",
+        "ghost",
+        "ghoul",
+        "demon",
+        "flowey",
+        "sananes",
+        "delon",
+        "demacon",
+        "machavoine"
+};
+
+
 /**
  * @brief Generates a complete map
  *
@@ -71,5 +89,21 @@ fight_t * get_last_done_fight(stage_t * last_stage);
  * @return The generated treasure
  */
 treasure_t * generate_treasure(stage_t * treasure_stage);
+
+/**
+ * @brief Turns the name of a monster to a number (of difficulty)
+ *
+ * @param monster_name The name of the monster
+ * @return The difficulty of the monster
+ */
+int monster_name_to_number(char * monster_name);
+
+/**
+ * @brief Turns a monster number into its name
+ *
+ * @param number The number of the monster
+ * @return The monster name
+ */
+char * number_to_monster_name(int number);
 
 #endif //DOOM_DEPTH_C_MAP_GENERATION_H
