@@ -8,29 +8,29 @@ int give_treasure_to_player(treasure_t * treasure, player_t * player) {
 
     player->gold += treasure->coins;
 
-    if(treasure->armor) {
-        if(player->inventory->armors_head == NULL) {
-            player->inventory->armors_head = malloc(sizeof(array_node_t));
-            player->inventory->armors_head->value = treasure->armor;
-            player->inventory->armors_head->next = NULL;
-        } else {
-            push(&(player->inventory->armors_head), treasure->armor, sizeof(armor_t));
-        }
-        player->inventory->nb_armors++;
-    }
-
-    if(treasure->weapon) {
-        if(player->inventory->weapons_head == NULL) {
-            player->inventory->weapons_head = malloc(sizeof(array_node_t));
-            player->inventory->weapons_head->value = treasure->weapon;
-            player->inventory->weapons_head->next = NULL;
-        } else {
-            push(&(player->inventory->weapons_head), treasure->weapon, sizeof(weapon_t));
-        }
-        player->inventory->nb_weapons++;
-    }
-
     if(player->inventory) {
+        if(treasure->armor) {
+            if(player->inventory->armors_head == NULL) {
+                player->inventory->armors_head = malloc(sizeof(array_node_t));
+                player->inventory->armors_head->value = treasure->armor;
+                player->inventory->armors_head->next = NULL;
+            } else {
+                push(&(player->inventory->armors_head), treasure->armor, sizeof(armor_t));
+            }
+            player->inventory->nb_armors++;
+        }
+
+        if(treasure->weapon) {
+            if(player->inventory->weapons_head == NULL) {
+                player->inventory->weapons_head = malloc(sizeof(array_node_t));
+                player->inventory->weapons_head->value = treasure->weapon;
+                player->inventory->weapons_head->next = NULL;
+            } else {
+                push(&(player->inventory->weapons_head), treasure->weapon, sizeof(weapon_t));
+            }
+            player->inventory->nb_weapons++;
+        }
+
         player->inventory->nb_mana_potions += treasure->mana_potions;
     }
 
