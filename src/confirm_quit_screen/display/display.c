@@ -76,13 +76,10 @@ int display_confirm_quit_cli(game_window_t * game_window, bool quit) {
     rect_t option_1_rect = {2, window_height / 2, window_width, window_height / 4};
     rect_t option_2_rect = {2, 3 * (window_height / 4), window_width, window_height / 4};
 
-    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, "Bye", game_window->cli_color_palette->text,
+    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, quit ? "> Bye" : "Bye", game_window->cli_color_palette->text,
                                 ALIGN_START, ALIGN_START,SMALL_TEXT);
-    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, "I want to stay", game_window->cli_color_palette->text,
+    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, !quit ? "> I want to stay" : "I want to stay", game_window->cli_color_palette->text,
                                 ALIGN_START, ALIGN_START, SMALL_TEXT);
-
-    // print cursor
-    display_cursor_cli(game_window, quit ? option_1_rect : option_2_rect);
 
     return EXIT_SUCCESS;
 }
