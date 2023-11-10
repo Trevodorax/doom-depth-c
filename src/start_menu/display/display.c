@@ -176,16 +176,16 @@ int display_start_menu_cli(game_window_t *game_window, unsigned short active_opt
     rect_t option_1_rect = {2, window_height / 2, window_width, window_height / 4};
     rect_t option_2_rect = {2, 3 * (window_height / 4), window_width, window_height / 4};
 
-    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, "Load game", game_window->cli_color_palette->text,
+    cli_print_text_in_rectangle(game_window->matrix, option_1_rect, active_option == 0 ? "> Load a game" : "Load a game", game_window->cli_color_palette->text,
                                 ALIGN_START, ALIGN_START, SMALL_TEXT);
-    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, "New game", game_window->cli_color_palette->text,
+    cli_print_text_in_rectangle(game_window->matrix, option_2_rect, active_option == 1 ? "> New game" : "New game", game_window->cli_color_palette->text,
                                 ALIGN_START, ALIGN_START, SMALL_TEXT);
 
-    // print cursor
-    rect_t cursor_rect = {0, 0, 1, 1};
-    cursor_rect.y = active_option == 0 ? option_1_rect.y : option_2_rect.y;
-
-    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", game_window->cli_color_palette->highlight, ALIGN_START, ALIGN_START, SMALL_TEXT);
+//    // print cursor
+//    rect_t cursor_rect = {0, 0, 1, 1};
+//    cursor_rect.y = active_option == 0 ? option_1_rect.y : option_2_rect.y;
+//
+//    cli_print_text_in_rectangle(game_window->matrix, cursor_rect, ">", game_window->cli_color_palette->highlight, ALIGN_START, ALIGN_START, SMALL_TEXT);
 
     return EXIT_SUCCESS;
 }
