@@ -68,6 +68,7 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
         } else {
             monsters_turn(game_window, fight_context, fight_zone);
             if(player->hp == 0) {
+                (player->stats->nb_deaths)++;
                 stage->fight_context = NULL;
                 return GAME_OVER;
             }

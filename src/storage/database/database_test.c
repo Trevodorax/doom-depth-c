@@ -151,7 +151,6 @@ void print_stats(void *stats) {
     printf("nb_deaths: %d\n", s->nb_deaths);
     printf("damages_dealt: %d\n", s->damages_dealt);
     printf("health_healed: %d\n", s->health_healed);
-    printf("max_level_reached: %d\n", s->max_level_reached);
 }
 
 char * test_create_stats_from_db() {
