@@ -18,6 +18,7 @@ unsigned int player_attack(player_t * player, monster_t * target) {
     target->hp -= damages;
 
     give_exp(player,damages);
+    player->stats->damages_dealt += damages;
 
     return damages;
 }

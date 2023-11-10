@@ -20,9 +20,11 @@ unsigned int heal_player(player_t * player, unsigned int amount){
     if(player->hp_max < player->hp+amount){
         unsigned int diff = player->hp_max - player->hp;
         player->hp = player->hp_max;
+        player->stats->health_healed += diff;
         return diff;
     } else {
         player->hp += amount;
+        player->stats->health_healed += amount;
         return amount;
     }
 }

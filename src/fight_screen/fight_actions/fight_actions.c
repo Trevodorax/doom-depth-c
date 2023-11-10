@@ -68,12 +68,15 @@ int attack_spell(fight_context_t *fight_context, void *custom_params) {
     }
     target->hp -= dmg;
     give_exp(fight_context->player,dmg);
+    fight_context->player->stats->damages_dealt += dmg;
 
     global_logger->info("\nDamages on %s : -%dHP", target->name, dmg);
     global_logger->info("\nHP left : %d", target->hp);
 
     if (target->hp == 0) {
         global_logger->info("\n%s is DEAD !", target->name);
+
+        (fight_context->player->stats->nb_monsters_killed)++;
 
         remove_node(&fight_context->monsters, (void *)&target);
 
@@ -156,6 +159,8 @@ int attack_weapon(fight_context_t *fight_context, void *custom_params) {
 
     if (target->hp == 0) {
         global_logger->info("\n%s is DEAD !", target->name);
+
+        (fight_context->player->stats->nb_monsters_killed)++;
 
         remove_node(&fight_context->monsters, (void *)&target);
         global_logger->info("\n%d monster(s) left", get_size(fight_context->monsters));

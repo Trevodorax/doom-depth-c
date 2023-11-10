@@ -16,8 +16,7 @@ const char create_stats_table_sql[] =
         "nb_monsters_killed INTEGER NOT NULL,"
         "nb_deaths INTEGER NOT NULL,"
         "damages_dealt INTEGER NOT NULL,"
-        "health_healed INTEGER NOT NULL,"
-        "max_level_reached INTEGER NOT NULL"
+        "health_healed INTEGER NOT NULL"
         ");";
 
 const char create_player_table_sql[] =
