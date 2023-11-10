@@ -69,4 +69,7 @@ map_t * get_player_map(player_t * player);
  */
 void save_player_map(player_t * player, map_t * map);
 
+// TODO: write doxygen
+void save_map(char * map_folder, map_t * map);
+
 #endif //DOOM_DEPTH_C_MAP_H

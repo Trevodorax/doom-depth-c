@@ -10,6 +10,7 @@
 #include "../help_screen/help_screen.h"
 #include "../confirm_quit_screen/confirm_quit_screen.h"
 #include "../stats_screen/stats_screen.h"
+#include "../map_generation/map_generation.h"
 
 /**
  * @brief Moves the player and returns the stage he is on
@@ -110,6 +111,13 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
                             break;
                         case LINKED_MAP:
                             save_player_map(player, *map);
+                            // map that wasn't already generated
+                            if (strlen(player_stage->linked_map_file_path) == 0) {
+                                map_t * generated_map = generate_map(*map);
+                                save_map("../assets/maps", generated_map);
+                                free(player_stage->linked_map_file_path);
+                                player_stage->linked_map_file_path = strdup(generated_map->name);
+                            }
                             player->current_map = player_stage->linked_map_file_path;
                             *map = get_player_map(player);
                             return MAP_SCREEN;

@@ -1,0 +1,9 @@
+{
+    "name": "map_3.json",
+    "stages": [
+{
+            "done": 1,
+            "linked_map": "map_2.json"
+        }
+    ]
+}

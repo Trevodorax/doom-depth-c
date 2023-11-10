@@ -3,9 +3,13 @@
   "stages": [
     {
       "done": 1,
-      "left": {
+      "linked_map": "map_1.json",
+      "right": {
         "done": 0,
-        "linked_map": "map_1.json"
+        "right": {
+          "done": 0,
+          "linked_map": ""
+        }
       }
     }
   ]

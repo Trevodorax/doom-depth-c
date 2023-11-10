@@ -3,8 +3,6 @@
 int get_nb_neighbors(bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE], int x_coord, int y_coord);
 
 fight_t * generate_harder_fight(fight_t * previous_fight) {
-    srand(time(NULL));
-
     // init generated fight
     fight_t * generated_fight = calloc(1, sizeof(fight_t));
     generated_fight->min_nb_enemies = previous_fight->min_nb_enemies;
@@ -96,7 +94,7 @@ treasure_t * generate_treasure(fight_t * last_fight) {
     treasure_t * generated_treasure = calloc(1, sizeof(treasure_t));
 
     // default treasure
-    if (!last_fight) {
+    if (!last_fight || last_fight->enemies_size == 0) {
         generated_treasure->coins = 20;
         return generated_treasure;
     }
@@ -119,7 +117,7 @@ fight_t * get_last_fight(stage_t * last_stage) {
 }
 
 fight_t * get_last_fight_rec(stage_t * stage) {
-    if (stage->counted) {
+    if (stage == NULL || stage->counted) {
         return NULL;
     }
     stage->counted = true;
@@ -175,8 +173,6 @@ char * get_available_map_name(char * maps_folder_path) {
 }
 
 stage_t * generate_stages_rec(fight_t * previous_fight, bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE], int x_coord, int y_coord) {
-    srand(time(NULL));
-
     // out of bounds => no stage
     if (x_coord < 0 || y_coord < 0 || x_coord >= MAX_MAP_SIZE || y_coord >= MAX_MAP_SIZE) {
         return NULL;
@@ -209,7 +205,7 @@ stage_t * generate_stages_rec(fight_t * previous_fight, bool anti_collision_map[
     }
     stage->type = stage_type;
 
-    switch(stage_type) {
+    switch (stage->type) {
         case FIGHT: {
             fight_t * new_fight = generate_harder_fight(previous_fight);
             stage->fight = new_fight;
@@ -219,13 +215,13 @@ stage_t * generate_stages_rec(fight_t * previous_fight, bool anti_collision_map[
         case TREASURE: {
             treasure_t * new_treasure = generate_treasure(previous_fight);
             stage->treasure = new_treasure;
-        }
             break;
+        }
         case LINKED_MAP: {
             stage->has_linked_map = true;
             stage->linked_map_file_path = strdup("");
-        }
             break;
+        }
         case SHOP:
             // add a shop if we decide to specify things in the shop in the future
         case EMPTY:
@@ -234,7 +230,7 @@ stage_t * generate_stages_rec(fight_t * previous_fight, bool anti_collision_map[
     }
 
     // stages that stop progression
-    if (stage_type == LINKED_MAP || stage_type == TREASURE) {
+    if (stage_type == LINKED_MAP || stage_type == SHOP) {
         return stage;
     }
 
@@ -245,6 +241,42 @@ stage_t * generate_stages_rec(fight_t * previous_fight, bool anti_collision_map[
     stage->left = generate_stages_rec(previous_fight, anti_collision_map, x_coord - 1, y_coord);
 
     return stage;
+}
+
+stage_t * generate_stages(fight_t * previous_fight) {
+    bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE] = {false};
+    if (!previous_fight) {
+        previous_fight = calloc(1, sizeof(fight_t));
+        previous_fight->enemies_size = 0;
+    }
+    return generate_stages_rec(previous_fight, anti_collision_map, MAX_MAP_SIZE / 2, MAX_MAP_SIZE / 2);
+}
+
+map_t * generate_map(map_t * prev_map) {
+    srand(time(NULL));
+
+    // init map
+    map_t * generated_map = calloc(1, sizeof(map_t));
+    generated_map->name = get_available_map_name("../assets/maps");
+    generated_map->first_stage = generate_stages(get_last_fight(prev_map->first_stage));
+
+    // make first stage a linked map to the previous map
+    if (generated_map->first_stage->fight) {
+        free_fight(generated_map->first_stage->fight);
+        generated_map->first_stage->fight = NULL;
+    }
+    if (generated_map->first_stage->treasure) {
+        // TODO: free treasure here
+        generated_map->first_stage->treasure = NULL;
+    }
+    generated_map->first_stage->type = LINKED_MAP;
+    generated_map->first_stage->is_done = true;
+    generated_map->first_stage->has_linked_map = true;
+    generated_map->first_stage->linked_map_file_path = strdup(prev_map->name);
+    generated_map->first_stage->player = malloc(sizeof(player_t));
+    generated_map->first_stage->player_orientation = SOUTH;
+
+    return generated_map;
 }
 
 int get_nb_neighbors(bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE], int x_coord, int y_coord) {
