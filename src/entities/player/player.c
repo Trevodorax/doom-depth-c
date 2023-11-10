@@ -165,6 +165,11 @@ void *create_player_from_db(sqlite3_stmt *stmt) {
 
 int save_player(sqlite3 *db, player_t *player) {
 
+    if (!player) {
+        fprintf(stderr, "Player is NULL.\n");
+        return 0;
+    }
+
     char *z_err_msg = NULL;
     sqlite3_stmt *stmt;
 
