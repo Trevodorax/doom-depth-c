@@ -2,8 +2,8 @@
 #include "../../../ui_utils/sdl_utils/sdl_utils.h"
 #include "../../stage/display/display.h"
 
-int display_map_gui(game_window_t *game_window, map_t *map);
-int display_map_cli(game_window_t *game_window, map_t *map);
+int display_map_gui(game_window_t * game_window, map_t * map);
+int display_map_cli(game_window_t * game_window, map_t * map);
 
 int display_map(game_window_t *game_window, map_t * map) {
     switch (game_window->ui_type) {

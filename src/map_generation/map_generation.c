@@ -1,6 +1,6 @@
 #include "map_generation.h"
 
-int get_nb_neighbors(bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE], int x_coord, int y_coord);
+int get_nb_neighbors(bool ** anti_collision_map, int x_coord, int y_coord);
 
 fight_t * generate_harder_fight(fight_t * previous_fight) {
     // init generated fight
@@ -67,6 +67,11 @@ fight_t * generate_harder_fight(fight_t * previous_fight) {
         generated_fight->enemies_size++;
         generated_fight->enemies_list[generated_fight->enemies_size - 1] = strdup(number_to_monster_name(enemies_list_number[0]));
         generated_fight->enemies_chances_to_appear[generated_fight->enemies_size - 1] = 100 / generated_fight->enemies_size;
+
+        for(int i = 0; i < generated_fight->enemies_size - 1; i++) {
+            // making space for the newly  created monster
+            generated_fight->enemies_chances_to_appear[i] -= generated_fight->enemies_chances_to_appear[i] / 5;
+        }
     }
 
     return generated_fight;
@@ -172,19 +177,23 @@ char * get_available_map_name(char * maps_folder_path) {
     return filename;
 }
 
-stage_t * generate_stages_rec(fight_t * previous_fight, bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE], int x_coord, int y_coord) {
+stage_t * generate_stages_rec(fight_t * previous_fight, bool *** anti_collision_map, int x_coord, int y_coord) {
     // out of bounds => no stage
     if (x_coord < 0 || y_coord < 0 || x_coord >= MAX_MAP_SIZE || y_coord >= MAX_MAP_SIZE) {
         return NULL;
     }
+    // already a stage there
+    if ((*anti_collision_map)[x_coord][y_coord]) {
+        return NULL;
+    }
     // has neighbors (other than parent) => no stage
-    int nb_neighbors = get_nb_neighbors(anti_collision_map, x_coord, y_coord);
+    int nb_neighbors = get_nb_neighbors(*anti_collision_map, x_coord, y_coord);
     if(nb_neighbors > 1) {
         return NULL;
     }
 
     // init stage
-    anti_collision_map[x_coord][y_coord] = true;
+    (*anti_collision_map)[x_coord][y_coord] = true;
     stage_t * stage = calloc(1, sizeof(stage_t));
     stage->is_done = false;
     stage->counted = false;
@@ -244,12 +253,38 @@ stage_t * generate_stages_rec(fight_t * previous_fight, bool anti_collision_map[
 }
 
 stage_t * generate_stages(fight_t * previous_fight) {
-    bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE] = {false};
+    int x_start_coord = 0;
+    int y_start_coord = MAX_MAP_SIZE / 2;
+
+    // init anti collision map
+    bool *** anti_collision_map = calloc(1, sizeof(bool **));
+    *anti_collision_map = calloc(MAX_MAP_SIZE, sizeof(bool *));
+    for(int i = 0; i < MAX_MAP_SIZE; i++) {
+        (*anti_collision_map)[i] = calloc(MAX_MAP_SIZE, sizeof(bool));
+        for(int j = 0; j < MAX_MAP_SIZE; j++) {
+            (*anti_collision_map)[i][j] = false;
+        }
+    }
+
+    // get stages
     if (!previous_fight) {
         previous_fight = calloc(1, sizeof(fight_t));
-        previous_fight->enemies_size = 0;
+        previous_fight->enemies_size = 1;
+        previous_fight->enemies_list = calloc(1, sizeof(char*));
+        previous_fight->enemies_list[0] = strdup(number_to_monster_name(0));
+        previous_fight->enemies_chances_to_appear = calloc(1, sizeof(int*));
+        previous_fight->enemies_chances_to_appear[0] = 100;
     }
-    return generate_stages_rec(previous_fight, anti_collision_map, MAX_MAP_SIZE / 2, MAX_MAP_SIZE / 2);
+    stage_t * stages = generate_stages_rec(previous_fight, anti_collision_map, x_start_coord, y_start_coord);
+
+    // free anti collision map
+    for(int i = 0; i < MAX_MAP_SIZE; i++) {
+        free((*anti_collision_map)[i]);
+    }
+    free(*anti_collision_map);
+    free(anti_collision_map);
+
+    return stages;
 }
 
 map_t * generate_map(map_t * prev_map) {
@@ -273,13 +308,12 @@ map_t * generate_map(map_t * prev_map) {
     generated_map->first_stage->is_done = true;
     generated_map->first_stage->has_linked_map = true;
     generated_map->first_stage->linked_map_file_path = strdup(prev_map->name);
-    generated_map->first_stage->player = malloc(sizeof(player_t));
     generated_map->first_stage->player_orientation = SOUTH;
 
     return generated_map;
 }
 
-int get_nb_neighbors(bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE], int x_coord, int y_coord) {
+int get_nb_neighbors(bool ** anti_collision_map, int x_coord, int y_coord) {
     int nb_neighbors = 0;
 
     if (x_coord < MAX_MAP_SIZE - 1 && anti_collision_map[x_coord + 1][y_coord]) {

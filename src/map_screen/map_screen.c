@@ -41,12 +41,11 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
     }
 
     event_t event;
-    bool quit = false;
-    while (!quit){
+    while (true){
         if (game_window->ui_type == CLI) {
             set_cli_raw_mode(true);
         }
-        delay(game_window->ui_type, 100);
+        delay(game_window->ui_type, 50);
 
         while (get_event(game_window->ui_type, &event)) {
             switch (event) {
@@ -102,13 +101,6 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
                         }
                         case SHOP:
                             return SHOP_SCREEN;
-                        case TREASURE:
-                            if (player_stage->is_done) {
-                                break;
-                            }
-                            player_stage->is_done = true;
-                            give_treasure_to_player(player_stage->treasure, player);
-                            break;
                         case LINKED_MAP:
                             // map that wasn't already generated
                             if (strlen(player_stage->linked_map_file_path) == 0) {
@@ -141,8 +133,6 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
         render_present(game_window);
 
     }
-
-    return QUIT_GAME;
 }
 
 stage_t * move_player(stage_t * player_stage, orientation_t direction) {
@@ -202,7 +192,12 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction) {
             break;
     }
 
-    if(player_stage->type != FIGHT && player_stage->type != TREASURE) {
+    if (!next_stage->is_done && next_stage->type == TREASURE) {
+        give_treasure_to_player(next_stage->treasure, next_stage->player);
+        printf("\nPlayer gold: %d", next_stage->player->gold);
+    }
+
+    if(player_stage->type != FIGHT) {
         player_stage->is_done = true;
     }
 

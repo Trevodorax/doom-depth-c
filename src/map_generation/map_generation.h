@@ -50,7 +50,7 @@ stage_t * generate_stages(fight_t * previous_fight);
  */
 stage_t * generate_stages_rec(
         fight_t * previous_fight,
-        bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE], // starts all false
+        bool *** anti_collision_map, // starts all false
         int x_coord, // starts at MAX_MAP_SIZE / 2
         int y_coord // starts at MAX_MAP_SIZE / 2
     );
