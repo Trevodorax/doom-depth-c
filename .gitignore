@@ -2,3 +2,5 @@
 cmake-build-debug
 .DS_Store
 logs
+assets/maps
+database/doomdepthc.database
