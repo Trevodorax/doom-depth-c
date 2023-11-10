@@ -194,7 +194,6 @@ stage_t * move_player(stage_t * player_stage, orientation_t direction) {
 
     if (!next_stage->is_done && next_stage->type == TREASURE) {
         give_treasure_to_player(next_stage->treasure, next_stage->player);
-        printf("\nPlayer gold: %d", next_stage->player->gold);
     }
 
     if(player_stage->type != FIGHT) {
