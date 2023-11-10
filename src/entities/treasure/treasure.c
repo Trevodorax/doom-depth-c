@@ -30,7 +30,9 @@ int give_treasure_to_player(treasure_t * treasure, player_t * player) {
         player->inventory->nb_weapons++;
     }
 
-    player->inventory->nb_mana_potions += treasure->mana_potions;
+    if(player->inventory) {
+        player->inventory->nb_mana_potions += treasure->mana_potions;
+    }
 
     return EXIT_SUCCESS;
 }

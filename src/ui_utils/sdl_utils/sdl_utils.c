@@ -161,6 +161,7 @@ int draw_image_in_rectangle(SDL_Renderer *renderer, SDL_Rect container, const ch
             return EXIT_FAILURE;
     }
 
+
     strcpy(orientated_file_path, file_path);
     char * dot = strrchr(orientated_file_path, '.');
     if (dot) {

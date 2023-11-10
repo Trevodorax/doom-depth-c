@@ -156,6 +156,8 @@ set(cross_platform_targets
         src/stats_screen/display/gui/gui.h
         src/stats_screen/stats_screen.c
         src/stats_screen/stats_screen.h
+        src/map_generation/map_generation.c
+        src/map_generation/map_generation.h
 )
 
 # for unix

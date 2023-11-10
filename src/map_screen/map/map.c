@@ -155,3 +155,13 @@ void save_player_map(player_t * player, map_t * map) {
 
     free(map_name);
 }
+
+void save_map(char * map_folder, map_t * map) {
+    char * map_name = calloc(500, sizeof(char));
+    snprintf(map_name, 500, "%s/%s", map_folder, map->name);
+    json_t * json_map = map_to_json(map);
+    write_json_to_file(json_map, map_name);
+
+    free(map_name);
+    // TODO: free json here
+}
