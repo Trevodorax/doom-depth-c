@@ -148,6 +148,9 @@ map_t * get_player_map(player_t * player) {
 }
 
 void save_player_map(player_t * player, map_t * map) {
+    if (!player) {
+        return;
+    }
     char * map_name = get_player_map_name(player);
 
     json_t * json_map = map_to_json(map);

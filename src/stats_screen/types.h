@@ -7,6 +7,7 @@ typedef enum {
     STAT_DEFENSE,
     STAT_ATTACK,
     STAT_ACTION_POINTS,
+    STAT_GOLD,
     STAT_COUNT
 } stat_t;
 
@@ -15,7 +16,8 @@ static char * stat_display_name[STAT_COUNT] = {
         "Max mana",
         "Defence",
         "Attack",
-        "Action points"
+        "Action points",
+        "Gold"
 };
 
 static char * stat_display_image_path[STAT_COUNT] = {
@@ -23,7 +25,8 @@ static char * stat_display_image_path[STAT_COUNT] = {
         "../assets/stat_icons/image/mana.png",
         "../assets/stat_icons/image/defense.png",
         "../assets/stat_icons/image/attack.png",
-        "../assets/stat_icons/image/action_points.png"
+        "../assets/stat_icons/image/action_points.png",
+        "../assets/items_mgmt/image/gold.png"
 };
 
 static char * stat_display_ascii_path[STAT_COUNT] = {
@@ -31,7 +34,8 @@ static char * stat_display_ascii_path[STAT_COUNT] = {
         "../assets/stat_icons/ascii/mana.asciiart",
         "../assets/stat_icons/ascii/defense.asciiart",
         "../assets/stat_icons/ascii/attack.asciiart",
-        "../assets/stat_icons/ascii/action_points.asciiart"
+        "../assets/stat_icons/ascii/action_points.asciiart",
+        "../assets/items_mgmt/ascii/gold.asciiart"
 };
 
 #endif //DOOM_DEPTH_C_LEVEL_UP_SCREEN_TYPES_H

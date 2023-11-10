@@ -77,6 +77,9 @@ int display_stat_options_cli(game_window_t *game_window, rect_t container, playe
             case STAT_ACTION_POINTS:
                 current_stat_amount = player->max_action_points;
                 break;
+            case STAT_GOLD:
+                current_stat_amount = player->gold;
+                break;
             default:
                 current_stat_amount = 0;
         }
