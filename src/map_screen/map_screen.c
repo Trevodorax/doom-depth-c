@@ -110,7 +110,6 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
                             give_treasure_to_player(player_stage->treasure, player);
                             break;
                         case LINKED_MAP:
-                            save_player_map(player, *map);
                             // map that wasn't already generated
                             if (strlen(player_stage->linked_map_file_path) == 0) {
                                 map_t * generated_map = generate_map(*map);
@@ -118,6 +117,9 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
                                 free(player_stage->linked_map_file_path);
                                 player_stage->linked_map_file_path = strdup(generated_map->name);
                             }
+
+                            save_player_map(player, *map);
+
                             player->current_map = player_stage->linked_map_file_path;
                             *map = get_player_map(player);
                             return MAP_SCREEN;
