@@ -3,6 +3,8 @@
 #ifndef DOOM_DEPTH_C_MAP_GENERATION_H
 #define DOOM_DEPTH_C_MAP_GENERATION_H
 
+#define MAX_MAP_SIZE 20
+
 #define NB_MONSTERS 12
 
 static char * monster_names[NB_MONSTERS] = {
@@ -38,7 +40,7 @@ map_t * generate_map(map_t * prev_map);
 stage_t * generate_stages(fight_t * previous_fight);
 
 /**
- * @brief Generates a stage and its neighbours recursively
+ * @brief Generates a stage and its neighbors recursively
  *
  * @param previous_fight The fight before this stage
  * @param anti_collision_map A map to make sure we don't put 2 stages at the same coords
@@ -48,9 +50,9 @@ stage_t * generate_stages(fight_t * previous_fight);
  */
 stage_t * generate_stages_rec(
         fight_t * previous_fight,
-        bool ** anti_collision_map,
-        int x_coord,
-        int y_coord
+        bool anti_collision_map[MAX_MAP_SIZE][MAX_MAP_SIZE], // starts all false
+        int x_coord, // starts at MAX_MAP_SIZE / 2
+        int y_coord // starts at MAX_MAP_SIZE / 2
     );
 
 /**
@@ -73,22 +75,22 @@ char * get_available_map_name(char * maps_folder_path);
 fight_t * generate_harder_fight(fight_t * previous_fight);
 
 /**
- * @brief Searches for the last done fight recursively
+ * @brief Searches for the last fight recursively
  *
  * @param last_stage The stage to start the search from
  * @return The last fight, or NULL if none was found
  */
-fight_t * get_last_done_fight(stage_t * last_stage);
+fight_t * get_last_fight(stage_t * last_stage);
 
 /**
  * @brief Generates a treasure
  *
  * The bigger the last fight found, the bigger the treasure will be
  *
- * @param treasure_stage The stage on which the treasure should be
+ * @param last_fight The stage on which the treasure should be
  * @return The generated treasure
  */
-treasure_t * generate_treasure(stage_t * treasure_stage);
+treasure_t * generate_treasure(fight_t *last_fight);
 
 /**
  * @brief Turns the name of a monster to a number (of difficulty)
