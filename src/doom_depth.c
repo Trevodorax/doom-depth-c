@@ -92,15 +92,15 @@ int main_loop(game_window_t * main_window) {
         }
     }
 
+    // save map
+    save_player_map(player, map);
+    free_map(map);
+
     // save player
     if (!save_player(db, player)) {
         return EXIT_FAILURE;
     }
 
-    save_player_map(player, map);
-
-    // free everything
-    free_map(map);
     free_player(player);
 
     return EXIT_SUCCESS;
