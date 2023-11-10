@@ -93,7 +93,9 @@ int main_loop(game_window_t * main_window) {
     }
 
     // save player
-    save_player(db, player);
+    if (!save_player(db, player)) {
+        return EXIT_FAILURE;
+    }
 
     save_player_map(player, map);
 
