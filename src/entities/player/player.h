@@ -50,12 +50,12 @@ player_t * create_player(char * name);
  *
  * @param player A pointer to the player to be created.
  *
- * @return None.
+ * @return Last inserted row id.
  * @sideeffects May modify the SQLite database by inserting new data.
  * @dependencies Depends on the SQLite3 library.
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
  */
-void create_player_in_db(player_t * player);
+int create_player_in_db(player_t * player);
 
 /**
  * @brief Creates a player from the database.
@@ -148,5 +148,20 @@ array_node_t *get_players_from_db(sqlite3 *db);
  * @param save true if saving, false if retrieving
  */
 void player_state_checkpoint(player_t * player, bool save);
+
+/**
+ * @brief Deletes a player from the database.
+ *
+ * This function deletes a player from the database.
+ *
+ * @param db A pointer to the SQLite3 database connection.
+ * @param player A pointer to the player to be deleted.
+ *
+ * @return SQLITE_OK if the player is successfully deleted. Otherwise, it returns an error code.
+ * @sideeffects May modify the SQLite database by inserting new data.
+ * @dependencies Depends on the SQLite3 library.
+ * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
+ */
+int delete_player(sqlite3 *db, player_t *player);
 
 #endif

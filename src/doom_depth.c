@@ -60,7 +60,7 @@ int main_loop(game_window_t *main_window) {
             }
 
             case NEW_GAME_SCREEN :
-                main_window->context->current_screen = new_game_screen(main_window, &player, &map);
+                main_window->context->current_screen = new_game_screen(main_window, &player, &map, db);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }

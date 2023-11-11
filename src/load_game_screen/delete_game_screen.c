@@ -44,14 +44,7 @@ int delete_game_screen(game_window_t * game_window, sqlite3 * db, char * title) 
                         // retrieve player
                         player_t *player = get_value_at_index(players, active_option);
 
-                        char sql_query[300];
-                        sprintf(sql_query, delete_player_from_db_sql, player->id);
-                        int rc = execute_query(db, sql_query, &zErrMsg);
-                        if (rc != SQLITE_OK) {
-                            global_logger->error("SQL error: %s", zErrMsg);
-                            sqlite3_free(zErrMsg);
-                            return EXIT_FAILURE;
-                        }
+                        delete_player(db, player);
 
                         free(player);
 
