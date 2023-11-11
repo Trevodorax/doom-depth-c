@@ -14,11 +14,12 @@
 #include "entities/entities.h"
 #include "new_game_screen/new_game_screen.h"
 #include "shop_screen/shop_screen.h"
-#include "load_game_screen/load_game_screen.h"
+#include "select_game_screen/load_game_screen.h"
 #include "level_up_screen/level_up_screen.h"
+#include "select_game_screen/delete_game_screen.h"
 
 int main_loop(game_window_t * main_window) {
-    sqlite3 *db = db_connection();
+    sqlite3 * db = db_connection();
     init_entities(db);
 
     map_t * map = NULL;
@@ -28,7 +29,7 @@ int main_loop(game_window_t * main_window) {
     while (main_window->context->current_screen != QUIT_GAME) {
         switch (main_window->context->current_screen) {
             case START_MENU :
-                main_window->context->current_screen = start_menu_screen(main_window);
+                main_window->context->current_screen = start_menu_screen(main_window, db);
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
@@ -44,7 +45,7 @@ int main_loop(game_window_t * main_window) {
             case FIGHT_SCREEN : {
                 // never happens
                 main_window->context->current_screen = fight_screen(main_window, player, NULL, NULL);
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
@@ -52,22 +53,22 @@ int main_loop(game_window_t * main_window) {
 
             case SHOP_SCREEN : {
                 main_window->context->current_screen = shop_screen(main_window, player);
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
             }
 
             case NEW_GAME_SCREEN :
-                main_window->context->current_screen = new_game_screen(main_window, &player, &map);
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                main_window->context->current_screen = new_game_screen(main_window, &player, &map, db);
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
 
             case LOAD_GAME_SCREEN :
-                main_window->context->current_screen = load_game_screen(main_window, &player, &map, db);
-                if(main_window->context->current_screen == EXIT_FAILURE) {
+                main_window->context->current_screen = load_game_screen(main_window, &player, &map, db, "Load a Game");
+                if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
                 break;
@@ -81,6 +82,12 @@ int main_loop(game_window_t * main_window) {
 
             case LEVEL_UP_SCREEN:
                 main_window->context->current_screen = level_up_screen(main_window, player);
+                if (main_window->context->current_screen == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                break;
+            case DELETE_GAME_SCREEN:
+                main_window->context->current_screen = delete_game_screen(main_window, db, "Delete Game");
                 if (main_window->context->current_screen == EXIT_FAILURE) {
                     return EXIT_FAILURE;
                 }
@@ -119,7 +126,7 @@ ui_type_t get_ui_type(char * ui_argument) {
     }
 
     // not case-sensitive
-    for (char *p = ui_argument; *p; p++) {
+    for (char * p = ui_argument; *p; p++) {
         *p = (char) tolower(*p);
     }
 
@@ -135,11 +142,11 @@ ui_type_t get_ui_type(char * ui_argument) {
     return default_type;
 }
 
-color_scheme_t get_color_scheme(char *color_scheme_argument) {
+color_scheme_t get_color_scheme(char * color_scheme_argument) {
     color_scheme_t default_color_scheme = DARK;
 
     if (color_scheme_argument == NULL) {
-        char * env_color_scheme = getenv("DOOM_DEPTH_COLOR_SCHEME");
+        char *env_color_scheme = getenv("DOOM_DEPTH_COLOR_SCHEME");
         if (env_color_scheme == NULL) {
             return default_color_scheme;
         } else {
@@ -148,7 +155,7 @@ color_scheme_t get_color_scheme(char *color_scheme_argument) {
     }
 
     // not case-sensitive
-    for (char *p = color_scheme_argument; *p; p++) {
+    for (char * p = color_scheme_argument; *p; p++) {
         *p = (char) tolower(*p);
     }
 

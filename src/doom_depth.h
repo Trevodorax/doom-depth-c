@@ -31,6 +31,6 @@ doom_depth_main doom_depth_factory(ui_type_t ui_type);
  * @param color_scheme_argument
  * @return The color scheme
  */
-color_scheme_t get_color_scheme(char *color_scheme_argument);
+color_scheme_t get_color_scheme(char * color_scheme_argument);
 
 #endif //DOOM_DEPTH_C_DOOM_DEPTH_H

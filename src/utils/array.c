@@ -18,8 +18,8 @@
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void push(array_node_t **head_ref, void *new_data, size_t data_size) {
-    array_node_t *new_node = malloc(sizeof(array_node_t));
+void push(array_node_t ** head_ref, void * new_data, size_t data_size) {
+    array_node_t * new_node = malloc(sizeof(array_node_t));
 
     new_node->value = malloc(data_size);
     new_node->next = *head_ref;
@@ -42,9 +42,9 @@ void push(array_node_t **head_ref, void *new_data, size_t data_size) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void append(array_node_t **head_ref, void *new_data, size_t data_size) {
-    array_node_t *new_node = (array_node_t *)malloc(sizeof(array_node_t));
-    array_node_t *last = *head_ref;
+void append(array_node_t ** head_ref, void * new_data, size_t data_size) {
+    array_node_t * new_node = (array_node_t *)malloc(sizeof(array_node_t));
+    array_node_t * last = *head_ref;
     new_node->value = malloc(data_size);
     new_node->next = NULL;
 
@@ -64,12 +64,12 @@ void append(array_node_t **head_ref, void *new_data, size_t data_size) {
     last->next = new_node;
 }
 
-void remove_node(array_node_t **head_ref, void **data_to_remove) {
+void remove_node(array_node_t ** head_ref, void ** data_to_remove) {
     if (*head_ref == NULL) {
         return;
     }
 
-    array_node_t *temp = *head_ref;
+    array_node_t * temp = *head_ref;
 
     if (temp->value == *data_to_remove) {
         *head_ref = temp->next;
@@ -86,7 +86,7 @@ void remove_node(array_node_t **head_ref, void **data_to_remove) {
         return;
     }
 
-    array_node_t *next = temp->next->next;
+    array_node_t * next = temp->next->next;
     free(temp->next->value);
     free(temp->next);
     temp->next = next;
@@ -105,12 +105,12 @@ void remove_node(array_node_t **head_ref, void **data_to_remove) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void delete_node(array_node_t **head_ref, int index) {
+void delete_node(array_node_t ** head_ref, int index) {
     if (*head_ref == NULL || index < 0) {
         return;
     }
 
-    array_node_t *temp = *head_ref;
+    array_node_t * temp = *head_ref;
 
     if (index == 0) {
         *head_ref = temp->next;
@@ -127,7 +127,7 @@ void delete_node(array_node_t **head_ref, int index) {
         return;
     }
 
-    array_node_t *next = temp->next->next;
+    array_node_t * next = temp->next->next;
     free(temp->next->value);
     free(temp->next);
     temp->next = next;
@@ -149,12 +149,12 @@ void delete_node(array_node_t **head_ref, int index) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-int insert_at_index(array_node_t **head_ref, void *new_data, size_t data_size, int index) {
+int insert_at_index(array_node_t ** head_ref, void * new_data, size_t data_size, int index) {
     if (index < 0) {
         return -1;  // Index out of bounds
     }
 
-    array_node_t *new_node = (array_node_t *)malloc(sizeof(array_node_t));
+    array_node_t * new_node = (array_node_t *)malloc(sizeof(array_node_t));
     new_node->value = malloc(data_size);
     memcpy(new_node->value, new_data, data_size);
 
@@ -164,7 +164,7 @@ int insert_at_index(array_node_t **head_ref, void *new_data, size_t data_size, i
         return 0;
     }
 
-    array_node_t *prev = *head_ref;
+    array_node_t * prev = *head_ref;
     for (int i = 0; i < index - 1; i++) {
         if (prev == NULL) {
             free(new_node->value);
@@ -195,8 +195,8 @@ int insert_at_index(array_node_t **head_ref, void *new_data, size_t data_size, i
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-int find_node(array_node_t *head, void *data_to_find, size_t data_size) {
-    array_node_t *current = head;
+int find_node(array_node_t * head, void * data_to_find, size_t data_size) {
+    array_node_t * current = head;
     int index = 0;
 
     while (current != NULL) {
@@ -226,8 +226,8 @@ int find_node(array_node_t *head, void *data_to_find, size_t data_size) {
  * @author Noam DE MASURE
  * @date 27/09/2023
  */
-void * get_value_at_index(array_node_t *head, int index) {
-    array_node_t *current = head;
+void * get_value_at_index(array_node_t * head, int index) {
+    array_node_t * current = head;
 
     if(current == NULL){
         return NULL;
@@ -256,9 +256,9 @@ void * get_value_at_index(array_node_t *head, int index) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void free_list(array_node_t **head_ref) {
-    array_node_t *current = *head_ref;
-    array_node_t *next;
+void free_list(array_node_t ** head_ref) {
+    array_node_t * current = *head_ref;
+    array_node_t * next;
 
     while (current != NULL) {
         next = current->next;
@@ -271,7 +271,7 @@ void free_list(array_node_t **head_ref) {
     *head_ref = NULL;
 }
 
-void free_array_node(array_node_t *node) {
+void free_array_node(array_node_t * node) {
     if (node) {
         free(node->value);
         free(node);
@@ -287,7 +287,7 @@ void free_array_node(array_node_t *node) {
  * @errors No error handling implemented.
  * @return Size of the linked list, 0 if empty.
  */
-int get_size(array_node_t *node) {
+int get_size(array_node_t * node) {
     int count = 0;
     while (node != NULL){
         node = node->next;
@@ -309,7 +309,7 @@ int get_size(array_node_t *node) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void print_list(array_node_t *node, void (*fptr)(void *)) {
+void print_list(array_node_t * node, void (*fptr)(void *)) {
     while (node != NULL) {
         (*fptr)(node->value);
         node = node->next;
@@ -329,7 +329,7 @@ void print_list(array_node_t *node, void (*fptr)(void *)) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void print_string(void *str) {
+void print_string(void * str) {
     printf(" %s", (char *)str);
 }
 
@@ -345,7 +345,7 @@ void print_string(void *str) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void print_int(void *n) {
+void print_int(void * n) {
     printf(" %d", *(int *)n);
 }
 
@@ -361,11 +361,11 @@ void print_int(void *n) {
  * @author Noam DE MASURE
  * @date 26/09/2023
  */
-void print_float(void *f) {
+void print_float(void * f) {
     printf(" %f", *(float *)f);
 }
 
-int get_count(array_node_t *head) {
+int get_count(array_node_t * head) {
     int counter = 0;
     while (head != NULL) {
         counter++;

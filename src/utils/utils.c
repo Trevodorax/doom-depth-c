@@ -3,12 +3,12 @@
 #include <string.h>
 #include "utils.h"
 
-char* custom_itoa(int value, char* str, int base) {
+char * custom_itoa(int value, char * str, int base) {
     sprintf(str, (base == 16) ? "%x" : (base == 8) ? "%o" : "%d", value);
     return str;
 }
 
-char* custom_strupr(char* str) {
+char * custom_strupr(char * str) {
     if (str == NULL) {
         return NULL;
     }

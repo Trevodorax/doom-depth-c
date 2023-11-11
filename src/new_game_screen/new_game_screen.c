@@ -8,9 +8,9 @@
 
 #define PLAYER_NAME_MAX_LEN 25
 
-void handle_name_input(event_t event, char *name);
+void handle_name_input(event_t event, char * name);
 
-int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** map) {
+int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** map, sqlite3 * db) {
     if (!game_window) {
         printf("Cannot display new game initialization : no game window\n");
         return EXIT_FAILURE;
@@ -37,7 +37,14 @@ int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** ma
                 case ENTER_KEY:
                     if (strlen(name)) {
                         *player = create_player(name);
-                        create_player_in_db(*player);
+                        int player_id = create_player_in_db(*player);
+                        (*player)->id = player_id;
+                        char sql_query[300];
+                        sprintf(sql_query, create_player_from_db_sql, (*player)->id);
+                        array_node_t *p = create_struct_from_db(db, sql_query, create_player_from_db, sizeof (player_t));
+                        *player = (player_t *) p->value;
+
+                        free(p);
 
                         *map = get_player_map(*player);
                         return MAP_SCREEN;
@@ -60,7 +67,7 @@ int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** ma
     return EXIT_SUCCESS;
 }
 
-void handle_name_input(event_t event, char *name) {
+void handle_name_input(event_t event, char * name) {
     char input_char = event_to_char(event);
     if ((input_char >= 'A' && input_char <= 'Z') || (input_char >= 'a' && input_char <= 'z')) {
         if (strlen(name) < PLAYER_NAME_MAX_LEN && custom_char_check(input_char)) {

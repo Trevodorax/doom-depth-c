@@ -5,7 +5,7 @@
 #include <string.h>
 
 char * test_get_node_int_value_at_index() {
-    array_node_t *start = NULL;
+    array_node_t * start = NULL;
 
     unsigned int_size = sizeof(int);
     int arr[] = {10, 20, 30, 40, 50}, i;
@@ -18,7 +18,7 @@ char * test_get_node_int_value_at_index() {
 }
 
 char * test_get_node_float_value_at_index() {
-    array_node_t *start = NULL;
+    array_node_t * start = NULL;
 
     // Example with floats
     unsigned float_size = sizeof(float);
@@ -33,15 +33,15 @@ char * test_get_node_float_value_at_index() {
 }
 
 char * test_get_node_string_value_at_index() {
-    array_node_t *start = NULL;
+    array_node_t * start = NULL;
 
     // Example with strings
     unsigned string_size = sizeof(char *);
-    char *arr_s[] = {"one", "two", "three", "four", "five"};
+    char * arr_s[] = {"one", "two", "three", "four", "five"};
     for (int i = 4; i >= 0; i--) {
         push(&start, &arr_s[i], string_size);
     }
-    char **assertValue = (char **)get_value_at_index(start, 1);
+    char ** assertValue = (char **)get_value_at_index(start, 1);
     mu_assert("Error in test string array", strcmp(*assertValue, "two") == 0);
     return 0;
 }
@@ -54,7 +54,7 @@ char * all_array_tests() {
 }
 
 int array_test() {
-    char *result = all_array_tests();
+    char * result = all_array_tests();
     if (result != 0) {
         printf("%s\n", result);
     }

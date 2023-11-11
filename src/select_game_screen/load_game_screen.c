@@ -7,7 +7,7 @@
 #include "../help_screen/help_screen.h"
 #include "../confirm_quit_screen/confirm_quit_screen.h"
 
-int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** map, sqlite3 * db) {
+int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** map, sqlite3 * db, char * title) {
 
     if (!game_window) {
         global_logger->error("Cannot display new game initialization : no game window");
@@ -75,7 +75,7 @@ int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** m
             set_cli_raw_mode(false);
         }
 
-        display_load_game(game_window, players, active_option);
+        display_select_game(game_window, players, active_option, title);
         render_present(game_window);
     }
 
