@@ -339,7 +339,6 @@ int delete_player(sqlite3 *db, player_t *player) {
     for (int i = 0; i < 4; i++) {
         memset(sql_query, 0, sizeof(sql_query));
         sprintf(sql_query, queries[i], i == 1 ? player->stats->id : player->id);
-        printf("%s\n", sql_query);
         int rc = execute_query(db, sql_query, &z_err_msg);
 
         if (rc != SQLITE_OK) {
