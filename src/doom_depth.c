@@ -97,7 +97,7 @@ int main_loop(game_window_t * main_window) {
     free_map(map);
 
     // save player
-    if (!save_player(db, player)) {
+    if (save_player(db, player) != SQLITE_OK) {
         return EXIT_FAILURE;
     }
 
