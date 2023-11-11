@@ -18,12 +18,12 @@
 #include "level_up_screen/level_up_screen.h"
 #include "select_game_screen/delete_game_screen.h"
 
-int main_loop(game_window_t *main_window) {
-    sqlite3 *db = db_connection();
+int main_loop(game_window_t * main_window) {
+    sqlite3 * db = db_connection();
     init_entities(db);
 
-    map_t *map = NULL;
-    player_t *player = NULL;
+    map_t * map = NULL;
+    player_t * player = NULL;
 
     main_window->context->current_screen = START_MENU;
     while (main_window->context->current_screen != QUIT_GAME) {
@@ -113,11 +113,11 @@ int main_loop(game_window_t *main_window) {
     return EXIT_SUCCESS;
 }
 
-ui_type_t get_ui_type(char *ui_argument) {
+ui_type_t get_ui_type(char * ui_argument) {
     ui_type_t default_type = GUI;
 
     if (ui_argument == NULL) {
-        char *env_ui_type = getenv("DOOM_DEPTH_UI_TYPE");
+        char * env_ui_type = getenv("DOOM_DEPTH_UI_TYPE");
         if (env_ui_type == NULL) {
             return default_type;
         } else {
@@ -126,7 +126,7 @@ ui_type_t get_ui_type(char *ui_argument) {
     }
 
     // not case-sensitive
-    for (char *p = ui_argument; *p; p++) {
+    for (char * p = ui_argument; *p; p++) {
         *p = (char) tolower(*p);
     }
 
@@ -142,7 +142,7 @@ ui_type_t get_ui_type(char *ui_argument) {
     return default_type;
 }
 
-color_scheme_t get_color_scheme(char *color_scheme_argument) {
+color_scheme_t get_color_scheme(char * color_scheme_argument) {
     color_scheme_t default_color_scheme = DARK;
 
     if (color_scheme_argument == NULL) {
@@ -155,7 +155,7 @@ color_scheme_t get_color_scheme(char *color_scheme_argument) {
     }
 
     // not case-sensitive
-    for (char *p = color_scheme_argument; *p; p++) {
+    for (char * p = color_scheme_argument; *p; p++) {
         *p = (char) tolower(*p);
     }
 
@@ -178,7 +178,7 @@ int doom_depth_gui(color_scheme_t color_scheme) {
         global_logger->info("Application started");
     }
 
-    game_window_t *main_window = init_game_window(GUI, color_scheme);
+    game_window_t * main_window = init_game_window(GUI, color_scheme);
 
     int result = main_loop(main_window);
 
@@ -198,7 +198,7 @@ int doom_depth_cli(color_scheme_t color_scheme) {
         global_logger->info("Application started");
     }
 
-    game_window_t *main_window = init_game_window(CLI, color_scheme);
+    game_window_t * main_window = init_game_window(CLI, color_scheme);
 
     int result = main_loop(main_window);
 

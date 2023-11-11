@@ -162,6 +162,6 @@ void player_state_checkpoint(player_t * player, bool save);
  * @dependencies Depends on the SQLite3 library.
  * @errors May return SQLITE_ERROR or other error codes if the query execution fails.
  */
-int delete_player(sqlite3 *db, player_t *player);
+int delete_player(sqlite3 * db, player_t * player);
 
 #endif

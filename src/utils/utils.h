@@ -16,9 +16,9 @@ typedef enum {
     INVALID
 } char_type_t;
 
-char* custom_itoa(int value, char* str, int base);
+char * custom_itoa(int value, char * str, int base);
 
-char* custom_strupr(char* str);
+char * custom_strupr(char * str);
 
 /**
  * @brief Checks if a char is valid for our system
