@@ -44,6 +44,11 @@ router_t fight_screen(game_window_t *game_window, player_t *player, stage_t *sta
                         delay(game_window->ui_type, 2000);
                         give_treasure_to_player(fight_context->treasure, fight_context->player);
 
+                        if (fight_context->player->is_defending) {
+                            fight_context->player->base_defense -= fight_context->player->defensive_spell->amount;
+                            fight_context->player->is_defending = false;
+                        }
+
                         // level up
                         if (check_level_up(player)) {
                             level_up_screen(game_window, fight_context->player);
