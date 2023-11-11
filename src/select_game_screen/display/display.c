@@ -2,18 +2,18 @@
 
 int display_title(game_window_t * game_window, int window_width, int window_height, SDL_Color text_color, char * title);
 
-int display_load_game(game_window_t * game_window, array_node_t * players, unsigned short active_option, char * title) {
+int display_select_game(game_window_t * game_window, array_node_t * players, unsigned short active_option, char * title) {
 
     switch (game_window->ui_type) {
         case CLI:
-            return display_load_game_cli(game_window, players, active_option, title);
+            return display_select_game_cli(game_window, players, active_option, title);
         case GUI:
-            return display_load_game_gui(game_window, players, active_option, title);
+            return display_select_game_gui(game_window, players, active_option, title);
     }
 
 }
 
-int display_load_game_gui(game_window_t * game_window, array_node_t * players, unsigned short active_option, char * title) {
+int display_select_game_gui(game_window_t * game_window, array_node_t * players, unsigned short active_option, char * title) {
 
     int window_width = 0;
     int window_height = 0;
@@ -90,7 +90,7 @@ int display_title(game_window_t *game_window, int window_width, int window_heigh
     return EXIT_SUCCESS;
 }
 
-int display_load_game_cli(game_window_t *game_window, array_node_t *players, unsigned short active_option, char * title) {
+int display_select_game_cli(game_window_t *game_window, array_node_t *players, unsigned short active_option, char * title) {
 
     int window_height = 0;
     int window_width = 0;

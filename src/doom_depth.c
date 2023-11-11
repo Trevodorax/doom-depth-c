@@ -14,9 +14,9 @@
 #include "entities/entities.h"
 #include "new_game_screen/new_game_screen.h"
 #include "shop_screen/shop_screen.h"
-#include "load_game_screen/load_game_screen.h"
+#include "select_game_screen/load_game_screen.h"
 #include "level_up_screen/level_up_screen.h"
-#include "load_game_screen/delete_game_screen.h"
+#include "select_game_screen/delete_game_screen.h"
 
 int main_loop(game_window_t *main_window) {
     sqlite3 *db = db_connection();

@@ -1,5 +1,5 @@
-#ifndef DOOM_DEPTH_C_LOAD_GAME_SCREEN_DISPLAY_H
-#define DOOM_DEPTH_C_LOAD_GAME_SCREEN_DISPLAY_H
+#ifndef DOOM_DEPTH_C_SELECT_GAME_SCREEN_DISPLAY_H
+#define DOOM_DEPTH_C_SELECT_GAME_SCREEN_DISPLAY_H
 
 #include "../../game_window/game_window.h"
 #include "../../ui_utils/sdl_utils/sdl_utils.h"
@@ -22,7 +22,7 @@
  * @dependencies Depends on the SDL2 library.
  * @errors None.
  */
-int display_load_game(game_window_t *game_window, array_node_t *players, unsigned short active_option, char * title);
+int display_select_game(game_window_t *game_window, array_node_t *players, unsigned short active_option, char * title);
 
 /**
  * @brief Displays the load game screen GUI.
@@ -39,7 +39,7 @@ int display_load_game(game_window_t *game_window, array_node_t *players, unsigne
  * @dependencies Depends on the SDL2 library.
  * @errors None.
  */
-int display_load_game_gui(game_window_t *game_window, array_node_t *players, unsigned short active_option, char * title);
+int display_select_game_gui(game_window_t *game_window, array_node_t *players, unsigned short active_option, char * title);
 
 /**
  * @brief Displays the load game screen CLI.
@@ -56,6 +56,6 @@ int display_load_game_gui(game_window_t *game_window, array_node_t *players, uns
  * @dependencies None.
  * @errors None.
  */
-int display_load_game_cli(game_window_t *game_window, array_node_t *players, unsigned short active_option, char * title);
+int display_select_game_cli(game_window_t *game_window, array_node_t *players, unsigned short active_option, char * title);
 
-#endif
+#endif //DOOM_DEPTH_C_SELECT_GAME_SCREEN_DISPLAY_H

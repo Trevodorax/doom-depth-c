@@ -59,7 +59,7 @@ int delete_game_screen(game_window_t * game_window, sqlite3 * db, char * title) 
             set_cli_raw_mode(false);
         }
 
-        display_load_game(game_window, players, active_option, title);
+        display_select_game(game_window, players, active_option, title);
         render_present(game_window);
     }
 
