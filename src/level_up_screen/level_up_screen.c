@@ -11,6 +11,11 @@ void level_up_upgrade_stat(player_t *player, stat_t selected_stat);
 int level_up_screen(game_window_t * game_window, player_t * player) {
     stat_t selected_stat = STAT_HP;
 
+    if(game_window->ui_type == CLI) {
+        player->hp += 20;
+        return MAP_SCREEN;
+    }
+
     event_t event;
     while (true){
         delay(game_window->ui_type, 50);
