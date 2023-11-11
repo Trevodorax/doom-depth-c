@@ -71,8 +71,9 @@ void handle_name_input(event_t event, char * name) {
     char input_char = event_to_char(event);
     if ((input_char >= 'A' && input_char <= 'Z') || (input_char >= 'a' && input_char <= 'z')) {
         if (strlen(name) < PLAYER_NAME_MAX_LEN && custom_char_check(input_char)) {
-            name[strlen(name)] = input_char;
-            name[strlen(name) + 1] = '\0';
+            int actual_length = strlen(name);
+            name[actual_length] = input_char;
+            name[actual_length + 1] = '\0';
         }
     }
     if (event == BACKSPACE_KEY) {
