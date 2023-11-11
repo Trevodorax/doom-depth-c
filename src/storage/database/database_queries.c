@@ -230,3 +230,6 @@ const char create_player_from_db_sql[] =
         "SELECT id, name, hp, hp_max, mana, mana_max, gold, xp, level, base_attack, "
         "base_defense, action_points, max_action_points, offensive_spell_id, defensive_spell_id, healing_spell_id, "
         "current_map FROM PLAYER WHERE id = %d;";
+
+const char delete_player_from_db_sql[] =
+        "DELETE FROM PLAYER WHERE id = %d;";

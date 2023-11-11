@@ -5,9 +5,20 @@
 #include "../help_screen/help_screen.h"
 #include "../confirm_quit_screen/confirm_quit_screen.h"
 
-int start_menu_screen(game_window_t *game_window) {
+int start_menu_screen(game_window_t *game_window, sqlite3 *db) {
     event_t event;
     unsigned short active_option = 0;
+
+    array_node_t *player = get_players_from_db(db);
+
+    // know how many players there are
+    unsigned short nb_players = 0;
+    array_node_t *tmp = player;
+    while (tmp != NULL) {
+        nb_players++;
+        tmp = tmp->next;
+    }
+
     while (true){
         delay(game_window->ui_type, 50);
 
@@ -40,7 +51,11 @@ int start_menu_screen(game_window_t *game_window) {
                     break;
                 case ENTER_KEY:
                     if(active_option == 1) {
-                        return NEW_GAME_SCREEN;
+                        if (nb_players == 3) {
+                            return DELETE_GAME_SCREEN;
+                        } else {
+                            return NEW_GAME_SCREEN;
+                        }
                     } else {
                         return LOAD_GAME_SCREEN;
                     }
