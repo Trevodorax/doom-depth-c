@@ -233,3 +233,12 @@ const char create_player_from_db_sql[] =
 
 const char delete_player_from_db_sql[] =
         "DELETE FROM PLAYER WHERE id = %d;";
+
+const char delete_stats_from_db_sql[] =
+        "DELETE FROM STATS WHERE id = %d;";
+
+const char delete_weapons_in_inventory_from_db_sql[] =
+        "DELETE FROM WEAPONS_IN_INVENTORY WHERE player_id = %d;";
+
+const char delete_armors_in_inventory_from_db_sql[] =
+        "DELETE FROM ARMORS_IN_INVENTORY WHERE player_id = %d;";
