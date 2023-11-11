@@ -11,6 +11,7 @@
 #include "../confirm_quit_screen/confirm_quit_screen.h"
 #include "../stats_screen/stats_screen.h"
 #include "../map_generation/map_generation.h"
+#include "../game_stats_screen/game_stats_screen.h"
 
 /**
  * @brief Moves the player and returns the stage he is on
@@ -74,6 +75,9 @@ int map_screen(game_window_t * game_window, map_t ** map, player_t * player) {
                     break;
                 case m_KEY:
                     stats_screen(game_window, player);
+                    break;
+                case p_KEY:
+                    game_stats_screen(game_window, player);
                     break;
                 case h_KEY:
                     help_screen(game_window);

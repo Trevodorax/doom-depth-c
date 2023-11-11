@@ -158,6 +158,15 @@ set(cross_platform_targets
         src/stats_screen/stats_screen.h
         src/map_generation/map_generation.c
         src/map_generation/map_generation.h
+        src/game_stats_screen/game_stats_screen.h
+        src/game_stats_screen/game_stats_screen.c
+        src/game_stats_screen/display/gui/gui.h
+        src/game_stats_screen/display/gui/gui.c
+        src/game_stats_screen/types.h
+        src/game_stats_screen/display/cli/cli.h
+        src/game_stats_screen/display/cli/cli.c
+        src/game_stats_screen/display/display.h
+        src/game_stats_screen/display/display.c
 )
 
 # for unix
