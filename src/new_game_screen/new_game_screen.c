@@ -17,8 +17,8 @@ int new_game_screen(game_window_t * game_window, player_t ** player, map_t ** ma
     }
 
     event_t event;
-    char name[PLAYER_NAME_MAX_LEN + 1]; //do not forget null character
-    name[0] = '\0';
+    char name[PLAYER_NAME_MAX_LEN + 1] = {0};
+
     while (true) {
         delay(game_window->ui_type, 50);
 

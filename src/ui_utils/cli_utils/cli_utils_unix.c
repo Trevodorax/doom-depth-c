@@ -6,6 +6,7 @@
 #include <poll.h>
 #include <string.h>
 #include <wchar.h>
+#include <time.h>
 
 void cli_get_window_size(int * width, int * height) {
     struct winsize w;

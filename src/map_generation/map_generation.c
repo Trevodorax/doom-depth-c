@@ -1,4 +1,5 @@
 #include "map_generation.h"
+#include <time.h>
 
 int get_nb_neighbors(bool ** anti_collision_map, int x_coord, int y_coord);
 

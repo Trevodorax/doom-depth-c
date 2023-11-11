@@ -33,7 +33,7 @@ int display_new_game_cli(game_window_t *game_window, char *name) {
                                 SMALL_TEXT);
 
     // Display name input
-    rect_t name_input_rect = {0, name_question_rect.y + name_question_rect.h + 2, window_width, window_height / 4};
+    rect_t name_input_rect = {0, name_question_rect.y + name_question_rect.h, window_width, window_height / 4 - 2};
     cli_print_text_in_rectangle(game_window->matrix, name_input_rect, name, game_window->cli_color_palette->text, ALIGN_CENTER, ALIGN_START,
                                 SMALL_TEXT);
 
