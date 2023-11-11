@@ -18,19 +18,19 @@ void *create_armor_from_db(sqlite3_stmt *stmt) {
     armor->image_path = strdup((char *) sqlite3_column_text(stmt, 6));
     armor->ascii_path = strdup((char *) sqlite3_column_text(stmt, 7));
 
-    if (sqlite3_column_count(stmt) == 9) {
+    if (sqlite3_column_count(stmt) >= 9) {
         armor->uses = sqlite3_column_int(stmt, 8);
     } else {
         armor->uses = armor->max_uses;
     }
 
-    if (sqlite3_column_count(stmt) == 10) {
+    if (sqlite3_column_count(stmt) >= 10) {
         armor->chosen = sqlite3_column_int(stmt, 9);
     } else {
         armor->chosen = 0;
     }
 
-    if (sqlite3_column_count(stmt) == 11) {
+    if (sqlite3_column_count(stmt) >= 11) {
         armor->id_in_inventory = sqlite3_column_int(stmt, 10);
     } else {
         armor->id_in_inventory = 0;
