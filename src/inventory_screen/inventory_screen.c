@@ -201,10 +201,12 @@ void handle_actions_input(event_t event, player_t * player, section_options_t * 
             case USE:
                 if (active_category == WEAPONS) {
                     player->chosen_weapon = get_value_at_index(player->inventory->weapons_head, active_item);
+                    player->chosen_weapon->chosen = true;
                     *active_section = ITEMS;
                 }
                 if (active_category == ARMORS) {
                     player->chosen_armor = get_value_at_index(player->inventory->armors_head, active_item);
+                    player->chosen_armor->chosen = true;
                     *active_section = ITEMS;
                 }
                 if (active_category == HEALTH_POTIONS) {
@@ -223,10 +225,12 @@ void handle_actions_input(event_t event, player_t * player, section_options_t * 
 
             case UNEQUIP:
                 if (active_category == WEAPONS) {
+                    player->chosen_weapon->chosen = false;
                     player->chosen_weapon = NULL;
                     *active_section = ITEMS;
                 }
                 if (active_category == ARMORS) {
+                    player->chosen_armor->chosen = false;
                     player->chosen_armor = NULL;
                     *active_section = ITEMS;
                 }
