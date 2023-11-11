@@ -163,11 +163,14 @@ void handle_actions_input(event_t event, player_t * player, section_options_t * 
                           category_options_t active_category, unsigned short active_item,
                           action_options_t * active_action) {
     bool can_be_used;
+    bool can_be_unequipped;
     if ((active_category == ARMORS && get_value_at_index(player->inventory->armors_head, active_item) == player->chosen_armor) ||
         (active_category == WEAPONS && get_value_at_index(player->inventory->weapons_head, active_item) == player->chosen_weapon)) {
         can_be_used = false;
+        can_be_unequipped = true;
     } else {
         can_be_used = true;
+        can_be_unequipped = false;
     }
 
     // going back to previous section when pressing the left arrow on the left column
@@ -181,14 +184,14 @@ void handle_actions_input(event_t event, player_t * player, section_options_t * 
 
     // moving through actions
     if (event == s_KEY && *active_action != THROW_AWAY) {
-        if (active_category == ARMORS || active_category == WEAPONS) {
+        if ((*active_action == USE && can_be_unequipped) || *active_action == UNEQUIP) {
             (*active_action)++;
         } else {
             (*active_action) = THROW_AWAY;
         }
     }
     if (event == z_KEY && *active_action != (can_be_used ? USE : UNEQUIP)) {
-        if (active_category == ARMORS || active_category == WEAPONS) {
+        if (*active_action == THROW_AWAY && can_be_unequipped) {
             (*active_action)--;
         } else {
             (*active_action) = USE;

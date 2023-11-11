@@ -164,9 +164,9 @@ int display_inventory_gui(game_window_t * game_window,
     if ((active_category == ARMORS && get_value_at_index(player->inventory->armors_head, active_item) == player->chosen_armor) ||
             (active_category == WEAPONS && get_value_at_index(player->inventory->weapons_head, active_item) == player->chosen_weapon)) {
         display_actions_gui(game_window, rect_to_SDL_Rect(actions_container), unit_padding - 2, active_action, false,
-                            0);
+                            true);
     } else {
-        display_actions_gui(game_window, rect_to_SDL_Rect(actions_container), unit_padding - 2, active_action, true, 0);
+        display_actions_gui(game_window, rect_to_SDL_Rect(actions_container), unit_padding - 2, active_action, true, false);
     }
 
     return EXIT_SUCCESS;
