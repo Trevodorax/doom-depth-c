@@ -6,6 +6,7 @@
 #include <poll.h>
 #include <string.h>
 #include <wchar.h>
+#include <time.h>
 
 void cli_get_window_size(int * width, int * height) {
     struct winsize w;
@@ -16,6 +17,10 @@ void cli_get_window_size(int * width, int * height) {
 }
 
 int cli_render_present(cli_matrix_t * current_matrix, color_code_t text_color) {
+    if(!current_matrix || !current_matrix->matrix) {
+        return EXIT_SUCCESS;
+    }
+
     // kept in memory between function calls
     static cli_matrix_t * previous_matrix;
     static int previous_window_width = -1;
@@ -47,7 +52,7 @@ int cli_render_present(cli_matrix_t * current_matrix, color_code_t text_color) {
     }
 
     if (!previous_matrix) {
-        previous_matrix = create_cli_matrix(0, 0, ' ', text_color);
+        previous_matrix = create_cli_matrix(1, 1, ' ', text_color);
     }
 
     // make some space in terminal if more is needed
@@ -180,14 +185,14 @@ void cli_print_special_char(special_char_t printed_char, color_code_t color) {
 }
 
 cli_matrix_t* create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_char, color_code_t default_color) {
-    cli_matrix_t *matrix = malloc(sizeof(cli_matrix_t));
+    cli_matrix_t *matrix = calloc(1, sizeof(cli_matrix_t));
     if (matrix == NULL) {
         fprintf(stderr, "\ncreate_cli_matrix error: failed memory allocation");
         return NULL;
     }
 
     // probably only when overflow under 0
-    if (nb_rows > 500) {
+    if (nb_rows > 500 || nb_cols > 500 || nb_rows == 0 || nb_cols == 0) {
         free(matrix);
         return NULL;
     }
@@ -195,7 +200,7 @@ cli_matrix_t* create_cli_matrix(size_t nb_rows, size_t nb_cols, char default_cha
     matrix->nb_rows = nb_rows;
     matrix->nb_cols = nb_cols;
 
-    matrix->matrix = malloc(nb_rows * sizeof(cli_char_t *));
+    matrix->matrix = calloc(nb_rows, sizeof(cli_char_t *));
     if (matrix->matrix == NULL) {
         fprintf(stderr, "\ncreate_cli_matrix error: failed memory allocation");
         free(matrix);
