@@ -277,7 +277,7 @@ void free_player(player_t *player) {
 
 array_node_t *get_players_from_db(sqlite3 *db) {
 
-    char sql_request[100] = "SELECT id, name FROM PLAYER LIMIT 3";
+    char sql_request[100] = "SELECT id, name, stats_id FROM PLAYER LIMIT 3";
 
     sqlite3_stmt *stmt;
     sqlite3_prepare_v2(db, sql_request, -1, &stmt, NULL);
@@ -287,6 +287,8 @@ while (sqlite3_step(stmt) == SQLITE_ROW) {
         player_t *player = malloc(sizeof(player_t));
         player->id = sqlite3_column_int(stmt, 0);
         player->name = strdup((char *) sqlite3_column_text(stmt, 1));
+        player->stats = create_stats();
+        player->stats->id = sqlite3_column_int(stmt, 2);
         if (players == NULL) {
             players = malloc(sizeof(array_node_t));
             players->value = player;
@@ -326,43 +328,25 @@ void player_state_checkpoint(player_t * player, bool save) {
 int delete_player(sqlite3 *db, player_t *player) {
     char *z_err_msg = NULL;
 
+    char *queries[] = {
+            delete_player_from_db_sql,
+            delete_stats_from_db_sql,
+            delete_weapons_in_inventory_from_db_sql,
+            delete_armors_in_inventory_from_db_sql
+    };
+
     char sql_query[300];
+    for (int i = 0; i < 4; i++) {
+        memset(sql_query, 0, sizeof(sql_query));
+        sprintf(sql_query, queries[i], i == 1 ? player->stats->id : player->id);
+        printf("%s\n", sql_query);
+        int rc = execute_query(db, sql_query, &z_err_msg);
 
-    // delete player
-    sprintf(sql_query, delete_player_from_db_sql, player->id);
-    int rc = execute_query(db, sql_query, &z_err_msg);
-    if (rc != SQLITE_OK) {
-        global_logger->error("SQL error: %s", z_err_msg);
-        sqlite3_free(z_err_msg);
-        return EXIT_FAILURE;
-    }
-
-    // delete stats
-    sprintf(sql_query, delete_stats_from_db_sql, player->stats->id);
-    rc = execute_query(db, sql_query, &z_err_msg);
-    if (rc != SQLITE_OK) {
-        global_logger->error("SQL error: %s", z_err_msg);
-        sqlite3_free(z_err_msg);
-        return EXIT_FAILURE;
-    }
-
-    // delete inventory
-    // delete weapons_in_inventory
-    sprintf(sql_query, delete_weapons_in_inventory_from_db_sql, player->id);
-    rc = execute_query(db, sql_query, &z_err_msg);
-    if (rc != SQLITE_OK) {
-        global_logger->error("SQL error: %s", z_err_msg);
-        sqlite3_free(z_err_msg);
-        return EXIT_FAILURE;
-    }
-
-    // delete armors_in_inventory
-    sprintf(sql_query, delete_armors_in_inventory_from_db_sql, player->id);
-    rc = execute_query(db, sql_query, &z_err_msg);
-    if (rc != SQLITE_OK) {
-        global_logger->error("SQL error: %s", z_err_msg);
-        sqlite3_free(z_err_msg);
-        return EXIT_FAILURE;
+        if (rc != SQLITE_OK) {
+            global_logger->error("SQL error: %s", z_err_msg);
+            sqlite3_free(z_err_msg);
+            return EXIT_FAILURE;
+        }
     }
 
     return EXIT_SUCCESS;
