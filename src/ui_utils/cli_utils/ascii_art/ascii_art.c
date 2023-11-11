@@ -37,6 +37,10 @@ cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width,
     size_t picked_ascii_art_index = 0;
 
     for (size_t i = 1; i < ascii_art->nb_versions; i++) {
+        if(!ascii_art->versions[i]) {
+            continue;
+        }
+
         if(ascii_art->versions[i]->nb_cols > max_width || ascii_art->versions[i]->nb_rows > max_height) {
             continue;
         }
@@ -46,7 +50,8 @@ cli_matrix_t * pick_ascii_art_version(ascii_art_t * ascii_art, size_t max_width,
         }
     }
 
-    if (ascii_art->versions[picked_ascii_art_index]->nb_cols > max_width ||
+    if (!ascii_art->versions[picked_ascii_art_index] ||
+        ascii_art->versions[picked_ascii_art_index]->nb_cols > max_width ||
         ascii_art->versions[picked_ascii_art_index]->nb_rows > max_height) {
         return create_cli_matrix(max_height, max_width, '#', CYAN);
     }
@@ -114,7 +119,10 @@ ascii_art_t *parse_ascii_art_file(const char *file_path, color_code_t color) {
 
         ascii_art->versions[i] = ascii_art_to_matrix(token, color);
 
-        free(token);
+        if(token) {
+            free(token);
+        }
+
         start = end + strlen(delimiter);
         i++;
     }

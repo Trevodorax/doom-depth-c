@@ -44,7 +44,7 @@ int init_game_window_cli(game_window_t * game_window) {
     int cli_height;
     cli_get_window_size(&cli_width, &cli_height);
 
-    game_window->matrix = create_cli_matrix(cli_height, cli_width, 0, RED);
+    game_window->matrix = create_cli_matrix(1, 1, 0, RED);
 
     if (game_window->matrix == NULL) {
         return EXIT_FAILURE;
@@ -105,6 +105,7 @@ void free_game_window(game_window_t *game_window, ui_type_t ui_type) {
 
 void free_game_window_cli(game_window_t * game_window) {
     free_matrix(game_window->matrix);
+    set_cli_raw_mode(false);
     system("clear");
 }
 
