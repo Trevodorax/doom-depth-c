@@ -21,6 +21,6 @@
  * @param db the database connection
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int delete_game_screen(game_window_t * game_window, sqlite3 * db);
+int delete_game_screen(game_window_t * game_window, sqlite3 * db, char * title);
 
 #endif

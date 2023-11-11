@@ -1,6 +1,6 @@
 #include "delete_game_screen.h"
 
-int delete_game_screen(game_window_t * game_window, sqlite3 * db) {
+int delete_game_screen(game_window_t * game_window, sqlite3 * db, char * title) {
 
     if (!game_window) {
         global_logger->error("Cannot display new game initialization : no game window");
@@ -66,7 +66,7 @@ int delete_game_screen(game_window_t * game_window, sqlite3 * db) {
             set_cli_raw_mode(false);
         }
 
-        display_load_game(game_window, players, active_option);
+        display_load_game(game_window, players, active_option, title);
         render_present(game_window);
     }
 

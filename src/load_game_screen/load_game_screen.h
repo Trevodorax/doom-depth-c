@@ -15,6 +15,6 @@
  * @param db the database connection
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** map, sqlite3 * db);
+int load_game_screen(game_window_t * game_window, player_t ** player, map_t ** map, sqlite3 * db, char * title);
 
 #endif

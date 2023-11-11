@@ -1,26 +1,26 @@
 #include "display.h"
 
-int display_title(game_window_t * game_window, int window_width, int window_height, SDL_Color text_color);
+int display_title(game_window_t * game_window, int window_width, int window_height, SDL_Color text_color, char * title);
 
-int display_load_game(game_window_t * game_window, array_node_t * players, unsigned short active_option) {
+int display_load_game(game_window_t * game_window, array_node_t * players, unsigned short active_option, char * title) {
 
     switch (game_window->ui_type) {
         case CLI:
-            return display_load_game_cli(game_window, players, active_option);
+            return display_load_game_cli(game_window, players, active_option, title);
         case GUI:
-            return display_load_game_gui(game_window, players, active_option);
+            return display_load_game_gui(game_window, players, active_option, title);
     }
 
 }
 
-int display_load_game_gui(game_window_t * game_window, array_node_t * players, unsigned short active_option) {
+int display_load_game_gui(game_window_t * game_window, array_node_t * players, unsigned short active_option, char * title) {
 
     int window_width = 0;
     int window_height = 0;
     SDL_GetWindowSize(game_window->window, &window_width, &window_height);
     SDL_RenderClear(game_window->renderer);
 
-    display_title(game_window, window_width, window_height, game_window->sdl_color_palette->text);
+    display_title(game_window, window_width, window_height, game_window->sdl_color_palette->text, title);
 
     rect_t container_saves = {
             (size_t)(window_width - window_width * 0.3)/ 2,
@@ -71,7 +71,7 @@ int display_load_game_gui(game_window_t * game_window, array_node_t * players, u
     return EXIT_SUCCESS;
 }
 
-int display_title(game_window_t *game_window, int window_width, int window_height, SDL_Color text_color) {
+int display_title(game_window_t *game_window, int window_width, int window_height, SDL_Color text_color, char * title) {
     rect_t container_title = {
             window_width / 4,
             0,
@@ -82,7 +82,7 @@ int display_title(game_window_t *game_window, int window_width, int window_heigh
     print_text_in_rectangle(
             game_window->renderer,
             rect_to_SDL_Rect(container_title),
-            "Load a game",
+            title,
             text_color,
             ALIGN_CENTER,
             ALIGN_CENTER);
@@ -90,7 +90,7 @@ int display_title(game_window_t *game_window, int window_width, int window_heigh
     return EXIT_SUCCESS;
 }
 
-int display_load_game_cli(game_window_t *game_window, array_node_t *players, unsigned short active_option) {
+int display_load_game_cli(game_window_t *game_window, array_node_t *players, unsigned short active_option, char * title) {
 
     int window_height = 0;
     int window_width = 0;
@@ -100,7 +100,7 @@ int display_load_game_cli(game_window_t *game_window, array_node_t *players, uns
 
     // print title
     rect_t title_rect = {0, 0, window_width, window_height / 2};
-    cli_print_text_in_rectangle(game_window->matrix, title_rect, "Load a game", game_window->cli_color_palette->text,
+    cli_print_text_in_rectangle(game_window->matrix, title_rect, title, game_window->cli_color_palette->text,
                                 ALIGN_CENTER, ALIGN_START, MEDIUM_TEXT);
 
     rect_t container_saves = {
